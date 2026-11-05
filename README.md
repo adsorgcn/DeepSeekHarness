@@ -36,6 +36,17 @@
 
 笔记是纯文本，你随时能看、能改、能删。不传服务器，不记密码。
 
+## 更新记录（每次改动即发版）
+
+**v1.0.0** · 2026-11-05 · 首发
+
+- 记忆体：Mem-Forever 2.1 的 DSH 适配版（AGENTS.md 自动注入、技能挂载、brain.py 验收）
+- 新手教程、插件点评、适配文档
+- 一键安装：`bootstrap.ps1`（官方源安装 + 审批模式），环境、仓库、记忆一次到位
+- 落地页：GitHub Pages，按 site-design-engine 工程书建成，独立评审修复后上线
+- 技能：`mem-forever`、`site-design-engine`；官方 iLang 语法校验器随仓库发布
+- 内置工作方式：索引寻址、可逆性裁决、注意力不平铺、iLang 交叉验证、cache_first
+
 ## 想看更多
 
 - [dsh-新手起手式.md](dsh-新手起手式.md) · DSH 新手从零开始
