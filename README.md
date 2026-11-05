@@ -6,6 +6,8 @@
 
 ## 开始（你只做这一件事）
 
+在线门面：https://adsorgcn.github.io/DeepSeekHarness
+
 把下面这句话，原样贴给你的 DSH：
 
 > 帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套。缺什么软件你从官方装，要安装任何东西都先问我；装完告诉我，以后每个新窗口怎么一句话回到这里。
