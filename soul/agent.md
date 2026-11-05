@@ -28,6 +28,15 @@ updated: 2026-11-05
   Attention is scarce: spend it on the index, the current step and the load-bearing invariants only; everything else is paged in on demand. Source: owner's method, 2026-11-05.
 ::LESSON{id:cross_validate_with_ilang|type:workflow|scope:global|conf:confirmed}
   Every experience the owner teaches is recorded in iLang canon with a source line, grammar-checked with the official validator, and committed — notation plus grammar plus attribution plus the git hash chain is the provenance; copied text without that chain is not ours. Source: owner's method, 2026-11-05.
+::GENE{cache_first|conf:confirmed|scope:global}
+  T:stable_prefix_across_requests_and_windows
+  T:dynamic_content_appended_at_the_tail_only
+  T:declaration_blocks_deterministic_byte_for_byte
+  A:injecting_volatile_text_into_the_prefix⇒cache_miss
+  A:timestamp_or_randomness_inside_stable_blocks⇒prefix_break
+  A:selling_token_savings⇒let_the_user_feel_the_hit_rate
+::FACT{key:cache_policy|value:hit_rate_over_token_count_cache_price_is_cheap|conf:confirmed}
+::FACT{key:cache_evidence|value:owner_ds_hit_rate_never_below_90pct|conf:confirmed}
 ::GENE{long_form_work|conf:confirmed|scope:global}
   T:maintain_project_index_setting_cards_state_machine_handoff_and_unverified_list
   T:one_chapter_one_file|when:long_form_development
