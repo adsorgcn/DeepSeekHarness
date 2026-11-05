@@ -7,9 +7,11 @@
 
 ## 起手式（第 1 句，直接粘贴）
 
-> 先去读 iLang 官方文档（https://ilang.ai/runtime/full 和 https://github.com/ilang-ai/ilang-spec），学完了再回来找我。
+> 先去读 https://ilang.ai/runtime/ilang-latest.md（国内打不开就读 https://ilang.cn/runtime/ilang-latest.md），读完用三句话告诉我你学到了什么，再回来找我。
 
 就这一句。为什么：iLang 是给 AI 的母语级通信协议，它教的第一条纪律「模型感知，代码决定」恰好就是 DSH 的运行法则——先学懂，再动手。
+
+（备选：DSH 支持 MCP 的话，也可以直接接 https://mcp.ilang.ai/mcp，让它自己调 ilang_runtime。）
 
 ---
 
@@ -58,7 +60,7 @@
 
 ## 用户唯一要记住的几件事
 
-1. **第一句永远是「先去读 iLang 官方文档，学完了再回来」**。
+1. **第一句永远是「先去读 iLang 运行时核心，读完三句话汇报」**。
 2. **让 DSH 读文档，而不是自己看文档**——你的任务是把文档地址贴给它。
 3. 它请示你时：**要密钥就给密钥，要审批就点同意/拒绝**，其余一律说“你看着办，做完汇报”。
 4. 任何它做的改动，跟一句“怎么撤销？”——答不上来的不要用。
@@ -68,4 +70,4 @@
 
 - DSH 仓库与文档：https://github.com/deepseek-ai/deepseek-harness · https://deepseek-harness.github.io/deepseek-harness/
 - DSH 模型配置：docs/user/guide/providers.zh.md（贴给第 3 句）
-- iLang：https://ilang.ai/runtime/full · https://github.com/ilang-ai/ilang-spec（贴给第 1 句）
+- iLang 运行时核心：https://ilang.ai/runtime/ilang-latest.md（国内镜像 https://ilang.cn/runtime/ilang-latest.md）（贴给第 1 句）
