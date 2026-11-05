@@ -3,6 +3,14 @@
 > **一个 fork/clone 之后，直接在 DeepSeek Harness 里当工作区打开就能用的记忆体。**
 > 上游：[ilang-ai/Mem-Forever](https://github.com/ilang-ai/Mem-Forever)（iLang v5.0 记忆协议）；本仓库是它的 **DSH 适配版**。
 
+## 🚀 一键开始（就一句话）
+
+在任何 DSH 会话里粘贴：
+
+> 帮我初始化记忆体：把 https://github.com/adsorgcn/DeepSeekHarness 克隆到本机，把工作目录切进去，读它的 AGENTS.md，完成初始化。
+
+然后它自动：克隆 → 切目录（AGENTS.md 与技能自动上线）→ 问几个问题建你的档案 → 记住你。详见 [一键安装.md](一键安装.md)。
+
 ## 它是什么
 
 每个 AI 工具每次会话后都会把你忘掉。这个仓库不会——**永远不**。
@@ -45,9 +53,11 @@ docs/                 ← 交付文档（见下）
 
 ## 文档
 
+- [一键安装.md](一键安装.md) —— 一句话进记忆体（用户只复制粘贴）。
 - [dsh-新手起手式.md](dsh-新手起手式.md) —— 第一句「先去学 iLang，学完了再回来」；用户只做三件事：复制、粘贴、让 DSH 读官方文档。
 - [mem-forever-dsh适配.md](mem-forever-dsh适配.md) —— 本仓库的适配方案与落地清单。
 - [插件点评-ilang视角.md](插件点评-ilang视角.md) —— 用 iLang 的眼光看当前 DSH 插件生态：为什么说范式太老了。
+- [ROADMAP.md](ROADMAP.md) —— 迭代协议：owner 丢来好技能/插件/文档，agent 按规则接入并推送。
 
 ## 协议
 
