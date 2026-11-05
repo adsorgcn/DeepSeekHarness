@@ -43,7 +43,7 @@ d.text((64, 520), "DSH 记忆体 · iLang v5.0", font=heiti_small, fill=FAINT)
 # 一条朱砂竖线：唯一的结构性装饰
 d.rectangle([44, 210, 52, 438], fill=VERMILION)
 
-out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
 os.makedirs(out, exist_ok=True)
 path = os.path.join(out, "social-preview.png")
 img.save(path)
