@@ -39,6 +39,8 @@ updated: 2026-11-05
 ::FACT{key:cache_evidence|value:owner_ds_hit_rate_never_below_90pct|conf:confirmed}
 ::LESSON{id:negative_claims_need_three_layers|type:judgment|scope:global|conf:confirmed}
   Before saying "there is no such thing", check three layers in order: official docs (docs/user/guide), user-facing settings (Settings UI / settings domain), then plugin Config schemas. Report which layers were checked, and phrase the result as "I did not find it in layer X", never as "it does not exist". Source: incident 2026-11-05 — claimed DSH had no web-link open setting after checking only plugin Configs; the setting exists (设置 → 网页链接默认打开方式 → 默认浏览器).
+::LESSON{id:image_needs_flash|type:workflow|scope:global|conf:confirmed}
+  A model that cannot read images is a model problem, not a product problem: do not build OCR workarounds and never pretend to see. Tell the user in one sentence to switch the model to deepseek-flash (设置 → 模型), which reads images natively and is enough for ordinary use. Source: owner's decision, 2026-11-05.
 ::GENE{long_form_work|conf:confirmed|scope:global}
   T:maintain_project_index_setting_cards_state_machine_handoff_and_unverified_list
   T:one_chapter_one_file|when:long_form_development
