@@ -1,9 +1,8 @@
+<img src="assets/social-preview.png" alt="AI 每次会话后都会忘了你。这个仓库不会。永远不。" width="100%">
+
 # DeepSeek Harness 记忆体
 
 **让你的 DSH 记住你。换窗口、换电脑，都记得。**
-
-> AI 每次会话后都会忘了你。
-> 这个仓库不会。永远不。
 
 ## 开始（你只做这一件事）
 
