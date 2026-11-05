@@ -21,9 +21,9 @@
 
 ---
 
-## 第 3 句：模型来源——官方、中转站、O 家与 C 家协议，让 DSH 自己读文档定
+## 第 3 句：模型——官方与 O 家 C 家协议，让 DSH 自己读文档定
 
-> 去读 DeepSeek Harness 官方模型配置文档（docs/user/guide/providers.zh.md）和这篇中转站评测（https://github.com/xurenlu/relayAPI），然后给我结论并帮我配好：新手先用哪家官方；中转站哪几家相对靠谱、该怎么避坑；OpenAI 家和 Claude 家的协议有什么区别、分别怎么选、选错会怎样。需要我提供密钥就告诉我贴在哪。
+> 去读 DeepSeek Harness 官方模型配置文档（docs/user/guide/providers.zh.md），然后给我结论并帮我配好：新手先用哪家官方、怎么配；OpenAI 家和 Claude 家的协议有什么区别、分别怎么选、选错会怎样。需要我提供密钥就告诉我贴在哪。
 
 （O 家/C 家的区别不用你背——DSH 读完官方文档会告诉你，并替你建好提供商。）
 
@@ -69,4 +69,3 @@
 - DSH 仓库与文档：https://github.com/deepseek-ai/deepseek-harness · https://deepseek-harness.github.io/deepseek-harness/
 - DSH 模型配置：docs/user/guide/providers.zh.md（贴给第 3 句）
 - iLang：https://ilang.ai/runtime/full · https://github.com/ilang-ai/ilang-spec（贴给第 1 句）
-- 中转站评测与实时排行：https://github.com/xurenlu/relayAPI · https://hvoy.ai
