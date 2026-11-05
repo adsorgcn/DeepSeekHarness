@@ -29,6 +29,7 @@
 - [x] 引导脚本：`bootstrap.ps1`（环境检测 → 官方源安装 Git/Python 需审批 → 克隆 → 验收）
 - [x] 技能：`site-design-engine`（爱出海工程书 v2.1，62 地板规则 + 24 命令 + 高斯/傅里叶，`.dsh/skills/`）
 - [x] 门面：README 按工程书重写（受众=纯新手，只粘贴只点头），社媒头图生成
+- [x] 工作方式：索引寻址 + iLang 判断层做记/不记裁决 + 注意力不平铺（写入模板 `soul/agent.md` 与一键安装说明）
 - [ ] 把仓库做成可 `github:` 一键安装的 DSH bundle（next）
 - [ ] 好技能持续接入（长期，owner 驱动）
 
