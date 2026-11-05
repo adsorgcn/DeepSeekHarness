@@ -3,13 +3,13 @@
 > **一个 fork/clone 之后，直接在 DeepSeek Harness 里当工作区打开就能用的记忆体。**
 > 上游：[ilang-ai/Mem-Forever](https://github.com/ilang-ai/Mem-Forever)（iLang v5.0 记忆协议）；本仓库是它的 **DSH 适配版**。
 
-## 🚀 一键开始（就一句话）
+## 🚀 一键开始（一句话 + 审批）
 
 在任何 DSH 会话里粘贴：
 
-> 帮我初始化记忆体：把 https://github.com/adsorgcn/DeepSeekHarness 克隆到本机，把工作目录切进去，读它的 AGENTS.md，完成初始化。
+> 帮我初始化记忆体：先下载运行 https://github.com/adsorgcn/DeepSeekHarness 的 bootstrap.ps1 检测环境；缺什么（git、Python 等）列给我并逐个征得我同意后从官方源安装；然后把仓库克隆到本机、把工作目录切进去、读它的 AGENTS.md 完成初始化。
 
-然后它自动：克隆 → 切目录（AGENTS.md 与技能自动上线）→ 问几个问题建你的档案 → 记住你。详见 [一键安装.md](一键安装.md)。
+模式 = **DSH 审批模式**：克隆、切目录、AGENTS.md 注入、技能发现、初始化全部自动；装 Git / Python 等系统软件先问你、同意才装，且**只走官方源**（winget 官方包 / git-scm.com / python.org）。详见 [一键安装.md](一键安装.md)。
 
 ## 它是什么
 
