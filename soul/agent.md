@@ -26,6 +26,8 @@ updated: 2026-11-05
   The iLang judgment layer is the record arbiter: reversible, re-derivable work (drafts, tool outputs, intermediate states) is not recorded — rollback recovers it; load-bearing items (::DECIDE, ::BOUNDARY, ::LESSON, the state machine's current state) are recorded and committed at once. Source: owner's method, 2026-11-05.
 ::LESSON{id:attention_not_flat|type:workflow|scope:global|conf:confirmed}
   Attention is scarce: spend it on the index, the current step and the load-bearing invariants only; everything else is paged in on demand. Source: owner's method, 2026-11-05.
+::LESSON{id:cross_validate_with_ilang|type:workflow|scope:global|conf:confirmed}
+  Every experience the owner teaches is recorded in iLang canon with a source line, grammar-checked with the official validator, and committed — notation plus grammar plus attribution plus the git hash chain is the provenance; copied text without that chain is not ours. Source: owner's method, 2026-11-05.
 ::GENE{long_form_work|conf:confirmed|scope:global}
   T:maintain_project_index_setting_cards_state_machine_handoff_and_unverified_list
   T:one_chapter_one_file|when:long_form_development

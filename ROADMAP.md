@@ -15,8 +15,10 @@
 ## 每次迭代的验收
 
 1. `python -X utf8 tools/brain.py check` → 0 错误 0 警告（含密钥扫描）；
-2. 逐笔 `git add` + `git commit -m "<type>: <what>"` + `git push`，不攒批；
-3. 更新本文件上方的「已接入清单」和 README。
+2. `python -X utf8 tools/ilang_grammar_validator.py --lint <改动文件> --strict` → 0 错误 0 警告（iLang 官方语法校验，校验器随仓库发布）；
+3. 每条经验带归属行（来源 + 作者 + 格式 iLang）——协议 + 语法 + 归属 + git 哈希四重锚点即防盗链；
+4. 逐笔 `git add` + `git commit -m "<type>: <what>"` + `git push`，不攒批；
+5. 更新本文件上方的「已接入清单」和 README。
 
 ## 已接入清单（截至 2026-11-05）
 
