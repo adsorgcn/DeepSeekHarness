@@ -117,6 +117,16 @@ def test_no_local_model():
     check("no_local_model", ok, "ids=%s" % sorted(ids))
 
 
+def test_asr_entry():
+    t = {x["id"]: x for x in REGISTRY["tools"]}
+    e = t["sherpa-onnx"]
+    ok = all(e["install"][k][:2] == ["python", "tools/asr_setup.py"]
+             and e["verify"][k][:3] == ["python", "tools/asr_setup.py", "--check"]
+             for k in ("windows", "macos", "linux"))
+    ok = ok and "160MB" in e["why"]
+    check("asr_entry", ok, str(e["why"]))
+
+
 def test_already_skips_install():
     r = FakeRunner({("yt-dlp", "--version"): 0})
     results, rc = FS.install_tools(REGISTRY, ["yt-dlp"], True, r, lambda name: True, "windows")
@@ -136,6 +146,7 @@ def main():
     test_obsidian_windows_via_winget()
     test_path_refresh()
     test_no_local_model()
+    test_asr_entry()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)

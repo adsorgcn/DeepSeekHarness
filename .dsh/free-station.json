@@ -45,6 +45,21 @@
         "macos": ["which", "obsidian"]
       },
       "manual": "https://obsidian.md/download"
+    },
+    {
+      "id": "sherpa-onnx",
+      "name": "SenseVoice 语音转写引擎（sherpa-onnx，本地）",
+      "why": "视频转文字的本地引擎，DSH 语音输入同款；首次约 160MB 模型下载；音频不出本机",
+      "install": {
+        "windows": ["python", "tools/asr_setup.py"],
+        "macos": ["python", "tools/asr_setup.py"],
+        "linux": ["python", "tools/asr_setup.py"]
+      },
+      "verify": {
+        "windows": ["python", "tools/asr_setup.py", "--check"],
+        "macos": ["python", "tools/asr_setup.py", "--check"],
+        "linux": ["python", "tools/asr_setup.py", "--check"]
+      }
     }
   ],
   "zero_install": [
