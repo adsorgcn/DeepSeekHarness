@@ -4,13 +4,18 @@
 
 安全约定：
 - 只回 issue（PR 跳过）、只在 open 状态回复；
+- 作者是任何 bot 账号（login 以 [bot] 结尾）一律不回；
 - 自己的评论 / 已有 bot 回复 => 跳过（防循环）；
+- 上限：每日最多 DAILY_CAP 条回复（超出只贴一键安装链接，不调模型）；
+  同一 issue 最多 PER_ISSUE_CAP 条 bot 回复；
 - 上下文只取仓库文档（README + 一键安装），顺序稳定；
 - 人格规则：诚实、不知道就说不知道、指向一句话安装、不超过 300 字。
 """
 import json
 import os
 import sys
+import time
+import urllib.parse
 import urllib.request
 
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
@@ -21,6 +26,10 @@ KEY = os.environ["DEEPSEEK_API_KEY"]
 MODEL = os.environ.get("BOT_MODEL") or "deepseek-chat"
 BOT_LOGIN = "github-actions[bot]"
 MARK = "<!-- auto-bot -->"
+DAILY_CAP = 30
+PER_ISSUE_CAP = 2
+INSTALL_LINK = "https://github.com/adsorgcn/DeepSeekHarness"
+DAY_S = 24 * 60 * 60
 
 
 def gh(method, url, body=None):
@@ -39,6 +48,10 @@ def gh(method, url, body=None):
         return json.load(r)
 
 
+def is_bot_login(user):
+    return str((user or {}).get("login") or "").endswith("[bot]")
+
+
 issue = EVENT.get("issue") or {}
 if issue.get("pull_request"):
     print("PR, skip")
@@ -48,12 +61,14 @@ if issue.get("state") != "open":
     sys.exit(0)
 num = issue["number"]
 action = EVENT.get("action")
+
+if is_bot_login(issue.get("user")):
+    print("bot author, skip")
+    sys.exit(0)
+
 if action == "issue_comment":
     comment = EVENT.get("comment") or {}
-    if (comment.get("user") or {}).get("login") == BOT_LOGIN:
-        print("own comment, skip")
-        sys.exit(0)
-    if MARK in (comment.get("body") or ""):
+    if is_bot_login(comment.get("user")) or MARK in (comment.get("body") or ""):
         print("bot comment, skip")
         sys.exit(0)
 elif action != "opened":
@@ -61,10 +76,24 @@ elif action != "opened":
     sys.exit(0)
 
 comments = gh("GET", "https://api.github.com/repos/%s/issues/%d/comments?per_page=100" % (REPO, num))
-for c in comments:
-    if (c.get("user") or {}).get("login") == BOT_LOGIN or MARK in (c.get("body") or ""):
-        print("already replied, skip")
-        sys.exit(0)
+already = [c for c in comments if (c.get("user") or {}).get("login") == BOT_LOGIN or MARK in (c.get("body") or "")]
+if len(already) >= PER_ISSUE_CAP:
+    print("per-issue cap reached, skip")
+    sys.exit(0)
+
+# Daily cap: count bot replies across the repo in the last 24 hours.
+since = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - DAY_S))
+url = "https://api.github.com/repos/%s/issues/comments?since=%s&per_page=100" % (REPO, urllib.parse.quote(since))
+recent = gh("GET", url)
+daily = len([c for c in recent if (c.get("user") or {}).get("login") == BOT_LOGIN or MARK in (c.get("body") or "")])
+if daily >= DAILY_CAP:
+    msg = (
+        "你好，这里是自动客服。今天的自动回复额度已用完，请先看仓库首页的一句话安装：\n\n"
+        "%s\n\n" % INSTALL_LINK
+    ) + MARK + "\n> 本回复由仓库自动客服（AI）生成。有误请指出，紧急问题请 @维护者。"
+    gh("POST", "https://api.github.com/repos/%s/issues/%d/comments" % (REPO, num), {"body": msg})
+    print("daily cap reached, posted install link only")
+    sys.exit(0)
 
 ctx_parts = []
 for name in ("README.md", "一键安装.md"):
@@ -94,7 +123,7 @@ payload = {
         {"role": "system", "content": system},
         {"role": "user", "content": user_msg},
     ],
-    "max_tokens": 600,
+    "max_tokens": 400,
 }
 req = urllib.request.Request(
     API + "/chat/completions",

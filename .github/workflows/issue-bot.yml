@@ -6,6 +6,10 @@ on:
   issue_comment:
     types: [created]
 
+concurrency:
+  group: issue-bot
+  cancel-in-progress: false
+
 permissions:
   contents: read
   issues: write
