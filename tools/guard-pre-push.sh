@@ -11,8 +11,12 @@ set -u
 
 ALLOW="${DSH_ALLOW_MEMORY_PUSH:-0}"
 [ "$ALLOW" = "1" ] && exit 0
+# 放行也可以来自本机 .git/config（B2 备份模式在用户确认私有仓库后设一次，不随仓库走）
+if [ "$(git config --bool dsh.allowMemoryPush 2>/dev/null)" = "true" ]; then
+  exit 0
+fi
 
-PATTERN='^(soul|memory|handoff|vault|env)/|^log\.md$'
+PATTERN='^(soul|memory|handoff|vault|env|projects|mirror|\.ilang)/|^log\.md$'
 ZEROS="0000000000000000000000000000000000000000"
 
 blocked=0
