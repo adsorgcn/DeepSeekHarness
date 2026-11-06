@@ -71,8 +71,8 @@
   "zero_install": [
     {
       "id": "voice",
-      "name": "语音：DSH 自带语音转写（Whisper/SenseVoice）+ 系统自带 Edge 朗读",
-      "how": "零安装；在 DSH 设置里打开语音转写即可，朗读让 agent 用系统语音生成音频"
+      "name": "语音：DSH 自带语音输入（实验性插件 voice-input-bundle，本地 SenseVoice）+ 系统自带语音朗读",
+      "how": "零安装；在 DSH 插件管理页启用实验性语音输入（随包默认禁用），首次用会下载 SenseVoiceSmall 模型文件，官方自带 hf-mirror.com 国内源；朗读是让 agent 调系统语音（Windows SAPI、macOS say）生成音频，DSH 本身没有朗读"
     },
     {
       "id": "notebook",

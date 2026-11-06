@@ -20,7 +20,7 @@
 | DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning | DeepSeek-AI | [10.48550/arXiv.2501.12948](https://doi.org/10.48550/arXiv.2501.12948) |
 | DeepSeek-V3 Technical Report | DeepSeek-AI | [10.48550/arXiv.2412.19437](https://doi.org/10.48550/arXiv.2412.19437) |
 | Qwen3 Technical Report（本地备用模型 qwen3:8b） | Qwen Team, Alibaba Group（An Yang 等） | [10.48550/arXiv.2505.09388](https://doi.org/10.48550/arXiv.2505.09388) |
-| Robust Speech Recognition via Large-Scale Weak Supervision（DSH 实验性语音转写的 Whisper 底座） | OpenAI（Alec Radford 等） | [10.48550/arXiv.2212.04356](https://doi.org/10.48550/arXiv.2212.04356) |
+| FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs（DSH 实验性语音输入的本地 Provider SenseVoiceSmall 所属工作） | Tongyi SpeechTeam, Alibaba Group（Keyu An 等） | [10.48550/arXiv.2407.04051](https://doi.org/10.48550/arXiv.2407.04051) |
 
 ## 延伸阅读（同源哲学，非直接依赖）
 
@@ -32,6 +32,8 @@
 
 - gzip（母版文件压缩）：[RFC 1952](https://www.rfc-editor.org/rfc/rfc1952)
 - age（密钥库加密）：[age 规范 v1](https://age-encryption.org/v1)（Filippo Valsorda 与 Ben Cartwright-Cox）
+- sherpa-onnx（语音模型推理运行时）：k2-fsa，Apache-2.0，无 DOI，[github.com/k2-fsa/sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)
+- Silero VAD（语音活动检测）：snakers4，MIT，无 DOI，[github.com/snakers4/silero-vad](https://github.com/snakers4/silero-vad)
 - Git（记忆的版本控制与哈希链）：[git-scm.com](https://git-scm.com)
 - Markdown / CommonMark：语言标准，无 DOI
 
@@ -48,7 +50,7 @@ Zenodo 自动归档已启用（owner 授权，2026-11-06）：
 
 - Long Quan Zhu：[0009-0004-4540-8082](https://orcid.org/0009-0004-4540-8082)（已核实）
 - Wenfeng Liang（梁文锋，DeepSeek-V4 与 DSec 两文作者/提交人）：**无公开 ORCID**——三重核查：① 同名检索 7 人均非 DeepSeek；② affiliation=DeepSeek 检索 48 人无他；③ 论文 HTML 作者块无其 ORCID 徽标。锚文本用 [arXiv 提交人页](https://arxiv.org/abs/2606.19348)。
-- Alec Radford（Whisper）：**无公开 ORCID**（检索 0 条），不挂。
+- Keyu An（FunAudioLLM 一作）：**无公开 ORCID**（检索 5 条同名，均无 Alibaba/通义归属），不挂不编。
 - An Yang（Qwen3 一作）：**无公开 ORCID**（检索 0 条），不挂。
 - DeepSeek 论文中以下作者有已核实 ORCID（检索口径 affiliation=DeepSeek，逐条比对 V4/DSec 作者名单）：
 

@@ -72,7 +72,7 @@
       "scheme": "doi"
     },
     {
-      "identifier": "10.48550/arXiv.2212.04356",
+      "identifier": "10.48550/arXiv.2407.04051",
       "relation": "cites",
       "resource_type": "publication-article",
       "scheme": "doi"
@@ -85,6 +85,6 @@
     "DeepSeek-AI. DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning. arXiv. DOI: 10.48550/arXiv.2501.12948",
     "DeepSeek-AI. DeepSeek-V3 Technical Report. arXiv. DOI: 10.48550/arXiv.2412.19437",
     "Qwen Team, Alibaba Group. Qwen3 Technical Report. arXiv. DOI: 10.48550/arXiv.2505.09388",
-    "OpenAI. Robust Speech Recognition via Large-Scale Weak Supervision. arXiv. DOI: 10.48550/arXiv.2212.04356"
+    "Tongyi SpeechTeam, Alibaba Group. FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs. arXiv. DOI: 10.48550/arXiv.2407.04051"
   ]
 }

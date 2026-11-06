@@ -70,7 +70,7 @@ references:
       - name: "Qwen Team, Alibaba Group"
     doi: "10.48550/arXiv.2505.09388"
   - type: article
-    title: "Robust Speech Recognition via Large-Scale Weak Supervision"
+    title: "FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs"
     authors:
-      - name: "OpenAI"
-    doi: "10.48550/arXiv.2212.04356"
+      - name: "Tongyi SpeechTeam, Alibaba Group"
+    doi: "10.48550/arXiv.2407.04051"

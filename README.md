@@ -56,7 +56,7 @@
 - Mem-Forever（同作者）：[DOI 10.5281/zenodo.22865160](https://doi.org/10.5281/zenodo.22865160)
 - DeepSeek-V4（DeepSeek-AI，arXiv 提交人 Wenfeng Liang）：[DOI 10.48550/arXiv.2606.19348](https://doi.org/10.48550/arXiv.2606.19348)
 
-完整清单（R1 / V3 / Qwen3 / Whisper / DSec 与标准组件）见 [docs/CITATIONS.md](docs/CITATIONS.md)。
+完整清单（R1 / V3 / Qwen3 / SenseVoice / DSec 与标准组件）见 [docs/CITATIONS.md](docs/CITATIONS.md)。
 
 ## 想看更多
 

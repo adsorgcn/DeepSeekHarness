@@ -64,4 +64,4 @@
 - **国内镜像**：`gitee.com/monetize/DeepSeekHarness` 只作产品源，永不作私人记忆备份目标；镜像同步方式由 owner 决定（Gitee 官方镜像或手动 push），每次发版后核对两边 HEAD 一致。
 - **记忆推送保护**：`bootstrap.*` 克隆后自动装 `tools/guard-pre-push.sh` 钩子；开发仓如需推送含 `soul/ memory/ handoff/ vault/ env/ projects/ mirror/ .ilang/ log.md` 的变更，先确认目标是私有仓库，再以 `DSH_ALLOW_MEMORY_PUSH=1` 或 `git config --bool dsh.allowMemoryPush true` 显式放行。
 - **DSH 版本行**：每次发版同步更新 README 与落地页的「在 DeepSeek Harness X 上验证」一行（X 取自本机 DSH 关于页或 package.json，取不到写「未记录」，不要猜）。
-- **引用规范**：凡用到/引到的算法与组件都按 docs/CITATIONS.md 挂 DOI/arXiv；作者有公开 ORCID 的做 ORCID 锚文本；查不到写「未查到」，不编造；仓库自身 DOI 待 owner 授权 Zenodo 后由发布 webhook 自动铸。
+- **引用规范**：凡用到/引到的算法与组件都按 docs/CITATIONS.md 挂 DOI/arXiv；作者有公开 ORCID 的做 ORCID 锚文本；查不到写「未查到」，不编造；仓库自身 DOI 由 Zenodo 发布 webhook 自动铸；写 DSH 有什么功能以 deepseek-ai/deepseek-harness 仓库为准，查不到不写。
