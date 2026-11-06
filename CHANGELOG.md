@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.26** · 2026-11-06 · 视觉路由（审计 DSH-VISION-ROUTE-F1-F5）
+
+- `AGENTS.local.md` 新增 `dsh_vision_routing` GENE：Pro 用户说「看截图」→ 剪贴板存图（`tools/clip_shot.ps1/sh`）→ `list_subagent_models` 核路由 → Flash 子代理 `read_image` 回报文字后继续；Flash 用户说「认真想」→ Pro 子代理；一次性子代理模型选择开关流程（两种开法、同意才写 profile）；全程不叫用户切模型
+- 新增剪贴板截图脚本（Windows/macOS/Linux，无图 NO_IMAGE 退出 2），`shots/` 进 .gitignore，CI 加脚本语法步骤
+- 一键安装与起手式加「截图给它看」小节；ROADMAP 记录：不装第三方视觉插件，贴图被宿主拒收等官方
+
 **v1.0.25** · 2026-11-06 · 首页功能卡版式修复
 
 - 「装完你就有了」一节：标题缩到 4–5 字并加 `.row.dense` 小字号，修掉窄栏折行（装完先验一／下、客服也过验／收、每版自动发／版）
