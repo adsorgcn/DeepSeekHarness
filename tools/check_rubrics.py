@@ -53,13 +53,15 @@ results["R3"] = not bad
 print(f"[R3] {'PASS' if results['R3'] else 'FAIL'} (forbidden found: {bad or 'none'})")
 print("-" * 60)
 
-# R4
+# R4：仓库自己的标题必须是 DeepSeekHarness（references 里引用 Mem-Forever 是合法的）
 c = io.open("CITATION.cff", encoding="utf-8").read()
 z = json.load(io.open(".zenodo.json", encoding="utf-8"))
+c_lines = c.splitlines()
+title_line = next((ln for ln in c_lines if ln.startswith("title:")), "")
 ok4 = (
-    "DeepSeekHarness" in c
+    "DeepSeekHarness" in title_line
     and "adsorgcn/DeepSeekHarness" in c
-    and "Mem-Forever: a Git-native" not in c
+    and not any(ln.startswith("title:") and "Mem-Forever" in ln for ln in c_lines)
     and "DeepSeekHarness" in z["title"]
     and any(r.get("identifier") == "10.5281/zenodo.22865160" for r in z.get("related_identifiers", []))
 )

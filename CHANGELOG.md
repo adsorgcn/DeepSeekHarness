@@ -1,5 +1,9 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.17** · 2026-11-06 · R4 检查器适配引用条目
+
+- `tools/check_rubrics.py` 的 R4 改为精确检查 CFF 的 `title:` 行（references 里引用 Mem-Forever 全名是合法引用，不再误报）
+
 **v1.0.16** · 2026-11-06 · 全量 DOI / arXiv / ORCID 引用
 
 - 新增 [docs/CITATIONS.md](docs/CITATIONS.md)：直接依赖（iLang、Mem-Forever、母版、校验器）、模型（DeepSeek-V4/R1/V3、Qwen3、Whisper）、延伸阅读（DSec）、标准组件（gzip/age/Git）全带 DOI/arXiv 锚点，作者有 ORCID 的挂 ORCID
