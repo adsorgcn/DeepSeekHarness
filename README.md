@@ -46,6 +46,16 @@
 
 笔记是纯文本，你随时能看、能改、能删。**默认只存在你自己电脑上**；本地记忆默认不联网：出网的只有两件事——你向模型提问时的 API 请求，和你主动配置的备份（自己的私有仓库或同步盘）。不记密码：密钥只进你本机的加密 vault。
 
+## 引用与致谢
+
+本仓库站在公开学术工作之上，每一层都带 DOI / arXiv 锚点，作者有 ORCID 的挂 ORCID：
+
+- iLang（[Long Quan Zhu](https://orcid.org/0009-0004-4540-8082)）：[DOI 10.5281/zenodo.21821452](https://doi.org/10.5281/zenodo.21821452)
+- Mem-Forever（同作者）：[DOI 10.5281/zenodo.22865160](https://doi.org/10.5281/zenodo.22865160)
+- DeepSeek-V4（DeepSeek-AI，arXiv 提交人 Wenfeng Liang）：[DOI 10.48550/arXiv.2606.19348](https://doi.org/10.48550/arXiv.2606.19348)
+
+完整清单（R1 / V3 / Qwen3 / Whisper / DSec 与标准组件）见 [docs/CITATIONS.md](docs/CITATIONS.md)。
+
 ## 想看更多
 
 - [CHANGELOG.md](CHANGELOG.md) · 更新记录

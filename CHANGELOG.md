@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.16** · 2026-11-06 · 全量 DOI / arXiv / ORCID 引用
+
+- 新增 [docs/CITATIONS.md](docs/CITATIONS.md)：直接依赖（iLang、Mem-Forever、母版、校验器）、模型（DeepSeek-V4/R1/V3、Qwen3、Whisper）、延伸阅读（DSec）、标准组件（gzip/age/Git）全带 DOI/arXiv 锚点，作者有 ORCID 的挂 ORCID
+- README 加「引用与致谢」块；落地页页脚改 DOI 链接；CITATION.cff 加 7 条 references（含 DOI）；.zenodo.json 加 5 条 cites 与 7 条 references
+- 核实记录：Wenfeng Liang 无公开 ORCID（不编造，锚 arXiv 提交人页）；本仓库自身 DOI 待 owner 授权 Zenodo 后自动铸
+
 **v1.0.15** · 2026-11-06 · 免费全家桶（数据驱动可选安装器）
 
 - 新增 `.dsh/free-station.json` 注册表 + `tools/free_station.py`：plan（只检测）/ install（逐项审批、官方源、失败即停、装后验证）/ status
