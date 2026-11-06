@@ -1,5 +1,15 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.12** · 2026-11-05 · 审计第三轮 DSH-FIX-B1-C6
+
+- C1 推送保护钩子覆盖 projects/ mirror/ .ilang/，并认 `git config dsh.allowMemoryPush` 放行
+- B9 客服把 issue 文本当数据；B10 维护者不触发、上下文换新手文档（行为测试 18 场景）
+- B1 三处合成同一句安装话；B3 装完亲眼看它记得；B2 本机模式默认（push 地址 DISABLED）+ 备份模式规则
+- C2 记 dsh.source、克隆失败自动换 Gitee 重试；B7 卸载；B6 密钥库标进阶可选
+- B4 引擎更新一句话 + 不动记忆的做法；B8 验证 DSH 版本行（0.2.2-rc.1，取自本机 package.json）
+- B11 更新记录移 CHANGELOG.md；C3 手动路线 bash 语法修复；C4 决策流装/推/删/出网写不算安全默认
+- C6 删死工作流、同步工作流写明权限；C5 月检带 Gitee 镜像漂移、发布打印双 HEAD；B12 bundle 项改官方插件索引机制（待实证）
+
 **v1.0.11** · 2026-11-05 · 决策纪律入 DNA
 
 - `AGENTS.local.md` 新增决策流：思考全部由 agent 完成，只把结论与推荐摆到 owner 面前；owner 零思考，只回答「做」或「过」；agent 不再提开放式问题；有安全默认时不阻塞等待

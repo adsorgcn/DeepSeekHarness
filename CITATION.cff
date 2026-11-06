@@ -19,7 +19,7 @@ authors:
 repository-code: "https://github.com/adsorgcn/DeepSeekHarness"
 url: "https://github.com/adsorgcn/DeepSeekHarness"
 license: MIT
-version: "1.0.11"
+version: "1.0.12"
 date-released: "2026-11-05"
 keywords:
   - DeepSeek Harness
