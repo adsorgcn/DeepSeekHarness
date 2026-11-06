@@ -1,5 +1,9 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.14** · 2026-11-06 · 发版摘要取对 Gitee HEAD
+
+- `release-on-version-change.yml`：摘要里的 Gitee HEAD 改用「取第一个 sha」的方式（grep -o + head -1 + cut），修掉 sed 贪婪匹配取到父提交的 bug（审计 DSH-FIX-D1）
+
 **v1.0.13** · 2026-11-06 · SEO 与仓库门面
 
 - 仓库 About：双语简介 + 官网地址 + 20 个主题标签（deepseek、ilang、ai-memory、persistent-memory、tutorial 等）
