@@ -293,78 +293,6 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
 .dsh-demo__handoff dt { color: #a1a1a7; font-size: 13px; }
 .dsh-demo__handoff dd { margin: 0; color: #e1e1e5; font-size: 15px; line-height: 1.6; }
 .dsh-demo__console i { width: 6px; height: 14px; background: var(--demo-blue); }
-.dsh-demo__phone {
-  position: relative;
-  width: min(252px, 92%);
-  padding: 5px;
-  border: 1px solid #68686e;
-  border-radius: 36px;
-  background: #303033;
-}
-.dsh-demo__phone::before, .dsh-demo__phone::after {
-  position: absolute;
-  content: "";
-  width: 2px;
-  background: #555559;
-}
-.dsh-demo__phone::before { top: 83px; left: -3px; height: 41px; }
-.dsh-demo__phone::after { top: 105px; right: -3px; height: 38px; }
-.dsh-demo__phone-screen {
-  display: flex;
-  flex-direction: column;
-  min-height: 414px;
-  border: 1px solid #222225;
-  border-radius: 29px;
-  overflow: hidden;
-  background: var(--demo-screen);
-}
-.dsh-demo__statusbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 34px;
-  padding: 0 19px;
-  color: #e1e1e5;
-  font: 600 12px/1 var(--demo-sans);
-  font-variant-numeric: tabular-nums;
-}
-.dsh-demo__earpiece { width: 45px; height: 10px; background: #09090a; border-radius: 8px; }
-.dsh-demo__radios { display: flex; align-items: end; gap: 2px; }
-.dsh-demo__radios i { width: 2px; height: 3px; background: #c7c7cc; }
-.dsh-demo__radios i:nth-child(2) { height: 5px; }
-.dsh-demo__radios i:nth-child(3) { height: 7px; }
-.dsh-demo__radios b { width: 11px; height: 6px; margin: 0 0 1px 2px; border: 1px solid #c7c7cc; }
-.dsh-demo__phonebar {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 17px 14px;
-  border-bottom: 1px solid var(--demo-divider);
-  font: 600 16px/1 var(--demo-sans);
-  letter-spacing: -.025em;
-}
-.dsh-demo__messages {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 23px;
-  padding: 22px 14px;
-  font-size: 15px;
-  line-height: 1.65;
-}
-.dsh-demo__user {
-  align-self: end;
-  padding: 7px 10px;
-  max-width: 90%;
-  border-radius: 13px 13px 4px 13px;
-  background: #303034;
-  color: var(--demo-ink);
-}
-.dsh-demo__user--short { background: #245b91; color: #fff; }
-.dsh-demo__answer, .dsh-demo__installed { display: flex; align-items: baseline; gap: 7px; color: #d4d4d8; }
-.dsh-demo__answer b { color: #a1a1a7; }
-.dsh-demo__installed b { color: var(--demo-blue); }
-.dsh-demo__handle { margin: auto auto 8px; width: 27%; height: 3px; background: #b9b9bf; border-radius: 2px; }
 .dsh-demo__terminal { width: min(100%, 500px); border-radius: 12px; }
 .dsh-demo__skills-list { margin: 14px 0 18px; padding: 0; list-style: none; }
 .dsh-demo__skills-list li { display: flex; gap: 11px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--demo-divider); }
@@ -378,15 +306,45 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
   .dsh-demo__bar { padding-inline: 10px; }
 }
 
+/* v1.0.39 narrative: hero note, tutorial / verify / say beats, command box grows to its text */
+.hero-note { margin-top: 22px; color: var(--quiet); font-size: 15px; letter-spacing: .01em; }
+.hero-main { padding-bottom: 8px; }
+.tutorial { background: var(--paper); }
+.install { background: var(--mist); }
+#verify { --ink: #f5f5f7; --quiet: #b6b6bd; --line: #424245; color: var(--ink); background: #111112; }
+#verify .section-label { color: #a1a1a6; }
+#verify .copy .proof { color: #fff; font-size: 19px; }
+.say { padding: clamp(100px, 9vw, 138px) 0; text-align: center; background: var(--paper); }
+.say h2 { margin: 16px auto 14px; }
+.say .lead { width: min(600px, 100%); margin: 0 auto; color: var(--quiet); font-size: 17px; line-height: 1.75; text-wrap: balance; }
+.say .command { margin-top: 34px; }
+.say .command textarea { height: auto; overflow: hidden; }
+.say .actions { margin-top: 24px; }
+.say-foot { margin-top: 30px; color: var(--note); font-size: 12px; line-height: 1.7; text-wrap: balance; }
+/* chat mockups inside a desktop window (the phone frame is gone) */
+.dsh-demo__messages { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 24px 22px 26px; font-size: 15px; line-height: 1.65; }
+.dsh-demo__user { align-self: flex-end; max-width: 88%; padding: 9px 13px; border-radius: 14px 14px 4px 14px; background: #303034; color: var(--demo-ink); overflow-wrap: anywhere; }
+.dsh-demo__user--short { background: #245b91; color: #fff; }
+.dsh-demo__answer, .dsh-demo__installed { display: flex; align-items: baseline; gap: 8px; max-width: 92%; color: #d4d4d8; }
+.dsh-demo__answer b { color: #a1a1a7; }
+.dsh-demo__installed b { color: var(--demo-blue); }
+.dsh-demo__answer span, .dsh-demo__installed span { min-width: 0; }
+@media (max-width: 720px) {
+  .hero-note { margin-top: 18px; font-size: 14px; }
+  .say { padding-block: 76px; }
+  .say .lead { font-size: 15px; }
+  .say-foot { font-size: 11px; }
+  .dsh-demo__messages { padding: 18px 14px 20px; font-size: 14px; }
+}
   </style>
 </head>
 <body>
-  <svg class="defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <svg class="defs" aria-hidden="true">
     <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 5V4a1 1 0 0 0-1-1H5a2 2 0 0 0-2 2v10a1 1 0 0 0 1 1h1"/></g></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></symbol>
     <symbol id="i-up" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M3 12h17m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
-
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3v17m-7-7 7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
   </svg>
   <a href="#main" class="skip">跳到正文</a>
   <header class="mast">
@@ -396,44 +354,42 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
         <span class="brand-family">iLang</span><span class="brand-product">DSH 工具包</span>
       </a>
       <nav class="nav" aria-label="页面导航">
-        <a href="#memory">记忆体</a><a href="#install">一键安装</a><a href="#skills">技能库</a>
+        <a href="#memory">记忆体</a><a href="#tutorial">新手教程</a><a href="#install">一键安装</a><a href="#skills">技能库</a><a href="#say">那句话</a>
       </nav>
       <a class="repo" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">GitHub <svg class="icon" aria-hidden="true"><use href="#i-up"/></svg></a>
     </div>
   </header>
   <main id="main">
+
+    <!-- 一、许愿 -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-main">
         <h1 class="hero-title" id="hero-title"><span>别人的 <span class="dsh">DSH</span> 是个聊天框。</span><span class="second">你的，一句话<strong>满配</strong>。</span></h1>
         <p class="hero-sub">记忆体 · 新手教程 · 一键安装 · 技能库</p>
         <div class="actions">
-          <button class="btn btn-primary" type="button" data-copy><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span id="copy-label">复制安装指令</span></button>
+          <a class="btn btn-primary" href="#say">那句话 <svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></a>
           <a class="btn btn-secondary" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">查看仓库 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
-        <div class="command">
-          <div class="command-bar">
-            <label class="command-label" for="install-command">安装指令</label>
-            <button class="icon-button" type="button" data-copy aria-label="复制完整安装指令" title="复制完整安装指令"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button>
-          </div>
-          <div class="command-body"><textarea id="install-command" rows="3" readonly spellcheck="false">帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。</textarea></div>
-        </div>
-        <p class="hint" id="hint">你只做两件事：粘贴、点头</p>
-        <span class="sr-only" id="copy-status" role="status"></span>
+        <p class="hero-note">你只做两件事：粘贴、点头。</p>
       </div>
       <div class="wrap hero-foot">
         <p><span>适用于 DeepSeek Harness，已在 0.2.2-rc.1 上验证</span> · <span>连不上 GitHub 自动走国内镜像</span></p>
       </div>
     </section>
+
+    <!-- 二、站在什么上面 -->
     <section id="protocol" class="trust filed" aria-labelledby="trust-title">
       <div class="wrap reveal">
         <span class="section-label">基于</span>
         <h2 id="trust-title">iLang 协议，开箱即用。</h2>
         <div class="names">
-          <span>iLang</span><span>Mem-Forever</span><span>DeepSeek V4</span>
+          <span>iLang</span><span>Mem-Forever</span><span>DeepSeek Harness</span>
         </div>
         <p>iLang 协议作者亲手设计，MIT 开源。</p>
       </div>
     </section>
+
+    <!-- 三、记忆体 -->
     <section id="memory" class="feature filed" aria-labelledby="memory-title">
       <div class="wrap split reveal">
         <div class="copy">
@@ -441,7 +397,6 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
           <h2 id="memory-title"><span>窗口关了，</span><span>进度还在。</span></h2>
           <p>你的习惯、决定、规矩，写成本地文件。换窗口不忘，换电脑一句话备份。每个新窗口开场，先汇报上次做到哪了。</p>
           <p class="proof">每笔记忆 = 一次 git 提交。哈希链就是防伪链。</p>
-          <p class="callout">装完先验：关掉窗口重开，它第一句就汇报上次做到哪。看到了就是装好了。</p>
         </div>
         <figure class="dsh-demo dsh-demo--memory" aria-label="笔记本上的记忆交接示例">
   <div class="dsh-demo__laptop">
@@ -470,37 +425,64 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
 </figure>
       </div>
     </section>
-    <section id="install" class="feature install filed" aria-labelledby="install-title">
+
+    <!-- 四、新手教程 -->
+    <section id="tutorial" class="feature tutorial filed" aria-labelledby="tutorial-title">
       <div class="wrap split reverse reveal">
+        <div class="copy">
+          <span class="section-label">新手教程</span>
+          <h2 id="tutorial-title"><span>第一句，</span><span>先学 iLang。</span></h2>
+          <p>教程不教你用 DSH，先让它去读 iLang 运行文件，读完用三句话告诉你学到了什么。第二句让它把你跑起来，第三句配模型，新手默认 deepseek-flash，第四句把灵魂写进去。</p>
+          <p class="proof">四句话，照抄就行。配模型、选协议、写人格，全是它的活。</p>
+        </div>
+        <figure class="dsh-demo dsh-demo--tutorial" aria-label="新窗口里的第一句示例">
+  <div class="dsh-demo__terminal">
+    <div class="dsh-demo__bar">
+      <span class="dsh-demo__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>新窗口 · 第 1 句</span>
+      <span class="dsh-demo__bar-end" aria-hidden="true">⌁</span>
+    </div>
+    <div class="dsh-demo__messages">
+      <div class="dsh-demo__user">先去读 runtime.ilang.app/ilang-latest.md（国内打不开就读 ilang.cn/runtime/ilang-latest.md），读完用三句话告诉我你学到了什么，再回来找我。</div>
+      <div class="dsh-demo__answer"><b aria-hidden="true">›</b><span>读完了。三句话：<br>一、iLang 是 AI 的原生语言，人类叫它协议。<br>二、每个动作先过判断：直接做、先问、交给人，还是停。<br>三、规则由代码检查，同样的输入永远同样的结果。</span></div>
+    </div>
+  </div>
+  <figcaption class="dsh-demo__caption">起手式示例</figcaption>
+</figure>
+      </div>
+    </section>
+
+    <!-- 五、一键安装 -->
+    <section id="install" class="feature install filed" aria-labelledby="install-title">
+      <div class="wrap split reveal">
         <div class="copy">
           <span class="section-label">一键安装</span>
           <h2 id="install-title"><span>新电脑，</span><span>一句话装齐。</span></h2>
           <p>缺什么补什么，每步问你，只走官方源。可选全家桶：视频下载、转文字、笔记、语音，一件一审批。</p>
           <p class="callout">只安装你点头同意的软件。删除工作区可移除项目文件，另装的工具需单独卸载。</p>
         </div>
-        <figure class="dsh-demo dsh-demo--install" aria-label="手机上的安装对话示例">
-  <div class="dsh-demo__phone">
-    <div class="dsh-demo__phone-screen">
-      <div class="dsh-demo__statusbar" aria-hidden="true">
-        <span>9:41</span><i class="dsh-demo__earpiece"></i>
-        <span class="dsh-demo__radios"><i></i><i></i><i></i><b></b></span>
-      </div>
-      <div class="dsh-demo__phonebar"><strong>工具包安装对话</strong></div>
-      <div class="dsh-demo__messages">
-        <div class="dsh-demo__user">帮我装个视频下载工具。</div>
-        <div class="dsh-demo__answer"><b aria-hidden="true">›</b><span>可以从官方源安装 <span lang="en">yt-dlp</span>。要继续吗？</span></div>
-        <div class="dsh-demo__user dsh-demo__user--short">同意安装</div>
-        <div class="dsh-demo__installed"><b aria-hidden="true">✓</b><span>yt-dlp 已安装</span></div>
-      </div>
-      <div class="dsh-demo__handle" aria-hidden="true"></div>
+        <figure class="dsh-demo dsh-demo--install" aria-label="安装审批对话示例">
+  <div class="dsh-demo__terminal">
+    <div class="dsh-demo__bar">
+      <span class="dsh-demo__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>安装审批</span>
+      <span class="dsh-demo__bar-end" aria-hidden="true">⌁</span>
+    </div>
+    <div class="dsh-demo__messages">
+      <div class="dsh-demo__user">帮我装个视频下载工具。</div>
+      <div class="dsh-demo__answer"><b aria-hidden="true">›</b><span>可以从官方源安装 <span lang="en">yt-dlp</span>。要继续吗？</span></div>
+      <div class="dsh-demo__user dsh-demo__user--short">同意安装</div>
+      <div class="dsh-demo__installed"><b aria-hidden="true">✓</b><span>yt-dlp 已安装</span></div>
     </div>
   </div>
   <figcaption class="dsh-demo__caption">安装审批示例</figcaption>
 </figure>
       </div>
     </section>
+
+    <!-- 六、技能库 -->
     <section id="skills" class="feature skills filed" aria-labelledby="skills-title">
-      <div class="wrap split reveal">
+      <div class="wrap split reverse reveal">
         <div class="copy">
           <span class="section-label">技能库</span>
           <h2 id="skills-title"><span>好技能，</span><span>随装随用。</span></h2>
@@ -527,6 +509,55 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
 </figure>
       </div>
     </section>
+
+    <!-- 七、验收时刻 -->
+    <section id="verify" class="feature verify filed" aria-labelledby="verify-title">
+      <div class="wrap split reveal">
+        <div class="copy">
+          <span class="section-label">验收时刻</span>
+          <h2 id="verify-title"><span>关掉窗口。</span><span>重开。</span></h2>
+          <p>把那个文件夹选为工作区，什么都不说。它第一句就汇报上次做到哪。</p>
+          <p class="proof">看到了，就是装好了。</p>
+        </div>
+        <figure class="dsh-demo dsh-demo--verify" aria-label="重开窗口后的第一句示例">
+  <div class="dsh-demo__terminal">
+    <div class="dsh-demo__bar">
+      <span class="dsh-demo__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>新窗口 · 你还没说话</span>
+      <span class="dsh-demo__bar-end" aria-hidden="true">⌁</span>
+    </div>
+    <div class="dsh-demo__messages">
+      <div class="dsh-demo__answer"><b aria-hidden="true">›</b><span>上次做到：整理了新手教程的目录。<br>下一步：接着写第一条安装指令。<br>要我接着写吗？</span></div>
+    </div>
+  </div>
+  <figcaption class="dsh-demo__caption">第一句就是汇报</figcaption>
+</figure>
+      </div>
+    </section>
+
+    <!-- 八、那句话 -->
+    <section id="say" class="say filed" aria-labelledby="say-title">
+      <div class="wrap reveal">
+        <span class="section-label">那句话</span>
+        <h2 id="say-title">贴给 DSH，剩下它全包。</h2>
+        <p class="lead">在任意 DSH 会话里，把下面这句原样贴给它。装环境先问你，放好全套，问几个问题认识你。</p>
+        <div class="command">
+          <div class="command-bar">
+            <label class="command-label" for="install-command">安装指令</label>
+            <button class="icon-button" type="button" data-copy aria-label="复制完整安装指令" title="复制完整安装指令"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button>
+          </div>
+          <div class="command-body"><textarea id="install-command" rows="4" readonly spellcheck="false">帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。</textarea></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-copy><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span id="copy-label">复制安装指令</span></button>
+        </div>
+        <p class="hint" id="hint">你只做两件事：粘贴、点头</p>
+        <span class="sr-only" id="copy-status" role="status"></span>
+        <p class="say-foot">Windows 走 bootstrap.ps1，macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选 · 只从官方源安装 · 默认本机模式，什么都不上传</p>
+      </div>
+    </section>
+
+    <!-- 九、隐私 -->
     <section class="privacy filed" aria-labelledby="privacy-title">
       <div class="wrap reveal">
         <span class="section-label">隐私与安全</span>
@@ -538,6 +569,8 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
         </ul>
       </div>
     </section>
+
+    <!-- 十、收尾 -->
     <section class="resume filed" aria-labelledby="resume-title">
       <div class="wrap reveal">
         <h2 class="section-label" id="resume-title">以后每个新窗口</h2>
@@ -568,6 +601,11 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
       const hint = document.getElementById('hint');
       const defaultHint = hint.textContent;
       let resetTimer;
+
+      // The sentence is shown whole: the box grows to its text instead of scrolling.
+      function fit() { field.style.height = 'auto'; field.style.height = field.scrollHeight + 'px'; }
+      fit();
+      addEventListener('resize', fit);
 
       async function copyCommand(event) {
         const trigger = event.currentTarget;
@@ -610,6 +648,7 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
       const active = new IntersectionObserver(entries => {
         for (const entry of entries) {
           const link = navLinks.find(item => item.hash === '#' + entry.target.id);
+          if (!link) continue;
           if (entry.isIntersecting) link.setAttribute('aria-current', 'location');
           else link.removeAttribute('aria-current');
         }
