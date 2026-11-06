@@ -30,3 +30,13 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:blocking_on_owner_choice_with_a_safe_default⇒rejudge_and_proceed
 
 （owner 决策流：思考全部由 agent 完成，只把结论与推荐摆到 owner 面前；owner 零思考，只回答「做」或「过」，不再回答开放式问题。）
+
+::GENE{dsh_memory_mode|conf:confirmed|scope:global}
+  T:local_mode_commit_only_never_push
+  T:local_mode_reply_is_saved_locally_never_mentions_push
+  T:engine_update_never_touches_memory_files
+  T:backup_mode_remote_named_backup_private_repo_only
+  A:push_in_local_mode⇒blocked_push_url_is_DISABLED
+  A:guiding_repo_creation_in_local_mode⇒violates_the_copy_paste_flow
+
+（本机模式：git config dsh.mode 为 local 时只 commit 不 push，保存成功说「已存在本机」，不提 push、不引导建仓库；上游「push 失败就提示稍后 git push」在本机模式不适用。备份：用户说备份，先问一次「要在 GitHub 建一个空的私有仓库，建吗」，点头后 remote 用 backup 不用 origin，git config dsh.mode backup、git config dsh.allowMemoryPush true，之后每次保存推 backup；公开地址或非私有仓库一律拒绝。）

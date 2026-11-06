@@ -145,6 +145,9 @@ if ! dsh_installed "$TARGET"; then
   say "克隆仓库（$product_source）..."
   [ -n "$GIT_BIN" ] || { say "git 仍不可用：请重跑本脚本。"; exit 1; }
   "$GIT_BIN" clone "$CLONE_URL" "$TARGET" || { say "克隆失败（$CLONE_URL）。请检查网络，或改用 -Source gitee 后重跑。"; exit 1; }
+  # 本机模式：关掉模板的推送地址，公开仓库在机制上永远不是推送目标
+  "$GIT_BIN" -C "$TARGET" remote set-url --push origin DISABLED || { say "设置本机模式失败，已停止。"; exit 1; }
+  "$GIT_BIN" -C "$TARGET" config dsh.mode local || { say "设置本机模式失败，已停止。"; exit 1; }
 fi
 
 # 4) 验收（失败即停，不报完成）

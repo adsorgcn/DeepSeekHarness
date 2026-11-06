@@ -177,6 +177,11 @@ if (-not (Test-DshInstalled $TargetDir)) {
         Write-Host "克隆失败（$cloneUrl）。请检查网络，或改用 -Source gitee 后重跑。"
         exit 1
     }
+    # 本机模式：关掉模板的推送地址，公开仓库在机制上永远不是推送目标
+    & $git -C $TargetDir remote set-url --push origin DISABLED
+    if ($LASTEXITCODE -ne 0) { Write-Host "设置本机模式失败，已停止。"; exit 1 }
+    & $git -C $TargetDir config dsh.mode local
+    if ($LASTEXITCODE -ne 0) { Write-Host "设置本机模式失败，已停止。"; exit 1 }
 }
 
 # 4) 验收（失败即停，不报完成）
