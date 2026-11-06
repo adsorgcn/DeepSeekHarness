@@ -1,265 +1,621 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#000000">
-<title>DeepSeek Harness 全套｜记忆体 · 新手教程 · 一键安装 · 技能库</title>
-<meta name="description" content="别人的 DSH 是个聊天框。你的，一句话满配。记忆体、新手教程、一键安装、技能库。">
-<meta property="og:title" content="DeepSeek Harness 全套">
-<meta property="og:description" content="别人的 DSH 是个聊天框。你的，一句话满配。">
-<meta property="og:type" content="website">
-<style>
-:root{--bg:#000;--bg2:#0a0a0a;--ink:#fff;--gray:#a0a0a0;--line:#1f1f1f;--line2:#2a2a2a;--accent:#FF4400}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC","Segoe UI",sans-serif;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
-.mono{font-family:"Cascadia Code",Consolas,"Courier New",monospace}
-a{color:inherit;text-decoration:none}
-a:hover{color:var(--accent)}
-.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
-section{padding:140px 0}
-.sec-label{font-family:"Cascadia Code",Consolas,monospace;font-size:13px;color:var(--gray);letter-spacing:.14em;margin-bottom:28px}
-h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.15}
-h1{font-size:clamp(34px,6vw,68px)}
-h2{font-size:clamp(28px,4.6vw,52px)}
-p{color:var(--gray)}
-.acc{color:var(--accent)}
-.note{font-size:14px;color:var(--gray);margin-top:18px}
-.callout{font-size:14px;color:var(--gray);border-left:2px solid var(--line2);padding-left:14px;margin-top:20px}
-.center{text-align:center}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="description" content="iLang 的 DSH 工具包适用于 DeepSeek Harness，提供本地记忆、新手教程、一键安装和技能库。">
+  <title>DSH 工具包 · iLang</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNTYiPgogIDxkZWZzPgogICAgCiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdvbGQiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1ZGVhMCI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjQ1JSIgc3RvcC1jb2xvcj0iI2Q0YTg1OCI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4ZjYzMjEiPjwvc3RvcD4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAKICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZFN0ZW0iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YwZDI4NyI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNhNjc3MmUiPjwvc3RvcD4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAKICAgIDxyYWRpYWxHcmFkaWVudCBpZD0ic2hlZW4iIGN4PSI1MCUiIGN5PSIzMCUiIHI9IjcwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMjU1LDI1NSwyNTUsLjEyKSI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InJnYmEoMjU1LDI1NSwyNTUsMCkiPjwvc3RvcD4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgPC9kZWZzPgoKICAKICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxMiIgZmlsbD0iIzBiMGYxYSI+PC9yZWN0PgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjEyIiBmaWxsPSJ1cmwoI3NoZWVuKSI+PC9yZWN0PgoKICAKICA8cmVjdCB4PSIxLjUiIHk9IjEuNSIgd2lkdGg9IjYxIiBoZWlnaHQ9IjYxIiByeD0iMTAuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9Ii42IiBvcGFjaXR5PSIuNTUiPjwvcmVjdD4KCiAgCiAgPHBhdGggZD0iTTE4IDE3IEwxMyAxNyBMMTMgNDcgTDE4IDQ3IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZCkiIHN0cm9rZS13aWR0aD0iMi44IiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIj48L3BhdGg+CgogIAogIDxwYXRoIGQ9Ik00NiAxNyBMNTEgMTcgTDUxIDQ3IEw0NiA0NyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIuOCIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciI+PC9wYXRoPgoKICAKICAKICA8cmVjdCB4PSIyOS42IiB5PSIxOSIgd2lkdGg9IjQuOCIgaGVpZ2h0PSI0LjYiIHJ4PSIuNiIgZmlsbD0idXJsKCNnb2xkU3RlbSkiPjwvcmVjdD4KICAKICA8cmVjdCB4PSIzMCIgeT0iMjcuNSIgd2lkdGg9IjQiIGhlaWdodD0iMTYiIGZpbGw9InVybCgjZ29sZFN0ZW0pIj48L3JlY3Q+CiAgCiAgPHJlY3QgeD0iMjguNCIgeT0iMjcuNSIgd2lkdGg9IjcuMiIgaGVpZ2h0PSIxLjQiIGZpbGw9InVybCgjZ29sZCkiPjwvcmVjdD4KICAKICA8cmVjdCB4PSIyNy44IiB5PSI0Mi4yIiB3aWR0aD0iOC40IiBoZWlnaHQ9IjEuNiIgZmlsbD0idXJsKCNnb2xkKSI+PC9yZWN0Pgo8L3N2Zz4=">
+  <style>
+@font-face {
+  font-family: "DSH Sans SC";
+  src: local("Noto Sans SC");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+:root {
+  --paper: #fff;
+  --mist: #f5f5f7;
+  --ink: #1d1d1f;
+  --quiet: #606064;
+  --note: #6e6e73;
+  --line: #d2d2d7;
+  --blue: #0071e3;
+  --link: #0066cc;
+  --sans: "SF Pro SC", "PingFang SC", "DSH Sans SC", "Noto Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", "PingFang SC", "DSH Sans SC", "Microsoft YaHei", monospace;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button, textarea { font: inherit; }
+button { cursor: pointer; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 3px solid #2997ff; outline-offset: 3px; }
+::selection { background: #c2e0ff; color: #1d1d1f; }
+h1, h2, p, blockquote { margin: 0; }
+.wrap { width: min(1080px, calc(100% - 96px)); margin-inline: auto; }
+.defs { position: absolute; width: 0; height: 0; pointer-events: none; }
+.icon { display: inline-block; width: 16px; height: 16px; flex: none; }
+.skip { position: fixed; top: -80px; left: 16px; z-index: 20; padding: 10px 16px; background: var(--paper); color: var(--ink); }
+.skip:focus { top: 12px; }
+.mast { position: sticky; top: 0; z-index: 10; background: rgb(255 255 255 / .96); border-bottom: 1px solid #e6e6e8; }
+.header-inner { display: flex; align-items: center; gap: 34px; min-height: 58px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; color: var(--ink); white-space: nowrap; }
+.brand img { display: block; width: 28px; height: 28px; }
+.brand-family { font: 600 21px/1 -apple-system, "Segoe UI", var(--sans); letter-spacing: -.025em; }
+.brand-product { margin-left: 4px; padding-left: 13px; border-left: 1px solid var(--line); font: 500 16px/1.25 var(--sans); }
+.nav { display: flex; align-items: center; gap: 29px; margin-left: auto; }
+.nav a, .repo { font-weight: 450; font-size: 13px; line-height: 26px; color: #515154; }
+.nav a:hover, .nav a[aria-current="location"], .repo:hover { color: var(--link); }
+.repo { display: inline-flex; align-items: center; gap: 5px; padding-left: 24px; border-left: 1px solid #dedee2; }
+.repo .icon { width: 12px; height: 12px; }
+.hero { background: var(--mist); }
+.hero-main { display: flex; flex-direction: column; align-items: center; width: min(1100px, 100%); margin: auto; padding: clamp(73px, 8.8vh, 116px) 24px 0; text-align: center; }
+.hero-title { font-weight: 550; line-height: 1.18; }
+.hero-title > span { display: block; }
+.hero-title > span:first-child { color: #626267; font-weight: 450; font-size: clamp(28px, 2.65vw, 39px); line-height: 1.42; letter-spacing: .005em; }
+.hero-title .dsh { font-family: -apple-system, "Segoe UI", var(--sans); letter-spacing: -.035em; font-weight: 500; }
+.hero-title .second { font-size: clamp(54px, 6.25vw, 88px); letter-spacing: -.036em; margin-top: 12px; }
+.hero-title strong { font-weight: inherit; }
+.hero-sub { margin-top: 24px; color: var(--quiet); font-size: 18px; font-weight: 400; letter-spacing: .03em; }
+.actions { display: flex; justify-content: center; align-items: center; gap: 19px; margin-top: 27px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding-inline: 20px; border: 1px solid transparent; border-radius: 100px; font: 450 15px/1.4 var(--sans); transition: background .16s, color .16s; }
+.btn-primary { background: var(--blue); color: white; }
+.btn-primary:hover { background: #0077ed; }
+.btn-secondary { color: var(--link); padding: 0 3px; }
+.btn-secondary:hover { text-decoration: underline; text-underline-offset: 4px; }
+.btn-secondary .icon { width: 14px; height: 14px; }
+.command { width: min(590px, 100%); margin: 37px auto 0; text-align: left; background: var(--paper); border: 1px solid #dcdce1; border-radius: 14px; }
+.command-bar { display: flex; align-items: center; justify-content: space-between; padding: 4px 9px 1px 17px; }
+.command-label { display: inline-flex; align-items: center; gap: 7px; color: #515154; font: 500 13px/1.5 var(--sans); }
+.icon-button { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; color: #737378; background: transparent; }
+.icon-button:hover { background: var(--mist); color: var(--link); }
+.command-body { padding: 0 16px 15px; }
+.command textarea { display: block; padding: 0 8px 0 0; border: 0; border-radius: 0; width: 100%; height: 64px; resize: none; color: #4c4c50; background: transparent; font: 400 13px/21.33px var(--mono); scrollbar-width: thin; scrollbar-color: #b9b9c0 transparent; }
+.hint { margin-top: 12px; font-size: 13px; line-height: 1.6; color: var(--note); }
+.hero-foot { display: flex; align-items: center; justify-content: center; margin-top: 36px; padding: 0 16px 28px; }
+.hero-foot p { text-align: center; color: var(--note); font-size: 12px; line-height: 1.65; text-wrap: balance; }
+.hero-foot p span { display: inline-block; }
+.trust { padding: 94px 0 100px; text-align: center; background: var(--paper); }
+.section-label { display: block; color: var(--quiet); font: 500 16px/1.4 var(--sans); letter-spacing: .012em; }
+h2 { font-size: clamp(40px, 4.1vw, 60px); font-weight: 550; line-height: 1.24; letter-spacing: -.023em; }
+.trust h2 { margin: 14px auto 29px; font-size: clamp(36px, 3.55vw, 48px); }
+.names { display: flex; align-items: center; justify-content: center; gap: 28px; }
+.names > span { display: inline-flex; align-items: center; font-size: 19px; font-weight: 520; letter-spacing: -.022em; }
+.names > span + span::before { content: ""; width: 1px; height: 15px; margin-right: 28px; background: var(--line); }
+.trust p { margin-top: 17px; font-size: 15px; color: var(--quiet); }
+.feature { padding: clamp(105px, 10vw, 154px) 0; }
+.split { display: grid; grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr); align-items: center; gap: clamp(44px, 6vw, 92px); }
+.split.reverse { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); }
+.split.reverse .copy { grid-column: 2; grid-row: 1; }
+.split.reverse figure { grid-column: 1; grid-row: 1; }
+.copy h2 { margin: 16px 0 22px; }
+.copy h2 span { display: block; }
+.copy p { text-wrap: balance; max-width: 29em; color: var(--quiet); font-size: 17px; line-height: 1.78; }
+.copy .proof { margin-top: 22px; color: var(--ink); font-size: 15px; }
+.copy .callout { margin-top: 18px; border-left: 2px solid var(--line); padding-left: 14px; font-size: 14px; line-height: 1.8; color: var(--quiet); }
+#memory, .resume { --ink: #f5f5f7; --quiet: #b6b6bd; --line: #424245; color: var(--ink); background: #111112; }
+#memory .section-label, .resume .section-label { color: #a1a1a6; }
+.install { background: var(--mist); }
+.skills { background: var(--paper); }
+.privacy { padding: clamp(100px, 9vw, 138px) 0; background: var(--mist); text-align: center; }
+.privacy h2 { margin: 16px auto 36px; }
+.privacy ul { width: min(640px, 100%); margin: 0 auto; padding: 0; list-style: none; text-align: left; }
+.privacy li { display: flex; gap: 14px; align-items: baseline; border-bottom: 1px solid var(--line); padding: 17px 0; color: #515154; font-size: 16px; line-height: 1.75; }
+.privacy li:last-child { border: 0; }
+.privacy li svg { color: var(--link); align-self: flex-start; margin-top: 6px; }
+.resume { padding: clamp(110px, 11vw, 170px) 0; text-align: center; }
+.resume blockquote { margin: 24px auto 19px; font-size: clamp(31px, 3.75vw, 55px); font-weight: 550; line-height: 1.4; letter-spacing: -.022em; text-wrap: balance; }
+.resume blockquote .quote-m { color: #a1a1a6; }
+.resume p { color: var(--quiet); font-size: 17px; }
+footer { padding: 43px 0; color: var(--quiet); background: var(--mist); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 15px 26px; }
+.footer-links a { color: #424245; font-size: 13px; }
+.footer-links a:hover, .doi:hover { color: var(--link); text-decoration: underline; }
+footer p { margin: 20px 0 10px; font-size: 12px; }
+.doi { display: inline-flex; align-items: center; border: 1px solid #c5c5cb; color: #56565b; border-radius: 3px; font: 11px/1.7 var(--mono); }
+.doi span { padding: 0 6px; }
+.doi span:first-child { border-right: 1px solid #c5c5cb; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.entered { animation: appear .45s ease-out both; }
+@keyframes appear { from { opacity: .35; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+@media (max-width: 900px) {
+  .wrap { width: calc(100% - 56px); }
+  .split, .split.reverse { gap: 36px; }
+  .copy p { font-size: 16px; }
+}
+@media (max-width: 720px) {
+  html { scroll-padding-top: 68px; }
+  .wrap { width: calc(100% - 40px); }
+  .header-inner { min-height: 52px; justify-content: space-between; gap: 12px; }
+  .brand { gap: 6px; }
+  .brand img { width: 24px; height: 24px; }
+  .brand-family { font-size: 18px; }
+  .brand-product { margin-left: 3px; padding-left: 9px; font-size: 14px; }
+  .nav { display: none; }
+  .repo { padding-left: 0; border: 0; font-size: 12px; }
+  .hero-main { padding: 64px 20px 0; }
+  .hero-title { margin-inline: -10px; }
+  .hero-title > span:first-child { font-size: clamp(19px, 4.9vw, 28px); letter-spacing: 0; }
+  .hero-title .second { margin-top: 10px; font-size: clamp(29px, 9.1vw, 54px); letter-spacing: -.045em; line-height: 1.24; }
+  .hero-sub { margin-top: 18px; font-size: clamp(13px, 3.4vw, 16px); letter-spacing: 0; }
+  .actions { margin-top: 23px; gap: 16px; }
+  .btn { font-size: 14px; }
+  .command { margin-top: 28px; }
+  .command textarea { font-size: 13px; height: 84px; line-height: 21px; }
+  .hero-foot { margin-top: 26px; padding-inline: 0; padding-bottom: 25px; }
+  .hero-foot p { font-size: 11px; }
+  .trust, .feature, .privacy, .resume { padding-block: 76px; }
+  h2, .trust h2 { font-size: clamp(29px, 7.15vw, 42px); }
+  .section-label { font-size: 14px; }
+  .trust h2 { margin: 12px 0 24px; text-wrap: balance; }
+  .names { gap: 12px; }
+  .names > span { font-size: clamp(13px, 3.35vw, 17px); }
+  .names > span + span::before { margin-right: 12px; height: 12px; }
+  .trust p { font-size: 14px; }
+  .split, .split.reverse { grid-template-columns: minmax(0, 1fr); gap: 38px; }
+  .split.reverse .copy, .split.reverse figure { grid-column: auto; grid-row: auto; }
+  .copy h2 { margin: 12px 0 18px; }
+  .copy h2 span { display: inline-block; }
+  .copy p { max-width: none; }
+  .privacy h2 { text-wrap: balance; }
+  .privacy li { font-size: 15px; }
+  .resume blockquote { font-size: clamp(26px, 6.15vw, 38px); }
+  .resume p { font-size: 15px; }
+  footer { padding: 33px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
 
-/* hero */
-.hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 60px;text-align:center}
-.hero h1{margin-bottom:22px}
-.hero .sub{color:var(--gray);font-size:clamp(16px,2.2vw,20px);margin-bottom:48px}
-.pastebox{border:1px solid var(--line2);background:var(--bg2);max-width:760px;margin:0 auto;text-align:left}
-.pastebox textarea{display:block;width:100%;border:0;background:transparent;color:#e8e8e8;font-family:"Cascadia Code",Consolas,monospace;font-size:14px;line-height:1.7;padding:18px 22px;resize:none;outline:none;height:150px}
-.pastebox .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:10px 22px;flex-wrap:wrap}
-.pastebox .bar span{font-size:13px;color:var(--gray)}
-.btn{border:1px solid transparent;background:var(--accent);color:#fff;font-family:inherit;font-size:14px;font-weight:700;padding:10px 22px;cursor:pointer;letter-spacing:.02em}
-.btn.ghost{background:transparent;border-color:#444;color:var(--ink)}
-.btn:hover{filter:brightness(1.1)}
-.hero-actions{display:flex;gap:14px;justify-content:center;margin-top:26px;flex-wrap:wrap}
-.hero-note{margin-top:64px;font-size:13px;color:var(--gray)}
+.dsh-demo {
+  --demo-blue: #2997ff;
+  --demo-ink: #f5f5f7;
+  --demo-secondary: #b9b9c0;
+  --demo-divider: #303034;
+  --demo-chrome: #212124;
+  --demo-screen: #151517;
+  --demo-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  --demo-mono: ui-monospace, "SFMono-Regular", Consolas, "PingFang SC", "Microsoft YaHei UI", monospace;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  color: var(--demo-ink);
+  font-family: var(--demo-sans);
+  -webkit-font-smoothing: antialiased;
+  text-align: left;
+  line-height: 1.5;
+}
+.dsh-demo, .dsh-demo * { box-sizing: border-box; }
+.dsh-demo__caption {
+  margin: 20px 0 0;
+  font: 400 13px/1.55 var(--demo-sans);
+  letter-spacing: .015em;
+  color: var(--device-caption, #77777d);
+}
+.dsh-demo__laptop { width: min(100%, 580px); }
+.dsh-demo__lid {
+  position: relative;
+  width: 91.5%;
+  margin: 0 auto;
+  padding: 16px 8px 10px;
+  border: 1px solid #656569;
+  border-radius: 16px 16px 6px 6px;
+  background: #1d1d1f;
+}
+.dsh-demo__camera {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  top: 6px;
+  left: calc(50% - 2px);
+  border-radius: 50%;
+  background: #444448;
+}
+.dsh-demo__display, .dsh-demo__terminal {
+  overflow: hidden;
+  border: 1px solid var(--demo-divider);
+  background: var(--demo-screen);
+}
+.dsh-demo__display { border-radius: 5px; }
+.dsh-demo__laptop-base {
+  position: relative;
+  height: 11px;
+  margin-top: -1px;
+  border: 1px solid #5a5a60;
+  border-radius: 1px 1px 45% 45% / 1px 1px 70% 70%;
+  background: #4d4d52;
+}
+.dsh-demo__laptop-base i {
+  display: block;
+  height: 4px;
+  width: 17%;
+  margin: 0 auto;
+  background: #2b2b2e;
+  border-radius: 0 0 3px 3px;
+}
+.dsh-demo__bar {
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--demo-divider);
+  background: var(--demo-chrome);
+  color: var(--demo-secondary);
+  font: 500 12px/1.5 var(--demo-sans);
+  text-align: center;
+}
+.dsh-demo__dots { display: flex; align-items: center; gap: 4px; }
+.dsh-demo__dots i {
+  width: 6px;
+  height: 6px;
+  background: #555559;
+  border-radius: 50%;
+}
+.dsh-demo__bar-end { justify-self: end; color: #98989d; font-size: 15px; }
+.dsh-demo__screen-content { padding: clamp(18px, 3vw, 34px); }
+.dsh-demo__path, .dsh-demo__console {
+  display: flex;
+  align-items: center;
+  gap: .65em;
+  color: var(--demo-secondary);
+  font: 13px/1.55 var(--demo-mono);
+}
+.dsh-demo__path b, .dsh-demo__console span { color: #98989d; font: 500 18px/1 var(--demo-mono); }
+.dsh-demo__screen-title {
+  display: block;
+  margin-top: 22px;
+  color: var(--demo-ink);
+  font-size: clamp(22px, 2.6vw, 29px);
+  font-weight: 600;
+  letter-spacing: -.025em;
+  line-height: 1.3;
+}
+.dsh-demo__handoff {
+  display: grid;
+  gap: 13px;
+  margin: 19px 0 22px;
+  padding: 0 0 0 14px;
+  border-left: 1px solid #47474b;
+}
+.dsh-demo__handoff div { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 10px; }
+.dsh-demo__handoff dt { color: #a1a1a7; font-size: 13px; }
+.dsh-demo__handoff dd { margin: 0; color: #e1e1e5; font-size: 15px; line-height: 1.6; }
+.dsh-demo__console i { width: 6px; height: 14px; background: var(--demo-blue); }
+.dsh-demo__phone {
+  position: relative;
+  width: min(252px, 92%);
+  padding: 5px;
+  border: 1px solid #68686e;
+  border-radius: 36px;
+  background: #303033;
+}
+.dsh-demo__phone::before, .dsh-demo__phone::after {
+  position: absolute;
+  content: "";
+  width: 2px;
+  background: #555559;
+}
+.dsh-demo__phone::before { top: 83px; left: -3px; height: 41px; }
+.dsh-demo__phone::after { top: 105px; right: -3px; height: 38px; }
+.dsh-demo__phone-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 414px;
+  border: 1px solid #222225;
+  border-radius: 29px;
+  overflow: hidden;
+  background: var(--demo-screen);
+}
+.dsh-demo__statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+  padding: 0 19px;
+  color: #e1e1e5;
+  font: 600 12px/1 var(--demo-sans);
+  font-variant-numeric: tabular-nums;
+}
+.dsh-demo__earpiece { width: 45px; height: 10px; background: #09090a; border-radius: 8px; }
+.dsh-demo__radios { display: flex; align-items: end; gap: 2px; }
+.dsh-demo__radios i { width: 2px; height: 3px; background: #c7c7cc; }
+.dsh-demo__radios i:nth-child(2) { height: 5px; }
+.dsh-demo__radios i:nth-child(3) { height: 7px; }
+.dsh-demo__radios b { width: 11px; height: 6px; margin: 0 0 1px 2px; border: 1px solid #c7c7cc; }
+.dsh-demo__phonebar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 17px 14px;
+  border-bottom: 1px solid var(--demo-divider);
+  font: 600 16px/1 var(--demo-sans);
+  letter-spacing: -.025em;
+}
+.dsh-demo__messages {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 23px;
+  padding: 22px 14px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.dsh-demo__user {
+  align-self: end;
+  padding: 7px 10px;
+  max-width: 90%;
+  border-radius: 13px 13px 4px 13px;
+  background: #303034;
+  color: var(--demo-ink);
+}
+.dsh-demo__user--short { background: #245b91; color: #fff; }
+.dsh-demo__answer, .dsh-demo__installed { display: flex; align-items: baseline; gap: 7px; color: #d4d4d8; }
+.dsh-demo__answer b { color: #a1a1a7; }
+.dsh-demo__installed b { color: var(--demo-blue); }
+.dsh-demo__handle { margin: auto auto 8px; width: 27%; height: 3px; background: #b9b9bf; border-radius: 2px; }
+.dsh-demo__terminal { width: min(100%, 500px); border-radius: 12px; }
+.dsh-demo__skills-list { margin: 14px 0 18px; padding: 0; list-style: none; }
+.dsh-demo__skills-list li { display: flex; gap: 11px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--demo-divider); }
+.dsh-demo__skills-list li > b { color: #98989d; font: normal 16px/1 var(--demo-mono); }
+.dsh-demo__skills-list strong { color: #e8e8ed; font: 500 15px/1.5 var(--demo-mono); overflow-wrap: anywhere; }
+.dsh-demo__skills-list small { display: block; margin-top: 2px; color: var(--demo-secondary); font-size: 13px; }
+@media (max-width: 420px) {
+  .dsh-demo__lid { width: 94%; padding-inline: 6px; }
+  .dsh-demo__handoff div { gap: 7px; }
+  .dsh-demo__handoff { padding-inline-start: 8px; }
+  .dsh-demo__bar { padding-inline: 10px; }
+}
 
-/* trust */
-.trust{text-align:center;padding:100px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.trust .names{display:flex;gap:56px;justify-content:center;margin:36px 0 22px;flex-wrap:wrap;font-weight:800;font-size:clamp(18px,2.6vw,26px)}
-.trust .names span{color:var(--ink)}
-
-/* feature rows */
-.row{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
-.row .text h2{margin-bottom:20px}
-.row .text p{margin-bottom:12px;max-width:34em}
-.row .proof{font-size:15px;color:#d8d8d8;margin-top:18px}
-.row.rev{grid-template-columns:1fr 1fr}
-@media (max-width:860px){.row,.row.rev{grid-template-columns:1fr;gap:40px}}
-
-/* mockups */
-.mock{border:1px solid var(--line2);border-radius:10px;background:var(--bg2);overflow:hidden;font-family:"Cascadia Code",Consolas,monospace;font-size:13px;line-height:1.8;color:#c8c8c8}
-.mock .bar{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line)}
-.mock .bar i{width:10px;height:10px;border-radius:50%;background:#333;display:inline-block}
-.mock .bar i:nth-child(1){background:#f0553d}
-.mock .body{padding:16px 18px}
-.mock .c{color:#8f8f8f}
-.mock .o{color:var(--accent)}
-.mock .w{color:#e8e8e8}
-.phone{max-width:300px;margin:0 auto;border-radius:24px;padding:14px}
-.phone .screen{border:1px solid var(--line);border-radius:16px;background:#000;padding:14px;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px}
-.phone .msg{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px;color:#d8d8d8}
-.phone .msg.me{background:#1a1200;border-color:#4a2a10;color:var(--ink)}
-.phone .t{color:var(--accent);font-weight:700;margin-bottom:8px}
-
-/* privacy */
-.privacy{text-align:center}
-.privacy ul{list-style:none;max-width:560px;margin:36px auto 0;text-align:left}
-.privacy li{color:var(--gray);padding:14px 0 14px 34px;position:relative;border-bottom:1px solid var(--line)}
-.privacy li:last-child{border-bottom:0}
-.privacy li::before{content:"✓";position:absolute;left:0;top:14px;color:var(--accent)}
-
-/* resume quote */
-.resume{text-align:center;padding:160px 0}
-.resume blockquote{font-size:clamp(24px,4vw,44px);font-weight:800;line-height:1.4;margin:34px 0 18px;color:var(--ink)}
-.resume p{color:var(--gray)}
-
-/* footer */
-footer{border-top:1px solid var(--line);padding:56px 0 72px;text-align:center;color:var(--gray);font-size:14px}
-footer .links{display:flex;gap:28px;justify-content:center;margin-bottom:22px;flex-wrap:wrap}
-footer .links a{color:var(--gray)}
-footer .links a:hover{color:var(--accent)}
-footer .doi{margin-top:18px}
-footer .doi img{opacity:.85}
-
-/* reveal */
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.rise{animation:rise .7s cubic-bezier(.16,1,.3,1) both}
-@media (prefers-reduced-motion:reduce){.rise{animation:none}}
-</style>
+  </style>
 </head>
 <body>
+  <svg class="defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 5V4a1 1 0 0 0-1-1H5a2 2 0 0 0-2 2v10a1 1 0 0 0 1 1h1"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M3 12h17m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
 
-<section class="hero wrap rise" id="top">
-  <h1>别人的 DSH 是个聊天框。<br><span class="acc">你的，一句话满配。</span></h1>
-  <p class="sub">记忆体 · 新手教程 · 一键安装 · 技能库</p>
-  <div class="pastebox">
-    <textarea id="cmd" readonly>帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。</textarea>
-    <div class="bar">
-      <span>你只做两件事：粘贴、点头</span>
-      <button class="btn" type="button" onclick="copyCmd()">复制安装指令</button>
+  </svg>
+  <a href="#main" class="skip">跳到正文</a>
+  <header class="mast">
+    <div class="wrap header-inner">
+      <a class="brand" href="#main" aria-label="iLang · DSH 工具包首页">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNTYiPgogIDxkZWZzPgogICAgCiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdvbGQiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1ZGVhMCI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjQ1JSIgc3RvcC1jb2xvcj0iI2Q0YTg1OCI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4ZjYzMjEiPjwvc3RvcD4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAKICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZFN0ZW0iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YwZDI4NyI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNhNjc3MmUiPjwvc3RvcD4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAKICAgIDxyYWRpYWxHcmFkaWVudCBpZD0ic2hlZW4iIGN4PSI1MCUiIGN5PSIzMCUiIHI9IjcwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMjU1LDI1NSwyNTUsLjEyKSI+PC9zdG9wPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InJnYmEoMjU1LDI1NSwyNTUsMCkiPjwvc3RvcD4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgPC9kZWZzPgoKICAKICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxMiIgZmlsbD0iIzBiMGYxYSI+PC9yZWN0PgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjEyIiBmaWxsPSJ1cmwoI3NoZWVuKSI+PC9yZWN0PgoKICAKICA8cmVjdCB4PSIxLjUiIHk9IjEuNSIgd2lkdGg9IjYxIiBoZWlnaHQ9IjYxIiByeD0iMTAuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9Ii42IiBvcGFjaXR5PSIuNTUiPjwvcmVjdD4KCiAgCiAgPHBhdGggZD0iTTE4IDE3IEwxMyAxNyBMMTMgNDcgTDE4IDQ3IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZCkiIHN0cm9rZS13aWR0aD0iMi44IiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIj48L3BhdGg+CgogIAogIDxwYXRoIGQ9Ik00NiAxNyBMNTEgMTcgTDUxIDQ3IEw0NiA0NyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIuOCIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciI+PC9wYXRoPgoKICAKICAKICA8cmVjdCB4PSIyOS42IiB5PSIxOSIgd2lkdGg9IjQuOCIgaGVpZ2h0PSI0LjYiIHJ4PSIuNiIgZmlsbD0idXJsKCNnb2xkU3RlbSkiPjwvcmVjdD4KICAKICA8cmVjdCB4PSIzMCIgeT0iMjcuNSIgd2lkdGg9IjQiIGhlaWdodD0iMTYiIGZpbGw9InVybCgjZ29sZFN0ZW0pIj48L3JlY3Q+CiAgCiAgPHJlY3QgeD0iMjguNCIgeT0iMjcuNSIgd2lkdGg9IjcuMiIgaGVpZ2h0PSIxLjQiIGZpbGw9InVybCgjZ29sZCkiPjwvcmVjdD4KICAKICA8cmVjdCB4PSIyNy44IiB5PSI0Mi4yIiB3aWR0aD0iOC40IiBoZWlnaHQ9IjEuNiIgZmlsbD0idXJsKCNnb2xkKSI+PC9yZWN0Pgo8L3N2Zz4=" width="28" height="28" alt="">
+        <span class="brand-family">iLang</span><span class="brand-product">DSH 工具包</span>
+      </a>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#memory">记忆体</a><a href="#install">一键安装</a><a href="#skills">技能库</a>
+      </nav>
+      <a class="repo" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">GitHub <svg class="icon" aria-hidden="true"><use href="#i-up"/></svg></a>
     </div>
-  </div>
-  <div class="hero-actions">
-    <button class="btn" type="button" onclick="copyCmd()">复制安装指令</button>
-    <a class="btn ghost" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">查看仓库 →</a>
-  </div>
-  <p class="hero-note">连不上 GitHub 自动走国内镜像 gitee.com/monetize/DeepSeekHarness · 在 DeepSeek Harness 0.2.2-rc.1 上验证（DSH 还是 Developer Preview，官方说可能有破坏性变更；装不上先看这一行）</p>
-</section>
-
-<section class="trust rise">
-  <div class="wrap">
-    <div class="sec-label">// 基于</div>
-    <h2>iLang 协议，开箱即用。</h2>
-    <div class="names"><span>iLang</span><span>Mem-Forever</span><span>DeepSeek V4</span></div>
-    <p>iLang 协议作者亲手设计，MIT 开源。</p>
-  </div>
-</section>
-
-<section class="rise">
-  <div class="wrap row">
-    <div class="text">
-      <div class="sec-label">// 记忆体</div>
-      <h2>窗口关了，进度还在。</h2>
-      <p>你的习惯、决定、规矩，写成本地文件。换窗口不忘，换电脑一句话备份。每个新窗口开场，先汇报上次做到哪了。</p>
-      <p class="proof">每笔记忆 = 一次 git 提交。哈希链就是防伪链。</p>
-      <p class="callout">装完先验：关掉窗口重开，它第一句就汇报上次做到哪。看到了就是装好了。</p>
-    </div>
-    <div class="mock">
-      <div class="bar"><i></i><i></i><i></i></div>
-      <div class="body">
-        <div class="c">$ dsh --resume</div>
-        <div class="o">上次做到哪：</div>
-        <div class="w">引擎已更新到最新，Gitee 镜像同 HEAD</div>
-        <div class="w">下一步：owner 巡检</div>
-        <div class="c"># 交接单 · 2026-11-06 · 哈希链 3 笔</div>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-main">
+        <h1 class="hero-title" id="hero-title"><span>别人的 <span class="dsh">DSH</span> 是个聊天框。</span><span class="second">你的，一句话<strong>满配</strong>。</span></h1>
+        <p class="hero-sub">记忆体 · 新手教程 · 一键安装 · 技能库</p>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-copy><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span id="copy-label">复制安装指令</span></button>
+          <a class="btn btn-secondary" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">查看仓库 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="command">
+          <div class="command-bar">
+            <label class="command-label" for="install-command">安装指令</label>
+            <button class="icon-button" type="button" data-copy aria-label="复制完整安装指令" title="复制完整安装指令"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button>
+          </div>
+          <div class="command-body"><textarea id="install-command" rows="3" readonly spellcheck="false">帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。</textarea></div>
+        </div>
+        <p class="hint" id="hint">你只做两件事：粘贴、点头</p>
+        <span class="sr-only" id="copy-status" role="status"></span>
+      </div>
+      <div class="wrap hero-foot">
+        <p><span>适用于 DeepSeek Harness，已在 0.2.2-rc.1 上验证</span> · <span>连不上 GitHub 自动走国内镜像</span></p>
+      </div>
+    </section>
+    <section id="protocol" class="trust filed" aria-labelledby="trust-title">
+      <div class="wrap reveal">
+        <span class="section-label">基于</span>
+        <h2 id="trust-title">iLang 协议，开箱即用。</h2>
+        <div class="names">
+          <span>iLang</span><span>Mem-Forever</span><span>DeepSeek V4</span>
+        </div>
+        <p>iLang 协议作者亲手设计，MIT 开源。</p>
+      </div>
+    </section>
+    <section id="memory" class="feature filed" aria-labelledby="memory-title">
+      <div class="wrap split reveal">
+        <div class="copy">
+          <span class="section-label">记忆体</span>
+          <h2 id="memory-title"><span>窗口关了，</span><span>进度还在。</span></h2>
+          <p>你的习惯、决定、规矩，写成本地文件。换窗口不忘，换电脑一句话备份。每个新窗口开场，先汇报上次做到哪了。</p>
+          <p class="proof">每笔记忆 = 一次 git 提交。哈希链就是防伪链。</p>
+          <p class="callout">装完先验：关掉窗口重开，它第一句就汇报上次做到哪。看到了就是装好了。</p>
+        </div>
+        <figure class="dsh-demo dsh-demo--memory" aria-label="笔记本上的记忆交接示例">
+  <div class="dsh-demo__laptop">
+    <div class="dsh-demo__lid">
+      <span class="dsh-demo__camera" aria-hidden="true"></span>
+      <div class="dsh-demo__display">
+        <div class="dsh-demo__bar">
+          <span class="dsh-demo__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>本地工作区</span>
+          <span class="dsh-demo__bar-end" aria-hidden="true">⌁</span>
+        </div>
+        <div class="dsh-demo__screen-content">
+          <div class="dsh-demo__path"><b aria-hidden="true">›</b> handoff/CURRENT.md</div>
+          <strong class="dsh-demo__screen-title">上次做到这里。</strong>
+          <dl class="dsh-demo__handoff">
+            <div><dt>已完成</dt><dd>整理了新手教程的目录。</dd></div>
+            <div><dt>下一步</dt><dd>接着写第一条安装指令。</dd></div>
+          </dl>
+          <div class="dsh-demo__console" aria-hidden="true"><span>›</span><i></i></div>
+        </div>
       </div>
     </div>
+    <div class="dsh-demo__laptop-base" aria-hidden="true"><i></i></div>
   </div>
-</section>
-
-<section class="rise">
-  <div class="wrap row rev">
-    <div class="phone">
-      <div class="screen">
-        <div class="t">DSH</div>
-        <div class="msg me">新电脑，装齐我要用的</div>
-        <div class="msg">检测中：缺 yt-dlp、FFmpeg、Obsidian。要装吗？逐个问你。</div>
-        <div class="msg me">装</div>
-        <div class="msg">yt-dlp 已装好（官方源）。下一个：FFmpeg？</div>
+  <figcaption class="dsh-demo__caption">记忆交接示例</figcaption>
+</figure>
       </div>
-    </div>
-    <div class="text">
-      <div class="sec-label">// 一键安装</div>
-      <h2>新电脑，一句话装齐。</h2>
-      <p>缺什么补什么，每步问你，只走官方源。可选全家桶：视频下载、转文字、笔记、语音，一件一审批。</p>
-      <p class="callout">装过的只有你点头同意的软件。删掉文件夹就全没了。</p>
-      <p class="note">新手用 Flash，截图直接贴；说「认真想」请 Pro。视频转文字：贴链接或文件，出文字和字幕，本地跑，不上传。</p>
-    </div>
-  </div>
-</section>
-
-<section class="rise">
-  <div class="wrap row">
-    <div class="text">
-      <div class="sec-label">// 技能库</div>
-      <h2>好技能，随装随用。</h2>
-      <p>mem-forever、site-design-engine 起步，按需加载；新技能持续进来，每次发版跟着更新。</p>
-    </div>
-    <div class="mock">
-      <div class="bar"><i></i><i></i><i></i></div>
-      <div class="body">
-        <div class="c">$ dsh skills</div>
-        <div class="w">mem-forever · 记忆体</div>
-        <div class="w">site-design-engine · 落地页</div>
-        <div class="c"># 更多技能随版本更新</div>
+    </section>
+    <section id="install" class="feature install filed" aria-labelledby="install-title">
+      <div class="wrap split reverse reveal">
+        <div class="copy">
+          <span class="section-label">一键安装</span>
+          <h2 id="install-title"><span>新电脑，</span><span>一句话装齐。</span></h2>
+          <p>缺什么补什么，每步问你，只走官方源。可选全家桶：视频下载、转文字、笔记、语音，一件一审批。</p>
+          <p class="callout">只安装你点头同意的软件。删除工作区可移除项目文件，另装的工具需单独卸载。</p>
+        </div>
+        <figure class="dsh-demo dsh-demo--install" aria-label="手机上的安装对话示例">
+  <div class="dsh-demo__phone">
+    <div class="dsh-demo__phone-screen">
+      <div class="dsh-demo__statusbar" aria-hidden="true">
+        <span>9:41</span><i class="dsh-demo__earpiece"></i>
+        <span class="dsh-demo__radios"><i></i><i></i><i></i><b></b></span>
       </div>
+      <div class="dsh-demo__phonebar"><strong>工具包安装对话</strong></div>
+      <div class="dsh-demo__messages">
+        <div class="dsh-demo__user">帮我装个视频下载工具。</div>
+        <div class="dsh-demo__answer"><b aria-hidden="true">›</b><span>可以从官方源安装 <span lang="en">yt-dlp</span>。要继续吗？</span></div>
+        <div class="dsh-demo__user dsh-demo__user--short">同意安装</div>
+        <div class="dsh-demo__installed"><b aria-hidden="true">✓</b><span>yt-dlp 已安装</span></div>
+      </div>
+      <div class="dsh-demo__handle" aria-hidden="true"></div>
     </div>
   </div>
-</section>
-
-<section class="privacy rise">
-  <div class="wrap">
-    <div class="sec-label">// 放心</div>
-    <h2>你的记忆，只在你的电脑上。</h2>
-    <ul>
-      <li>本地记忆默认不上传。出网的只有模型请求和你主动配置的备份。</li>
-      <li>密钥只进本机加密保险箱。密码不会被保存。</li>
-      <li>笔记是纯文本，你随时能看、能改、能删。</li>
-    </ul>
-  </div>
-</section>
-
-<section class="resume rise">
-  <div class="wrap">
-    <div class="sec-label">// 以后每个新窗口</div>
-    <blockquote>「进我的记忆体，看看上次到哪了。」</blockquote>
-    <p>或者把目录选成 DSH 的工作区，连这句话都不用说。</p>
-  </div>
-</section>
-
-<footer class="rise">
-  <div class="wrap">
-    <div class="links">
-      <a href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">仓库</a>
-      <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/dsh-新手起手式.md" target="_blank" rel="noopener">新手教程</a>
-      <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/一键安装.md" target="_blank" rel="noopener">一键安装</a>
-      <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md" target="_blank" rel="noopener">迭代清单</a>
-      <a href="https://gitee.com/monetize/DeepSeekHarness" target="_blank" rel="noopener">国内镜像</a>
+  <figcaption class="dsh-demo__caption">安装审批示例</figcaption>
+</figure>
+      </div>
+    </section>
+    <section id="skills" class="feature skills filed" aria-labelledby="skills-title">
+      <div class="wrap split reveal">
+        <div class="copy">
+          <span class="section-label">技能库</span>
+          <h2 id="skills-title"><span>好技能，</span><span>随装随用。</span></h2>
+          <p>mem-forever、site-design-engine 起步，新技能持续进来。你刷到什么好东西，说一句「迭代进去」，它就进仓库。</p>
+        </div>
+        <figure class="dsh-demo dsh-demo--skills" aria-label="终端中的本地技能列表示例">
+  <div class="dsh-demo__terminal">
+    <div class="dsh-demo__bar">
+      <span class="dsh-demo__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>本地技能库</span>
+      <span class="dsh-demo__bar-end" aria-hidden="true">⌁</span>
     </div>
-    <p>基于 iLang v5.0 与 Mem-Forever · MIT</p>
-    <div class="doi"><a href="https://doi.org/10.5281/zenodo.23998664" target="_blank" rel="noopener"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.23998664.svg" alt="DOI 10.5281/zenodo.23998664"></a></div>
+    <div class="dsh-demo__screen-content">
+      <div class="dsh-demo__path"><b aria-hidden="true">›</b> skills/</div>
+      <strong class="dsh-demo__screen-title">本地技能</strong>
+      <ul class="dsh-demo__skills-list">
+        <li><b aria-hidden="true">↳</b><span><strong>mem-forever</strong><small>保存本地记忆</small></span></li>
+        <li><b aria-hidden="true">↳</b><span><strong>site-design-engine</strong><small>设计网站页面</small></span></li>
+      </ul>
+      <div class="dsh-demo__console" aria-hidden="true"><span>›</span><i></i></div>
+    </div>
   </div>
-</footer>
+  <figcaption class="dsh-demo__caption">本地技能示例</figcaption>
+</figure>
+      </div>
+    </section>
+    <section class="privacy filed" aria-labelledby="privacy-title">
+      <div class="wrap reveal">
+        <span class="section-label">隐私与安全</span>
+        <h2 id="privacy-title">你的记忆，只在你的电脑上。</h2>
+        <ul>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>本地记忆默认不上传。出网的只有模型请求和你主动配置的备份。</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>密钥只进本机加密保险箱。密码不会被保存。</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>笔记是纯文本，你随时能看、能改、能删。</li>
+        </ul>
+      </div>
+    </section>
+    <section class="resume filed" aria-labelledby="resume-title">
+      <div class="wrap reveal">
+        <h2 class="section-label" id="resume-title">以后每个新窗口</h2>
+        <blockquote><span class="quote-m">「</span>进我的记忆体，看看上次到哪了。<span class="quote-m">」</span></blockquote>
+        <p>或者把目录选成 DSH 的工作区，连这句话都不用说。</p>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <nav class="footer-links" aria-label="项目资源">
+        <a href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">仓库</a>
+        <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/dsh-新手起手式.md" target="_blank" rel="noopener">新手教程</a>
+        <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/一键安装.md" target="_blank" rel="noopener">一键安装</a>
+        <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md" target="_blank" rel="noopener">迭代清单</a>
+        <a href="https://gitee.com/monetize/DeepSeekHarness" target="_blank" rel="noopener">国内镜像</a>
+      </nav>
+      <p>iLang 出品 · 基于 iLang v5.0 与 Mem-Forever · MIT</p>
+      <a class="doi" href="https://doi.org/10.5281/zenodo.23998664" target="_blank" rel="noopener"><span>DOI</span><span>10.5281/zenodo.23998664</span></a>
+    </div>
+  </footer>
+  <script>
+    (() => {
+      const field = document.getElementById('install-command');
+      const controls = [...document.querySelectorAll('[data-copy]')];
+      const label = document.getElementById('copy-label');
+      const status = document.getElementById('copy-status');
+      const hint = document.getElementById('hint');
+      const defaultHint = hint.textContent;
+      let resetTimer;
 
-<script>
-(function () {
-  var els = document.querySelectorAll("section.rise, footer.rise");
-  if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    els.forEach(function (el) { el.style.opacity = 1; });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (en.isIntersecting) { en.target.style.animationPlayState = "running"; io.unobserve(en.target); }
-    });
-  }, { threshold: 0.12 });
-  els.forEach(function (el) {
-    el.style.opacity = 0;
-    el.style.animationPlayState = "paused";
-    io.observe(el);
-  });
-})();
+      async function copyCommand(event) {
+        const trigger = event.currentTarget;
+        let copied = false;
+        try {
+          await navigator.clipboard.writeText(field.value);
+          copied = true;
+        } catch {
+          field.focus({ preventScroll: true });
+          field.select();
+          try { copied = document.execCommand('copy'); } catch { /* Selection supports manual copying. */ }
+          if (copied) trigger.focus({ preventScroll: true });
+        }
+        clearTimeout(resetTimer);
+        controls.forEach(button => button.querySelector('use').setAttribute('href', copied ? '#i-check' : '#i-copy'));
+        label.textContent = copied ? '已复制指令' : '复制安装指令';
+        hint.textContent = copied ? '粘贴到 DSH 对话框，按提示逐项确认。' : '已选中完整指令，请使用系统的复制操作。';
+        status.textContent = copied ? '已复制完整安装指令。' : hint.textContent;
+        resetTimer = setTimeout(() => {
+          label.textContent = '复制安装指令';
+          controls.forEach(button => button.querySelector('use').setAttribute('href', '#i-copy'));
+          hint.textContent = defaultHint;
+          status.textContent = '';
+        }, 3000);
+      }
 
-function copyCmd() {
-  var ta = document.getElementById("cmd");
-  var done = function () {
-    var btns = document.querySelectorAll(".btn:not(.ghost)");
-    btns.forEach(function (b) { b.textContent = "已复制 ✓"; setTimeout(function () { b.textContent = "复制安装指令"; }, 1600); });
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(ta.value).then(done, function () { fallbackCopy(); });
-  } else {
-    fallbackCopy();
-  }
-  function fallbackCopy() {
-    ta.removeAttribute("readonly");
-    ta.select();
-    ta.setSelectionRange(0, ta.value.length);
-    document.execCommand("copy");
-    ta.setAttribute("readonly", "");
-    done();
-  }
-}
-</script>
+      controls.forEach(button => button.addEventListener('click', copyCommand));
+      if (!('IntersectionObserver' in window)) return;
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const reveal = new IntersectionObserver(entries => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('entered');
+            reveal.unobserve(entry.target);
+          }
+        }, { threshold: .08 });
+        document.querySelectorAll('.reveal').forEach(section => reveal.observe(section));
+      }
+      const navLinks = [...document.querySelectorAll('.nav a')];
+      const active = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          const link = navLinks.find(item => item.hash === '#' + entry.target.id);
+          if (entry.isIntersecting) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        }
+      }, { rootMargin: '-20% 0px -50% 0px' });
+      navLinks.forEach(link => active.observe(document.getElementById(link.hash.slice(1))));
+    })();
+  </script>
 </body>
 </html>
