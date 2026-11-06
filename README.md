@@ -1,5 +1,7 @@
 <img src="assets/social-preview.png" alt="别人的 DSH 是个聊天框。你的，一句话满配。" width="100%">
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23998664.svg)](https://doi.org/10.5281/zenodo.23998664)
+
 # DeepSeek Harness
 
 **一句话，让你的 DSH 记住你、教会你、把环境装齐。**

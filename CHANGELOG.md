@@ -1,5 +1,10 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.19** · 2026-11-06 · 自家 DOI 与 ORCID 锚点闭环
+
+- 本仓库 concept DOI：[10.5281/zenodo.23998664](https://doi.org/10.5281/zenodo.23998664)（Zenodo 自动归档已生效，README 挂徽章，CITATION.cff 加 identifiers）
+- CITATIONS.md：26 位 DeepSeek 作者已核实 ORCID 逐个挂链；Wenfeng Liang / Alec Radford / An Yang 经核查无公开 ORCID，如实标注不编造
+
 **v1.0.18** · 2026-11-06 · Zenodo 自动 DOI 启用
 
 - owner 已在 GitHub 启用 Zenodo 自动归档；CITATIONS.md 记录启用状态；本版发布即触发首次归档，DOI 铸成后回填徽章

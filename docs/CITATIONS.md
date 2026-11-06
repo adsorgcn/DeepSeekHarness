@@ -37,9 +37,48 @@
 
 ## 关于本仓库自己的 DOI
 
-owner 已于 2026-11-06 在 GitHub 启用 Zenodo 自动归档：**下一个 Release 起，每个版本自动铸 DOI，同一 concept DOI 覆盖全部版本**。首个 DOI 铸成后，回填本节、README 徽章与 CITATION.cff 的 identifiers 字段。本仓库的引用建议在 DOI 就位后以 DOI 为准。
+Zenodo 自动归档已启用（owner 授权，2026-11-06）：
 
-## ORCID 说明
+- **Concept DOI（覆盖全部版本）：[10.5281/zenodo.23998664](https://doi.org/10.5281/zenodo.23998664)**
+- v1.0.18 版本 DOI：[10.5281/zenodo.23998665](https://doi.org/10.5281/zenodo.23998665)
+
+引用本仓库请优先使用 concept DOI；后续每个 Release 自动追加版本 DOI。
+
+## ORCID 说明（礼貌与铁律：有 ORCID 必挂链接，查不到就明说，不编造）
 
 - Long Quan Zhu：[0009-0004-4540-8082](https://orcid.org/0009-0004-4540-8082)（已核实）
-- Wenfeng Liang（梁文锋）：**公开 ORCID 未查到**——ORCID 库中 7 位同名者均非 DeepSeek 相关；他在 arXiv 上以提交人身份出现在 DeepSeek-V4（2606.19348）与 DSec（2609.22978）两文。按本仓库纪律不编造，锚文本用 arXiv 页面。
+- Wenfeng Liang（梁文锋，DeepSeek-V4 与 DSec 两文作者/提交人）：**无公开 ORCID**——三重核查：① 同名检索 7 人均非 DeepSeek；② affiliation=DeepSeek 检索 48 人无他；③ 论文 HTML 作者块无其 ORCID 徽标。锚文本用 [arXiv 提交人页](https://arxiv.org/abs/2606.19348)。
+- Alec Radford（Whisper）：**无公开 ORCID**（检索 0 条），不挂。
+- An Yang（Qwen3 一作）：**无公开 ORCID**（检索 0 条），不挂。
+- DeepSeek 论文中以下作者有已核实 ORCID（检索口径 affiliation=DeepSeek，逐条比对 V4/DSec 作者名单）：
+
+| 作者 | ORCID |
+|---|---|
+| Jingchang Chen | [0009-0003-3014-2077](https://orcid.org/0009-0003-3014-2077) |
+| Yaohui Wang | [0009-0004-8848-4122](https://orcid.org/0009-0004-8848-4122) |
+| Zuofan Wu | [0009-0009-5515-4414](https://orcid.org/0009-0009-5515-4414) |
+| Ziwei Xie | [0009-0008-6109-5652](https://orcid.org/0009-0008-6109-5652) |
+| Haoling Zhang | [0009-0000-2265-0360](https://orcid.org/0009-0000-2265-0360) |
+| Zhizhou Ren | [0009-0004-9962-5816](https://orcid.org/0009-0004-9962-5816) |
+| Panpan Huang | [0009-0008-2875-0184](https://orcid.org/0009-0008-2875-0184) |
+| Shirong Ma | [0009-0008-1686-407X](https://orcid.org/0009-0008-1686-407X) |
+| Yuhan Wu | [0000-0001-7115-5390](https://orcid.org/0000-0001-7115-5390) |
+| Longhao Chen | [0009-0008-7803-8208](https://orcid.org/0009-0008-7803-8208) |
+| Shiyu Wang | [0009-0007-6607-6568](https://orcid.org/0009-0007-6607-6568) |
+| Yuxuan Liu | [0009-0008-2770-7926](https://orcid.org/0009-0008-2770-7926) |
+| Damai Dai | [0009-0004-9714-7902](https://orcid.org/0009-0004-9714-7902) |
+| Zhe Fu | [0009-0002-3292-1712](https://orcid.org/0009-0002-3292-1712) |
+| Jiarui Wang | [0009-0005-1714-4961](https://orcid.org/0009-0005-1714-4961) |
+| Yuan Cheng | [0009-0002-0762-4505](https://orcid.org/0009-0002-0762-4505) |
+| Haoyu Chen | [0009-0005-9547-5678](https://orcid.org/0009-0005-9547-5678) |
+| Junjie Qiu | [0009-0001-4831-6640](https://orcid.org/0009-0001-4831-6640) |
+| Honghui Ding | [0009-0007-7231-4892](https://orcid.org/0009-0007-7231-4892) |
+| Lingxiao Luo | [0009-0005-7989-8742](https://orcid.org/0009-0005-7989-8742) |
+| Yixiao Chen | [0009-0008-5525-5891](https://orcid.org/0009-0008-5525-5891) |
+| Han Yu | [0009-0002-1984-3625](https://orcid.org/0009-0002-1984-3625) |
+| Shuiping Yu | [0009-0008-5427-998X](https://orcid.org/0009-0008-5427-998X) |
+| Bingzheng Xu | [0009-0009-7633-0448](https://orcid.org/0009-0009-7633-0448) |
+| Wenjun Gao | [0009-0008-6184-8888](https://orcid.org/0009-0008-6184-8888) |
+| Zhangli Sha | [0009-0005-9644-1605](https://orcid.org/0009-0005-9644-1605) |
+
+（其余 DeepSeek 归属 ORCID 记录以 ORCID 官方检索 affiliation=DeepSeek 为准；未逐一列名的作者不做个人锚文本。）
