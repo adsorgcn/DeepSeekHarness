@@ -1,5 +1,16 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.20** · 2026-11-06 · 审计第四轮 DSH-FIX-E1-E8
+
+- E1 模型条目 verify 改 `ollama show qwen3:8b`（不再用 ollama list 误报已装）
+- E2 macOS Ollama 走 cask `ollama-app`（formula 装完 pull 必失败）
+- E3 Windows Obsidian 用 `winget list` 验证（不再查 PATH 误报失败）
+- E4 Windows 安装器读注册表刷新 PATH 并按全路径执行；装成功提示重启 DSH
+- E5 语音引用改正：SenseVoice / FunAudioLLM（2407.04051）+ sherpa-onnx + Silero VAD，撤下 Whisper；DSH 功能描述以官方仓库为准
+- E6 NotebookLM 正名并标注海外（需谷歌账号、国内打不开）
+- E7 预印本改用 concept DOI 10.5281/zenodo.22882690
+- E8 Linux 补 apt 条目（ffmpeg/yt-dlp）与 ollama/obsidian 官方下载页指引
+
 **v1.0.19** · 2026-11-06 · 自家 DOI 与 ORCID 锚点闭环
 
 - 本仓库 concept DOI：[10.5281/zenodo.23998664](https://doi.org/10.5281/zenodo.23998664)（Zenodo 自动归档已生效，README 挂徽章，CITATION.cff 加 identifiers）
