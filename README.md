@@ -10,7 +10,7 @@
 
 把下面这句话，原样贴给你的 DSH：
 
-> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套。缺什么软件你从官方装，要安装任何东西都先问我；装完告诉我，以后每个新窗口怎么一句话回到这里。
+> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。
 
 剩下的它全包：装环境（先问你再动手）、放好全套、问几个问题认识你。**你只粘贴、只点头。**（Windows 走 bootstrap.ps1，macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选。）
 

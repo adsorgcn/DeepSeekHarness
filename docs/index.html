@@ -78,9 +78,10 @@ footer .links{display:flex; flex-wrap:wrap; gap:28px; margin-bottom:28px}
   <p class="lead rise r2">记忆体、新手教程、一键安装、技能库。贴一句话，它记住你、教会你、装齐环境。</p>
 
   <div class="pastebox rise r3">
-    <textarea id="cmd" readonly aria-label="要粘贴给 DSH 的安装指令">帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套。缺什么软件你从官方装，要安装任何东西都先问我；装完告诉我，以后每个新窗口怎么一句话回到这里。</textarea>
+    <textarea id="cmd" readonly aria-label="要粘贴给 DSH 的安装指令">帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。</textarea>
     <div class="bar"><span>你只做两件事：粘贴、点头</span><button class="copy" id="copyBtn">复制这句话</button></div>
   </div>
+  <p class="note rise r3">连不上 GitHub：自动走国内镜像 gitee.com/monetize/DeepSeekHarness，iLang 官方资料自动走 ilang.cn；私人记忆默认拦在本地，只有你确认的私有仓库才能备份。</p>
 </div>
 
 <section class="wrap">
