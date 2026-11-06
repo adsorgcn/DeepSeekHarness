@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.31** · 2026-11-06 · 吸收第三方优质产品：REA 进全家桶（装+推荐+署名）
+
+- 免费全家桶新增可选条目 REA（morluto/rea，MIT；npx 官方安装，装前问，需 Node.js，新手不必装）
+- 起手式加「怎么把话说清楚」三件套（指目标→要证据→要复现，范式署名 REA 官网）+ REA 例句行；一键安装进阶清单同步
+- CITATIONS.md / CITATION.cff / .zenodo.json 三处署 REA 原作者；AGENTS.local 记规矩：吸收第三方必须装前问+官方源+署原作者
+
 **v1.0.30** · 2026-11-06 · 视频转文字修复版（审计 DSH-VIDEO-TEXT-FIX-I1-I7）
 
 - transcribe.py 去掉 numpy（标准库 array 转 PCM16）；照官方例子补 EOF flush、边喂边取段、VAD 参数 0.2/0.25/5、0.1 秒读窗（修掉丢尾段与段首字被吃）
