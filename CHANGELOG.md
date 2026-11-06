@@ -1,5 +1,9 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.29** · 2026-11-06 · 首页全家桶卡补「视频转文字」措辞
+
+- docs/index.html 全家桶卡改「SenseVoice 本地视频转文字与字幕」，与四处口径对齐
+
 **v1.0.28** · 2026-11-06 · 视频转文字内置（审计 DSH-VIDEO-TEXT-H1-H5）
 
 - 免费全家桶新增 sherpa-onnx 引擎条目 + `tools/asr_setup.py`（.asr-venv + 官方三源下载 + sha256 逐文件校验 + --check）
