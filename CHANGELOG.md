@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.27** · 2026-11-06 · 新手默认 Flash（审计 DSH-NEWBIE-FLASH-G1-G5）
+
+- 起手式第 3 句定死 deepseek-flash（看图、1M、便宜；Pro 更贵且不能看图，先不用）
+- AGENTS.local.md 新增 `dsh_newbie_model` GENE（看图直接贴、认真想请 Pro、只问一次模型选择）；「看截图」视觉路由标注为 Pro 开发者路线
+- 一键安装改「看图直接贴」+「开发者用 Pro」小节；装完先验加贴图验收；起手式玩法表换「看图/想深一点」+ 开发者段；首页与 README 同口径
+
 **v1.0.26** · 2026-11-06 · 视觉路由（审计 DSH-VISION-ROUTE-F1-F5）
 
 - `AGENTS.local.md` 新增 `dsh_vision_routing` GENE：Pro 用户说「看截图」→ 剪贴板存图（`tools/clip_shot.ps1/sh`）→ `list_subagent_models` 核路由 → Flash 子代理 `read_image` 回报文字后继续；Flash 用户说「认真想」→ Pro 子代理；一次性子代理模型选择开关流程（两种开法、同意才写 profile）；全程不叫用户切模型
