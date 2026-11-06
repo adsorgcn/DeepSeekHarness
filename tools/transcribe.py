@@ -10,12 +10,60 @@
 音频不出本机；允许出现的网络只有 yt-dlp 自己的下载。
 """
 import argparse
+import glob
 import os
+import shutil
 import subprocess
 import sys
 
 VENV = ".asr-venv"
 MODELS = os.path.join("models", "sensevoice")
+
+
+def refresh_path(key=None):
+    """Windows：注册表机器/用户 PATH 并入当前 PATH；非 Windows 原样返回。"""
+    key = key or ("windows" if sys.platform.startswith("win") else sys.platform)
+    cur = os.environ.get("PATH", "")
+    if key != "windows":
+        return cur
+    parts = [p for p in cur.split(os.pathsep) if p]
+    try:
+        import winreg
+        for hkey, sub in (
+            (winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"),
+            (winreg.HKEY_CURRENT_USER, "Environment"),
+        ):
+            try:
+                with winreg.OpenKey(hkey, sub) as k:
+                    val, _ = winreg.QueryValueEx(k, "Path")
+                for p in os.path.expandvars(str(val)).split(os.pathsep):
+                    p = p.strip()
+                    if p and p not in parts:
+                        parts.append(p)
+            except OSError:
+                pass
+    except ImportError:
+        pass
+    return os.pathsep.join(parts)
+
+
+def resolve_exe(name):
+    """找可执行文件：PATH（含注册表刷新）→ WinGet Links → WinGet Packages；找不到返回 None。"""
+    full = shutil.which(name, path=refresh_path())
+    if full:
+        return full
+    if sys.platform.startswith("win"):
+        local = os.environ.get("LOCALAPPDATA", "")
+        for cand_dir in (
+            os.path.join(local, "Microsoft", "WinGet", "Links"),
+            os.path.join(local, "Microsoft", "WinGet", "Packages"),
+        ):
+            try:
+                for hit in glob.glob(os.path.join(cand_dir, "**", name + ".exe"), recursive=True):
+                    return hit
+            except OSError:
+                pass
+    return None
 
 
 def venv_python():
@@ -43,14 +91,15 @@ def check_engine_ready(venv_py, models_dir, import_fn=None):
 
 
 def reexec_if_needed():
-    """当前解释器不是 .asr-venv 里的，就用 venv 的 Python 重新执行自己。"""
+    """当前解释器不是 .asr-venv 里的，就用 venv 的 Python 重新执行自己并透传退出码。"""
     vp = venv_python()
     if os.path.realpath(sys.executable) == os.path.realpath(vp):
         return
     if not os.path.exists(vp):
         print("先装视频转文字引擎：python tools/free_station.py install sherpa-onnx")
         sys.exit(2)
-    os.execv(vp, [vp] + sys.argv)
+    r = subprocess.run([vp] + sys.argv)
+    sys.exit(r.returncode)
 
 
 def is_url(x):
@@ -70,10 +119,20 @@ def build_ffmpeg_cmd(src, dst):
 
 
 def download_audio(url):
+    ytdlp = resolve_exe("yt-dlp")
+    if not ytdlp:
+        print("找不到 yt-dlp：请先装视频转文字引擎与 yt-dlp（免费全家桶）")
+        sys.exit(3)
     out_tpl = os.path.join("media", "%(id)s.%(ext)s")
-    p = subprocess.run(["yt-dlp", "-f", "bestaudio", "-o", out_tpl,
+    tmpdir = os.path.abspath(os.path.join("media", ".ytdlp-tmp"))
+    os.makedirs(tmpdir, exist_ok=True)
+    env = dict(os.environ)
+    env["TMP"] = tmpdir
+    env["TEMP"] = tmpdir  # 工作区沙箱下 %TEMP% 不可建目录，PyInstaller 需在工作区内解包
+    p = subprocess.run([ytdlp, "-f", "bestaudio", "-o", out_tpl,
                         "--print", "after_move:filepath", url],
-                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+                       capture_output=True, text=True, encoding="utf-8", errors="replace",
+                       env=env)
     if p.returncode != 0:
         print(p.stderr.strip())
         sys.exit(3)
@@ -104,28 +163,34 @@ def transcribe_wav(wav_path, lang, threads):
     buffer = sherpa_onnx.VoiceActivityDetector(vad_config, buffer_size_in_seconds=100)
 
     segments = []
+    import numpy as np
     with wave.open(wav_path, "rb") as f:
         assert f.getframerate() == 16000, "wav 采样率必须是 16000"
-        samples_per_read = int(window_size * f.getframerate())
+        samples_per_read = int(window_size)  # window_size 单位是采样数，readframes 按帧读
         while True:
-            samples = f.readframes(samples_per_read)
-            if not samples:
+            raw = f.readframes(samples_per_read)
+            if not raw:
                 break
-            samples = sherpa_onnx.float32_samples(samples)
+            raw = raw[: (len(raw) // 2) * 2]  # PCM16：按 2 字节对齐，丢弃尾巴半样本
+            samples = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768.0
             buffer.accept_waveform(samples)
-            while not buffer.empty():
-                segment = buffer.front
-                buffer.pop()
-                segments.append(segment)
+
+    while not buffer.empty():
+        segment = buffer.front
+        start = segment.start
+        seg_samples = list(segment.samples)  # 必须在 pop 前拷贝，pop 会抽空
+        buffer.pop()
+        if seg_samples:
+            segments.append((start, seg_samples))
 
     texts = []
-    for seg in segments:
+    for start, samples in segments:
         stream = recognizer.create_stream()
-        stream.accept_waveform(seg.samples)
+        stream.accept_waveform(16000, samples)
         recognizer.decode_stream(stream)
         text = (stream.result.text or "").strip()
         if text:
-            texts.append((seg.start, seg.start + len(seg.samples) / 16000.0, text))
+            texts.append((start / 16000.0, (start + len(samples)) / 16000.0, text))
     return texts
 
 
@@ -147,8 +212,16 @@ def main(argv=None):
         src = download_audio(src)
 
     stem = os.path.splitext(os.path.basename(src))[0]
+    if stem.endswith(".16k"):
+        stem = stem[:-4]
     wav_path = os.path.join("media", stem + ".16k.wav")
-    p = subprocess.run(build_ffmpeg_cmd(src, wav_path),
+    ffmpeg = resolve_exe("ffmpeg")
+    if not ffmpeg:
+        print("找不到 ffmpeg：请先装视频转文字引擎与 FFmpeg（免费全家桶）")
+        sys.exit(3)
+    cmd = build_ffmpeg_cmd(src, wav_path)
+    cmd[0] = ffmpeg
+    p = subprocess.run(cmd,
                        capture_output=True, text=True, encoding="utf-8", errors="replace")
     if p.returncode != 0:
         print(p.stderr.strip())
