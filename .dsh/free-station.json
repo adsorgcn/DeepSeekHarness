@@ -75,9 +75,9 @@
       "how": "零安装；在 DSH 插件管理页启用实验性语音输入（随包默认禁用），首次用会下载 SenseVoiceSmall 模型文件，官方自带 hf-mirror.com 国内源；朗读是让 agent 调系统语音（Windows SAPI、macOS say）生成音频，DSH 本身没有朗读"
     },
     {
-      "id": "notebook",
-      "name": "Gemini Notebook 学习助手",
-      "how": "零安装；对 agent 说「把交接单导出成学习笔记」，它整理好你贴进 NotebookLM"
+      "id": "notebooklm",
+      "name": "NotebookLM 学习助手（海外：需谷歌账号，国内网络打不开）",
+      "how": "零安装；对 agent 说「把交接单导出成学习笔记」，它整理好你贴进 NotebookLM；没有谷歌账号就跳过这条"
     }
   ]
 }
