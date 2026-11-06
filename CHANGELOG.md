@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.34** · 2026-11-06 · 第三方边界与市场收录规则 v1（审计 DSH-THIRD-PARTY-BOUNDARY-J1-J6）
+
+- REA 从全家桶安装条目退回零安装入口（zero_install）：只给官方入口，撤装法/验法/用法/例句/分级；署名三处保留
+- docs/社区插件甄选.md 改为收录规则 v1（六条），REA 为首个样板条目（官方原话+直译+入口+可选+署名）
+- AGENTS.local.md 新增 dsh_third_party_boundary GENE：第三方只给官方信息和官方入口，一律可选，用法问官方文档，署名给原作者
+- transcribe.py 自检重执行补 -X utf8（Windows 控制台中文不乱码）
+
 **v1.0.33** · 2026-11-06 · REA 许可证从源仓库核实
 
 - 社区插件甄选：REA 的 MIT 许可证改为「已拉取仓库 LICENSE 核实（Copyright (c) 2026 morluto）」
