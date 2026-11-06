@@ -204,4 +204,4 @@ if ((Test-Path $hookSrc) -and (Test-Path (Join-Path $TargetDir ".git"))) {
 }
 
 Write-Host ""
-Write-Host "完成。在 DSH 里把 $TargetDir 选为工作区（或说一句话让 agent 切进去），记忆体即上线。"
+Write-Host ("完成。关掉这个窗口重开一个，把 " + $TargetDir + " 选为工作区，它第一句应该汇报上次做到哪；没看到就把屏幕上的内容贴给你的 DSH。")

@@ -71,3 +71,9 @@
 - DSH 仓库与文档：https://github.com/deepseek-ai/deepseek-harness · https://deepseek-harness.github.io/deepseek-harness/
 - DSH 模型配置：docs/user/guide/providers.zh.md（贴给第 3 句）
 - iLang 运行时核心：https://runtime.ilang.app/ilang-latest.md（国内镜像 https://ilang.cn/runtime/ilang-latest.md）（贴给第 1 句）
+
+---
+
+## 装完先验一下
+
+关掉这个窗口，重开一个，把这个文件夹选成工作区，什么都不说；它第一句应该是汇报上次做到哪。看到了，就是装好了。没看到就把屏幕上的内容贴给你的 DSH。
