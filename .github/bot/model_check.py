@@ -145,6 +145,33 @@ def main():
                      "（本条由 model-check 工作流自动创建。）" % (MANIFEST_URL, type(e).__name__))
         rc = 1
 
+    # 3) Gitee 镜像漂移：镜像 main 与 GitHub main 不同要有人知道
+    try:
+        req = urllib.request.Request(
+            "https://gitee.com/api/v5/repos/monetize/DeepSeekHarness/branches/main",
+            headers={"User-Agent": "dsh-model-check"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            gitee_main = (json.load(r).get("commit") or {}).get("sha") or ""
+        req = urllib.request.Request(
+            "https://api.github.com/repos/%s/branches/main" % REPO,
+            headers={"User-Agent": "dsh-model-check"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            github_main = (json.load(r).get("commit") or {}).get("sha") or ""
+        if github_main and gitee_main and gitee_main != github_main:
+            ensure_issue(TOKEN, "镜像落后：Gitee main 在 %s" % gitee_main[:7],
+                         "每月模型检查：Gitee 镜像与 GitHub 不一致。\n\n"
+                         "- GitHub main：%s\n- Gitee main：%s\n"
+                         "请把 https://gitee.com/monetize/DeepSeekHarness 同步到 GitHub 的 HEAD。\n"
+                         "（本条由 model-check 工作流自动创建。）" % (github_main, gitee_main))
+            rc = 1
+        else:
+            print("gitee mirror in sync:", gitee_main[:7] if gitee_main else "(未取得)")
+    except Exception as e:
+        ensure_issue(TOKEN, "模型检查异常：Gitee 镜像状态获取失败",
+                     "每月模型检查：获取 Gitee 镜像状态失败。\n\n- 错误：%s\n请人工检查。"
+                     "（本条由 model-check 工作流自动创建。）" % type(e).__name__)
+        rc = 1
+
     return rc
 
 

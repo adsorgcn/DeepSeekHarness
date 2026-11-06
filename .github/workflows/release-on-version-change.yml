@@ -76,3 +76,6 @@ jobs:
         run: |
           gh release create "v$VERSION" --verify-tag --latest --generate-notes --title "$REPO_NAME $VERSION"
           echo "released v$VERSION; Zenodo archives it from the release webhook" >> "$GITHUB_STEP_SUMMARY"
+          gitee_head=$(curl -s --max-time 20 https://gitee.com/api/v5/repos/monetize/DeepSeekHarness/branches/main | sed -n 's/.*"sha":"\([0-9a-f]*\)".*/\1/p')
+          echo "GitHub main HEAD: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Gitee  main HEAD: ${gitee_head:-unavailable}" >> "$GITHUB_STEP_SUMMARY"
