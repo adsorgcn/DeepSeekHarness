@@ -1,5 +1,10 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.21** · 2026-11-06 · 免费全家桶砍掉本地模型（审计 DSH-FIX-E1-E8 v2.3）
+
+- E1 删除 Ollama 与 Qwen3 8B 条目及全部 Qwen3 引用：新手模型走 DeepSeek API，不装本地模型（别人的清单只示意图，不照搬条目）
+- E3–E8 沿用 v1.0.20 已落地修正，本轮回归核验通过（obsidian winget 验证、PATH 刷新、SenseVoice 引用、NotebookLM 标注、concept DOI、Linux 条目）
+
 **v1.0.20** · 2026-11-06 · 审计第四轮 DSH-FIX-E1-E8
 
 - E1 模型条目 verify 改 `ollama show qwen3:8b`（不再用 ollama list 误报已装）
