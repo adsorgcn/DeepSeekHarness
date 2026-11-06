@@ -115,6 +115,14 @@ def test_obsidian_windows_via_winget():
     check("obsidian_windows_via_winget", ok, str(v))
 
 
+def test_path_refresh():
+    r_win = FS.refresh_path("windows")
+    ok1 = os.environ.get("PATH", "") in r_win
+    r_other = FS.refresh_path("linux")
+    ok2 = r_other == os.environ.get("PATH", "")
+    check("path_refresh", ok1 and ok2, "win_contains=%s nonwin_equal=%s" % (ok1, ok2))
+
+
 def test_already_skips_install():
     r = FakeRunner({("ollama", "--version"): 0})
     results, rc = FS.install_tools(REGISTRY, ["ollama"], True, r, lambda name: True, "windows")
@@ -134,6 +142,7 @@ def main():
     test_qwen_verify_is_show()
     test_ollama_macos_is_cask()
     test_obsidian_windows_via_winget()
+    test_path_refresh()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)

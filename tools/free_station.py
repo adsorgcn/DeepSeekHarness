@@ -13,6 +13,8 @@
 """
 import argparse
 import json
+import os
+import shutil
 import subprocess
 import sys
 
@@ -75,7 +77,43 @@ def install_tools(registry, ids, yes, runner, approve, key=None):
     return results, 0
 
 
+def refresh_path(key=None):
+    """Windows：把注册表里的机器/用户 PATH（expandvars 展开）并入当前 PATH 返回；
+    非 Windows 原样返回当前 PATH。
+    CreateProcess 查找可执行文件用的是父进程的 PATH 快照，给 subprocess 传 env
+    不改变查找结果——所以新装的命令要用 shutil.which 换全路径执行。"""
+    key = key or platform_key()
+    cur = os.environ.get("PATH", "")
+    if key != "windows":
+        return cur
+    parts = [p for p in cur.split(os.pathsep) if p]
+    try:
+        import winreg
+        targets = (
+            (winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"),
+            (winreg.HKEY_CURRENT_USER, "Environment"),
+        )
+        for hkey, sub in targets:
+            try:
+                with winreg.OpenKey(hkey, sub) as k:
+                    val, _ = winreg.QueryValueEx(k, "Path")
+                for p in os.path.expandvars(str(val)).split(os.pathsep):
+                    p = p.strip()
+                    if p and p not in parts:
+                        parts.append(p)
+            except OSError:
+                pass
+    except ImportError:
+        pass
+    return os.pathsep.join(parts)
+
+
 def _runner(cmd, timeout=1800):
+    full = shutil.which(cmd[0], path=refresh_path())
+    if not full:
+        print("  [run] %s -> 未找到该命令（视为缺）" % " ".join(cmd))
+        return 1
+    cmd = [full] + list(cmd[1:])
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
                            errors="replace", timeout=timeout)
@@ -122,6 +160,8 @@ def main(argv=None):
     for tid, state, detail in results:
         print("%-12s %s%s" % (tid, labels.get(state, state), (" " + detail) if detail else ""))
     print("零安装：%s" % "；".join(z["name"] for z in registry.get("zero_install", [])))
+    if key == "windows" and any(state == "installed" for _, state, _ in results):
+        print("提示：新装的命令要重启 DSH 后才会在 DSH 自己的终端里可用。")
     return rc
 
 
