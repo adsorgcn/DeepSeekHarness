@@ -37,7 +37,7 @@
 
 ## 关于本仓库自己的 DOI
 
-`.zenodo.json` 与发布 webhook 已就绪：**owner 在 GitHub 授权 Zenodo 应用后，每个 Release 会自动归档并铸 DOI**。截至 2026-11-06，Zenodo 尚无公开的 DeepSeekHarness 记录（已查证），故此处不预填数字；授权后在此补 concept DOI，并在 README 挂徽章。
+owner 已于 2026-11-06 在 GitHub 启用 Zenodo 自动归档：**下一个 Release 起，每个版本自动铸 DOI，同一 concept DOI 覆盖全部版本**。首个 DOI 铸成后，回填本节、README 徽章与 CITATION.cff 的 identifiers 字段。本仓库的引用建议在 DOI 就位后以 DOI 为准。
 
 ## ORCID 说明
 

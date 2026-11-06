@@ -1,5 +1,9 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.18** · 2026-11-06 · Zenodo 自动 DOI 启用
+
+- owner 已在 GitHub 启用 Zenodo 自动归档；CITATIONS.md 记录启用状态；本版发布即触发首次归档，DOI 铸成后回填徽章
+
 **v1.0.17** · 2026-11-06 · R4 检查器适配引用条目
 
 - `tools/check_rubrics.py` 的 R4 改为精确检查 CFF 的 `title:` 行（references 里引用 Mem-Forever 全名是合法引用，不再误报）
