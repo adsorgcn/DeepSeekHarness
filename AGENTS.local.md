@@ -86,3 +86,15 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:clip_shot_prints_no_image⇒say_screenshot_first_then_kan_jietu_and_stop
 
 （视觉路由：以下是 Pro 开发者路线，新手在 Flash 上用不到。用户说「看截图」「看剪贴板」或给图片路径 = 视觉任务。本模型能读图就直接 read_image；不能读图时——若图在剪贴板先跑 tools/clip_shot.ps1 或 tools/clip_shot.sh 拿到路径（NO_IMAGE 就提示先截图再停），再调 list_subagent_models：没有 deepseek-flash 路由就把两种开法原文给用户选，用户说「好」才动、不说不动——甲、用户自己在 DSH 插件页打开「子代理模型选择」并加入 deepseek-flash 与 deepseek-v4-pro；乙、经用户同意后往 $DSH_HOME/profiles/<当前 profile>/cordis.patch.yml 追加：- id: subagent-model-selection-settings，name: \"@deepseek-ai/dsh-tool-subagent/model-selection-settings\"，config: enabled: true，allowedModels: [{provider: <当前路由的 provider>, model: deepseek-flash}, {provider: <当前路由的 provider>, model: deepseek-v4-pro}]（provider 取 list_subagent_models 返回的当前路由，不要猜）。开完请用户重开会话，再调一次 list_subagent_models，看到两条路由才算开成，没看到就把返回原文给用户，不猜原因。有 flash 路由就派 deepseek-flash 子代理（provider 同上）read_image 并回报文字；它回来后在本模型继续，绝不提切模型。flash 主模型遇「认真想」派 deepseek-v4-pro 子代理并把任务与相关文件路径给它、告知用户 Pro 在干活。贴图在纯文本模型被拒就答「截图后直接说看截图，不用贴」。web 一律 builtin web_search 与 web_fetch。未获本会话明确同意绝不改 DSH profile。）
+
+::GENE{dsh_video_to_text|conf:confirmed|scope:global}
+  T:user_gives_a_video_link_or_file_and_asks_for_text_or_subtitles⇒run_tools_transcribe_py_and_return_the_txt_and_srt_paths_plus_a_short_summary
+  T:transcribe_exits_2⇒offer_free_station_install_sherpa-onnx_and_run_it_only_after_the_user_says_yes_then_rerun
+  T:shipinhao_or_kuaishou_link⇒say_yt-dlp_does_not_support_it_and_ask_for_the_file
+  T:douyin_or_xiaohongshu_download_fails⇒show_yt-dlp_error_verbatim_and_ask_for_the_file
+  T:transcribe_exits_4⇒say_no_speech_detected
+  A:sending_audio_or_video_to_any_network_transcription_service⇒forbidden
+  A:installing_the_engine_without_an_explicit_yes⇒forbidden
+  A:inventing_or_polishing_transcript_text⇒forbidden_quote_the_file
+
+（视频转文字全在本机：链接走 yt-dlp，文件直接转，引擎是 DSH 同款 SenseVoice，第一次装前问你一次。）
