@@ -13,7 +13,8 @@
       "verify": {
         "windows": ["ollama", "--version"],
         "macos": ["ollama", "--version"]
-      }
+      },
+      "manual": "https://ollama.com/download/linux"
     },
     {
       "id": "qwen3-8b",
@@ -21,11 +22,13 @@
       "why": "Ollama 装好后的第一个模型（官方源）",
       "install": {
         "windows": ["ollama", "pull", "qwen3:8b"],
-        "macos": ["ollama", "pull", "qwen3:8b"]
+        "macos": ["ollama", "pull", "qwen3:8b"],
+        "linux": ["ollama", "pull", "qwen3:8b"]
       },
       "verify": {
         "windows": ["ollama", "show", "qwen3:8b"],
-        "macos": ["ollama", "show", "qwen3:8b"]
+        "macos": ["ollama", "show", "qwen3:8b"],
+        "linux": ["ollama", "show", "qwen3:8b"]
       }
     },
     {
@@ -34,11 +37,13 @@
       "why": "官方 winget / brew 包",
       "install": {
         "windows": ["winget", "install", "--id", "yt-dlp.yt-dlp", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
-        "macos": ["brew", "install", "yt-dlp"]
+        "macos": ["brew", "install", "yt-dlp"],
+        "linux": ["sudo", "apt-get", "install", "-y", "yt-dlp"]
       },
       "verify": {
         "windows": ["yt-dlp", "--version"],
-        "macos": ["yt-dlp", "--version"]
+        "macos": ["yt-dlp", "--version"],
+        "linux": ["yt-dlp", "--version"]
       }
     },
     {
@@ -47,11 +52,13 @@
       "why": "官方 winget 包 Gyan.FFmpeg",
       "install": {
         "windows": ["winget", "install", "--id", "Gyan.FFmpeg", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
-        "macos": ["brew", "install", "ffmpeg"]
+        "macos": ["brew", "install", "ffmpeg"],
+        "linux": ["sudo", "apt-get", "install", "-y", "ffmpeg"]
       },
       "verify": {
         "windows": ["ffmpeg", "-version"],
-        "macos": ["ffmpeg", "-version"]
+        "macos": ["ffmpeg", "-version"],
+        "linux": ["ffmpeg", "-version"]
       }
     },
     {
@@ -65,7 +72,8 @@
       "verify": {
         "windows": ["winget", "list", "--id", "Obsidian.Obsidian", "-e", "--accept-source-agreements"],
         "macos": ["which", "obsidian"]
-      }
+      },
+      "manual": "https://obsidian.md/download"
     }
   ],
   "zero_install": [

@@ -41,7 +41,8 @@ def plan(registry, runner, key=None):
     for t in registry.get("tools", []):
         cmd = (t.get("verify") or {}).get(key)
         if not cmd:
-            rows.append((t["id"], t["name"], "unsupported", "该平台未提供官方一键方式"))
+            manual = t.get("manual") or "该平台未提供官方一键方式"
+            rows.append((t["id"], t["name"], "unsupported", manual))
             continue
         ok = runner(cmd) == 0
         rows.append((t["id"], t["name"], "installed" if ok else "missing", " ".join(cmd)))
@@ -61,7 +62,8 @@ def install_tools(registry, ids, yes, runner, approve, key=None):
             continue
         inst = (t.get("install") or {}).get(key)
         if not inst:
-            results.append((t["id"], "unsupported", "该平台未提供官方一键方式"))
+            manual = t.get("manual") or "该平台未提供官方一键方式"
+            results.append((t["id"], "unsupported", manual))
             continue
         if not yes and not approve(t["name"]):
             results.append((t["id"], "skipped", "未同意"))
