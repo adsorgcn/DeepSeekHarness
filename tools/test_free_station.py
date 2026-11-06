@@ -46,14 +46,14 @@ class FakeRunner:
 def test_plan_detects():
     r = FakeRunner({("ffmpeg", "-version"): 0})
     rows = dict((row[0], row[2]) for row in FS.plan(REGISTRY, r, "windows"))
-    check("plan_detects", rows.get("ffmpeg") == "installed" and rows.get("ollama") == "missing",
+    check("plan_detects", rows.get("ffmpeg") == "installed" and rows.get("yt-dlp") == "missing",
           str(rows))
 
 
 def test_unsupported_platform():
     r = FakeRunner()
     rows = dict((row[0], row[2]) for row in FS.plan(REGISTRY, r, "linux"))
-    check("unsupported_platform", rows.get("ollama") == "unsupported", str(rows.get("ollama")))
+    check("unsupported_platform", rows.get("obsidian") == "unsupported", str(rows.get("obsidian")))
 
 
 def test_install_skips_without_approval():
@@ -84,28 +84,15 @@ def test_verify_fail_stops():
 
 def test_install_fail_stops_rest():
     def r(cmd, timeout=1800):
-        if tuple(cmd) == ("ollama", "--version"):
+        if tuple(cmd) == ("yt-dlp", "--version"):
             return 1
-        if tuple(cmd)[0] == "winget" and "Ollama.Ollama" in tuple(cmd):
+        if tuple(cmd)[0] == "winget" and "yt-dlp.yt-dlp" in tuple(cmd):
             return 2
         return 0
     results, rc = FS.install_tools(REGISTRY, None, True, r, lambda name: True, "windows")
     first = results[0]
     check("install_fail_stops", rc == 1 and first[1] == "failed" and len(results) == 1,
           str(results))
-
-
-def test_qwen_verify_is_show():
-    t = {x["id"]: x for x in REGISTRY["tools"]}
-    q = t["qwen3-8b"]["verify"]
-    ok = all(v == ["ollama", "show", "qwen3:8b"] for v in q.values())
-    check("qwen_verify_is_show", ok, str(q))
-
-
-def test_ollama_macos_is_cask():
-    t = {x["id"]: x for x in REGISTRY["tools"]}
-    ok = t["ollama"]["install"]["macos"] == ["brew", "install", "--cask", "ollama-app"]
-    check("ollama_macos_is_cask", ok, str(t["ollama"]["install"]["macos"]))
 
 
 def test_obsidian_windows_via_winget():
@@ -123,9 +110,16 @@ def test_path_refresh():
     check("path_refresh", ok1 and ok2, "win_contains=%s nonwin_equal=%s" % (ok1, ok2))
 
 
+def test_no_local_model():
+    raw = open(os.path.join(ROOT, ".dsh", "free-station.json"), encoding="utf-8").read()
+    ids = {x["id"] for x in REGISTRY["tools"]}
+    ok = not (ids & {"ollama", "qwen3-8b"}) and "ollama" not in raw.lower()
+    check("no_local_model", ok, "ids=%s" % sorted(ids))
+
+
 def test_already_skips_install():
-    r = FakeRunner({("ollama", "--version"): 0})
-    results, rc = FS.install_tools(REGISTRY, ["ollama"], True, r, lambda name: True, "windows")
+    r = FakeRunner({("yt-dlp", "--version"): 0})
+    results, rc = FS.install_tools(REGISTRY, ["yt-dlp"], True, r, lambda name: True, "windows")
     ran_install = any(c[0] == "winget" for c in r.calls)
     check("already_skips", rc == 0 and results[0][1] == "already" and not ran_install,
           str(results))
@@ -139,10 +133,9 @@ def main():
     test_install_yes_runs_and_verifies()
     test_verify_fail_stops()
     test_install_fail_stops_rest()
-    test_qwen_verify_is_show()
-    test_ollama_macos_is_cask()
     test_obsidian_windows_via_winget()
     test_path_refresh()
+    test_no_local_model()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)

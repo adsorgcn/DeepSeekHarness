@@ -19,7 +19,6 @@
 | DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence（`deepseek-flash` = DeepSeek-V4.1-Flash-1017 所属系列；1M 上下文） | DeepSeek-AI（arXiv 提交人：Wenfeng Liang） | [10.48550/arXiv.2606.19348](https://doi.org/10.48550/arXiv.2606.19348) |
 | DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning | DeepSeek-AI | [10.48550/arXiv.2501.12948](https://doi.org/10.48550/arXiv.2501.12948) |
 | DeepSeek-V3 Technical Report | DeepSeek-AI | [10.48550/arXiv.2412.19437](https://doi.org/10.48550/arXiv.2412.19437) |
-| Qwen3 Technical Report（本地备用模型 qwen3:8b） | Qwen Team, Alibaba Group（An Yang 等） | [10.48550/arXiv.2505.09388](https://doi.org/10.48550/arXiv.2505.09388) |
 | FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs（DSH 实验性语音输入的本地 Provider SenseVoiceSmall 所属工作） | Tongyi SpeechTeam, Alibaba Group（Keyu An 等） | [10.48550/arXiv.2407.04051](https://doi.org/10.48550/arXiv.2407.04051) |
 
 ## 延伸阅读（同源哲学，非直接依赖）
@@ -51,7 +50,6 @@ Zenodo 自动归档已启用（owner 授权，2026-11-06）：
 - Long Quan Zhu：[0009-0004-4540-8082](https://orcid.org/0009-0004-4540-8082)（已核实）
 - Wenfeng Liang（梁文锋，DeepSeek-V4 与 DSec 两文作者/提交人）：**无公开 ORCID**——三重核查：① 同名检索 7 人均非 DeepSeek；② affiliation=DeepSeek 检索 48 人无他；③ 论文 HTML 作者块无其 ORCID 徽标。锚文本用 [arXiv 提交人页](https://arxiv.org/abs/2606.19348)。
 - Keyu An（FunAudioLLM 一作）：**无公开 ORCID**（检索 5 条同名，均无 Alibaba/通义归属），不挂不编。
-- An Yang（Qwen3 一作）：**无公开 ORCID**（检索 0 条），不挂。
 - DeepSeek 论文中以下作者有已核实 ORCID（检索口径 affiliation=DeepSeek，逐条比对 V4/DSec 作者名单）：
 
 | 作者 | ORCID |

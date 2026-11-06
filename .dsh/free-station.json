@@ -3,35 +3,6 @@
   "note": "免费全家桶可选安装注册表（数据文件）。全部官方源；安装前逐个审批；每个条目自带 verify，装没装以命令输出为准，失败即停。新工具 = 加一条目 + 发一个 patch，机制不变。语音与笔记是零安装集成，见 zero_install。",
   "tools": [
     {
-      "id": "ollama",
-      "name": "Ollama 本地模型引擎",
-      "why": "断网也能用的本地备用模型底座",
-      "install": {
-        "windows": ["winget", "install", "--id", "Ollama.Ollama", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
-        "macos": ["brew", "install", "--cask", "ollama-app"]
-      },
-      "verify": {
-        "windows": ["ollama", "--version"],
-        "macos": ["ollama", "--version"]
-      },
-      "manual": "https://ollama.com/download/linux"
-    },
-    {
-      "id": "qwen3-8b",
-      "name": "Qwen3 8B 本地备用模型",
-      "why": "Ollama 装好后的第一个模型（官方源）",
-      "install": {
-        "windows": ["ollama", "pull", "qwen3:8b"],
-        "macos": ["ollama", "pull", "qwen3:8b"],
-        "linux": ["ollama", "pull", "qwen3:8b"]
-      },
-      "verify": {
-        "windows": ["ollama", "show", "qwen3:8b"],
-        "macos": ["ollama", "show", "qwen3:8b"],
-        "linux": ["ollama", "show", "qwen3:8b"]
-      }
-    },
-    {
       "id": "yt-dlp",
       "name": "yt-dlp 视频下载",
       "why": "官方 winget / brew 包",

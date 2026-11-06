@@ -65,11 +65,6 @@ references:
       - name: "DeepSeek-AI"
     doi: "10.48550/arXiv.2412.19437"
   - type: article
-    title: "Qwen3 Technical Report"
-    authors:
-      - name: "Qwen Team, Alibaba Group"
-    doi: "10.48550/arXiv.2505.09388"
-  - type: article
     title: "FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs"
     authors:
       - name: "Tongyi SpeechTeam, Alibaba Group"
