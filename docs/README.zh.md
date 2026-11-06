@@ -77,19 +77,19 @@
 
 ## 2. 有 shell：引导
 
-两个代码块殊途同归：你磁盘上一个私有的大脑仓库，查过，在 `main` 分支上，只等推到你新建的空私有仓库。要求只有 git 和 Python 3.10 以上，别的都不要。挑你的 shell，原样跑。
+国内网络连不上 GitHub 时：仓库换 `https://gitee.com/monetize/DeepSeekHarness`，iLang 官方资料换 `https://ilang.cn`，其余不变。产品本体的一键引导（推荐）用仓库根的 `bootstrap.ps1` / `bootstrap.sh`：自动探测 GitHub、不可达自动切国内镜像、装软件先审批、每步核验退出码、克隆后自动装「记忆推送保护钩子」。下面的手动路线供懂 shell 的人用，原则一样：**不删 `.git`、每步失败即停、私人记忆只推自己的私有仓库**。要求只有 git 和 Python 3.10 以上，别的都不要。挑你的 shell，原样跑。
 
 PowerShell（Windows）：
 
 ```powershell
-git clone --depth 1 https://github.com/ilang-ai/Mem-Forever.git brain
+git clone https://github.com/adsorgcn/DeepSeekHarness.git brain   # 连不上：换成 https://gitee.com/monetize/DeepSeekHarness.git
+if ($LASTEXITCODE -ne 0) { throw "clone 失败，先解决网络再继续" }
 Set-Location brain
-Remove-Item -Recurse -Force .git
-git init -q -b main
+if (-not (Test-Path .git)) { throw "没有 .git，拒绝继续（防止在错误目录里误删）" }
 python -X utf8 tools/brain.py check
 git add -A
-git commit -q -m "init: brain from Mem-Forever 2.1"
-# 然后在 GitHub 上新建一个「空的、私有的」仓库，再跑：
+git commit -q -m "init: brain from DeepSeekHarness"
+# 备份到你的私有仓库：先在 GitHub 新建「空的、私有的」仓库，再跑：
 #   git remote add origin https://github.com/YOU/brain.git
 #   git push -u origin main
 ```
@@ -97,11 +97,11 @@ git commit -q -m "init: brain from Mem-Forever 2.1"
 bash（macOS、Linux）：
 
 ```bash
-git clone --depth 1 https://github.com/ilang-ai/Mem-Forever.git brain \
- && cd brain && rm -rf .git && git init -q -b main \
+git clone https://github.com/adsorgcn/DeepSeekHarness.git brain \   # 连不上：换成 https://gitee.com/monetize/DeepSeekHarness.git
+ && cd brain && test -d .git \
  && python3 -X utf8 tools/brain.py check \
- && git add -A && git commit -q -m "init: brain from Mem-Forever 2.1"
-# 然后在 GitHub 上新建一个「空的、私有的」仓库，再跑：
+ && git add -A && git commit -q -m "init: brain from DeepSeekHarness"
+# 备份到你的私有仓库：先在 GitHub 新建「空的、私有的」仓库，再跑：
 #   git remote add origin https://github.com/YOU/brain.git && git push -u origin main
 ```
 

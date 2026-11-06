@@ -3,19 +3,29 @@
 # 原则：全部软件只从官方源安装；每步要不要人审批由 DSH 的审批模式决定——
 #   · 不需要审批的（检测、克隆、切目录、验收）→ 自动跑
 #   · 需要审批的（装 Git / Python 等系统软件）→ agent 先问用户，同意后执行
+# 国内网络：GitHub 不可达时自动切换产品仓库到国内镜像
+#   https://gitee.com/monetize/DeepSeekHarness（镜像与 GitHub 同源，由 owner 维护）
 #
 # 用法：
-#   powershell -ExecutionPolicy Bypass -File bootstrap.ps1             # 只检测并打印计划（默认，零改动）
-#   powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Install -Yes   # 按计划执行（用户已审批后）
+#   powershell -ExecutionPolicy Bypass -File bootstrap.ps1                              # 只检测并打印计划（默认，零改动）
+#   powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Install -Yes                # 按计划执行（用户已审批后）
 #   powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Install -TargetDir "D:\mem" -Yes
+#   powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Install -Yes -Source gitee  # 强制走国内镜像
 
 param(
     [switch]$Install,
     [string]$TargetDir = "$env:USERPROFILE\dsh-memory",
-    [switch]$Yes
+    [switch]$Yes,
+    [ValidateSet("auto", "github", "gitee")]
+    [string]$Source = "auto"
 )
 
 $ErrorActionPreference = "Stop"
+
+$GitHubUrl  = "https://github.com/adsorgcn/DeepSeekHarness.git"
+$GiteeUrl   = "https://gitee.com/monetize/DeepSeekHarness.git"
+$GitHubProbe = "https://github.com"
+
 function Has($cmd) {
     # 1) 真跑一下版本命令（防止把微软商店的 python 占位 stub 当成本地已装）
     try {
@@ -30,23 +40,74 @@ function Has($cmd) {
     }
 }
 
+function Resolve-Cmd($cmd) {
+    # 返回能真正执行该命令的绝对路径；找不到返回 $null（调用处失败报错，不再裸调）
+    try {
+        $null = & $cmd --version 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            $found = Get-Command $cmd -ErrorAction SilentlyContinue
+            if ($found) { return $found.Source }
+        }
+    } catch { }
+    switch ($cmd) {
+        "git" {
+            foreach ($p in @("C:\Program Files\Git\cmd\git.exe", "$env:LOCALAPPDATA\Programs\Git\cmd\git.exe")) {
+                if (Test-Path $p) { return $p }
+            }
+        }
+        "python" {
+            foreach ($p in @("$env:LOCALAPPDATA\Programs\Python\Python312\python.exe", "C:\Python312\python.exe")) {
+                if (Test-Path $p) { return $p }
+            }
+        }
+    }
+    return $null
+}
+
+function Test-DshInstalled($dir) {
+    return (Test-Path (Join-Path $dir "AGENTS.md")) -and
+           (Test-Path (Join-Path $dir "tools\brain.py")) -and
+           (Test-Path (Join-Path $dir "CITATION.cff"))
+}
+
+function Test-GitHubReachable {
+    if ($Source -eq "gitee")  { return $false }
+    if ($Source -eq "github") { return $true }
+    try {
+        Invoke-WebRequest -UseBasicParsing -Uri $GitHubProbe -TimeoutSec 8 | Out-Null
+        return $true
+    } catch {
+        return $false
+    }
+}
+
 $gitOk    = Has git
 $pyOk     = Has python
 $wingetOk = Has winget
-$repoOk   = Test-Path (Join-Path $TargetDir "AGENTS.md")
+
+$productSource = "auto"
+if ($Source -eq "gitee") { $productSource = "gitee" }
+elseif ($Source -eq "github") { $productSource = "github" }
+elseif (Test-GitHubReachable) { $productSource = "github" }
+else { $productSource = "gitee" }
+$cloneUrl = if ($productSource -eq "github") { $GitHubUrl } else { $GiteeUrl }
 
 Write-Host "== DeepSeekHarness 记忆体引导 =="
 Write-Host ("git     : " + $(if ($gitOk) { "已装" } else { "缺（需审批安装）" }))
 Write-Host ("python  : " + $(if ($pyOk) { "已装" } else { "缺（需审批安装）" }))
 Write-Host ("winget  : " + $(if ($wingetOk) { "可用（官方包管理器）" } else { "缺（将给官方下载链接，人类点一下）" }))
-Write-Host ("目标仓库: " + $(if ($repoOk) { "已存在 -> $TargetDir" } else { "待克隆 -> $TargetDir" }))
+Write-Host ("目标仓库: " + $(if (Test-DshInstalled $TargetDir) { "已安装（完整） -> $TargetDir" } else { "待克隆 -> $TargetDir" }))
+if ($Source -eq "auto") { Write-Host ("产品源  : 自动探测（GitHub 优先，不可达走国内镜像 gitee.com/monetize/DeepSeekHarness）——本轮: " + $productSource) }
+elseif ($Source -eq "gitee") { Write-Host "产品源  : 国内镜像 gitee.com/monetize/DeepSeekHarness（强制）" }
+else { Write-Host "产品源  : github.com/adsorgcn/DeepSeekHarness（强制）" }
 Write-Host ""
 
 $plan = @()
 if (-not $gitOk)    { $plan += "安装 Git —— 官方源：winget id=Git.Git（git-scm.org 官方版）" }
 if (-not $pyOk)     { $plan += "安装 Python 3.12 —— 官方源：winget id=Python.Python.3.12（python.org 官方版）" }
-if (-not $repoOk)   { $plan += "克隆 https://github.com/adsorgcn/DeepSeekHarness -> $TargetDir" }
-$plan += "切目录 $TargetDir 并跑 python tools\brain.py check 验收"
+if (-not (Test-DshInstalled $TargetDir)) { $plan += "克隆 $cloneUrl -> $TargetDir" }
+$plan += "切目录 $TargetDir 并跑 python tools\brain.py check 验收（失败即停）"
+$plan += "安装记忆推送保护钩子（私人记忆不确认不得推送）"
 
 Write-Host "计划："
 $plan | ForEach-Object { Write-Host ("  - " + $_) }
@@ -69,6 +130,10 @@ if (-not $gitOk) {
         Write-Host "跳过 Git（后续克隆仓库需要它）"
     } elseif ($wingetOk) {
         winget install --id Git.Git --source winget -e --silent --accept-source-agreements --accept-package-agreements
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Git 安装失败（winget 退出码 $LASTEXITCODE）。请从官方下载并安装：https://git-scm.com/download/win ，装好后重跑本脚本。"
+            exit 1
+        }
         Write-Host "Git 安装完成。注意：新装的 git 需要新开终端（或重启 DSH）才进 PATH。"
     } else {
         Write-Host "winget 不可用。请从官方下载并安装：https://git-scm.com/download/win"
@@ -83,6 +148,10 @@ if (-not $pyOk) {
         Write-Host "跳过 Python（brain.py check 需要它）"
     } elseif ($wingetOk) {
         winget install --id Python.Python.3.12 --source winget -e --silent --accept-source-agreements --accept-package-agreements
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Python 安装失败（winget 退出码 $LASTEXITCODE）。请从官方下载并安装：https://www.python.org/downloads/windows/ ，装好后重跑本脚本。"
+            exit 1
+        }
         Write-Host "Python 安装完成。注意：新装的 python 需要新开终端（或重启 DSH）才进 PATH。"
     } else {
         Write-Host "winget 不可用。请从官方下载并安装：https://www.python.org/downloads/windows/"
@@ -91,28 +160,48 @@ if (-not $pyOk) {
     }
 }
 
-# 3) 克隆仓库（无需审批）
-if (-not $repoOk) {
-    Write-Host "克隆仓库..."
-    if (-not (Has git)) {
+# 3) 克隆仓库（无需审批，但失败即停）
+if (-not (Test-DshInstalled $TargetDir)) {
+    if (Test-Path $TargetDir) {
+        Write-Host "目标目录已存在但检测不到完整安装（缺 AGENTS.md / tools\brain.py / CITATION.cff）。为避免覆盖你已有的文件，已停止。请换一个 -TargetDir。"
+        exit 1
+    }
+    Write-Host ("克隆仓库（" + $productSource + "）...")
+    $git = Resolve-Cmd git
+    if (-not $git) {
         Write-Host "git 仍不可用：请新开终端后重跑本脚本。"
         exit 1
     }
-    git clone https://github.com/adsorgcn/DeepSeekHarness.git $TargetDir
+    & $git clone $cloneUrl $TargetDir
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "克隆失败（$cloneUrl）。请检查网络，或改用 -Source gitee 后重跑。"
+        exit 1
+    }
 }
 
-# 4) 验收（无需审批）
+# 4) 验收（失败即停，不报完成）
 Set-Location $TargetDir
-if (Has python) {
-    python -X utf8 tools\brain.py check
-} elseif (Has py) {
-    py -X utf8 tools\brain.py check
-} else {
+$py = Resolve-Cmd python
+if (-not $py) { $py = Resolve-Cmd py }
+if (-not $py) {
     Write-Host "Python 仍不可用：请新开终端后重跑本脚本。"
     exit 1
+}
+& $py -X utf8 tools\brain.py check
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "验收失败：brain.py check 未通过（退出码 $LASTEXITCODE），已停止（请按上面 ERROR/WARN 修复）。"
+    exit 1
+}
+
+# 5) 记忆推送保护钩子
+$hookSrc = Join-Path $TargetDir "tools\guard-pre-push.sh"
+$hookDst = Join-Path $TargetDir ".git\hooks\pre-push"
+if ((Test-Path $hookSrc) -and (Test-Path (Join-Path $TargetDir ".git"))) {
+    Copy-Item $hookSrc $hookDst -Force
+    Write-Host "已安装记忆推送保护钩子（推私人记忆前需显式确认 DSH_ALLOW_MEMORY_PUSH=1）。"
+} else {
+    Write-Host "（本次克隆的版本不含推送保护钩子；更新到新版本后重跑即可自动安装。）"
 }
 
 Write-Host ""
 Write-Host "完成。在 DSH 里把 $TargetDir 选为工作区（或说一句话让 agent 切进去），记忆体即上线。"
-
-

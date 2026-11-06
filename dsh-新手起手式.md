@@ -7,7 +7,7 @@
 
 ## 起手式（第 1 句，直接粘贴）
 
-> 先去读 https://ilang.ai/runtime/ilang-latest.md（国内打不开就读 https://ilang.cn/runtime/ilang-latest.md），读完用三句话告诉我你学到了什么，再回来找我。
+> 先去读 https://runtime.ilang.app/ilang-latest.md（国内打不开就读 https://ilang.cn/runtime/ilang-latest.md），读完用三句话告诉我你学到了什么，再回来找我。
 
 就这一句。为什么：iLang 是给 AI 的母语级通信协议，它教的第一条纪律「模型感知，代码决定」恰好就是 DSH 的运行法则——先学懂，再动手。
 
@@ -70,4 +70,4 @@
 
 - DSH 仓库与文档：https://github.com/deepseek-ai/deepseek-harness · https://deepseek-harness.github.io/deepseek-harness/
 - DSH 模型配置：docs/user/guide/providers.zh.md（贴给第 3 句）
-- iLang 运行时核心：https://ilang.ai/runtime/ilang-latest.md（国内镜像 https://ilang.cn/runtime/ilang-latest.md）（贴给第 1 句）
+- iLang 运行时核心：https://runtime.ilang.app/ilang-latest.md（国内镜像 https://ilang.cn/runtime/ilang-latest.md）（贴给第 1 句）
