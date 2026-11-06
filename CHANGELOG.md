@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.30** · 2026-11-06 · 视频转文字修复版（审计 DSH-VIDEO-TEXT-FIX-I1-I7）
+
+- transcribe.py 去掉 numpy（标准库 array 转 PCM16）；照官方例子补 EOF flush、边喂边取段、VAD 参数 0.2/0.25/5、0.1 秒读窗（修掉丢尾段与段首字被吃）
+- free_station 的 python 命令改为当前解释器（macOS 12.3+/Ubuntu 无 python 命令也能装）
+- asr_setup：模型包只下一遍、流式落盘核哈希、自检音频入库、silero_vad 加 csukuangfj/vad 镜像（两哈希都认）
+- 引擎与模型搬到用户目录 ~/.deepseekharness/asr，装完 brain check 仍 0 退出；`--selftest` 一句话自检（SELFTEST OK）
+
 **v1.0.29** · 2026-11-06 · 首页全家桶卡补「视频转文字」措辞
 
 - docs/index.html 全家桶卡改「SenseVoice 本地视频转文字与字幕」，与四处口径对齐
