@@ -49,6 +49,7 @@
 - [x] 上游同步 v1.0.10：`.dsh/skills/mem-forever/SKILL.md` 副本同步 + 回归门（brain check + rubrics + 行为测试不过不推）
 - [x] 发布自愈 v1.0.10：tag 与 Release 分别检查，部分失败重跑自动补齐（仍全自动发版）
 - [x] 决策纪律 v1.0.11：agent 先判定做/不做并给默认选择，owner 只答「做/过」，不提问（写入 AGENTS.local.md）
+- [x] 视觉路由 v1.0.26：识图与深思考走官方子代理模型选择（`subagent-model-selection-settings` + `list_subagent_models` + `tools/clip_shot.*`），不装第三方视觉插件；输入框贴图在纯文本模型上被宿主拒收是 harness 行为，等官方
 - [x] 收敛：网页/图片打开方式用官方设置（设置 → 网页链接默认打开方式），不装插件替代官方开关
 - [x] 收敛：识图 = 切模型到 `deepseek-flash`（原生读图，一般人够用）；不立工程书、不装插件，提示用户一句话
 - [x] 判断纪律：负向断言先查三层（官方文档 → 用户设置 → 插件配置），只说「哪一层没找到」
