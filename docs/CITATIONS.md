@@ -19,7 +19,7 @@
 | DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence（`deepseek-flash` = DeepSeek-V4.1-Flash-1017 所属系列；1M 上下文） | DeepSeek-AI（arXiv 提交人：Wenfeng Liang） | [10.48550/arXiv.2606.19348](https://doi.org/10.48550/arXiv.2606.19348) |
 | DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning | DeepSeek-AI | [10.48550/arXiv.2501.12948](https://doi.org/10.48550/arXiv.2501.12948) |
 | DeepSeek-V3 Technical Report | DeepSeek-AI | [10.48550/arXiv.2412.19437](https://doi.org/10.48550/arXiv.2412.19437) |
-| FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs（DSH 实验性语音输入的本地 Provider SenseVoiceSmall 所属工作） | Tongyi SpeechTeam, Alibaba Group（Keyu An 等） | [10.48550/arXiv.2407.04051](https://doi.org/10.48550/arXiv.2407.04051) |
+| FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs（DSH 实验性语音输入的本地 Provider SenseVoiceSmall 所属工作，视频转文字同款） | Tongyi SpeechTeam, Alibaba Group（Keyu An 等） | [10.48550/arXiv.2407.04051](https://doi.org/10.48550/arXiv.2407.04051) |
 
 ## 延伸阅读（同源哲学，非直接依赖）
 
@@ -31,8 +31,10 @@
 
 - gzip（母版文件压缩）：[RFC 1952](https://www.rfc-editor.org/rfc/rfc1952)
 - age（密钥库加密）：[age 规范 v1](https://age-encryption.org/v1)（Filippo Valsorda 与 Ben Cartwright-Cox）
-- sherpa-onnx（语音模型推理运行时）：k2-fsa，Apache-2.0，无 DOI，[github.com/k2-fsa/sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)
-- Silero VAD（语音活动检测）：snakers4，MIT，无 DOI，[github.com/snakers4/silero-vad](https://github.com/snakers4/silero-vad)
+- sherpa-onnx（语音模型推理运行时，视频转文字同款）：k2-fsa，Apache-2.0，无 DOI，[github.com/k2-fsa/sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)
+- Silero VAD（语音活动检测，视频转文字同款）：snakers4，MIT，无 DOI，[github.com/snakers4/silero-vad](https://github.com/snakers4/silero-vad)
+- yt-dlp（视频下载）：Unlicense，无 DOI，[github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- FFmpeg（音视频处理）：LGPL/GPL，无 DOI，[ffmpeg.org](https://ffmpeg.org)
 - Git（记忆的版本控制与哈希链）：[git-scm.com](https://git-scm.com)
 - Markdown / CommonMark：语言标准，无 DOI
 
