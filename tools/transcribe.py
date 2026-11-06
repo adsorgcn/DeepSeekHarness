@@ -58,7 +58,7 @@ def reexec_if_needed():
     if not os.path.exists(vp):
         print("先装视频转文字引擎：python tools/free_station.py install sherpa-onnx")
         sys.exit(2)
-    r = subprocess.run([vp] + sys.argv)
+    r = subprocess.run([vp, "-X", "utf8"] + sys.argv)
     sys.exit(r.returncode)
 
 
