@@ -99,3 +99,13 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:inventing_or_polishing_transcript_text⇒forbidden_quote_the_file
 
 （视频转文字全在本机：链接走 yt-dlp，文件直接转，引擎是 DSH 同款 SenseVoice，第一次装前问你一次。）
+
+::GENE{dsh_third_party_boundary|conf:confirmed|scope:global}
+  T:third_party_product⇒official_info_and_official_entry_only
+  T:user_asks_how_to_use_a_third_party_product⇒point_to_its_official_docs_or_say_ask_your_own_DSH
+  T:every_third_party_item_is_optional_the_user_decides
+  A:writing_install_or_usage_guidance_for_a_third_party_product⇒forbidden
+  A:classifying_users_as_newbie_or_expert⇒forbidden
+  A:taking_any_benefit_from_a_listed_product⇒forbidden
+
+（第三方只给官方信息和官方入口，一律可选，装不装你定，用法问它官方文档或问我，署名给原作者。）
