@@ -1,5 +1,7 @@
 # 永久记忆
 
+> 手动路线只给懂 shell 的人，新手走 一键安装.md。
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
   <img src="assets/banner-light.svg" alt="Mem-Forever：记忆比会话活得久。一把会话的标尺，当前这一场用金色标出。" width="1200">
@@ -82,7 +84,8 @@
 PowerShell（Windows）：
 
 ```powershell
-git clone https://github.com/adsorgcn/DeepSeekHarness.git brain   # 连不上：换成 https://gitee.com/monetize/DeepSeekHarness.git
+# 连不上 GitHub：把下一行的地址换成 https://gitee.com/monetize/DeepSeekHarness.git
+git clone https://github.com/adsorgcn/DeepSeekHarness.git brain
 if ($LASTEXITCODE -ne 0) { throw "clone 失败，先解决网络再继续" }
 Set-Location brain
 if (-not (Test-Path .git)) { throw "没有 .git，拒绝继续（防止在错误目录里误删）" }
@@ -97,7 +100,8 @@ git commit -q -m "init: brain from DeepSeekHarness"
 bash（macOS、Linux）：
 
 ```bash
-git clone https://github.com/adsorgcn/DeepSeekHarness.git brain \   # 连不上：换成 https://gitee.com/monetize/DeepSeekHarness.git
+# 连不上 GitHub：把下一行的地址换成 https://gitee.com/monetize/DeepSeekHarness.git
+git clone https://github.com/adsorgcn/DeepSeekHarness.git brain \
  && cd brain && test -d .git \
  && python3 -X utf8 tools/brain.py check \
  && git add -A && git commit -q -m "init: brain from DeepSeekHarness"
