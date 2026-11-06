@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.28** · 2026-11-06 · 视频转文字内置（审计 DSH-VIDEO-TEXT-H1-H5）
+
+- 免费全家桶新增 sherpa-onnx 引擎条目 + `tools/asr_setup.py`（.asr-venv + 官方三源下载 + sha256 逐文件校验 + --check）
+- 新增 `tools/transcribe.py`：链接或文件 → yt-dlp 下载 → ffmpeg 16k 单声道 → SenseVoice 本地识别 → .txt 与 .srt（照官方 generate-subtitles.py）；`tools/test_transcribe.py` 5 场景进 CI
+- AGENTS.local.md 新增 `dsh_video_to_text` GENE：全本机、装前问一次、不编文字、音频不出本机
+- 文档四处同口径；CITATIONS 补 yt-dlp 与 FFmpeg；Whisper 不进默认包
+
 **v1.0.27** · 2026-11-06 · 新手默认 Flash（审计 DSH-NEWBIE-FLASH-G1-G5）
 
 - 起手式第 3 句定死 deepseek-flash（看图、1M、便宜；Pro 更贵且不能看图，先不用）
