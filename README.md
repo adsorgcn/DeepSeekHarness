@@ -4,6 +4,8 @@
 
 **一句话，让你的 DSH 记住你、教会你、把环境装齐。**
 
+> One sentence and your DeepSeek Harness remembers you. Memory · tutorial · one-click install · skills — 一句话满配。
+
 ## 开始（你只做这一件事）
 
 在线门面：https://adsorgcn.github.io/DeepSeekHarness

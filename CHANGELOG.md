@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.13** · 2026-11-06 · SEO 与仓库门面
+
+- 仓库 About：双语简介 + 官网地址 + 20 个主题标签（deepseek、ilang、ai-memory、persistent-memory、tutorial 等）
+- 落地页 `<head>`：关键词标题、描述、canonical、Open Graph / Twitter 卡片（配 social-preview.png）
+- README 顶部双语关键词句；方便 GitHub 搜索与社交分享卡片识别
+
 **v1.0.12** · 2026-11-05 · 审计第三轮 DSH-FIX-B1-C6
 
 - C1 推送保护钩子覆盖 projects/ mirror/ .ilang/，并认 `git config dsh.allowMemoryPush` 放行

@@ -1,7 +1,7 @@
 {
   "title": "DeepSeekHarness: one-paste furnishing of a DeepSeek Harness workspace (memory, tutorial, one-click install, skills)",
   "description": "<p>DeepSeekHarness furnishes a DeepSeek Harness workspace in one paste: a Git-native memory layer adapted from Mem-Forever, a beginner tutorial whose first move is reading the iLang runtime core, an approval-gated bootstrap that installs missing tools from official sources only, and a growing skill shelf. The user pastes one sentence and nods; the agent does the rest. Memory is plain Markdown with iLang declarations in the user's own Git repository: readable by people, parseable by machines, portable across tools, and every change ships as a versioned release.</p>",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "upload_type": "software",
   "license": "MIT",
   "access_right": "open",
