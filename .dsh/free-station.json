@@ -60,6 +60,22 @@
         "macos": ["python", "tools/asr_setup.py", "--check"],
         "linux": ["python", "tools/asr_setup.py", "--check"]
       }
+    },
+    {
+      "id": "rea",
+      "name": "REA 逆向学习工具（第三方开源，morluto/rea）",
+      "why": "开发者逆向学习工具（第三方 MIT）；新手不必装——它的官网例句才是学怎么提需求的教材；需要 Node.js",
+      "install": {
+        "windows": ["npx", "rea-agents@latest", "setup"],
+        "macos": ["npx", "rea-agents@latest", "setup"],
+        "linux": ["npx", "rea-agents@latest", "setup"]
+      },
+      "verify": {
+        "windows": ["npx", "rea-agents", "--version"],
+        "macos": ["npx", "rea-agents", "--version"],
+        "linux": ["npx", "rea-agents", "--version"]
+      },
+      "manual": "https://rea.tools/get-started/"
     }
   ],
   "zero_install": [

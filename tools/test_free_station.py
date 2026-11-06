@@ -132,6 +132,16 @@ def test_python_token():
     check("python_token", out == [sys.executable, "tools/asr_setup.py", "--check"], str(out))
 
 
+def test_rea_entry():
+    t = {x["id"]: x for x in REGISTRY["tools"]}
+    e = t["rea"]
+    ok = all(e["install"][k] == ["npx", "rea-agents@latest", "setup"]
+             and e["verify"][k] == ["npx", "rea-agents", "--version"]
+             for k in ("windows", "macos", "linux"))
+    ok = ok and "MIT" in e["why"] and "Node" in e["why"]
+    check("rea_entry", ok, str(e["why"]))
+
+
 def test_already_skips_install():
     r = FakeRunner({("yt-dlp", "--version"): 0})
     results, rc = FS.install_tools(REGISTRY, ["yt-dlp"], True, r, lambda name: True, "windows")
@@ -153,6 +163,7 @@ def main():
     test_no_local_model()
     test_asr_entry()
     test_python_token()
+    test_rea_entry()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)
