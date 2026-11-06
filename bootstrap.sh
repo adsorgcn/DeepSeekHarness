@@ -12,6 +12,7 @@
 #   bash bootstrap.sh -Install -Yes                      # 按计划执行（用户已审批后）
 #   bash bootstrap.sh -Install -Yes -TargetDir "$HOME/dsh-memory"
 #   bash bootstrap.sh -Install -Yes -Source gitee        # 强制走国内镜像
+#   -Install -Yes 只在 DSH 已逐项征得用户同意后使用，脚本本身不替用户点头
 
 set -u
 
@@ -144,10 +145,22 @@ if ! dsh_installed "$TARGET"; then
   fi
   say "克隆仓库（$product_source）..."
   [ -n "$GIT_BIN" ] || { say "git 仍不可用：请重跑本脚本。"; exit 1; }
-  "$GIT_BIN" clone "$CLONE_URL" "$TARGET" || { say "克隆失败（$CLONE_URL）。请检查网络，或改用 -Source gitee 后重跑。"; exit 1; }
+  "$GIT_BIN" clone "$CLONE_URL" "$TARGET" || {
+    if [ "$product_source" = "github" ] && [ "$SOURCE" = "auto" ]; then
+      say "GitHub 克隆失败，自动改用国内镜像重试..."
+      rm -rf "$TARGET"
+      product_source="gitee"
+      CLONE_URL="$GITEE_URL"
+      "$GIT_BIN" clone "$CLONE_URL" "$TARGET" || { say "克隆失败（$CLONE_URL）。已试过 GitHub 与 Gitee，请检查网络后重跑。"; exit 1; }
+    else
+      say "克隆失败（$CLONE_URL）。请检查网络，或改用 -Source gitee 后重跑。"
+      exit 1
+    fi
+  }
   # 本机模式：关掉模板的推送地址，公开仓库在机制上永远不是推送目标
   "$GIT_BIN" -C "$TARGET" remote set-url --push origin DISABLED || { say "设置本机模式失败，已停止。"; exit 1; }
   "$GIT_BIN" -C "$TARGET" config dsh.mode local || { say "设置本机模式失败，已停止。"; exit 1; }
+  "$GIT_BIN" -C "$TARGET" config dsh.source "$product_source" || { say "记录产品源失败，已停止。"; exit 1; }
 fi
 
 # 4) 验收（失败即停，不报完成）

@@ -11,6 +11,7 @@
 #   powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Install -Yes                # 按计划执行（用户已审批后）
 #   powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Install -TargetDir "D:\mem" -Yes
 #   powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Install -Yes -Source gitee  # 强制走国内镜像
+#   -Install -Yes 只在 DSH 已逐项征得用户同意后使用，脚本本身不替用户点头
 
 param(
     [switch]$Install,
@@ -174,14 +175,28 @@ if (-not (Test-DshInstalled $TargetDir)) {
     }
     & $git clone $cloneUrl $TargetDir
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "克隆失败（$cloneUrl）。请检查网络，或改用 -Source gitee 后重跑。"
-        exit 1
+        if (($productSource -eq "github") -and ($Source -eq "auto")) {
+            Write-Host "GitHub 克隆失败，自动改用国内镜像重试..."
+            if (Test-Path $TargetDir) { Remove-Item -Recurse -Force $TargetDir }
+            $productSource = "gitee"
+            $cloneUrl = $GiteeUrl
+            & $git clone $cloneUrl $TargetDir
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "克隆失败（$cloneUrl）。已试过 GitHub 与 Gitee，请检查网络后重跑。"
+                exit 1
+            }
+        } else {
+            Write-Host "克隆失败（$cloneUrl）。请检查网络，或改用 -Source gitee 后重跑。"
+            exit 1
+        }
     }
     # 本机模式：关掉模板的推送地址，公开仓库在机制上永远不是推送目标
     & $git -C $TargetDir remote set-url --push origin DISABLED
     if ($LASTEXITCODE -ne 0) { Write-Host "设置本机模式失败，已停止。"; exit 1 }
     & $git -C $TargetDir config dsh.mode local
     if ($LASTEXITCODE -ne 0) { Write-Host "设置本机模式失败，已停止。"; exit 1 }
+    & $git -C $TargetDir config dsh.source $productSource
+    if ($LASTEXITCODE -ne 0) { Write-Host "记录产品源失败，已停止。"; exit 1 }
 }
 
 # 4) 验收（失败即停，不报完成）
