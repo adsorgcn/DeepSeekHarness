@@ -175,7 +175,6 @@ def transcribe_wav(wav_path, lang, threads, so=None):
     vad_config.silero_vad.min_silence_duration = 0.25
     vad_config.silero_vad.max_speech_duration = 5
     vad_config.sample_rate = 16000
-    window_size = int(getattr(vad_config.silero_vad, "window_size", 512))
     vad = so.VoiceActivityDetector(vad_config, buffer_size_in_seconds=100)
 
     texts = []
@@ -199,7 +198,7 @@ def transcribe_wav(wav_path, lang, threads, so=None):
 
     with wave.open(wav_path, "rb") as f:
         assert f.getframerate() == 16000, "wav 采样率必须是 16000"
-        samples_per_read = window_size
+        samples_per_read = int(0.1 * 16000)  # 官方例子：每 0.1 秒读一次，读太短会吃掉段首字
         while True:
             raw = f.readframes(samples_per_read)
             if not raw:
