@@ -108,6 +108,13 @@ def test_ollama_macos_is_cask():
     check("ollama_macos_is_cask", ok, str(t["ollama"]["install"]["macos"]))
 
 
+def test_obsidian_windows_via_winget():
+    t = {x["id"]: x for x in REGISTRY["tools"]}
+    v = t["obsidian"]["verify"]["windows"]
+    ok = v[:5] == ["winget", "list", "--id", "Obsidian.Obsidian", "-e"]
+    check("obsidian_windows_via_winget", ok, str(v))
+
+
 def test_already_skips_install():
     r = FakeRunner({("ollama", "--version"): 0})
     results, rc = FS.install_tools(REGISTRY, ["ollama"], True, r, lambda name: True, "windows")
@@ -126,6 +133,7 @@ def main():
     test_install_fail_stops_rest()
     test_qwen_verify_is_show()
     test_ollama_macos_is_cask()
+    test_obsidian_windows_via_winget()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)

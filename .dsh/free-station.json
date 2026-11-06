@@ -63,7 +63,7 @@
         "macos": ["brew", "install", "--cask", "obsidian"]
       },
       "verify": {
-        "windows": ["where.exe", "obsidian"],
+        "windows": ["winget", "list", "--id", "Obsidian.Obsidian", "-e", "--accept-source-agreements"],
         "macos": ["which", "obsidian"]
       }
     }
