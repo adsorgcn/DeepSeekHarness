@@ -59,7 +59,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:installing_free_station_tools_outside_the_registry⇒forbidden
   A:adding_a_free_station_tool_without_a_verify_command⇒forbidden
 
-（免费全家桶：只走 tools/free_station.py 读 .dsh/free-station.json；每件先问、只走官方源、失败即停；语音与笔记零安装集成；新工具=注册表加一条目+发 patch。）
+（免费全家桶：只走 tools/free_station.py 读 .dsh/free-station.json；每件先问、只走官方源、失败即停；语音与笔记零安装集成；新工具=注册表加一条目+发 patch；吸收第三方工具进全家桶必须：装前问、官方源、docs/CITATIONS.md 署原作者。）
 
 ::GENE{dsh_newbie_model|conf:confirmed|scope:global}
   T:newbie_default_model_is_deepseek-flash_because_it_reads_images_has_1M_context_and_is_cheap

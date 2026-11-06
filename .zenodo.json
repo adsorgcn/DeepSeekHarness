@@ -1,7 +1,7 @@
 {
   "title": "DeepSeekHarness: one-paste furnishing of a DeepSeek Harness workspace (memory, tutorial, one-click install, skills)",
   "description": "<p>DeepSeekHarness furnishes a DeepSeek Harness workspace in one paste: a Git-native memory layer adapted from Mem-Forever, a beginner tutorial whose first move is reading the iLang runtime core, an approval-gated bootstrap that installs missing tools from official sources only, and a growing skill shelf. The user pastes one sentence and nods; the agent does the rest. Memory is plain Markdown with iLang declarations in the user's own Git repository: readable by people, parseable by machines, portable across tools, and every change ships as a versioned release.</p>",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "upload_type": "software",
   "license": "MIT",
   "access_right": "open",
@@ -78,6 +78,7 @@
     "DeepSeek-AI. DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence. arXiv. DOI: 10.48550/arXiv.2606.19348",
     "DeepSeek-AI. DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning. arXiv. DOI: 10.48550/arXiv.2501.12948",
     "DeepSeek-AI. DeepSeek-V3 Technical Report. arXiv. DOI: 10.48550/arXiv.2412.19437",
-    "Tongyi SpeechTeam, Alibaba Group. FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs. arXiv. DOI: 10.48550/arXiv.2407.04051"
+    "Tongyi SpeechTeam, Alibaba Group. FunAudioLLM: Voice Understanding and Generation Foundation Models for Natural Interaction Between Humans and LLMs. arXiv. DOI: 10.48550/arXiv.2407.04051",
+    "morluto. REA: Reverse Engineering for Your Coding Agent. MIT. https://github.com/morluto/rea"
   ]
 }

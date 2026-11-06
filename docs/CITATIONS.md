@@ -35,6 +35,7 @@
 - Silero VAD（语音活动检测，视频转文字同款）：snakers4，MIT，无 DOI，[github.com/snakers4/silero-vad](https://github.com/snakers4/silero-vad)
 - yt-dlp（视频下载）：Unlicense，无 DOI，[github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
 - FFmpeg（音视频处理）：LGPL/GPL，无 DOI，[ffmpeg.org](https://ffmpeg.org)
+- REA（逆向学习工具，免费全家桶可选条目）：morluto，MIT，无 DOI，[github.com/morluto/rea](https://github.com/morluto/rea)
 - Git（记忆的版本控制与哈希链）：[git-scm.com](https://git-scm.com)
 - Markdown / CommonMark：语言标准，无 DOI
 
