@@ -28,6 +28,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:open_question_to_owner⇒rephrase_as_judgment_with_recommendation
   A:making_owner_do_the_analysis⇒agent_rethinks_and_presents_the_decision_ready
   A:blocking_on_owner_choice_with_a_safe_default⇒rejudge_and_proceed
+  A:treating_install_push_delete_or_network_write_as_a_safe_default⇒stop_and_ask_first
 
 （owner 决策流：思考全部由 agent 完成，只把结论与推荐摆到 owner 面前；owner 零思考，只回答「做」或「过」，不再回答开放式问题。）
 
