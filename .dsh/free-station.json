@@ -8,7 +8,7 @@
       "why": "断网也能用的本地备用模型底座",
       "install": {
         "windows": ["winget", "install", "--id", "Ollama.Ollama", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
-        "macos": ["brew", "install", "ollama"]
+        "macos": ["brew", "install", "--cask", "ollama-app"]
       },
       "verify": {
         "windows": ["ollama", "--version"],

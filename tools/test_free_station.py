@@ -102,6 +102,12 @@ def test_qwen_verify_is_show():
     check("qwen_verify_is_show", ok, str(q))
 
 
+def test_ollama_macos_is_cask():
+    t = {x["id"]: x for x in REGISTRY["tools"]}
+    ok = t["ollama"]["install"]["macos"] == ["brew", "install", "--cask", "ollama-app"]
+    check("ollama_macos_is_cask", ok, str(t["ollama"]["install"]["macos"]))
+
+
 def test_already_skips_install():
     r = FakeRunner({("ollama", "--version"): 0})
     results, rc = FS.install_tools(REGISTRY, ["ollama"], True, r, lambda name: True, "windows")
@@ -119,6 +125,7 @@ def main():
     test_verify_fail_stops()
     test_install_fail_stops_rest()
     test_qwen_verify_is_show()
+    test_ollama_macos_is_cask()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)
