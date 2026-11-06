@@ -37,6 +37,7 @@
 - [x] 强制规则：`cache_first`（前缀稳定、后缀动态、块确定性，iLang 声明）
 - [x] 发版纪律：三档版本（默认 patch / 发中版 minor / 迭代大版本 major），每次改动即 Release
 - [x] Issue 自动客服：`.github/workflows/issue-bot.yml` + `.github/bot/issue_bot.py`（文档为脑，新手人格，防循环）
+- [x] 客服升级：flash 最新版 + 每月官方模型检查（model-check 工作流）+ 回答后赠 iLang 解决方案工程书（母版格式，用户回填自己的 Agent）
 - [x] 收敛：网页/图片打开方式用官方设置（设置 → 网页链接默认打开方式），不装插件替代官方开关
 - [x] 收敛：识图 = 切模型到 `deepseek-flash`（原生读图，一般人够用）；不立工程书、不装插件，提示用户一句话
 - [x] 判断纪律：负向断言先查三层（官方文档 → 用户设置 → 插件配置），只说「哪一层没找到」

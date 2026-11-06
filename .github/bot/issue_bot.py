@@ -23,7 +23,20 @@ REPO = os.environ["GITHUB_REPOSITORY"]
 EVENT = json.load(open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8"))
 API = (os.environ.get("LLM_API_BASE") or "https://api.deepseek.com/v1").rstrip("/")
 KEY = os.environ["DEEPSEEK_API_KEY"]
-MODEL = os.environ.get("BOT_MODEL") or "deepseek-chat"
+
+
+def _pinned_model():
+    try:
+        with open(".github/bot/MODEL.txt", encoding="utf-8") as f:
+            p = f.read().strip()
+        if p:
+            return p
+    except FileNotFoundError:
+        pass
+    return os.environ.get("BOT_MODEL") or "deepseek-flash"
+
+
+MODEL = _pinned_model()
 BOT_LOGIN = "github-actions[bot]"
 MARK = "<!-- auto-bot -->"
 DAILY_CAP = 30
@@ -112,7 +125,14 @@ system = (
     "规则：能答就答完整；不知道就直说「这个问题我不确定，请 @维护者 帮忙看一下」；"
     "幻觉是不诚实，禁止编造文档里没有的内容；能给步骤给步骤，能给模板给模板；"
     "装不上、配不通的问题，一律先指向仓库首页的一句话安装（README 里那句话）。"
-    "语气：诚实、简洁、友好。回答控制在 300 字以内。\n\n"
+    "语气：诚实、简洁、友好。"
+    "回答分两段：第一段直接答案，控制在 300 字以内；"
+    "第二段把这份解决方案写成一本 iLang 工程书，单独放在一个 ``` 代码块里，"
+    "工程书遵循母版格式：以 ::ILANG::v5.0 开头，含 [TYPE:engineering_book] 与 [ID]、"
+    "::OBJECTIVE、若干 ::RULE 步骤、::RUBRIC 验收、一行操作流水线、"
+    "署名行「来源：DeepSeekHarness · iLang IML v5.0」。"
+    "工程书是给用户回填自己的 Agent 用的：用户整块复制粘贴即可执行；"
+    "若问题只是操作指引，工程书就写操作清单与验收项。\n\n"
     "仓库文档：\n" + context
 )
 user_msg = "用户提问（标题：%s）：\n%s" % (title, body[:2000])
@@ -123,7 +143,7 @@ payload = {
         {"role": "system", "content": system},
         {"role": "user", "content": user_msg},
     ],
-    "max_tokens": 400,
+    "max_tokens": 1600,
 }
 req = urllib.request.Request(
     API + "/chat/completions",
@@ -132,7 +152,18 @@ req = urllib.request.Request(
 )
 with urllib.request.urlopen(req, json.dumps(payload).encode(), timeout=60) as r:
     out = json.load(r)
-reply = (out["choices"][0]["message"]["content"] or "").strip()
+raw = (out["choices"][0]["message"]["content"] or "").strip()
+parts = raw.split("```")
+answer = parts[0].strip()
+book = ""
+if len(parts) >= 2:
+    book = parts[1].strip()
+    if book.lower().startswith("text"):
+        book = book[4:].strip()
+if book:
+    reply = answer + "\n\n> 赠送：把下面这本工程书整块贴给你的 Agent，它就能自己执行。\n\n```text\n" + book + "\n```"
+else:
+    reply = answer
 reply = reply + "\n\n" + MARK + "\n> 本回复由仓库自动客服（AI）生成。有误请指出，紧急问题请 @维护者。"
 gh("POST", "https://api.github.com/repos/%s/issues/%d/comments" % (REPO, num), {"body": reply})
 print("replied", num)
