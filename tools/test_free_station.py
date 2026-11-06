@@ -95,6 +95,13 @@ def test_install_fail_stops_rest():
           str(results))
 
 
+def test_qwen_verify_is_show():
+    t = {x["id"]: x for x in REGISTRY["tools"]}
+    q = t["qwen3-8b"]["verify"]
+    ok = all(v == ["ollama", "show", "qwen3:8b"] for v in q.values())
+    check("qwen_verify_is_show", ok, str(q))
+
+
 def test_already_skips_install():
     r = FakeRunner({("ollama", "--version"): 0})
     results, rc = FS.install_tools(REGISTRY, ["ollama"], True, r, lambda name: True, "windows")
@@ -111,6 +118,7 @@ def main():
     test_install_yes_runs_and_verifies()
     test_verify_fail_stops()
     test_install_fail_stops_rest()
+    test_qwen_verify_is_show()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)

@@ -24,8 +24,8 @@
         "macos": ["ollama", "pull", "qwen3:8b"]
       },
       "verify": {
-        "windows": ["ollama", "list"],
-        "macos": ["ollama", "list"]
+        "windows": ["ollama", "show", "qwen3:8b"],
+        "macos": ["ollama", "show", "qwen3:8b"]
       }
     },
     {
