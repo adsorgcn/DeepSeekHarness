@@ -23,11 +23,11 @@
 
 ---
 
-## 第 3 句：模型——官方与 O 家 C 家协议，让 DSH 自己读文档定
+## 第 3 句：模型——新手就用 deepseek-flash
 
-> 去读 DeepSeek Harness 官方模型配置文档（docs/user/guide/providers.zh.md），然后给我结论并帮我配好：新手先用哪家官方、怎么配；OpenAI 家和 Claude 家的协议有什么区别、分别怎么选、选错会怎样。需要我提供密钥就告诉我贴在哪。
+> 去读 DeepSeek Harness 官方模型配置文档（docs/user/guide/providers.zh.md），然后帮我把模型配成 deepseek-flash，并用一句话告诉我为什么：它能看图、上下文 1M、便宜，新手够用；Pro 更贵且不能看图，先不用。需要我提供密钥就告诉我贴在哪；如果我是 DeepSeek 账号登录，就告诉我在模型选择里选 deepseek-flash 这一次就行。
 
-（O 家/C 家的区别不用你背——DSH 读完官方文档会告诉你，并替你建好提供商。）
+（其他家的协议以后再说。你只要记住：看图直接贴，想深一点说「认真想」。）
 
 ---
 
