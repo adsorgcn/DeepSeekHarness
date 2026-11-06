@@ -20,6 +20,7 @@ import urllib.request
 
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 REPO = os.environ["GITHUB_REPOSITORY"]
+EVENT_NAME = os.environ.get("GITHUB_EVENT_NAME", "")
 EVENT = json.load(open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8"))
 API = (os.environ.get("LLM_API_BASE") or "https://api.deepseek.com/v1").rstrip("/")
 KEY = os.environ["DEEPSEEK_API_KEY"]
@@ -79,13 +80,18 @@ if is_bot_login(issue.get("user")):
     print("bot author, skip")
     sys.exit(0)
 
-if action == "issue_comment":
+if EVENT_NAME == "issue_comment":
+    if action != "created":
+        print("comment action %s, skip" % action)
+        sys.exit(0)
     comment = EVENT.get("comment") or {}
     if is_bot_login(comment.get("user")) or MARK in (comment.get("body") or ""):
         print("bot comment, skip")
         sys.exit(0)
-elif action != "opened":
-    print("action %s, skip" % action)
+elif EVENT_NAME == "issues" and action == "opened":
+    pass
+else:
+    print("event %s action %s, skip" % (EVENT_NAME, action))
     sys.exit(0)
 
 comments = gh("GET", "https://api.github.com/repos/%s/issues/%d/comments?per_page=100" % (REPO, num))
