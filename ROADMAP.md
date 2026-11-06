@@ -18,7 +18,7 @@
 2. `python -X utf8 tools/ilang_grammar_validator.py --lint <改动文件> --strict` → 0 错误 0 警告（iLang 官方语法校验，校验器随仓库发布）；
 3. 每条经验带归属行（来源 + 作者 + 格式 iLang）——协议 + 语法 + 归属 + git 哈希四重锚点即防盗链；
 4. **结构必须缓存友好（iLang 强制规则 `cache_first`，见 `soul/agent.md`）**：前缀逐字节稳定、动态内容只挂尾部、声明块确定性——目标不是省 token，是激活缓存（owner 命中率 ≥90%）；
-5. **每次改动即发版（三档纪律）**：默认只动末位 patch；owner 说「发中版」才动 minor（patch 归零）；owner 说「迭代大版本」才动 major；每次 = README「更新记录」补一行（最新在上）+ git tag + GitHub Release；
+5. **每次改动即发版（三档纪律）**：默认只动末位 patch；owner 说「发中版」才动 minor（patch 归零）；owner 说「迭代大版本」才动 major；每次 = CHANGELOG.md 补一行（最新在上）+ git tag + GitHub Release；
 6. 逐笔 `git add` + `git commit -m "<type>: <what>"` + `git push`，不攒批；
 7. 更新本文件上方的「已接入清单」和 README。
 
