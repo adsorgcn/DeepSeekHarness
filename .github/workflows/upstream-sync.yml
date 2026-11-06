@@ -21,9 +21,9 @@ jobs:
 
       - name: Sync engine files only
         run: |
-          # Only sync engine files; never touch user data in soul/ memory/ handoff/ vault/ env/ (or the deprecated .ilang/)
-          # Nor the five instruction files (AGENTS.md CLAUDE.md GEMINI.md .cursorrules .github/copilot-instructions.md):
-          # AGENTS.md stays identical to upstream by discipline, and this repo's DSH additions live in AGENTS.local.md.
+          # Only sync engine files; never touch user data in soul/ memory/ handoff/ vault/ env/ (or the deprecated .ilang/).
+          # The five instruction files and LICENSE stay local: kept identical to upstream by discipline, and this
+          # repo's DSH additions live in AGENTS.local.md, which upstream does not sync.
           git checkout upstream/main -- tools/brain.py rules/GRAMMAR-CARD.md rules/GRAMMAR-CARD.zh.md docs/OKF.md docs/VAULT.md skills/mem-forever/SKILL.md 2>/dev/null || true
           
           # Check if anything changed
