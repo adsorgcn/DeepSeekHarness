@@ -17,6 +17,8 @@ jobs:
           python-version: '3.12'
       - name: Behavior tests (bot, quotas, book validation)
         run: python -X utf8 tools/test_bot.py
+      - name: Behavior tests (free station installer)
+        run: python -X utf8 tools/test_free_station.py
       - name: Rubrics R1-R9
         run: python -X utf8 tools/check_rubrics.py
       - name: Brain check

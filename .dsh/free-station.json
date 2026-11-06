@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "note": "免费全家桶可选安装注册表（数据文件）。全部官方源；安装前逐个审批；每个条目自带 verify，装没装以命令输出为准，失败即停。新工具 = 加一条目 + 发一个 patch，机制不变。语音与笔记是零安装集成，见 zero_install。",
+  "tools": [
+    {
+      "id": "ollama",
+      "name": "Ollama 本地模型引擎",
+      "why": "断网也能用的本地备用模型底座",
+      "install": {
+        "windows": ["winget", "install", "--id", "Ollama.Ollama", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
+        "macos": ["brew", "install", "ollama"]
+      },
+      "verify": {
+        "windows": ["ollama", "--version"],
+        "macos": ["ollama", "--version"]
+      }
+    },
+    {
+      "id": "qwen3-8b",
+      "name": "Qwen3 8B 本地备用模型",
+      "why": "Ollama 装好后的第一个模型（官方源）",
+      "install": {
+        "windows": ["ollama", "pull", "qwen3:8b"],
+        "macos": ["ollama", "pull", "qwen3:8b"]
+      },
+      "verify": {
+        "windows": ["ollama", "list"],
+        "macos": ["ollama", "list"]
+      }
+    },
+    {
+      "id": "yt-dlp",
+      "name": "yt-dlp 视频下载",
+      "why": "官方 winget / brew 包",
+      "install": {
+        "windows": ["winget", "install", "--id", "yt-dlp.yt-dlp", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
+        "macos": ["brew", "install", "yt-dlp"]
+      },
+      "verify": {
+        "windows": ["yt-dlp", "--version"],
+        "macos": ["yt-dlp", "--version"]
+      }
+    },
+    {
+      "id": "ffmpeg",
+      "name": "FFmpeg 视频处理",
+      "why": "官方 winget 包 Gyan.FFmpeg",
+      "install": {
+        "windows": ["winget", "install", "--id", "Gyan.FFmpeg", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
+        "macos": ["brew", "install", "ffmpeg"]
+      },
+      "verify": {
+        "windows": ["ffmpeg", "-version"],
+        "macos": ["ffmpeg", "-version"]
+      }
+    },
+    {
+      "id": "obsidian",
+      "name": "Obsidian 笔记",
+      "why": "装好后直接打开记忆文件夹就是金库，零集成",
+      "install": {
+        "windows": ["winget", "install", "--id", "Obsidian.Obsidian", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
+        "macos": ["brew", "install", "--cask", "obsidian"]
+      },
+      "verify": {
+        "windows": ["where.exe", "obsidian"],
+        "macos": ["which", "obsidian"]
+      }
+    }
+  ],
+  "zero_install": [
+    {
+      "id": "voice",
+      "name": "语音：DSH 自带语音转写（Whisper/SenseVoice）+ 系统自带 Edge 朗读",
+      "how": "零安装；在 DSH 设置里打开语音转写即可，朗读让 agent 用系统语音生成音频"
+    },
+    {
+      "id": "notebook",
+      "name": "Gemini Notebook 学习助手",
+      "how": "零安装；对 agent 说「把交接单导出成学习笔记」，它整理好你贴进 NotebookLM"
+    }
+  ]
+}

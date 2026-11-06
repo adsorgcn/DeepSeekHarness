@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.15** · 2026-11-06 · 免费全家桶（数据驱动可选安装器）
+
+- 新增 `.dsh/free-station.json` 注册表 + `tools/free_station.py`：plan（只检测）/ install（逐项审批、官方源、失败即停、装后验证）/ status
+- 条目：Ollama + Qwen3 8B（本地备用）、yt-dlp、FFmpeg、Obsidian（winget/brew 官方包，id 已逐一验证）
+- 零安装集成：语音（DSH 自带转写 + 系统朗读）、Gemini Notebook（导出交接单）
+- 行为测试 `tools/test_free_station.py`（7 场景）进 CI；默认 bootstrap 安装计划不变
+
 **v1.0.14** · 2026-11-06 · 发版摘要取对 Gitee HEAD
 
 - `release-on-version-change.yml`：摘要里的 Gitee HEAD 改用「取第一个 sha」的方式（grep -o + head -1 + cut），修掉 sed 贪婪匹配取到父提交的 bug（审计 DSH-FIX-D1）

@@ -50,3 +50,13 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:updating_when_citation_version_is_unchanged⇒reply_already_latest_and_stop
 
 （引擎更新：「把 DeepSeekHarness 的引擎更新到最新，不要动我的记忆」的做法：git fetch origin main（fetch 地址按 git config dsh.source 是 github 或 gitee）→ git checkout FETCH_HEAD -- tools rules skills .dsh docs AGENTS.md AGENTS.local.md CLAUDE.md GEMINI.md BRAIN.md bootstrap.ps1 bootstrap.sh CITATION.cff .zenodo.json README.md ROADMAP.md CHANGELOG.md 一键安装.md dsh-新手起手式.md .github → 永远不碰 soul memory handoff vault env projects mirror log.md index.md → 更新前后各跑一次 brain.py check → 重新复制 tools/guard-pre-push.sh 到 .git/hooks/pre-push → 把两次 CITATION 版本号写进交接单并 commit；CITATION 版本相同就说「已是最新」不做事。）
+
+::GENE{dsh_free_station|conf:confirmed|scope:global}
+  T:free_station_installs_only_via_tools_free_station_py
+  T:every_free_station_item_needs_owner_approval_before_install
+  T:official_sources_only_for_every_free_station_item
+  T:voice_uses_dsh_builtin_stt_and_system_tts_zero_install
+  A:installing_free_station_tools_outside_the_registry⇒forbidden
+  A:adding_a_free_station_tool_without_a_verify_command⇒forbidden
+
+（免费全家桶：只走 tools/free_station.py 读 .dsh/free-station.json；每件先问、只走官方源、失败即停；语音与笔记零安装集成；新工具=注册表加一条目+发 patch。）
