@@ -93,6 +93,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   T:shipinhao_or_kuaishou_link⇒say_yt-dlp_does_not_support_it_and_ask_for_the_file
   T:douyin_or_xiaohongshu_download_fails⇒show_yt-dlp_error_verbatim_and_ask_for_the_file
   T:transcribe_exits_4⇒say_no_speech_detected
+  T:user_asks_to_selftest_video_to_text⇒run_tools_transcribe_py_selftest_and_quote_its_output_verbatim
   A:sending_audio_or_video_to_any_network_transcription_service⇒forbidden
   A:installing_the_engine_without_an_explicit_yes⇒forbidden
   A:inventing_or_polishing_transcript_text⇒forbidden_quote_the_file
