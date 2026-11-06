@@ -16,6 +16,8 @@
 
 连不上 GitHub：自动走国内镜像 gitee.com/monetize/DeepSeekHarness，iLang 官方资料自动走 ilang.cn；私人记忆默认拦在本地，只有你确认的私有仓库才能备份。
 
+在 DeepSeek Harness 0.2.2-rc.1 上验证（DSH 还是 Developer Preview，官方说可能有破坏性变更；装不上先看这一行）。
+
 ## 里面有什么
 
 **记忆体** · 记住你的习惯、决定、规矩。换窗口、换电脑都不忘；每个新窗口开场，先汇报上次做到哪了。

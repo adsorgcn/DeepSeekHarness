@@ -62,4 +62,5 @@
 - owner 说「迭代进去」就按上面做，做完一句话汇报接入了什么、放哪了。
 - **文件归属**：上游引擎文件（`tools/brain.py`、`rules/GRAMMAR-CARD*.md`、`docs/OKF.md`、`docs/VAULT.md`、`skills/mem-forever/SKILL.md`）由 upstream-sync 同步，勿本地改；`AGENTS.md` 等五份指令文件保持与上游一致；本仓库的 DSH 补充一律放在 `AGENTS.local.md`、`soul/`、`.dsh/`、`docs/` 内 DSH 文档、`bootstrap.*` 与工作流里。
 - **国内镜像**：`gitee.com/monetize/DeepSeekHarness` 只作产品源，永不作私人记忆备份目标；镜像同步方式由 owner 决定（Gitee 官方镜像或手动 push），每次发版后核对两边 HEAD 一致。
-- **记忆推送保护**：`bootstrap.*` 克隆后自动装 `tools/guard-pre-push.sh` 钩子；开发仓如需推送含 `soul/ memory/ handoff/ vault/ env/ log.md` 的变更，先确认目标是私有仓库，再以 `DSH_ALLOW_MEMORY_PUSH=1` 显式放行。
+- **记忆推送保护**：`bootstrap.*` 克隆后自动装 `tools/guard-pre-push.sh` 钩子；开发仓如需推送含 `soul/ memory/ handoff/ vault/ env/ projects/ mirror/ .ilang/ log.md` 的变更，先确认目标是私有仓库，再以 `DSH_ALLOW_MEMORY_PUSH=1` 或 `git config --bool dsh.allowMemoryPush true` 显式放行。
+- **DSH 版本行**：每次发版同步更新 README 与落地页的「在 DeepSeek Harness X 上验证」一行（X 取自本机 DSH 关于页或 package.json，取不到写「未记录」，不要猜）。
