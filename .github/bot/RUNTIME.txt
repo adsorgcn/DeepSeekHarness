@@ -1,0 +1,9 @@
+version: 2026.11.05-e45fd039752f
+source_commit: 15677b14841a4ef92b2a732effae2f43b00f4503
+updated: 2026-11-05T17:15:26-05:00
+core_url: https://runtime.ilang.app/ilang-latest.md
+core_sha256: e45fd039752fc6087c55c57810be9cbc5b1510840952d2637bfad72c09bb2e9a
+full_sha256: 7dc7b59e173f14791dac874e103dd263000c72abaadbb1db83bd48d54ee9ff32
+manifest_url: https://runtime.ilang.app/manifest.json
+pinned_at: 2026-11-05 (America/New_York)
+note: pinned runtime anchor used by the issue bot. model-check workflow verifies freshness monthly and opens an issue when the manifest moves.

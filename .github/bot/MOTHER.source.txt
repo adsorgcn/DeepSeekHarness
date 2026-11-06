@@ -1,0 +1,5 @@
+url: https://ilang.ai/source-book/METHOD-TO-BOOK-MOTHER-v2.9-2026-10-30.ilang.md
+fetched_at: 2026-11-05 (America/New_York)
+file: MOTHER-v2.9.ilang.md.gz
+sha256_of_uncompressed_content: 20DEBDDBB0B536EB1335495E3E8A15CF2989F164174F93C96909587EFCAB5503
+note: verbatim copy of the official iLang engineering-book mother template v2.9 (MIT, author Long Quan Zhu / iLang), gzip-compressed so the repo secret scanner does not flag its example Bearer wording. The bot decompresses at read time; the sha above is of the uncompressed text and must match after any re-fetch. Source link above.

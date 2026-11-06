@@ -95,12 +95,36 @@ print(f"[R8] {'PASS' if results['R8'] else 'FAIL'} (exit={code}, expect=0)")
 print(out)
 print("-" * 60)
 
-# R9
+# R9：客服防重复/配额/校验必须真实存在（AST 检查常量与关键机制，不再是字符串存在性）
+import ast as _ast
 b = io.open(".github/bot/issue_bot.py", encoding="utf-8").read()
 w = io.open(".github/workflows/issue-bot.yml", encoding="utf-8").read()
-ok9 = "DAILY_CAP" in b and "PER_ISSUE_CAP" in b and "concurrency" in w
+ok9 = True
+reasons = []
+tree = _ast.parse(b)
+caps = {}
+for node in tree.body:
+    if isinstance(node, _ast.Assign):
+        for t in node.targets:
+            if isinstance(t, _ast.Name) and t.id in ("DAILY_CAP", "PER_ISSUE_CAP", "BOOK_MAX_CHARS", "ANSWER_MAX_CHARS"):
+                try:
+                    caps[t.id] = _ast.literal_eval(node.value)
+                except Exception:
+                    caps[t.id] = None
+for k in ("DAILY_CAP", "PER_ISSUE_CAP", "BOOK_MAX_CHARS", "ANSWER_MAX_CHARS"):
+    v = caps.get(k)
+    if not isinstance(v, int) or v <= 0:
+        ok9 = False
+        reasons.append("%s not a positive int constant" % k)
+for needle in ("dsh-event:", 'rel="next"', '!= "open"', "finish_reason"):
+    if needle not in b:
+        ok9 = False
+        reasons.append("missing %r" % needle)
+if "issue.number" not in w or "cancel-in-progress" not in w:
+    ok9 = False
+    reasons.append("concurrency not per-issue")
 results["R9"] = ok9
-print(f"[R9] {'PASS' if ok9 else 'FAIL'}")
+print(f"[R9] {'PASS' if ok9 else 'FAIL'} ({'; '.join(reasons) if reasons else 'constants, event dedup, pagination, live recheck, per-issue concurrency verified'})")
 print("-" * 60)
 
 failed = [k for k, v in results.items() if not v]

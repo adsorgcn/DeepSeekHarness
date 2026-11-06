@@ -1,0 +1,23 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Behavior tests (bot, quotas, book validation)
+        run: python -X utf8 tools/test_bot.py
+      - name: Rubrics R1-R9
+        run: python -X utf8 tools/check_rubrics.py
+      - name: Brain check
+        run: python -X utf8 tools/brain.py check
