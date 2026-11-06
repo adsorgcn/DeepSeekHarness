@@ -127,6 +127,11 @@ def test_asr_entry():
     check("asr_entry", ok, str(e["why"]))
 
 
+def test_python_token():
+    out = FS.resolve_cmd(["python", "tools/asr_setup.py", "--check"])
+    check("python_token", out == [sys.executable, "tools/asr_setup.py", "--check"], str(out))
+
+
 def test_already_skips_install():
     r = FakeRunner({("yt-dlp", "--version"): 0})
     results, rc = FS.install_tools(REGISTRY, ["yt-dlp"], True, r, lambda name: True, "windows")
@@ -147,6 +152,7 @@ def main():
     test_path_refresh()
     test_no_local_model()
     test_asr_entry()
+    test_python_token()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)

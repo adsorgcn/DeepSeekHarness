@@ -110,21 +110,30 @@ def refresh_path(key=None):
     return os.pathsep.join(parts)
 
 
-def _runner(cmd, timeout=1800):
+def resolve_cmd(cmd):
+    """把命令首项换成可执行的全路径：python 用当前解释器（macOS/Linux 可能没有 python 命令），其余走 shutil.which。"""
+    if cmd and cmd[0] == "python":
+        return [sys.executable] + list(cmd[1:])
     full = shutil.which(cmd[0], path=refresh_path())
     if not full:
+        return None
+    return [full] + list(cmd[1:])
+
+
+def _runner(cmd, timeout=1800):
+    resolved = resolve_cmd(cmd)
+    if resolved is None:
         print("  [run] %s -> 未找到该命令（视为缺）" % " ".join(cmd))
         return 1
-    cmd = [full] + list(cmd[1:])
     try:
-        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+        r = subprocess.run(resolved, capture_output=True, text=True, encoding="utf-8",
                            errors="replace", timeout=timeout)
     except FileNotFoundError:
         print("  [run] %s -> 未找到该命令（视为缺）" % " ".join(cmd))
         return 1
     if r.returncode != 0:
         tail = ((r.stderr or "").strip() or (r.stdout or "").strip())[:120]
-        print("  [run] %s -> %d%s" % (" ".join(cmd), r.returncode, (" | " + tail) if tail else ""))
+        print("  [run] %s -> %d%s" % (" ".join(resolved), r.returncode, (" | " + tail) if tail else ""))
     return r.returncode
 
 
