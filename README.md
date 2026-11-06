@@ -10,7 +10,7 @@
 
 ## 开始（你只做这一件事）
 
-在线门面：https://adsorgcn.github.io/DeepSeekHarness
+在线门面：https://dsh.ilang.guide/ （微信、QQ 里分享用下面的指导站地址）
 
 指导站：https://ilang.cn/guide/dsh/ ——一页讲清贴哪句、会发生什么、怎么验收，Agent 可读的孪生在同一页；微信、QQ 里分享用这个地址。
 
