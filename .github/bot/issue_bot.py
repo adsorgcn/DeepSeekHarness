@@ -10,7 +10,7 @@
   身份判定只认 login（普通用户贴标记不能冒充、不消耗配额）；
 - 上限：每日最多 DAILY_CAP 次尝试（含兜底贴链接），同一 issue 最多 PER_ISSUE_CAP 条 bot 回复；
   评论分页取全（Link rel=next），不分页会漏数；
-- 上下文只取仓库文档（README + 一键安装），顺序稳定，上限 8000 字符；
+- 上下文只取新手文档（一键安装 + 新手起手式），顺序稳定，上限 8000 字符；
 - 人格规则：诚实、不知道就说不知道、指向一句话安装、第一段不超过 300 字；
 - 工程书：按母版 v2.9（.github/bot/MOTHER-v2.9.ilang.md）生成；
   发送前硬校验：官方语法校验器 --strict 0 错误 + 首尾双标记 + 长度上限 + finish_reason=stop；
@@ -239,6 +239,13 @@ def run(event_name, event, gh, model_call, docs, mother, runtime):
     if issue.get("state") != "open":
         return {"ok": True, "reason": "not open, skip"}
     num = issue["number"]
+    assoc = str((issue.get("author_association") or "")).upper()
+    if event_name == "issue_comment":
+        c_assoc = str(((event.get("comment") or {}).get("author_association") or "")).upper()
+        if c_assoc:
+            assoc = c_assoc
+    if assoc in ("OWNER", "MEMBER", "COLLABORATOR"):
+        return {"ok": True, "reason": "maintainer author, skip"}
     if is_bot_login(issue.get("user")):
         return {"ok": True, "reason": "bot author, skip"}
 
@@ -347,7 +354,7 @@ def main():
     def model_call(model, messages, max_tokens):
         return _call_llm(API, KEY, model, messages, max_tokens)
 
-    docs = _read_docs(("README.md", "一键安装.md"), DOCS_MAX_CHARS)
+    docs = _read_docs(("一键安装.md", "dsh-新手起手式.md"), DOCS_MAX_CHARS)
     with gzip.open(MOTHER, "rt", encoding="utf-8") as f:
         mother = f.read()
     with open(RUNTIME, encoding="utf-8") as f:

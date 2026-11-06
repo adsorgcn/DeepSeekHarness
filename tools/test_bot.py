@@ -139,6 +139,18 @@ def check(name, cond, detail=""):
     print("[%s] %s %s" % (name, "PASS" if cond else "FAIL", detail))
 
 
+def scenario_maintainer_skip():
+    gh = FakeGH()
+    ev = issue_event()
+    ev["issue"]["author_association"] = "OWNER"
+    res = BOT.run("issues", ev, gh, FakeModel([]), DOCS, MOTHER, RUNTIME)
+    check("maintainer_skip", res["reason"] == "maintainer author, skip", res["reason"])
+    ev2 = comment_event()
+    ev2["comment"]["author_association"] = "COLLABORATOR"
+    res2 = BOT.run("issue_comment", ev2, gh, FakeModel([]), DOCS, MOTHER, RUNTIME)
+    check("maintainer_comment_skip", res2["reason"] == "maintainer author, skip", res2["reason"])
+
+
 def scenario_pr_skip():
     gh = FakeGH()
     ev = issue_event()
@@ -328,6 +340,7 @@ def scenario_forged_marker_ignored():
 
 def main():
     os.chdir(ROOT)
+    scenario_maintainer_skip()
     scenario_pr_skip()
     scenario_closed_snapshot()
     scenario_bot_author()
