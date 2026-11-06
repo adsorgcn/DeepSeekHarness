@@ -132,14 +132,13 @@ def test_python_token():
     check("python_token", out == [sys.executable, "tools/asr_setup.py", "--check"], str(out))
 
 
-def test_rea_entry():
-    t = {x["id"]: x for x in REGISTRY["tools"]}
-    e = t["rea"]
-    ok = all(e["install"][k] == ["npx", "rea-agents@latest", "setup"]
-             and e["verify"][k] == ["npx", "rea-agents", "--version"]
-             for k in ("windows", "macos", "linux"))
-    ok = ok and "MIT" in e["why"] and "Node" in e["why"]
-    check("rea_entry", ok, str(e["why"]))
+def test_rea_zero_install():
+    t = {x["id"] for x in REGISTRY["tools"]}
+    z = {x["id"]: x for x in REGISTRY.get("zero_install", [])}
+    e = z.get("rea")
+    ok = "rea" not in t and e is not None and "github.com/morluto/rea" in e.get("how", "")
+    ok = ok and "npx" not in json.dumps(e, ensure_ascii=False)
+    check("rea_zero_install", ok, str(e.get("how", ""))[:60])
 
 
 def test_already_skips_install():
@@ -163,7 +162,7 @@ def main():
     test_no_local_model()
     test_asr_entry()
     test_python_token()
-    test_rea_entry()
+    test_rea_zero_install()
     test_already_skips_install()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)

@@ -60,22 +60,6 @@
         "macos": ["python", "tools/asr_setup.py", "--check"],
         "linux": ["python", "tools/asr_setup.py", "--check"]
       }
-    },
-    {
-      "id": "rea",
-      "name": "REA 逆向学习工具（第三方开源，morluto/rea）",
-      "why": "开发者逆向学习工具（第三方 MIT）；新手不必装——它的官网例句才是学怎么提需求的教材；需要 Node.js",
-      "install": {
-        "windows": ["npx", "rea-agents@latest", "setup"],
-        "macos": ["npx", "rea-agents@latest", "setup"],
-        "linux": ["npx", "rea-agents@latest", "setup"]
-      },
-      "verify": {
-        "windows": ["npx", "rea-agents", "--version"],
-        "macos": ["npx", "rea-agents", "--version"],
-        "linux": ["npx", "rea-agents", "--version"]
-      },
-      "manual": "https://rea.tools/get-started/"
     }
   ],
   "zero_install": [
@@ -88,6 +72,11 @@
       "id": "notebooklm",
       "name": "NotebookLM 学习助手（海外：需谷歌账号，国内网络打不开）",
       "how": "零安装；对 agent 说「把交接单导出成学习笔记」，它整理好你贴进 NotebookLM；没有谷歌账号就跳过这条"
+    },
+    {
+      "id": "rea",
+      "name": "REA（第三方，可选：morluto/rea，MIT）",
+      "how": "零安装：它官方自带 MCP，想用就按它官方文档自己接上；本仓库只给官方入口 https://github.com/morluto/rea ，不写装法和用法，怎么用问你的 DSH 或看它官方文档"
     }
   ]
 }
