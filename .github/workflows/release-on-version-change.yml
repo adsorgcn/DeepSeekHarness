@@ -3,6 +3,10 @@
 # and mints its DOI. Nothing runs when the version is unchanged, so an ordinary
 # commit never creates a release.
 #
+# Self-healing: the tag and the Release are checked separately. If a previous run
+# pushed the tag but failed to create the Release, the next run skips the tag and
+# creates the missing Release.
+#
 # Pre-release lines (tags such as v5.0-pre.x) stay manual: CITATION.cff carries
 # the stable version, and this workflow only ever tags that one.
 
@@ -25,8 +29,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read the version from CITATION.cff
+      - name: Read the version from CITATION.cff and check tag/release state
         id: read
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           version=$(sed -n 's/^version:[[:space:]]*"\{0,1\}\([^"[:space:]]*\)"\{0,1\}.*/\1/p' CITATION.cff | head -1)
           if [ -z "$version" ]; then
@@ -35,16 +41,23 @@ jobs:
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
           if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
-            echo "tagged=true" >> "$GITHUB_OUTPUT"
-            echo "v$version already exists; nothing to do"
+            echo "tag_exists=true" >> "$GITHUB_OUTPUT"
           else
-            echo "tagged=false" >> "$GITHUB_OUTPUT"
+            echo "tag_exists=false" >> "$GITHUB_OUTPUT"
+          fi
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "release_exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "release_exists=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ "$(cat "$GITHUB_OUTPUT" | grep '^tag_exists=' | cut -d= -f2)" = "true" ] && \
+             [ "$(cat "$GITHUB_OUTPUT" | grep '^release_exists=' | cut -d= -f2)" = "true" ]; then
+            echo "v$version tag and release both exist; nothing to do"
           fi
 
-      - name: Tag and publish the release
-        if: steps.read.outputs.tagged == 'false'
+      - name: Tag (when missing)
+        if: steps.read.outputs.tag_exists == 'false'
         env:
-          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.read.outputs.version }}
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
@@ -52,5 +65,14 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag -a "v$VERSION" -m "$REPO_NAME $VERSION"
           git push origin "v$VERSION"
+          echo "tagged v$VERSION" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish the release (when missing; self-heals after a partial failure)
+        if: steps.read.outputs.release_exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.read.outputs.version }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
           gh release create "v$VERSION" --verify-tag --latest --generate-notes --title "$REPO_NAME $VERSION"
           echo "released v$VERSION; Zenodo archives it from the release webhook" >> "$GITHUB_STEP_SUMMARY"

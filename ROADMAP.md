@@ -31,6 +31,9 @@
 - [x] 文档：`插件点评-ilang视角.md`（旧范式点评）
 - [x] 文档：`一键安装.md`（一句话进记忆体，审批模式）
 - [x] 引导脚本：`bootstrap.ps1`（环境检测 → 官方源安装 Git/Python 需审批 → 克隆 → 验收）
+- [x] 安装安全 v1.0.8：双端引导每步核验退出码、绝对路径执行、`-Yes` 确认门一致、完整身份检查、不覆盖未知目录；旧教程删 `.git` 路线废止
+- [x] 国内镜像 v1.0.8：GitHub 不可达自动切 `gitee.com/monetize/DeepSeekHarness`，iLang 资料自动走 `ilang.cn`（按可达性探测，不按地区猜测）
+- [x] 记忆推送保护 v1.0.8：`tools/guard-pre-push.sh` 钩子随克隆自动安装，私人记忆默认不可推送（`DSH_ALLOW_MEMORY_PUSH=1` 显式放行）
 - [x] 技能：`site-design-engine`（爱出海工程书 v2.1，62 地板规则 + 24 命令 + 高斯/傅里叶，`.dsh/skills/`）
 - [x] 门面：README 按工程书重写（受众=纯新手，只粘贴只点头），社媒头图生成
 - [x] 工作方式：索引寻址 + iLang 判断层做记/不记裁决 + 注意力不平铺（写入模板 `soul/agent.md` 与一键安装说明）
@@ -42,6 +45,9 @@
 - [x] 工程书硬校验 v1.0.9：母版 v2.9 原文随仓库（gzip，带源哈希）、发送前官方语法校验 + 双标记 + 长度 + 完成原因，不合格不发
 - [x] 模型检查升级 v1.0.9：显示名元数据比对（稳定别名底层换版可发现）、异常报警、提醒去重、iLang manifest 漂移检查
 - [x] 行为测试 v1.0.9：`tools/test_bot.py`（16 场景全 mock）+ `.github/workflows/tests.yml`；R9 升级为真实机制校验
+- [x] 文档口径 v1.0.10：隐私表述分层（本地默认不出网，出网仅模型请求与用户主动备份）；适配文档标注为历史现场记录
+- [x] 上游同步 v1.0.10：`.dsh/skills/mem-forever/SKILL.md` 副本同步 + 回归门（brain check + rubrics + 行为测试不过不推）
+- [x] 发布自愈 v1.0.10：tag 与 Release 分别检查，部分失败重跑自动补齐（仍全自动发版）
 - [x] 收敛：网页/图片打开方式用官方设置（设置 → 网页链接默认打开方式），不装插件替代官方开关
 - [x] 收敛：识图 = 切模型到 `deepseek-flash`（原生读图，一般人够用）；不立工程书、不装插件，提示用户一句话
 - [x] 判断纪律：负向断言先查三层（官方文档 → 用户设置 → 插件配置），只说「哪一层没找到」
@@ -54,3 +60,5 @@
 - 私人记忆属于 owner 的私有 brain（本地或私有仓库），与本仓库分离。
 - owner 说「迭代进去」就按上面做，做完一句话汇报接入了什么、放哪了。
 - **文件归属**：上游引擎文件（`tools/brain.py`、`rules/GRAMMAR-CARD*.md`、`docs/OKF.md`、`docs/VAULT.md`、`skills/mem-forever/SKILL.md`）由 upstream-sync 同步，勿本地改；`AGENTS.md` 等五份指令文件保持与上游一致；本仓库的 DSH 补充一律放在 `AGENTS.local.md`、`soul/`、`.dsh/`、`docs/` 内 DSH 文档、`bootstrap.*` 与工作流里。
+- **国内镜像**：`gitee.com/monetize/DeepSeekHarness` 只作产品源，永不作私人记忆备份目标；镜像同步方式由 owner 决定（Gitee 官方镜像或手动 push），每次发版后核对两边 HEAD 一致。
+- **记忆推送保护**：`bootstrap.*` 克隆后自动装 `tools/guard-pre-push.sh` 钩子；开发仓如需推送含 `soul/ memory/ handoff/ vault/ env/ log.md` 的变更，先确认目标是私有仓库，再以 `DSH_ALLOW_MEMORY_PUSH=1` 显式放行。

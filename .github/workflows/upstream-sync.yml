@@ -24,14 +24,34 @@ jobs:
           # Only sync engine files; never touch user data in soul/ memory/ handoff/ vault/ env/ (or the deprecated .ilang/).
           # The five instruction files and LICENSE stay local: kept identical to upstream by discipline, and this
           # repo's DSH additions live in AGENTS.local.md, which upstream does not sync.
-          git checkout upstream/main -- tools/brain.py rules/GRAMMAR-CARD.md rules/GRAMMAR-CARD.zh.md docs/OKF.md docs/VAULT.md skills/mem-forever/SKILL.md 2>/dev/null || true
+          # The .dsh skill copy mirrors skills/mem-forever/SKILL.md so DSH skill discovery and the canonical
+          # source never drift apart (they are byte-identical as of v1.0.9).
+          git checkout upstream/main -- tools/brain.py rules/GRAMMAR-CARD.md rules/GRAMMAR-CARD.zh.md docs/OKF.md docs/VAULT.md skills/mem-forever/SKILL.md .dsh/skills/mem-forever/SKILL.md
           
           # Check if anything changed
           if git diff --staged --quiet; then
             echo "Already up to date."
           else
-            git config user.name "mem-forever[bot]"
-            git config user.email "bot@ilang.ai"
-            git commit -m "sync: upstream engine update $(date +%Y-%m-%d)"
-            git push
+            echo "upstream changes staged; the regression gate runs next"
           fi
+
+      - name: Regression gate
+        run: |
+          if git diff --staged --quiet; then
+            echo "no upstream changes; gate skipped"
+            exit 0
+          fi
+          python -X utf8 tools/brain.py check
+          python -X utf8 tools/check_rubrics.py
+          python -X utf8 tools/test_bot.py
+
+      - name: Commit and push
+        run: |
+          if git diff --staged --quiet; then
+            echo "nothing staged; nothing to push"
+            exit 0
+          fi
+          git config user.name "mem-forever[bot]"
+          git config user.email "bot@ilang.ai"
+          git commit -m "sync: upstream engine update $(date +%Y-%m-%d)"
+          git push
