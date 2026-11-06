@@ -48,3 +48,4 @@
 - 本仓库是**公开模板**：不包含任何个人档案、真实密钥、私人记忆。
 - 私人记忆属于 owner 的私有 brain（本地或私有仓库），与本仓库分离。
 - owner 说「迭代进去」就按上面做，做完一句话汇报接入了什么、放哪了。
+- **文件归属**：上游引擎文件（`tools/brain.py`、`rules/GRAMMAR-CARD*.md`、`docs/OKF.md`、`docs/VAULT.md`、`skills/mem-forever/SKILL.md`）由 upstream-sync 同步，勿本地改；`AGENTS.md` 等五份指令文件保持与上游一致；本仓库的 DSH 补充一律放在 `AGENTS.local.md`、`soul/`、`.dsh/`、`docs/` 内 DSH 文档、`bootstrap.*` 与工作流里。
