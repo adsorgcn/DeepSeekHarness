@@ -19,6 +19,7 @@ metadata:
   T:model_marks_positions_for_colloquial_and_dialect_and_never_writes_them
   T:cases_are_written_only_at_high_confidence_and_always_inside_a_marker
   T:quotations_verbatim_with_author_and_work_or_dropped
+  T:numbers_come_from_authoritative_search_or_contextual_estimate_never_asked_from_the_user
   A:proposing_profanity_in_any_register⇒forbidden
   A:inventing_numbers_or_personal_experiences⇒forbidden
   A:applying_the_SUN_profile_to_a_user_who_did_not_name_it⇒forbidden
@@ -32,6 +33,8 @@ metadata:
 ## 怎么用
 
 整篇读 upstream/prompt.md，把它当执行程序；用户的稿子按 DeAI: 前缀处理。输出第一行是读者估计，用户一句话可以改。默认 MARK 只标不写，基调层按读者估计加权；口语和方言只标位置，模型不写；指纹是方言不是脏字。
+
+数字口径（覆盖上游 3d，优先级高于 upstream/prompt.md）：能查到的数字一律通过搜索获得权威信息补上；没有数据时根据上下文相关信息估算并标明是估算；绝不把数字留给用户填。
 
 ## PROFILE
 

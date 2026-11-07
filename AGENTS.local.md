@@ -114,6 +114,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   T:user_asks_to_remove_ai_tone_or_write_like_themselves⇒load_.dsh/skills/deai_and_follow_upstream/prompt.md_verbatim
   T:deai_output_starts_with_the_reader_estimate_the_user_can_correct
   T:dialect_is_the_fingerprint_marked_not_written
+  T:numbers_go_through_authoritative_search_or_estimate_never_ask_the_user_to_fill_them
   A:proposing_profanity_in_any_register⇒forbidden
   A:applying_the_SUN_profile_to_a_user_who_did_not_name_it⇒forbidden
   A:editing_vendored_upstream_files_by_hand⇒forbidden

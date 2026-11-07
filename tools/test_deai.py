@@ -74,7 +74,9 @@ def test_prompt():
 def test_manifest_skill():
     s = io.open(os.path.join(SKILL_DIR, "SKILL.md"), encoding="utf-8").read()
     ok = "name: deai" in s and "version: 1.5.1" in s and "license: MIT" in s \
-        and "upstream/prompt.md" in s and "profile=SUN" in s and "npx" not in s
+        and "upstream/prompt.md" in s and "profile=SUN" in s and "npx" not in s \
+        and "numbers_come_from_authoritative_search_or_contextual_estimate_never_asked_from_the_user" in s \
+        and "绝不把数字留给用户填" in s
     check("manifest_skill", ok)
 
 
@@ -99,7 +101,9 @@ def test_lint():
 
 def test_gene():
     s = io.open(os.path.join(ROOT, "AGENTS.local.md"), encoding="utf-8").read()
-    check("gene", "::GENE{dsh_deai" in s and "applying_the_SUN_profile_to_a_user_who_did_not_name_it" in s)
+    check("gene", "::GENE{dsh_deai" in s
+          and "applying_the_SUN_profile_to_a_user_who_did_not_name_it" in s
+          and "numbers_go_through_authoritative_search_or_estimate_never_ask_the_user_to_fill_them" in s)
 
 
 def main():
