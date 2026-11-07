@@ -1,5 +1,9 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.41** · 2026-11-07 · 收录样板二：dsh-media-desk
+
+- 社区插件甄选按市场收录规则 v1 收录 dsh-media-desk（woniuniuniu（蜗牛的科技笔记），MIT，已核仓库 LICENSE）；只给官方描述与官方仓库入口，署名三处登记
+
 **v1.0.40** · 2026-11-07 · 落地页域名 dsh.ilang.guide，README 对齐落地页叙事（审计 DSH-LANDING-DOMAIN-L1-L4）
 
 - docs/CNAME＝dsh.ilang.guide；Pages 自定义域名已设、证书已签、HTTPS 强制；DNS 在 owner 这边（仅 DNS 不代理）；国内分享链接仍是 ilang.cn/guide/dsh/
