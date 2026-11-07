@@ -1,14 +1,16 @@
-<img src="assets/social-preview.png" alt="别人的 DSH 是个聊天框。你的，一句话满配。" width="100%">
+<img src="assets/social-preview.png" alt="iLang DSH 工具包：给 DeepSeek Harness 装上本地记忆和技能" width="100%">
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23998664.svg)](https://doi.org/10.5281/zenodo.23998664)
 
-# DeepSeek Harness
+# iLang DSH 工具包
 
 **别人的 DSH 是个聊天框。你的，一句话满配。**
 
 > One sentence and your DeepSeek Harness remembers you. Memory · tutorial · one-click install · skills.
 
-记忆体 · 新手教程 · 一键安装 · 技能库。你只做两件事：粘贴、点头。
+iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地记忆、新手教程、一键安装和技能库。
+
+你只做两件事：粘贴、点头。
 
 在线门面：https://dsh.ilang.guide/ （微信、QQ 里分享用下面的指导站地址）
 
@@ -18,7 +20,7 @@
 
 在任意 DSH 会话里，把下面这句原样贴给它：
 
-> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。
+> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 里的 iLang DSH 工具包安装到本地：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。
 
 剩下它全包：装环境先问你再动手，放好全套，问几个问题认识你。Windows 走 bootstrap.ps1，macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选；软件只从官方源装；默认本机模式，什么都不上传。
 
@@ -48,7 +50,7 @@
 
 更新引擎：
 
-> 把 DeepSeekHarness 的引擎更新到最新，不要动我的记忆。
+> 把 iLang DSH 工具包的引擎更新到最新，不要动我的记忆。
 
 看图：新手用 Flash，截图直接贴；说「认真想」才请 Pro。
 
