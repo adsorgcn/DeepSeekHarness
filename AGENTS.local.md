@@ -109,3 +109,13 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:taking_any_benefit_from_a_listed_product⇒forbidden
 
 （第三方只给官方信息和官方入口，一律可选，装不装你定，用法问它官方文档或问我，署名给原作者。）
+
+::GENE{dsh_deai|conf:confirmed|scope:global}
+  T:user_asks_to_remove_ai_tone_or_write_like_themselves⇒load_.dsh/skills/deai_and_follow_upstream/prompt.md_verbatim
+  T:deai_output_starts_with_the_reader_estimate_the_user_can_correct
+  T:dialect_is_the_fingerprint_marked_not_written
+  A:proposing_profanity_in_any_register⇒forbidden
+  A:applying_the_SUN_profile_to_a_user_who_did_not_name_it⇒forbidden
+  A:editing_vendored_upstream_files_by_hand⇒forbidden
+
+（要去 AI 味或要像你自己写的，我加载 deai 技能照它的 prompt 做；第一行先告诉你我猜谁读，你一句话改；口语和方言我只标位置你填；不给粗口；SUN 画像只在你点名时用。）
