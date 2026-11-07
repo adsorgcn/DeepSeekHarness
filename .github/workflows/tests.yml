@@ -25,6 +25,8 @@ jobs:
           pwsh -NoProfile -Command "$null=[scriptblock]::Create((Get-Content -Raw tools/clip_shot.ps1)); exit 0"
       - name: Behavior tests (transcribe)
         run: python -X utf8 tools/test_transcribe.py
+      - name: Behavior tests (deai skill)
+        run: python -X utf8 tools/test_deai.py
       - name: Rubrics R1-R9
         run: python -X utf8 tools/check_rubrics.py
       - name: Brain check
