@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.0.42** · 2026-11-07 · 内置 DeAI 1.5.1 技能（审计 DSH-DEAI-EMBED-M1-M7）
+
+- .dsh/skills/deai/：上游 11 个文件原样 vendor（upstream.json 钉 tag v1.5.1 与 LF 归一哈希，更新只换 tag）；技能清单 SKILL.md（去 AI 味，默认 MARK 只标不写，指纹是方言不是脏字）
+- AGENTS.local 加 dsh_deai GENE；起手式、README、落地页各提 deai；SUN 画像只在用户点名 profile=SUN 时用
+- 三处引用登记 DeAI DOI（10.5281/zenodo.24028757 概念 / 10.5281/zenodo.24028758 版本）；新增 tools/test_deai.py 六场景进 CI
+
 **v1.0.41** · 2026-11-07 · 收录样板二：dsh-media-desk
 
 - 社区插件甄选按市场收录规则 v1 收录 dsh-media-desk（woniuniuniu（蜗牛的科技笔记），MIT，已核仓库 LICENSE）；只给官方描述与官方仓库入口，署名三处登记
