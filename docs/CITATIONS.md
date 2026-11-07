@@ -11,6 +11,7 @@
 | Mem-Forever（记忆层：交接单、一文件一记忆、OKF） | [Long Quan Zhu](https://orcid.org/0009-0004-4540-8082) | [10.5281/zenodo.22865160](https://doi.org/10.5281/zenodo.22865160) |
 | METHOD-TO-BOOK-MOTHER v2.9（工程书母版，随仓库 gzip 分发，SHA256 见 .github/bot/MOTHER.source.txt） | iLang（作者同上） | [ilang.ai 源文件](https://ilang.ai/source-book/METHOD-TO-BOOK-MOTHER-v2.9-2026-10-30.ilang.md)（无 DOI） |
 | ilang_grammar_validator（官方语法校验器，随仓库发布） | ilang-spec | [github.com/ilang-ai/ilang-spec](https://github.com/ilang-ai/ilang-spec)（MIT，无 DOI） |
+| DeAI 1.5.1（去 AI 味：保底层加读者估计基调层，方言指纹；原样内置于 .dsh/skills/deai/） | [Long Quan Zhu](https://orcid.org/0009-0004-4540-8082) | [10.5281/zenodo.24028757](https://doi.org/10.5281/zenodo.24028757)（概念）· [10.5281/zenodo.24028758](https://doi.org/10.5281/zenodo.24028758)（1.5.1） |
 
 ## 模型（使用）
 

@@ -19,7 +19,7 @@ authors:
 repository-code: "https://github.com/adsorgcn/DeepSeekHarness"
 url: "https://github.com/adsorgcn/DeepSeekHarness"
 license: MIT
-version: "1.0.41"
+version: "1.0.42"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.23998664
@@ -81,3 +81,10 @@ references:
       - name: "woniuniuniu (蜗牛的科技笔记)"
     url: "https://github.com/woniuniuniu/dsh-media-desk"
     license: MIT
+  - type: software
+    title: "DeAI: make AI drafts sound like you, and write in your own voice from an evidence-based author profile"
+    authors:
+      - given-names: "Long Quan"
+        family-names: "Zhu"
+        orcid: "https://orcid.org/0009-0004-4540-8082"
+    doi: "10.5281/zenodo.24028757"
