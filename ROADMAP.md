@@ -55,7 +55,7 @@
 - [x] 社区插件甄选 v1.0.32：docs/社区插件甄选.md 只收录 REA；与官方能力重复、要钥匙或记忆、娱乐不稳定的一律不收（署名只给开发者，不给转发者）
 - [x] 第三方边界 v1.0.34：市场收录规则 v1——只给官方信息与官方入口、一律可选、不写装法用法例句、署名给原作者、无利益往来；REA 为首个样板（退回零安装入口）
 - [x] 收录样板二 v1.0.41：dsh-media-desk（woniuniuniu，MIT）按市场收录规则 v1 入库，三处署名
-- [x] 技能：deai（iLang 自家 DeAI 1.5.1 原样内置，.dsh/skills/deai/，upstream.json 钉 tag 与哈希，更新只换 tag，DOI 10.5281/zenodo.24028757）
+- [x] 技能：deai（iLang 自家 DeAI 1.6.0 原样内置，.dsh/skills/deai/，upstream.json 钉 tag 与哈希，更新只换 tag，DOI 10.5281/zenodo.24028757；数字两档：公共数字搜索带出处或不写，个人数字不碰）
 - [x] 指导站入口 v1.0.37：README 与一键安装.md 指向 ilang.cn/guide/dsh/（备案域名，微信与 QQ 里可分享）；未备案的镜像域名一律不进仓库；面向国内用户的 iLang 链接一律 ilang.cn
 - [x] 落地页域名 v1.0.40：dsh.ilang.guide（GitHub Pages 自定义域名，DNS 在 owner 这边，仓库里只有 docs/CNAME，HTTPS 强制）；国内分享链接仍是 ilang.cn/guide/dsh/
 - [x] 收敛：网页/图片打开方式用官方设置（设置 → 网页链接默认打开方式），不装插件替代官方开关

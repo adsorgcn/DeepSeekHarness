@@ -21,8 +21,8 @@ PY = sys.executable
 RESULTS = []
 
 PINNED = {
-    "prompt.md": "b61b62806572d51d460a3fe3dd9be4d7b5cf8292001fb0df7a86478f5cdafeb2",
-    "SKILL.md": "2badf4eb5b38fdbc0c95c00bae16642a7658357b084b25f5aa32a95c6cf19791",
+    "prompt.md": "9b08d19829b54d78217207a391971e44e6d88f6960d53cdb524c0f1ba0d49f24",
+    "SKILL.md": "d3463a670c239988e7d473b4b6d932da6d66809615b46fb223d8c60bea647df6",
     "sun-writing-v1.2-2026-11-06.ilang.md": "6be862ee42ea7e77691eb7a18558fb9cb45f2217258d499688a1dc85f03e7ee8",
     "references/profile-mode-v1.2-2026-11-06.ilang.md": "08acbf7cc81b1e862e96ca0b20966855d3e2e60d9ce14c1db66cb257fd35e421",
     "profiles/sun-v1.1-2026-10-03.ilang.md": "75c107bb6b27b8e61c9f9a0dc28803b3f3175c43556ae2db12a0197ecdb7dcbf",
@@ -47,7 +47,7 @@ def test_manifest():
         check("manifest", False, str(e))
         return
     files = m.get("files", {})
-    ok = m.get("tag") == "v1.5.1" and len(files) == 11
+    ok = m.get("tag") == "v1.6.0" and len(files) == 11
     if ok:
         for p, v in files.items():
             fp = os.path.join(UP, p)
@@ -67,16 +67,18 @@ def test_pinned():
 def test_prompt():
     s = io.open(os.path.join(UP, "prompt.md"), encoding="utf-8").read()
     ok = s.startswith("::ILANG::v5.0") and all(k in s for k in (
-        "[VERSION:1.3.0]", "STEP_1B_READER_ESTIMATE", "STEP_5B_TONE", "Never propose profanity"))
+        "[VERSION:1.4.0]", "STEP_1B_READER_ESTIMATE", "STEP_5B_TONE", "Never propose profanity",
+        "Personal figures", "never estimate one")) and "add specific number" not in s
     check("prompt", ok)
 
 
 def test_manifest_skill():
     s = io.open(os.path.join(SKILL_DIR, "SKILL.md"), encoding="utf-8").read()
-    ok = "name: deai" in s and "version: 1.5.1" in s and "license: MIT" in s \
+    ok = "name: deai" in s and "version: 1.6.0" in s and "license: MIT" in s \
         and "upstream/prompt.md" in s and "profile=SUN" in s and "npx" not in s \
-        and "numbers_come_from_authoritative_search_or_contextual_estimate_never_asked_from_the_user" in s \
-        and "绝不把数字留给用户填" in s
+        and "public_figures_searched_with_source_and_date_or_left_as_written" in s \
+        and "不往这块写" in s \
+        and "估算" not in s and "contextual_estimate" not in s
     check("manifest_skill", ok)
 
 
@@ -103,7 +105,8 @@ def test_gene():
     s = io.open(os.path.join(ROOT, "AGENTS.local.md"), encoding="utf-8").read()
     check("gene", "::GENE{dsh_deai" in s
           and "applying_the_SUN_profile_to_a_user_who_did_not_name_it" in s
-          and "numbers_go_through_authoritative_search_or_estimate_never_ask_the_user_to_fill_them" in s)
+          and "personal_figures_left_as_written_never_estimated" in s
+          and "never_ask_the_user_to_fill_them" not in s)
 
 
 def main():
