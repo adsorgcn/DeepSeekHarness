@@ -19,7 +19,7 @@ authors:
 repository-code: "https://github.com/adsorgcn/DeepSeekHarness"
 url: "https://github.com/adsorgcn/DeepSeekHarness"
 license: MIT
-version: "1.0.40"
+version: "1.0.41"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.23998664
@@ -74,4 +74,10 @@ references:
     authors:
       - name: "morluto"
     url: "https://github.com/morluto/rea"
+    license: MIT
+  - type: software
+    title: "dsh-media-desk: DeepSeek Harness 自媒体工作台插件"
+    authors:
+      - name: "woniuniuniu (蜗牛的科技笔记)"
+    url: "https://github.com/woniuniuniu/dsh-media-desk"
     license: MIT

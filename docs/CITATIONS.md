@@ -36,6 +36,7 @@
 - yt-dlp（视频下载）：Unlicense，无 DOI，[github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
 - FFmpeg（音视频处理）：LGPL/GPL，无 DOI，[ffmpeg.org](https://ffmpeg.org)
 - REA（第三方，可选，只给官方入口）：morluto，MIT，无 DOI，[github.com/morluto/rea](https://github.com/morluto/rea)
+- dsh-media-desk（自媒体工作台，第三方，可选，只给官方入口）：woniuniuniu（蜗牛的科技笔记），MIT，无 DOI，[github.com/woniuniuniu/dsh-media-desk](https://github.com/woniuniuniu/dsh-media-desk)
 - Git（记忆的版本控制与哈希链）：[git-scm.com](https://git-scm.com)
 - Markdown / CommonMark：语言标准，无 DOI
 
