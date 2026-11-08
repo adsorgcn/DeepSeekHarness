@@ -737,7 +737,11 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
           else link.removeAttribute('aria-current');
         }
       }, { rootMargin: '-20% 0px -50% 0px' });
-      navLinks.forEach(link => active.observe(document.getElementById(link.hash.slice(1))));
+      navLinks.forEach(link => {
+        if (!link.hash) return;
+        const el = document.getElementById(link.hash.slice(1));
+        if (el) active.observe(el);
+      });
     })();
   </script>
 </body>
