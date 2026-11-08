@@ -110,8 +110,8 @@ def build_index(reg):
         "format": 1,
         "title": {"en": "iLang DSH Market", "zh": "iLang DSH 市场"},
         "description": {
-            "en": "Only iLang-conformant DeepSeek Harness plugins: the manifest passes the official validator with zero errors and zero warnings, versions are pinned, licenses are on record. No ranking.",
-            "zh": "只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器 strict 0 错 0 警告，钉提交，许可在案。不排名。",
+            "en": "Only iLang-conformant DeepSeek Harness plugins: the manifest passes the official validator with zero errors and zero warnings, versions are pinned, licenses are on record. Listing order is admission order.",
+            "zh": "只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器 strict 0 错 0 警告，钉提交，许可在案。收录顺序就是显示顺序。",
         },
         "metadata": {
             "labels": labels,
@@ -152,19 +152,33 @@ def bundle_rows(reg):
     rows = []
     for e in [x for x in reg["entries"] if x.get("kind") == "bundle"]:
         repo = e.get("repository", {}).get("url", "")
-        if repo:
-            repo_html = '<a href="%s" target="_blank" rel="noopener">%s</a>' % (repo, repo)
-        else:
-            repo_html = "—"
+        repo_html = ('<a href="%s" target="_blank" rel="noopener">%s</a>' % (repo, repo)) if repo else "—"
         ver = e["versions"][-1]
         commit = ver["source"].get("commit", "")
+        meta = "%s · %s · %s · %s" % (e["author"], e["license"], repo_html, ver["version"])
+        if commit:
+            meta += '<span title="%s"> · %s</span>' % (commit, commit[:12])
         rows.append(
             '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
-            '<div class="m-meta">%s · %s · %s · %s · %s<span title="%s">%s</span></div></div>'
-            % (e["name"], e["description"]["zh"], e["author"], e["license"], repo_html,
-               ver["version"], commit, commit[:12] if commit else "—")
+            '<div class="m-meta">%s</div></div>'
+            % (e["name"], e["description"]["zh"], meta)
         )
     return "\n".join(rows)
+
+
+def bundles_region(reg):
+    """market:bundles 标记之间的内容：空态（无数量词）或有行态（行区 + 官方三步）。"""
+    addr = '<code class="code">https://dsh.ilang.guide/market/index.json</code>'
+    rows = bundle_rows(reg)
+    if rows:
+        steps = (
+            '<p class="after">在 DSH 里：插件 → 实验性插件 → 打开「自定义插件索引」；'
+            '发现 → 添加索引源 → 贴 %s ；安装前核对确认框里的来源。</p>' % addr
+        )
+        return "\n" + rows + "\n    " + steps
+    return ('\n    <p class="after">索引地址</p>\n'
+            '    <code class="code">https://dsh.ilang.guide/market/index.json</code>\n'
+            '    <p class="after">过了门的插件会出现在这里，DSH 里添加这个地址就能看到。</p>')
 
 
 def render_page(reg):
@@ -177,7 +191,7 @@ def render_page(reg):
     text = re.sub(re.escape(a) + r".*?" + re.escape(b),
                   a + "\n" + skill_rows(reg) + "\n    " + b, text, flags=re.S)
     text = re.sub(re.escape(c) + r".*?" + re.escape(d),
-                  c + "\n" + bundle_rows(reg) + "\n    " + d, text, flags=re.S)
+                  c + bundles_region(reg) + "\n    " + d, text, flags=re.S)
     return text
 
 

@@ -44,7 +44,7 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 ## 市场
 
-门是 iLang：清单过官方校验器 strict 0 错 0 警告。自家技能随工具包，过门的插件在索引 https://dsh.ilang.guide/market/index.json ，页面 https://dsh.ilang.guide/market/ 。想进来先跑 tools/market_admit.py 自检再提申请，不排名。
+门是 iLang：清单过官方校验器 strict 0 错 0 警告。自家技能随工具包，过门的插件在索引 https://dsh.ilang.guide/market/index.json ，页面 https://dsh.ilang.guide/market/ 。想进来先跑 tools/market_admit.py 自检再提申请，收录顺序就是显示顺序。
 
 ## 以后每个新窗口
 
