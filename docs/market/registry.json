@@ -1,0 +1,109 @@
+{
+  "format": 1,
+  "title": {
+    "en": "iLang DSH Market",
+    "zh": "iLang DSH 市场"
+  },
+  "gate": {
+    "manifest": "清单：仓库里一个以 ::ILANG::v5.0 开头的围栏且含 ::GENE{",
+    "validator": "校验器：tools/ilang_grammar_validator.py --lint --strict 0 错 0 警告且 linted 不小于 1",
+    "pin": "钉死：技能记清单 sha256（CRLF 换 LF 后算），bundle 记 40 位 commit 与精确版本",
+    "license": "许可：仓库里有 OSI 许可文件",
+    "veto": "否决：与官方能力重复、要拿走钥匙或记忆、娱乐与不稳定三类不收，来源 docs/社区插件甄选.md 第六条"
+  },
+  "ranking": "none",
+  "_bundle_entry_shape": "纯说明，构建脚本忽略下划线开头的键：name（npm 包名）、title{zh,en}、description（package.json 的 description 原话，不改写）、author、license、repository{url}、homepage、manifest{path, sha256_lf}、validated{…}、versions[{version, commit, publishTimestamp, engines_dsh, source: git 或 npm}]、admitted_by 固定 @SUN、admitted_on 日期",
+  "entries": [
+    {
+      "kind": "skill",
+      "name": "mem-forever",
+      "title": {
+        "zh": "记忆体",
+        "en": "Mem-Forever"
+      },
+      "description": {
+        "zh": "窗口关了，进度还在",
+        "en": "Close the window, the progress stays."
+      },
+      "version": "2.1.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/skills/mem-forever/MARKET.md",
+      "procedure": ".dsh/skills/mem-forever/SKILL.md",
+      "upstream": {
+        "repo": "https://github.com/ilang-ai/Mem-Forever",
+        "doi": "10.5281/zenodo.22865160"
+      },
+      "sha256_lf": "74e9741ea86ddc2968e7f46e82ed05a6666b18779754cf5f4a3930a6d5058232",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "fences_linted": 1,
+        "at": "2026-11-07"
+      },
+      "get": "kit"
+    },
+    {
+      "kind": "skill",
+      "name": "site-design-engine",
+      "title": {
+        "zh": "site-design-engine",
+        "en": "site-design-engine"
+      },
+      "description": {
+        "zh": "把门面做到获奖级",
+        "en": "Make the storefront award-worthy."
+      },
+      "version": "2.1.0",
+      "author": "ai_chuhai",
+      "license": "MIT",
+      "manifest": ".dsh/skills/site-design-engine/SKILL.md",
+      "procedure": ".dsh/skills/site-design-engine/SKILL.md",
+      "upstream": null,
+      "sha256_lf": "0be2adf61c7a33ca3c9ca1448e14c6cd7299096099dee28c7e33801192afc73c",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "fences_linted": 4,
+        "at": "2026-11-07"
+      },
+      "get": "kit"
+    },
+    {
+      "kind": "skill",
+      "name": "deai",
+      "title": {
+        "zh": "deai",
+        "en": "DeAI"
+      },
+      "description": {
+        "zh": "去 AI 味，像你自己写的",
+        "en": "Drop the AI tone, write like yourself."
+      },
+      "version": "1.6.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/skills/deai/SKILL.md",
+      "procedure": ".dsh/skills/deai/SKILL.md",
+      "upstream": {
+        "repo": "https://github.com/adsorgcn/DEAI",
+        "tag": "v1.6.0",
+        "doi": "10.5281/zenodo.24028757"
+      },
+      "sha256_lf": "cdec34412a45a95f3328e17c294631431188adc56e168f25ed2e81a0dccfce9d",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "fences_linted": 1,
+        "at": "2026-11-07"
+      },
+      "get": "kit"
+    }
+  ]
+}
