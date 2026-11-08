@@ -24,13 +24,17 @@ jobs:
 
       - name: Sync engine files only
         run: |
-          # Only sync engine files; never touch user data in soul/ memory/ handoff/ vault/ env/ (or the deprecated .ilang/).
-          # The five instruction files and LICENSE stay local: kept identical to upstream by discipline, and this
-          # repo's DSH additions live in AGENTS.local.md, which upstream does not sync.
-          # The .dsh skill copy mirrors skills/mem-forever/SKILL.md so DSH skill discovery and the canonical
-          # source never drift apart (they are byte-identical as of v1.0.9).
-          git checkout upstream/main -- tools/brain.py rules/GRAMMAR-CARD.md rules/GRAMMAR-CARD.zh.md docs/OKF.md docs/VAULT.md skills/mem-forever/SKILL.md .dsh/skills/mem-forever/SKILL.md
-          
+          # Only sync engine files; never touch user data in soul/ memory/ handoff/ vault/ env/ log/ pair/
+          # (or the deprecated .ilang/). The five instruction files are regenerated from SKILL.md by
+          # `brain.py instructions sync`; the .dsh skill copy is obtained by cp; MARKET.md and the
+          # registry rows are refreshed by tools/market_build.py. The .dsh path does not exist
+          # upstream, so it must not appear on the checkout line (it would fail the whole command).
+          git checkout upstream/main -- tools/brain.py rules/GRAMMAR-CARD.md rules/GRAMMAR-CARD.zh.md docs/OKF.md docs/VAULT.md docs/LEDGER.md docs/PRODUCT.md skills/mem-forever/SKILL.md tools/hooks/pre-commit tools/hooks/pre-push tools/test_brain.py env/README.md
+          cp skills/mem-forever/SKILL.md .dsh/skills/mem-forever/SKILL.md
+          python -X utf8 tools/brain.py instructions sync
+          python -X utf8 tools/market_build.py
+          git add -A -- .dsh/skills/mem-forever *.md .cursorrules .github/copilot-instructions.md docs/market
+
           # Check if anything changed
           if git diff --staged --quiet; then
             echo "Already up to date."
@@ -45,6 +49,9 @@ jobs:
             exit 0
           fi
           python -X utf8 tools/brain.py check
+          python -X utf8 tools/brain.py instructions check
+          python -X utf8 tools/test_brain.py
+          python -X utf8 tools/test_market.py
           python -X utf8 tools/check_rubrics.py
           python -X utf8 tools/test_bot.py
 
