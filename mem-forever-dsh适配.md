@@ -26,7 +26,7 @@
 
 ## 本回合已落地（可验证）
 
-1. **brain 落盘**：`default-workspace/brain/`，来自 Mem-Forever 2.1 模板（zip 方式，本机无 git）。
+1. **brain 落盘**：`default-workspace/brain/`，来自 Mem-Forever 3.1 模板（zip 方式，本机无 git）。
 2. **AGENTS.md 自动注入已实证**：brain 目录被触达的瞬间，DSH 就把它作为 `<system-reminder>` 注入了本会话——这就是「打开即记忆上线」的活证据。
 3. **技能已挂**：`brain/.dsh/skills/mem-forever/SKILL.md`（DSH 项目技能根）。
 4. **灵魂两份已写**：
