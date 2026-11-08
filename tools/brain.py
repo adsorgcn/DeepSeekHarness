@@ -102,6 +102,16 @@ brain.py v1.5  可移植 Agent 大脑（brain 仓库）的单文件工具。
       date / done / next / unverified 四段，不改任何东西。
 
   handoff review <候选文件> [--baseline handoff/CURRENT.md] [--validator 校验器路径]
+
+  3.0（设计 MEM-FOREVER-3-ILANG-CRYPTO-DESIGN v1.1）：记忆是一条推导，钥匙推出任务，任务取定常数，中间逻辑是注释
+  ledger list | add <名> --door --kind --value|--ref --verify --recover [--scope] [--why] [--top] | verify [all|名] | show <名> [--with-value]
+      env/ledger.env 一行一门，明文放在私有仓库；verify 退出 0 才算门开着，写 last_verified
+  unlock <名> [--scope 标签] [--code 一次性码]   当前 next 项点到这扇门且在范围内才打出值；顶门只认 otp issue 发的码
+  otp issue|revoke|list <名>                  owner 在场时给顶门发一次性码（env/otp.json 只存哈希）
+  pair <对方公钥> --scope 标签 ; unseal <文件>  配对时才封：范围内的行封给对方与 owner，写 declaration.md
+  log owner|agent "<原文>" ; recognize [--days N] 原始轨迹按日追加到 log/；认人＝owner 发言对 soul 锚点命中率≥0.30 且零越界
+  provenance init|check|repair [--transcript JSONL]  来源键 by:；无 owner 证据的边界读作建议；review [--staged] 是每个写入者的同一道门
+  import <目录|文件> --from <名> ; verify [--online] ; instructions sync|check ; remote-check <url> ; migrate-2to3
       别的模型或别的会话交回来的交接单先当候选，与基线逐块比对后才准替换（2.0 的 REVIEW）：
       基线里的每条 BOUNDARY 必须原样在候选里，少了、改了、挂了 when: 都 REJECT；
       候选每个块的必填键齐全且值非空（none / 无 算有值），缺键空值 REJECT；
@@ -127,6 +137,7 @@ brain.py v1.5  可移植 Agent 大脑（brain 仓库）的单文件工具。
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import io
 import json
@@ -139,10 +150,10 @@ import sys
 import tarfile
 import tempfile
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
-VERSION = "1.5"
+VERSION = "2.1"
 GENERATED_BY = f"brain.py/{VERSION}"
 OKF_VERSION = "0.2"
 OKF_DIRS = ("soul", "memory", "handoff")
@@ -315,6 +326,8 @@ def secret_scan(repo: Path) -> tuple[list[str], list[str], int]:
     scanned = 0
     for p in iter_repo_files(repo):
         rel = p.relative_to(repo).as_posix()
+        if rel.split("/", 1)[0] in SCAN_EXEMPT_TOP:
+            continue
         try:
             text = p.read_bytes().decode("utf-8")
         except UnicodeDecodeError:
@@ -410,10 +423,24 @@ def cmd_check(repo: Path) -> int:
             if g is not None and (not isinstance(g, dict) or not g.get("by")):
                 warnings.append(f"{rel}: generated present but generated.by missing")
 
-    # 4. 密钥前缀扫描：全仓库，只报位置不回显
+    # 4. key-shaped text: since 3.1 a WARN with the harvest command, never a refused commit (the repository is private;
+    #    the push guard is the gate). The locations are listed, the content never echoed.
     hits, scan_warnings, scanned = secret_scan(repo)
-    errors += hits
+    if hits:
+        where = sorted({h.split(":", 1)[0] for h in hits})
+        warnings.append(f"{len(hits)} key-shaped value(s) outside the ledger in {', '.join(where[:6])}{'...' if len(where) > 6 else ''}; "
+                        f"python -X utf8 tools/brain.py ledger harvest turns them into ledger rows and {{{{DOOR}}}} tokens")
     warnings += scan_warnings
+    raw_keys = _keys_env(repo)
+    plain = [k for k, v in raw_keys.items() if v and not is_encoded(v)]
+    if plain:
+        warnings.append(f"{len(plain)} plain row(s) in {KEYS_REL}; python -X utf8 tools/brain.py ledger encode")
+    if any(is_encoded(v) for v in raw_keys.values()) and load_pepper(repo) is None:
+        warnings.append(f"{PEPPER_REL} missing: encoded rows cannot be read on this clone (ledger decode --pepper <hex>)")
+    if (repo / ".git").exists():
+        rc, out = _git(repo, "config", "core.hooksPath")
+        if out.strip() != "tools/hooks":
+            warnings.append("hooks are off on this clone (core.hooksPath is not tools/hooks); run python -X utf8 tools/brain.py init .")
 
     # 5. 字节上限（代理指标）
     for rel, limit in BYTE_LIMITS.items():
@@ -422,6 +449,37 @@ def cmd_check(repo: Path) -> int:
             warnings.append(f"{rel}: missing")
         elif p.stat().st_size > limit:
             warnings.append(f"{rel}: {p.stat().st_size} bytes > {limit} (400 token 需用 Playground 实测)")
+
+    # 6. 3.0: the ledger parses, log/ files are dated, provenance and the five instruction files
+    rows, _ = load_ledger(repo)
+    for r in rows:
+        if r.get("error"):
+            errors.append(f"{LEDGER_REL}:{r['line'] + 1}: {r['error']}")
+    for r in rows:
+        if not r.get("error") and not r["kv"].get("door"):
+            errors.append(f"{LEDGER_REL}:{r['line'] + 1}: row {r['name']} has no door")
+    logdir = repo / LOG_DIR
+    if logdir.is_dir():
+        for p in sorted(logdir.glob("*.md")):
+            if not DATE_RE.match(p.stem):
+                warnings.append(f"log/{p.name}: name is not YYYY-MM-DD.md")
+    try:
+        violations, decays = provenance_scan(repo)
+        for v in violations:
+            warnings.append(f"provenance {v['file']}:{v['line']} {v['rule']} (brain.py provenance repair)")
+        if decays:
+            warnings.append(f"provenance: {len(decays)} block(s) due for decay (brain.py provenance repair)")
+    except Exception as e:  # noqa: BLE001 - a broken file must not hide the other checks
+        warnings.append(f"provenance scan failed: {e}")
+    skill = repo / "skills" / "mem-forever" / "SKILL.md"
+    if skill.is_file():
+        body = skill_body(repo)
+        for rel in INSTRUCTION_FILES:
+            p = repo / rel
+            if p.is_file() and read_text(p).replace("\r\n", "\n") != body:
+                warnings.append(f"{rel}: not identical to the skill body (brain.py instructions sync)")
+    if (repo / ".git").exists() and not (repo / "tools" / "hooks" / "pre-commit").is_file():
+        warnings.append("tools/hooks/pre-commit missing (brain.py install writes the hooks)")
 
     for w in warnings:
         print(f"WARN  {w}")
@@ -450,6 +508,22 @@ def _copy_mtime(src: Path, dst: Path) -> None:
 
 
 def cmd_migrate_cc(repo: Path, src: Path, overwrite: bool) -> int:
+    rc = _migrate_cc_copy(repo, src, overwrite)
+    if rc != 0:
+        return rc
+    # 3.1: the keys inside the migrated memory become ledger rows; without them the new session knows its next step
+    # and can enter no machine
+    if has_grant(repo, "write"):
+        created = harvest(repo, ["memory"])
+        for c in created:
+            print(f"door    {c['door']} ({c['kind']}) from {c['file']}:{c['line']}")
+        print(f"harvest: {len(created)} door(s) created from the migrated memory; run ledger verify and fill verify for each")
+    else:
+        print("harvest: skipped, no write grant on this machine; python -X utf8 tools/brain.py grant --write ; then ledger harvest memory")
+    return 0
+
+
+def _migrate_cc_copy(repo: Path, src: Path, overwrite: bool) -> int:
     if not src.is_dir():
         print(f"ERROR source directory not found: {src}")
         return 1
@@ -1039,6 +1113,8 @@ def cmd_install(repo: Path, cc_home: Path, project_dir: Path, date: str, dry_run
                 problems += 1
         print(ROLLBACK_HELP.format(link=link, backup=backup))
 
+    # 2b. hooks: every writer passes the same gate; the push guard keeps the brain private
+    problems += install_hooks(repo, dry_run)
     # 3. soul/dna.md
     dna_src, dna_dst = repo / "soul" / "dna.md", cc_home / ".dna.md"
     dna_status = None
@@ -1256,23 +1332,24 @@ def cmd_status(repo: Path, as_json: bool) -> int:
 # ----------------------------------------------------------------------- init
 
 INIT_DIRS = ("soul", "memory", "handoff/archive", "rules", "skills", "env/scheduled-tasks",
-             "vault", "projects", "mirror", "tools")
-INIT_KEEP = ("handoff/archive", "skills", "env/scheduled-tasks", "vault", "projects", "mirror")
+             "vault", "projects", "mirror", "tools", "log", "pair")
+INIT_KEEP = ("handoff/archive", "skills", "env/scheduled-tasks", "vault", "projects", "mirror", "log", "pair")
 
 INIT_BRAIN_MD = """# BRAIN.md · read this and take over
 
 This is the entry point of one person's agent brain. No runtime to load; read in this order.
 
-1. `handoff/CURRENT.md` first: what was done, what comes next, what is unverified. Restate it in two sentences, then start.
-2. Then every file under `soul/`: how the user works and where the lines are, and the agent's own soul in `soul/agent.md`. Follow it; do not recite it.
-3. Then `memory/MEMORY.md`, one line per memory. Open a file under `memory/` only when the task needs it.
+0. Keys first: `python -X utf8 tools/brain.py ledger verify`. Every door this brain can open is one row in `env/ledger.env`. A key reaches your context only when a `next` item names its door and this machine holds the owner's grant (`brain.py unlock`; `brain.py grant` once per machine); top doors need the owner's code. Fresh clone: `brain.py init .` once.
+1. `handoff/CURRENT.md`: what was done, what comes next, what is unverified. Restate it in two sentences, then start.
+2. Then every file under `soul/`: how the owner works and where the lines are, and the agent's own soul in `soul/agent.md`. Follow it; do not recite it.
+3. Then `memory/MEMORY.md`, one line per memory. Open a file under `memory/` only when the task needs it. Code and machines are read from themselves.
 4. Reading or updating the hand-off is not doing the work. Judge each `next` item before acting: it crosses a boundary, stop; evidence is missing, ask; it is the owner's call, defer. A recap or hand-off request authorizes nothing.
-5. New facts: if you can write this repo, edit the file, commit and push at once, one change per commit. If you cannot, hand the change back as `::PROGRESS{date|done|next|unverified}`, `::DECIDE{}` or `::LESSON{}` blocks in one code fence, every key present, `none` where there is no material; a git-capable tool reviews and records it.
-6. Update `handoff/CURRENT.md` at every milestone, not at session end.
-7. No secrets live here. `vault/` is encrypted and opens only when the owner says so.
+5. New facts: if you can write this repo, edit the file, commit and push at once, one change per commit, each block with `by:`. If you cannot, hand the change back as `::PROGRESS{date|done|next|unverified}`, `::DECIDE{}` or `::LESSON{}` blocks in one code fence, every key present, `none` where there is no material.
+6. Update `handoff/CURRENT.md` at every milestone, not at session end. Log the owner's words verbatim in `log/`.
+7. No key value in memory text: a key is a ledger row, encoded at rest in this private repository (reversible, not encryption), `{{DOOR}}` where it stood, sealed only when paired.
 8. `::BLOCK{k:v|k:v}`, `T:` and `A:⇒` are declaration notation: read them literally; the quick card is `rules/GRAMMAR-CARD.md`.
 
-<!-- Gate: about 400 tokens on the receiving model's tokenizer; measure before changing. Doubles as Claude.ai project, ChatGPT custom and Gemini Gem instructions. -->
+<!-- Gate: about 400 tokens on the receiving model's tokenizer; measure before changing. -->
 """
 
 INIT_GRAMMAR_CARD = """# iLang notation quick card (for reading a brain)
@@ -1360,13 +1437,27 @@ INIT_MEMORY_INDEX = """# Memory Index
 <!-- Keep it an index: no memory content in this file. -->
 """
 
-INIT_ENV_README = """# env/ — machine environment, no secrets
+INIT_ENV_README = """# env/ — the ledger and the machine environment
 
-settings.json (agent CLI settings), mcp.json (key fields as ${VAULT:name}), scheduled-tasks/, ssh_config.template, install.ps1 / install.sh.
-Anything that would let someone act as you goes into vault/ (see docs/VAULT.md or rules/SECRETS.md), never here.
+This directory is where the derivation starts. It lives in a **private** repository; `brain.py check` does not scan it for secret-like text, and `tools/hooks/pre-push` refuses to push it to a public remote.
+
+| File | Content |
+|---|---|
+| `ledger.env` | the authorization ledger: one `::STATE{@name, door, kind, ref or value, verify, last_verified, recover, scope, top, why}` row per door; see [docs/LEDGER.md](../docs/LEDGER.md) |
+| `pepper` | 32 random bytes (hex), written by `brain.py init`, committed; the encoded rows of `keys.env` are reversible with it and this tool, and with nothing else. Not encryption: a holder of the repository reads everything; it keeps keys out of grep, screenshots, model context and pastes |
+| `keys.env` | `KEY=enc1:...` rows the ledger points at with `ref:KEY`, encoded at rest; written by `brain.py ledger add --value`, `ledger harvest`, `ledger encode`; `ledger decode` prints them plain for the owner |
+| `otp.json` | hashes of one-time codes the owner issued for top doors; expires; ignored by git |
+| `ssh/` | SSH private keys `migrate-2to3` brought over from a 2.1 vault, one ledger row each |
+| `settings.json` | your agent CLI settings (Claude Code reads `~/.claude/settings.json`) |
+| `mcp.json` | MCP servers; a key field may say `${VAULT:name}` and is filled from the ledger at install time |
+| `scheduled-tasks/` | scheduled task definitions, one folder per task |
+| `ssh_config.template` | host aliases and jump hosts |
+| `install.ps1`, `install.sh` | new-machine checklist as a script: git, python, your agent CLI, then `brain.py install` and `brain.py ledger verify all` |
+
+Rule: a key reaches a model's context only when a `next` item names its door (`brain.py unlock`) and this machine holds the owner's grant (`brain.py grant <DOOR>` or `--all`, git config, never in the repository; top doors keep the one-time code), never by reading this directory into the conversation. The pasted brain (`brain.py paste`) carries the ledger without values unless the owner says `--with-values`.
 """
 
-INIT_GITIGNORE = "__pycache__/\n*.pyc\n*.tmp\n"
+INIT_GITIGNORE = "__pycache__/\n*.pyc\n*.tmp\nenv/otp.json\n"
 
 HANDOFF_TEMPLATE = """---
 type: handoff
@@ -1445,7 +1536,10 @@ def cmd_init(repo: Path, agent: str, no_git: bool) -> int:
     put("soul/dna.md", INIT_DNA_MD)
     put("soul/agent.md", INIT_AGENT_SOUL)
     put("env/README.md", INIT_ENV_README)
+    put("env/ledger.env", LEDGER_HEADER)
     put(".gitignore", INIT_GITIGNORE)
+    if write_pepper(repo):
+        created.append(PEPPER_REL)
     me = Path(__file__).resolve()
     tool = repo / "tools" / "brain.py"
     if not tool.exists():
@@ -1464,6 +1558,7 @@ def cmd_init(repo: Path, agent: str, no_git: bool) -> int:
                 rc, out = _git(repo, "init", "-q")
                 _git(repo, "symbolic-ref", "HEAD", "refs/heads/main")
             git_note = "git init (branch main)" if rc == 0 else f"git init failed: {out}"
+    install_hooks(repo)
     for rel in created:
         print(f"create  {rel}")
     for rel in skipped:
@@ -1778,7 +1873,7 @@ def pick_card(repo: Path, lang: str) -> Path:
     raise FileNotFoundError(f"{default} missing")
 
 
-def build_paste(repo: Path, lang: str) -> tuple[str, Path]:
+def build_paste(repo: Path, lang: str, with_values: bool = False) -> tuple[str, Path]:
     """开场句 + 速查卡 + --- + 交接单声明块。lang=auto 按交接单的语言挑卡（中文占比 >= 0.2 取 zh），
     开场句跟实际用的那张卡走。返回 (消息, 卡的路径)。"""
     cur = _handoff_path(repo)
@@ -1790,30 +1885,31 @@ def build_paste(repo: Path, lang: str) -> tuple[str, Path]:
     card_path = pick_card(repo, lang)
     card = read_text(card_path).strip("\n")
     opening = PASTE_OPENING["zh" if _has_cjk(card.split("\n", 1)[0]) else "en"]
-    return f"{opening}\n\n{card}\n\n---\n\n{blocks}\n", card_path
+    ledger = ledger_section(repo, with_values)
+    tail = f"\n\n---\n\n{ledger}" if ledger else ""
+    return f"{opening}\n\n{card}\n\n---\n\n{blocks}{tail}\n", card_path
 
 
-def cmd_paste(repo: Path, out: Path | None, lang: str) -> int:
+def cmd_paste(repo: Path, out: Path | None, lang: str, with_values: bool = False) -> int:
     try:
-        text, card_path = build_paste(repo, lang)
+        text, card_path = build_paste(repo, lang, with_values)
     except FileNotFoundError as e:
         print(f"ERROR   {e}", file=sys.stderr)
         return 1
-    hits = _secret_hits_in_text(text)
-    if hits:
-        for h in hits:
-            print(f"ERROR   {h}", file=sys.stderr)
-        print(f"paste: refused, {len(hits)} secret-like hits; nothing written", file=sys.stderr)
-        return 1
+    masked = 0
+    if not with_values:
+        text, masked = mask_key_values(text)
     data = text.encode("utf-8")
+    note = ("ledger VALUES INCLUDED, nothing masked: this message leaves the private repository, hand it only where the work needs the keys"
+            if with_values else f"{masked} key-shaped string(s) masked as {{{{UNHARVESTED ...}}}}; the ledger rows carry no values")
     if out:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_bytes(data)
-        print(f"paste   {out}: {len(data)} bytes, card {card_path.name}, 0 secret-like hits; send it as one message (docs/PASTE.md)", file=sys.stderr)
+        print(f"paste   {out}: {len(data)} bytes, card {card_path.name}, {note}; send it as one message (docs/PASTE.md)", file=sys.stderr)
     else:
         sys.stdout.write(text)
         sys.stdout.flush()
-        print(f"paste   {len(data)} bytes, card {card_path.name}, 0 secret-like hits; send it as one message (docs/PASTE.md)", file=sys.stderr)
+        print(f"paste   {len(data)} bytes, card {card_path.name}, {note}; send it as one message (docs/PASTE.md)", file=sys.stderr)
     return 0
 
 
@@ -1921,7 +2017,9 @@ def _touches_boundary(item: str, never: str) -> bool:
         return True
     toks_a = set(re.findall(r"[a-z][a-z0-9_\-]{4,}", a))
     toks_b = set(re.findall(r"[a-z][a-z0-9_\-]{4,}", b))
-    return bool(toks_a & toks_b)
+    if toks_a & toks_b:
+        return True
+    return _bigram_overlap(a, b) >= 0.5
 
 
 def overlay_candidate(base_text: str, cand_text: str) -> tuple[str, int, int, int]:
@@ -2151,6 +2249,1925 @@ def cmd_handoff_review(repo: Path, candidate: Path, baseline: Path | None, valid
     return 0
 
 
+# ====================================================== 3.0: ledger, log, recognize, unlock, pair, provenance, import, verify
+# Design: MEM-FOREVER-3-ILANG-CRYPTO-DESIGN v1.1 (2026-11-08). Memory is a derivation: keys derive tasks, tasks
+# yield constants, the logic between them is annotation. The ledger (env/ledger.env) is the start of the derivation;
+# nothing is sealed at rest in the private repository; sealing is a pairing act; the owner is always a recipient.
+
+import secrets as _secrets
+import math as _math
+import urllib.request as _urlreq
+import urllib.error as _urlerr
+
+LEDGER_REL = "env/ledger.env"
+KEYS_REL = "env/keys.env"
+PEPPER_REL = "env/pepper"                        # 3.1: 32 random bytes, hex, committed; the encoded state needs nothing else
+ENC_TAG = "enc1:"
+GRANT_PREFIX = "brain.grant."                    # 3.1: grants are git config of the machine, never a file of the repository
+HARVEST_DEFAULT_PATHS = ("memory", "soul", "handoff")
+HARVEST_SKIP = ("soul/evidence.md",)
+OTP_REL = "env/otp.json"
+LOG_DIR = "log"
+PAIR_DIR = "pair"
+SCAN_EXEMPT_TOP = {"env", "log", "pair"}          # private repository: the ledger, the verbatim log and sealed rows are not scanned
+TOP_KINDS = ("root", "sudo", "payment", "account_security", "recovery_code", "registrar", "dns", "age_identity")
+STALE_DAYS = 90
+TENTATIVE_TTL = 30
+CONFIRMED_AGENT_TTL = 90
+RECOGNIZE_THRESHOLD = 0.30
+OWNER_SOURCES = ("owner_verbatim", "owner_confirmed", "legacy")
+SOURCES = ("owner_verbatim", "owner_confirmed", "owner_claimed", "agent_inferred", "imported", "legacy")
+PROV_KINDS = ("FACT", "LESSON", "DECIDE", "BOUNDARY", "GENE", "STATE")
+LEDGER_HEADER = ("# env/ledger.env - the authorization ledger: one row per door (3.0). Plain in a private repository.\n"
+                 "# ::STATE{@name, door:..., kind:..., ref:KEY | value:..., verify:<command, exit 0 = the door opens>, "
+                 "last_verified:YYYY-MM-DD|none, recover:<how to get back in>, scope:<tags>, top:true|false, why:<what it serves>}\n"
+                 "# Values live here or in env/keys.env as KEY=value (ref:KEY). Top doors (root, payment, registrar, dns, "
+                 "account_security, recovery_code, age_identity) never unlock from the record; the owner issues a one-time code.\n")
+
+
+def _today() -> str:
+    return f"{datetime.now():%Y-%m-%d}"
+
+
+def _parse_date(s: str):
+    try:
+        return datetime.strptime(s.strip(), "%Y-%m-%d")
+    except (ValueError, AttributeError):
+        return None
+
+
+def _days_since(s: str):
+    d = _parse_date(s or "")
+    return None if d is None else (datetime.now() - d).days
+
+
+def _write_lf(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(text.replace("\r\n", "\n").encode("utf-8"))
+
+
+def _write_lf_atomic(path: Path, text: str) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    _write_lf(tmp, text)
+    os.replace(tmp, path)
+
+
+# ---------------------------------------------------------------- ledger
+
+def ledger_name(name: str) -> str:
+    """Row names are canon entities, @[A-Z][A-Z0-9_]*: upper case, other characters become _."""
+    n = re.sub(r"[^A-Za-z0-9_]", "_", (name or "").strip()).upper().strip("_")
+    return n if n and n[0].isalpha() else ("K_" + n if n else "")
+
+
+def ledger_path(repo: Path) -> Path:
+    return repo / LEDGER_REL
+
+
+def load_ledger(repo: Path) -> tuple[list[dict], list[str]]:
+    """Rows of env/ledger.env as dicts {name, kv, line, raw}; also the raw lines. Comment and blank lines are kept."""
+    p = ledger_path(repo)
+    if not p.is_file():
+        return [], []
+    lines = read_text(p).replace("\r\n", "\n").split("\n")
+    rows: list[dict] = []
+    for i, raw in enumerate(lines):
+        s = raw.strip()
+        if not s or s.startswith("#"):
+            continue
+        m = BLOCK_RE.match(s)
+        if not m or m.group(1) != "STATE":
+            rows.append({"name": "", "kv": {}, "line": i, "raw": s, "error": "not a ::STATE{@name, k:v} row"})
+            continue
+        pos, kv = _fields(m.group(2).strip(), ",")
+        name = pos[0][1:] if pos and pos[0].startswith("@") else ""
+        rows.append({"name": name, "kv": kv, "line": i, "raw": s, "error": "" if name else "row has no @name"})
+    return rows, lines
+
+# ---------------------------------------------------------------- 3.1 three states: plain in a process, encoded at rest, sealed when pairing
+
+def pepper_path(repo: Path) -> Path:
+    return repo / PEPPER_REL
+
+
+def load_pepper(repo: Path, override: str | None = None) -> bytes | None:
+    if override:
+        try:
+            return bytes.fromhex(override.strip())
+        except ValueError:
+            return None
+    p = pepper_path(repo)
+    if not p.is_file():
+        return None
+    try:
+        return bytes.fromhex(read_text(p).strip())
+    except ValueError:
+        return None
+
+
+def write_pepper(repo: Path) -> bool:
+    """Create env/pepper when missing. Never overwrites. Returns True when written."""
+    p = pepper_path(repo)
+    if p.is_file():
+        return False
+    p.parent.mkdir(parents=True, exist_ok=True)
+    _write_lf(p, _secrets.token_hex(32) + "\n")
+    return True
+
+
+def _keystream(pepper: bytes, door: str, n: int) -> bytes:
+    out = b""
+    c = 0
+    while len(out) < n:
+        out += hashlib.sha256(pepper + door.encode("utf-8") + c.to_bytes(4, "big")).digest()
+        c += 1
+    return out[:n]
+
+
+def is_encoded(v: str | None) -> bool:
+    return isinstance(v, str) and v.startswith(ENC_TAG)
+
+
+def enc1_encode(pepper: bytes, door: str, value: str) -> str:
+    """Reversible encoding, not encryption: anyone holding the repository (pepper) and this tool can read it back.
+    It keeps a key out of grep, screenshots, model context and pastes; it does not protect against a holder of the repository."""
+    b = value.encode("utf-8")
+    ks = _keystream(pepper, door, len(b))
+    return ENC_TAG + base64.urlsafe_b64encode(bytes(x ^ y for x, y in zip(b, ks))).decode("ascii").rstrip("=")
+
+
+def enc1_decode(pepper: bytes, door: str, token: str) -> str:
+    t = token[len(ENC_TAG):]
+    t += "=" * (-len(t) % 4)
+    raw = base64.urlsafe_b64decode(t.encode("ascii"))
+    ks = _keystream(pepper, door, len(raw))
+    return bytes(x ^ y for x, y in zip(raw, ks)).decode("utf-8", errors="replace")
+
+
+def _git_config_bool(repo: Path, key: str) -> bool:
+    rc, out = _git(repo, "config", "--bool", key)
+    return rc == 0 and out.strip() == "true"
+
+
+def has_grant(repo: Path, name: str) -> bool:
+    """A grant is a line of this machine's git config: brain.grant.<DOOR>, brain.grant.all, brain.grant.write."""
+    return _git_config_bool(repo, GRANT_PREFIX + name)
+
+
+def grant_mode(row: dict) -> str:
+    g = row["kv"].get("grant", "").strip().lower()
+    if g in ("once", "standing"):
+        return g
+    return "once" if is_top(row) else "standing"
+
+
+def _need_write_grant(repo: Path, what: str) -> bool:
+    """True when storing may proceed. Prints the one-sentence ask otherwise."""
+    if has_grant(repo, "write"):
+        return True
+    print(f"GRANT   storing a key ({what}) needs the owner's yes once on this machine: python -X utf8 tools/brain.py grant --write")
+    return False
+
+
+# Harvest: find the value, not just the prefix. Group 1 is the value. Built by concatenation so this file does not
+# trip its own scan. The table is the only place the tool names a vendor.
+HARVEST_PATTERNS = [
+    ("anthropic_key", re.compile(r"(?<![A-Za-z0-9_\-])(" + "s" + r"k-ant-[A-Za-z0-9_\-]{16,})")),
+    ("openai_key", re.compile(r"(?<![A-Za-z0-9_\-])(" + "s" + r"k-(?!ant-)[A-Za-z0-9_\-]{16,})")),
+    ("github_token", re.compile(r"(?<![A-Za-z0-9_])(" + "gh" + r"[pousr]_[A-Za-z0-9]{20,}|github_" + r"pat_[A-Za-z0-9_]{20,})")),
+    ("aws_key", re.compile(r"(?<![A-Za-z0-9])(" + "AK" + "IA" + r"[0-9A-Z]{16})(?![A-Za-z0-9])")),
+    ("vendor_token", re.compile(r"(?<![A-Za-z0-9_\-])((?:xox[abpr]-|gl" + r"pat-|cf" + r"at_|lxm" + r"cp_|ts" + r"key-|AI" + r"za|ya29\.|[sr]k_live_)[A-Za-z0-9_\-.]{8,})")),
+    ("jwt", re.compile(r"(ey" + r"J[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,})")),
+    ("bearer_token", re.compile(r"Bearer\s+((?!\$\{)[A-Za-z0-9_\-.]{16,})")),
+    ("url_credential", re.compile(r"://[^\s/:@]+:((?!\$\{)[^\s/@]{4,})@")),
+    ("credential", re.compile(r"(?:Secret|Token|EncodingAESKey|CorpID|AppSecret|SecretKey|AccessKey|API_KEY|api_key|ApiKey|client_secret|app_secret|access_key|secret_key)\s*[=:：]\s*[`'\"]?([A-Za-z0-9_\-+/=]{12,})")),
+    ("generic_password", re.compile(r"(?:密码|口令|password|passwd|pwd|root\s*/)\s*[:：=]?\s*[`'\"]?(" + _MIXED + r")(?![/\\.])")),
+    ("ssh_private_key", re.compile("(-----BE" + r"GIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----)")),
+]
+TOKEN_RE = re.compile(r"\{\{[A-Z][A-Z0-9_]*\}\}")
+
+
+def find_key_values(text: str) -> list[tuple[str, str, int]]:
+    """(kind, value, line) for every key-shaped value in text; a value inside a {{TOKEN}} is skipped."""
+    out: list[tuple[str, str, int]] = []
+    seen: set[str] = set()
+    for kind, rx in HARVEST_PATTERNS:
+        for m in rx.finditer(text):
+            v = m.group(1)
+            if not v or v in seen or "{{" in v:
+                continue
+            seen.add(v)
+            out.append((kind, v, text.count("\n", 0, m.start(1)) + 1))
+    return out
+
+
+def _harvest_door_name(kind: str, stem: str, taken: set[str]) -> str:
+    base = re.sub(r"[^A-Z0-9]+", "_", (kind + "_" + stem).upper()).strip("_") or "KEY"
+    if base[0].isdigit():
+        base = "K_" + base
+    name, n = base, 1
+    while name in taken:
+        n += 1
+        name = f"{base}_{n}"
+    taken.add(name)
+    return name
+
+
+def harvest(repo: Path, paths: list[str] | None = None) -> list[dict]:
+    """Turn key-shaped values under memory/ soul/ handoff/ (or the given paths) into ledger rows: the value encoded into
+    env/keys.env, one ::STATE row with verify:none, and the text replaced by {{DOOR}}. log/ env/ pair/ and
+    soul/evidence.md are never touched. Returns the doors created."""
+    rows, lines = load_ledger(repo)
+    taken = {r["name"] for r in rows if not r.get("error")}
+    pepper = load_pepper(repo)
+    if pepper is None:
+        write_pepper(repo)
+        pepper = load_pepper(repo)
+    keys = _keys_env(repo)
+    kp = repo / KEYS_REL
+    keys_text = read_text(kp).replace("\r\n", "\n") if kp.is_file() else "# env/keys.env - KEY=value rows referenced by env/ledger.env (ref:KEY). Private repository; never pasted.\n"
+    if not lines:
+        lines = LEDGER_HEADER.rstrip("\n").split("\n")
+    lines = [ln for ln in lines]
+    while lines and not lines[-1].strip():
+        lines.pop()
+    value_door: dict[str, str] = {}
+    created: list[dict] = []
+    targets: list[Path] = []
+    for rel in (paths or list(HARVEST_DEFAULT_PATHS)):
+        p = repo / rel
+        if p.is_file():
+            targets.append(p)
+        elif p.is_dir():
+            targets += [q for q in sorted(p.rglob("*")) if q.is_file()]
+    for p in targets:
+        rel = p.relative_to(repo).as_posix()
+        top = rel.split("/", 1)[0]
+        if top in SCAN_EXEMPT_TOP or rel in HARVEST_SKIP or "/.git/" in f"/{rel}/":
+            continue
+        try:
+            text = p.read_bytes().decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+        nl = "\r\n" if "\r\n" in text else "\n"
+        body = text.replace("\r\n", "\n")
+        found = find_key_values(body)
+        if not found:
+            continue
+        stem = re.sub(r"\.[^.]+$", "", p.name)
+        for kind, value, line in found:
+            if value in value_door:
+                door = value_door[value]
+            else:
+                door = _harvest_door_name(kind, stem, taken)
+                value_door[value] = door
+                keys_text = keys_text.rstrip("\n") + f"\n{door}={enc1_encode(pepper, door, value)}\n"
+                keys[door] = value
+                fields = [f"@{door}", f"door:{kind} found in {rel}", f"kind:{kind}", f"ref:{door}", "verify:none",
+                          "last_verified:none", f"recover:see {rel}:{line} and the service that issued it", f"scope:{stem}",
+                          "top:false", f"why:harvested from {rel}:{line} on {_today()}"]
+                lines.append("::STATE{" + ", ".join(fields) + "}")
+                created.append({"door": door, "kind": kind, "file": rel, "line": line})
+            body = body.replace(value, "{{" + door + "}}")
+        p.write_bytes(body.replace("\n", nl).encode("utf-8"))
+    if created:
+        _write_lf_atomic(kp, keys_text)
+        _save_ledger(repo, lines)
+    return created
+
+
+def mask_key_values(text: str) -> tuple[str, int]:
+    """For text that leaves the repository: every key-shaped value becomes {{UNHARVESTED <kind> <fingerprint>}}."""
+    n = 0
+    for kind, value, _ in find_key_values(text):
+        text = text.replace(value, "{{UNHARVESTED " + kind + " " + _sha256(value.encode("utf-8"))[:8] + "}}")
+        n += 1
+    # anything the prefix scan still sees: mask the token run from the match to the next whitespace
+    for label, rx in SECRET_PATTERNS:
+        for m in list(rx.finditer(text))[::-1]:
+            start = m.start()
+            end = start
+            while end < len(text) and not text[end].isspace():
+                end += 1
+            if "{{UNHARVESTED" in text[start:end]:
+                continue
+            text = text[:start] + "{{UNHARVESTED " + re.sub(r"[^A-Za-z0-9_]+", "_", label).strip("_").lower() + " " + _sha256(text[start:end].encode("utf-8"))[:8] + "}}" + text[end:]
+            n += 1
+    return text, n
+
+
+def _handoff_scope(repo: Path) -> set[str] | None:
+    """The scope the hand-off declares: scope: on the PROGRESS block. None when it declares none."""
+    cur = _handoff_path(repo)
+    if not cur.is_file():
+        return None
+    for b in parse_blocks(read_text(cur)):
+        if b["kind"] == "PROGRESS":
+            sc = b["kv"].get("scope", "").strip()
+            if sc and sc != "none":
+                return {t for t in re.split(r"[\s,]+", sc) if t}
+    return None
+
+
+def _keys_env(repo: Path) -> dict[str, str]:
+    p = repo / KEYS_REL
+    out: dict[str, str] = {}
+    if not p.is_file():
+        return out
+    for ln in read_text(p).replace("\r\n", "\n").split("\n"):
+        s = ln.strip()
+        if not s or s.startswith("#") or "=" not in s:
+            continue
+        k, v = s.split("=", 1)
+        v = v.strip()
+        if len(v) >= 2 and v[0] == v[-1] and v[0] in "\"'":
+            v = v[1:-1]
+        out[k.strip()] = v
+    return out
+
+
+def ledger_value(repo: Path, row: dict, pepper: bytes | None = None) -> str | None:
+    kv = row["kv"]
+    if kv.get("value") not in (None, "", "none"):
+        v = kv["value"]
+    else:
+        ref = kv.get("ref")
+        if not ref:
+            return None
+        v = _keys_env(repo).get(ref)
+        if v is None:
+            return None
+    if is_encoded(v):
+        pepper = pepper or load_pepper(repo)
+        if pepper is None:
+            return None
+        return enc1_decode(pepper, kv.get("ref") or row["name"], v)
+    return v
+
+
+def value_problem(repo: Path, row: dict) -> str:
+    """Why ledger_value returned None, for the messages."""
+    kv = row["kv"]
+    ref = kv.get("ref")
+    raw = kv.get("value") if kv.get("value") not in (None, "", "none") else (_keys_env(repo).get(ref) if ref else None)
+    if raw is None:
+        return f"no value or ref resolves ({KEYS_REL})"
+    if is_encoded(raw) and load_pepper(repo) is None:
+        return f"{PEPPER_REL} missing: the encoded value cannot be read on this clone (ledger decode --pepper <hex> if the owner kept it)"
+    return "value unreadable"
+
+
+def _is_stale(row: dict) -> bool:
+    d = _days_since(row['kv'].get('last_verified', ''))
+    return d is None or d > STALE_DAYS
+
+
+def is_top(row: dict) -> bool:
+    kv = row["kv"]
+    return kv.get("top", "").lower() == "true" or kv.get("kind", "").lower() in TOP_KINDS
+
+
+def row_scope(row: dict) -> set[str]:
+    s = row["kv"].get("scope", "")
+    return {t for t in re.split(r"[\s,]+", s) if t and t != "none"}
+
+
+def row_text(row: dict, with_value: bool = False, value: str | None = None) -> str:
+    """The row as a ::STATE line; the value masked unless with_value."""
+    kv = dict(row["kv"])
+    if with_value:
+        if value is not None:
+            kv["value"] = value
+            kv.pop("ref", None)
+    else:
+        if "value" in kv and kv["value"] not in ("", "none"):
+            kv["value"] = "[set]"
+    parts = [f"@{row['name']}"] + [f"{k}:{v}" for k, v in kv.items()]
+    return "::STATE{" + ", ".join(parts) + "}"
+
+
+def _set_state_key(raw: str, key: str, value: str) -> str:
+    """Set key:value inside a ::STATE{...} line, replacing or appending before the closing brace."""
+    m = BLOCK_RE.match(raw.strip())
+    if not m:
+        return raw
+    head = m.group(2)
+    parts = re.split(r",\s*(?=[A-Za-z_][A-Za-z0-9_]*\s*:)", head)
+    done = False
+    for i, part in enumerate(parts):
+        mm = re.match(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*:", part)
+        if mm and mm.group(1) == key:
+            parts[i] = f"{key}:{value}"
+            done = True
+    if not done:
+        parts.append(f"{key}:{value}")
+    return "::STATE{" + ", ".join(p.strip() for p in parts) + "}"
+
+
+def _save_ledger(repo: Path, lines: list[str]) -> None:
+    _write_lf_atomic(ledger_path(repo), "\n".join(lines).rstrip("\n") + "\n")
+
+
+def _ledger_verify_env(repo: Path, row: dict) -> dict:
+    env = dict(os.environ)
+    val = ledger_value(repo, row)
+    if val is not None:
+        env["LEDGER_VALUE"] = val
+        ref = row["kv"].get("ref")
+        if ref:
+            env[ref] = val
+    env["LEDGER_NAME"] = row["name"]
+    env["LEDGER_DOOR"] = row["kv"].get("door", "")
+    return env
+
+
+def cmd_ledger(repo: Path, action: str, name: str | None, opts: dict) -> int:
+    rows, lines = load_ledger(repo)
+    bad = [r for r in rows if r.get("error")]
+    for r in bad:
+        print(f"ERROR   ledger line {r['line'] + 1}: {r['error']}")
+    rows = [r for r in rows if not r.get("error")]
+
+    if action == "list":
+        if not rows:
+            print("ledger: no rows yet (brain.py ledger add <name> --door ... --kind ... --verify ... --recover ...)")
+            return 0
+        print(f"{'name':20s} {'kind':16s} {'last_verified':14s} {'top':5s} {'scope':16s} door")
+        for r in rows:
+            kv = r["kv"]
+            print(f"{r['name']:20s} {kv.get('kind', ''):16s} {kv.get('last_verified', 'none'):14s} "
+                  f"{'yes' if is_top(r) else 'no':5s} {kv.get('scope', '') or '-':16s} {kv.get('door', '')}")
+        stale = [r for r in rows if _is_stale(r)]
+        if stale:
+            print(f"stale   {len(stale)} row(s) unverified for more than {STALE_DAYS} days or never: "
+                  + ", ".join(r["name"] for r in stale))
+        return 1 if bad else 0
+
+    if action in ("add", "show", "verify", "reveal") and name and name != "all":
+        name = ledger_name(name)
+    if action == "add":
+        if not name:
+            print("ERROR   ledger add needs a name (letters, digits, _; it is written upper case)")
+            return 2
+        if any(r["name"] == name for r in rows):
+            print(f"ERROR   ledger row {name} exists; edit env/ledger.env or choose another name")
+            return 1
+        door, kind = opts.get("door") or "", opts.get("kind") or ""
+        if not door or not kind:
+            print("ERROR   --door and --kind are required")
+            return 2
+        value, ref = opts.get("value"), opts.get("ref")
+        if value and not ref:
+            if not _need_write_grant(repo, f"ledger add {name}"):
+                return 2
+            ref = name
+            kp = repo / KEYS_REL
+            existing = read_text(kp).replace("\r\n", "\n") if kp.is_file() else "# env/keys.env - KEY=value rows referenced by env/ledger.env (ref:KEY). Private repository; never pasted.\n"
+            if re.search(r"(?m)^" + re.escape(ref) + r"=", existing):
+                print(f"ERROR   {KEYS_REL} already has {ref}; pass --ref with another key name")
+                return 1
+            pepper = load_pepper(repo)
+            if pepper is None:
+                write_pepper(repo)
+                pepper = load_pepper(repo)
+            _write_lf_atomic(kp, existing.rstrip("\n") + f"\n{ref}={enc1_encode(pepper, ref, value)}\n")
+        fields = [f"@{name}", f"door:{door}", f"kind:{kind}"]
+        if ref:
+            fields.append(f"ref:{ref}")
+        elif value:
+            fields.append(f"value:{value}")
+        fields.append(f"verify:{opts.get('verify') or 'none'}")
+        fields.append("last_verified:none")
+        fields.append(f"recover:{opts.get('recover') or 'none'}")
+        fields.append(f"scope:{opts.get('scope') or 'none'}")
+        fields.append(f"top:{'true' if opts.get('top') or kind.lower() in TOP_KINDS else 'false'}")
+        if opts.get("grant") in ("once", "standing"):
+            fields.append(f"grant:{opts['grant']}")
+        fields.append(f"why:{opts.get('why') or 'none'}")
+        row = "::STATE{" + ", ".join(fields) + "}"
+        if not lines:
+            lines = LEDGER_HEADER.rstrip("\n").split("\n")
+        lines = [ln for ln in lines]
+        while lines and not lines[-1].strip():
+            lines.pop()
+        lines.append(row)
+        _save_ledger(repo, lines)
+        print(f"ledger  added {name} ({kind}) -> {LEDGER_REL}" + (f"; value stored encoded in {KEYS_REL} as {ref}" if value else ""))
+        return 0
+
+    if action == "encode":
+        kp = repo / KEYS_REL
+        if not kp.is_file():
+            print(f"ledger encode: no {KEYS_REL}; nothing to do")
+            return 0
+        pepper = load_pepper(repo)
+        if pepper is None:
+            write_pepper(repo)
+            pepper = load_pepper(repo)
+            print(f"create  {PEPPER_REL}")
+        text = read_text(kp).replace("\r\n", "\n")
+        out, n = [], 0
+        for ln in text.split("\n"):
+            st = ln.strip()
+            if st and not st.startswith("#") and "=" in st:
+                k, v = st.split("=", 1)
+                v = v.strip()
+                if len(v) >= 2 and v[0] == v[-1] and v[0] in "\"'":
+                    v = v[1:-1]
+                if v and not is_encoded(v):
+                    out.append(f"{k.strip()}={enc1_encode(pepper, k.strip(), v)}")
+                    n += 1
+                    continue
+            out.append(ln)
+        if n:
+            bak = kp.with_suffix(".env.bak")
+            if not bak.exists():
+                bak.write_bytes(kp.read_bytes())
+                print(f"backup  {bak.relative_to(repo).as_posix()} (plain; delete it after ledger decode shows the rows open)")
+            _write_lf_atomic(kp, "\n".join(out).rstrip("\n") + "\n")
+        print(f"ledger encode: {n} row(s) encoded; the encoding is reversible with {PEPPER_REL} and this tool, it is not encryption")
+        return 0
+
+    if action == "decode":
+        kp = repo / KEYS_REL
+        raw = _keys_env(repo)
+        if not raw:
+            print(f"ledger decode: no rows in {KEYS_REL}")
+            return 0
+        pepper = load_pepper(repo, opts.get("pepper"))
+        if pepper is None and any(is_encoded(v) for v in raw.values()):
+            print(f"ERROR   {PEPPER_REL} missing: the repository is incomplete. The owner's copy of the pepper opens it: ledger decode --pepper <hex>")
+            return 2
+        for k, v in raw.items():
+            print(f"{k}={enc1_decode(pepper, k, v) if is_encoded(v) else v}")
+        return 0
+
+    if action == "reveal":
+        if not name:
+            print("ERROR   ledger reveal needs the door name")
+            return 2
+        r = next((x for x in rows if x["name"] == name), None)
+        if r is None:
+            print(f"ERROR   no ledger row named {name}")
+            return 1
+        val = ledger_value(repo, r)
+        if val is None:
+            print(f"ERROR   {name}: {value_problem(repo, r)}")
+            return 2
+        print(val)
+        return 0
+
+    if action == "harvest":
+        if not _need_write_grant(repo, "ledger harvest"):
+            return 2
+        created = harvest(repo, opts.get("paths") or None)
+        for c in created:
+            print(f"door    {c['door']} ({c['kind']}) from {c['file']}:{c['line']} -> {{{{{c['door']}}}}} in the text, value encoded in {KEYS_REL}, verify:none")
+        print(f"ledger harvest: {len(created)} door(s) created; fill verify with ledger verify or the owner's word; log/ and {HARVEST_SKIP[0]} untouched")
+        return 0
+
+    if action == "show":
+        r = next((x for x in rows if x["name"] == name), None)
+        if r is None:
+            print(f"ERROR   no ledger row named {name}")
+            return 1
+        val = ledger_value(repo, r) if opts.get("with_value") else None
+        print(row_text(r, bool(opts.get("with_value")), val))
+        return 0
+
+    if action == "verify":
+        wanted = [r for r in rows if not name or r["name"] == name or name == "all"]
+        if name and name != "all" and not wanted:
+            print(f"ERROR   no ledger row named {name}")
+            return 1
+        timeout = int(opts.get("timeout") or 30)
+        failed = passed = skipped = 0
+        for r in wanted:
+            cmd = r["kv"].get("verify", "none")
+            if cmd in ("", "none"):
+                print(f"SKIP    {r['name']}: no verify command")
+                skipped += 1
+                continue
+            try:
+                res = subprocess.run(cmd, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                     timeout=timeout, env=_ledger_verify_env(repo, r), cwd=str(repo))
+                rc = res.returncode
+                tail = (res.stdout + res.stderr).strip().splitlines()[-1:] if (res.stdout or res.stderr) else []
+            except subprocess.TimeoutExpired:
+                rc, tail = 124, ["timeout"]
+            except OSError as e:
+                rc, tail = 127, [str(e)]
+            if rc == 0:
+                passed += 1
+                lines[r["line"]] = _set_state_key(lines[r["line"]], "last_verified", _today())
+                print(f"PASS    {r['name']} ({r['kv'].get('door', '')})")
+            else:
+                failed += 1
+                print(f"FAIL    {r['name']} ({r['kv'].get('door', '')}): exit {rc} {' '.join(tail)[:120]}")
+        if passed:
+            _save_ledger(repo, lines)
+        rows2, _ = load_ledger(repo)
+        stale = [r for r in rows2 if not r.get("error") and _is_stale(r)]
+        print(f"ledger verify: {passed} passed, {failed} failed, {skipped} skipped; {len(stale)} stale (> {STALE_DAYS} days or never)")
+        return 1 if failed else 0
+
+    print(f"ERROR   unknown ledger action {action}")
+    return 2
+
+
+# ---------------------------------------------------------------- one-time code (top doors)
+
+def _otp_load(repo: Path) -> dict:
+    p = repo / OTP_REL
+    if not p.is_file():
+        return {}
+    try:
+        return json.loads(read_text(p))
+    except json.JSONDecodeError:
+        return {}
+
+
+def _otp_save(repo: Path, data: dict) -> None:
+    _write_lf_atomic(repo / OTP_REL, json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+
+
+def cmd_otp(repo: Path, action: str, name: str, minutes: int) -> int:
+    name = ledger_name(name) if name else name
+    data = _otp_load(repo)
+    if action == "issue":
+        code = _secrets.token_hex(4)
+        expires = datetime.now() + timedelta(minutes=minutes)
+        data[name] = {"sha256": _sha256(code.encode()), "expires": expires.isoformat(timespec="seconds"), "issued": _now_iso()}
+        _otp_save(repo, data)
+        print(f"otp     {name}: {code}  (valid {minutes} min, until {expires:%H:%M}; used once; revoke with brain.py otp revoke {name})")
+        return 0
+    if action == "revoke":
+        if data.pop(name, None) is None:
+            print(f"otp     {name}: nothing to revoke")
+        else:
+            _otp_save(repo, data)
+            print(f"otp     {name}: revoked")
+        return 0
+    if action == "list":
+        now = datetime.now()
+        for k, v in data.items():
+            exp = datetime.fromisoformat(v["expires"])
+            print(f"{k:20s} {'valid' if exp > now else 'expired'} until {v['expires']}")
+        if not data:
+            print("otp     none issued")
+        return 0
+    print(f"ERROR   unknown otp action {action}")
+    return 2
+
+
+def _otp_consume(repo: Path, name: str, code: str) -> tuple[bool, str]:
+    data = _otp_load(repo)
+    rec = data.get(name)
+    if not rec:
+        return False, "no code issued for this door"
+    if datetime.fromisoformat(rec["expires"]) < datetime.now():
+        data.pop(name, None)
+        _otp_save(repo, data)
+        return False, "code expired; the owner issues a new one"
+    if _sha256(code.strip().encode()) != rec["sha256"]:
+        return False, "code does not match"
+    data.pop(name, None)
+    _otp_save(repo, data)
+    return True, "code accepted and consumed"
+
+
+# ---------------------------------------------------------------- unlock
+
+def handoff_next_items(repo: Path) -> list[str]:
+    cur = _handoff_path(repo)
+    if not cur.is_file():
+        return []
+    for b in parse_blocks(read_text(cur)):
+        if b["kind"] == "PROGRESS":
+            return _items(b["kv"].get("next", ""))
+    return []
+
+
+def _item_names_door(item: str, row: dict) -> bool:
+    a = _norm(item).lower()
+    name = row["name"].lower()
+    door = _norm(row["kv"].get("door", "")).lower()
+    return (name and name in a) or (door and door in a) or (door and _bigram_overlap(a, door) >= 0.5)
+
+
+def cmd_unlock(repo: Path, name: str, scope: str | None, code: str | None, no_log: bool = False) -> int:
+    name = ledger_name(name)
+    rows, _ = load_ledger(repo)
+    row = next((r for r in rows if not r.get("error") and r["name"] == name), None)
+    if row is None:
+        print(f"ERROR   no ledger row named {name}")
+        return 1
+    mode = grant_mode(row)
+    if is_top(row) or mode == "once":
+        if not code:
+            what = "a top door" if is_top(row) else "a once door (grant:once)"
+            print(f"TOP     {name} is {what} ({row['kv'].get('kind', '')}); it never unlocks from the record. "
+                  f"The owner issues a one-time code in person: brain.py otp issue {name}; then brain.py unlock {name} --code <code>")
+            return 3
+        ok, why = _otp_consume(repo, name, code)
+        if not ok:
+            print(f"REFUSE  {name}: {why}")
+            return 3
+    else:
+        if not (has_grant(repo, name) or has_grant(repo, "all")):
+            print(f"REFUSE  {name}: no grant on this machine. The owner says yes once: python -X utf8 tools/brain.py grant {name}"
+                  f"   (or: grant --all, every standing door on this machine)")
+            return 3
+        rs = row_scope(row)
+        declared = {t for t in re.split(r"[\s,]+", scope) if t} if scope else _handoff_scope(repo)
+        if rs:
+            if declared is None:
+                print(f"REFUSE  {name}: the row has scope {sorted(rs)} and none was declared; pass --scope or put scope: on the PROGRESS block of handoff/CURRENT.md")
+                return 1
+            if not rs <= declared:
+                print(f"REFUSE  {name}: row scope {sorted(rs)} is not inside the declared scope {sorted(declared)}; the item stays in next")
+                return 1
+        items = handoff_next_items(repo)
+        if not any(_item_names_door(it, row) for it in items):
+            print(f"REFUSE  {name}: no next item in handoff/CURRENT.md names this door; the key reaches context only when the work reaches it")
+            return 1
+    val = ledger_value(repo, row)
+    if val is None:
+        print(f"ERROR   {name}: {value_problem(repo, row)}")
+        return 1
+    print(row_text(row, True, val))
+    if not no_log:
+        _log_append(repo, "AGENT", f"unlock {name} ({row['kv'].get('door', '')}) grant:{'code' if (is_top(row) or mode == 'once') else ('door' if has_grant(repo, name) else 'all')}", kind="unlock")
+    return 0
+
+
+def cmd_grant(repo: Path, door: str | None, all_: bool, write: bool, revoke: bool, list_: bool) -> int:
+    if not (repo / ".git").exists():
+        print("ERROR   grants live in this clone's git config; there is no .git here")
+        return 1
+    if list_:
+        rc, out = _git(repo, "config", "--get-regexp", "^brain\\.grant\\.")
+        print(out.strip() if out.strip() else "grant: none on this machine")
+        return 0
+    targets: list[str] = []
+    if all_:
+        targets.append("all")
+    if write:
+        targets.append("write")
+    if door:
+        targets.append(ledger_name(door))
+    if not targets:
+        print("ERROR   grant needs <DOOR>, --all or --write (add --revoke to take one back, --list to see them)")
+        return 2
+    for t in targets:
+        if revoke:
+            _git(repo, "config", "--unset", GRANT_PREFIX + t)
+            print(f"grant   revoked {t} on this machine")
+        else:
+            rc, out = _git(repo, "config", "--bool", GRANT_PREFIX + t, "true")
+            if rc != 0:
+                print(f"ERROR   git config failed: {out}")
+                return 1
+            print(f"grant   {t} on this machine ({GRANT_PREFIX}{t} true in .git/config; the repository never carries it)")
+    _log_append(repo, "OWNER", f"grant {'revoke ' if revoke else ''}{' '.join(targets)}", kind="grant")
+    return 0
+
+
+# ---------------------------------------------------------------- pair / unseal
+
+def owner_recipients(repo: Path) -> list[str]:
+    p = repo / "vault" / "recipients.txt"
+    if not p.is_file():
+        return []
+    return [ln.strip() for ln in read_text(p).splitlines() if ln.strip() and not ln.strip().startswith("#")]
+
+
+def cmd_pair(repo: Path, recipient: str, scope: str, out: Path | None, age_dir: str | None, label: str | None) -> int:
+    rec = recipient.strip()
+    rp = Path(rec).expanduser()
+    if rp.is_file():
+        rec = next((ln.strip() for ln in read_text(rp).splitlines() if ln.strip() and not ln.startswith("#")), "")
+    if not rec.startswith("age1"):
+        print("ERROR   recipient must be an age public key (age1...) or a file holding one")
+        return 2
+    owners = owner_recipients(repo)
+    if not owners:
+        print("ERROR   vault/recipients.txt is empty; the owner must always be a recipient (age-keygen -y ~/.age/key.txt > vault/recipients.txt)")
+        return 1
+    try:
+        age = find_age_tool("age", age_dir)
+    except FileNotFoundError as e:
+        print(f"ERROR   {e}")
+        return 1
+    declared = {t for t in re.split(r"[\s,]+", scope or "") if t}
+    rows, _ = load_ledger(repo)
+    chosen = [r for r in rows if not r.get("error") and not is_top(r) and (not row_scope(r) or (row_scope(r) & declared))]
+    label = label or _sha256(rec.encode())[:8]
+    outdir = out or repo / PAIR_DIR / f"{_today()}-{label}"
+    outdir.mkdir(parents=True, exist_ok=True)
+    sealed = []
+    for r in chosen:
+        val = ledger_value(repo, r)
+        if val is None:
+            print(f"skip    {r['name']}: no value resolves")
+            continue
+        text = row_text(r, True, val) + "\n"
+        args = [age]
+        for o in [rec] + owners:
+            args += ["-r", o]
+        target = outdir / f"{r['name']}.age"
+        args += ["-o", str(target)]
+        res = subprocess.run(args, input=text.encode("utf-8"), capture_output=True)
+        if res.returncode != 0:
+            print(f"ERROR   age failed for {r['name']}: {res.stderr.decode('utf-8', 'replace').strip()}")
+            return 1
+        sealed.append(r["name"])
+        print(f"seal    {r['name']} -> {target.name} (recipients: receiver + {len(owners)} owner key(s))")
+    decl = (f"::STATE{{@PAIR, date:{_today()}, receiver:{_sha256(rec.encode())[:12]}, scope:{' '.join(sorted(declared)) or 'none'}, "
+            f"authorization:@OWNER, rows:{' '.join(sealed) or 'none'}, top_doors:excluded, owner_recipient:true}}\n"
+            f"::BOUNDARY{{never:use_a_row_outside_the_declared_scope_or_before_a_next_item_names_its_door|scope:this_pairing}}\n")
+    _write_lf(outdir / "declaration.md", "# pairing declaration\n\n" + decl)
+    print(f"pair    {len(sealed)} row(s) sealed to {outdir}; declaration.md states identity, scope and authorization")
+    return 0
+
+
+def cmd_unseal(infile: Path, identity: Path, age_dir: str | None) -> int:
+    try:
+        data = _vault_decrypt(infile, identity, age_dir)
+    except (FileNotFoundError, RuntimeError) as e:
+        print(f"ERROR   {e}")
+        return 1
+    sys.stdout.write(data.decode("utf-8", errors="replace"))
+    sys.stdout.flush()
+    return 0
+
+
+# ---------------------------------------------------------------- log (the raw trajectory)
+
+def log_path(repo: Path, date: str | None = None) -> Path:
+    return repo / LOG_DIR / f"{date or _today()}.md"
+
+
+def _log_append(repo: Path, who: str, text: str, kind: str = "turn", date: str | None = None) -> Path:
+    p = log_path(repo, date)
+    head = "" if p.is_file() else f"# {date or _today()}\n\n"
+    body = text.replace("\r\n", "\n").strip("\n")
+    entry = f"::EVENT{{@{who}, at:{datetime.now():%H:%M}, kind:{kind}}}\n{body}\n\n"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with open(p, "ab") as f:
+        f.write((head + entry).encode("utf-8"))
+    return p
+
+
+def cmd_log(repo: Path, who: str, text: str | None, file: Path | None, kind: str, show: str | None) -> int:
+    if show is not None:
+        p = log_path(repo, show or None)
+        if not p.is_file():
+            print(f"log     {p.name}: no entries")
+            return 1
+        sys.stdout.write(read_text(p))
+        return 0
+    if file is not None:
+        text = read_text(file)
+    elif text is None or text == "-":
+        text = sys.stdin.read()
+    if not text or not text.strip():
+        print("ERROR   nothing to log")
+        return 2
+    p = _log_append(repo, "OWNER" if who == "owner" else "AGENT", text, kind=kind)
+    print(f"log     {who} -> {p.relative_to(repo).as_posix()} ({len(text.encode('utf-8'))} bytes)")
+    return 0
+
+
+def log_events(repo: Path, days: int | None = None, since: str | None = None) -> list[dict]:
+    """EVENT blocks of log/*.md inside the window, each with who, kind, date, text."""
+    d = repo / LOG_DIR
+    if not d.is_dir():
+        return []
+    lo = None
+    if since:
+        lo = since
+    elif days is not None:
+        lo = f"{datetime.now() - timedelta(days=max(0, days - 1)):%Y-%m-%d}"
+    events: list[dict] = []
+    for p in sorted(d.glob("*.md")):
+        date = p.stem
+        if not DATE_RE.match(date) or (lo and date < lo):
+            continue
+        cur: dict | None = None
+        for raw in read_text(p).replace("\r\n", "\n").split("\n"):
+            m = BLOCK_RE.match(raw.strip())
+            if m and m.group(1) == "EVENT":
+                pos, kv = _fields(m.group(2).strip(), ",")
+                who = pos[0][1:] if pos and pos[0].startswith("@") else ""
+                cur = {"who": who, "kind": kv.get("kind", "turn"), "date": date, "at": kv.get("at", ""), "lines": []}
+                events.append(cur)
+                continue
+            if cur is not None and raw.startswith("#") and not raw.startswith("##"):
+                continue
+            if cur is not None:
+                cur["lines"].append(raw.rstrip("\r"))
+    for e in events:
+        e["text"] = "\n".join(e["lines"]).strip("\n")
+    return events
+
+
+# ---------------------------------------------------------------- recognize (the action is the pairing)
+
+def _content_words(s: str) -> set[str]:
+    words: set[str] = set()
+    for tok in re.findall(r"[A-Za-z][A-Za-z0-9\-]{4,}", s.replace("_", " ")):
+        words.add(tok.lower())
+    for run in re.findall(r"[一-鿿]{2,}", s):
+        for i in range(len(run) - 1):
+            words.add(run[i:i + 2])
+    return words
+
+
+def _bigram_overlap(a: str, b: str) -> float:
+    """Jaccard overlap of CJK character bigrams (plus ASCII tokens) of two strings; 0 when either has none."""
+    wa, wb = _content_words(a), _content_words(b)
+    if not wa or not wb:
+        return 0.0
+    return len(wa & wb) / len(wa | wb)
+
+
+def _split_trailing(line: str) -> tuple[str, dict[str, str]]:
+    """'T:text|k:v|k2:v2' -> ('T:text', {k: v}); keys are plain identifiers."""
+    parts = line.split("|")
+    text, kv = parts[0], {}
+    for part in parts[1:]:
+        m = re.match(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*:(.*)$", part, re.S)
+        if m:
+            kv[m.group(1)] = m.group(2).strip()
+        else:
+            text += "|" + part
+    return text, kv
+
+
+def soul_anchors(repo: Path, soul: Path | None = None) -> list[dict]:
+    p = soul or repo / "soul" / "soul.md"
+    if not p.is_file():
+        return []
+    anchors: list[dict] = []
+    for b in parse_blocks(read_text(p)):
+        if b["kind"] != "GENE":
+            continue
+        for line in b["body"]:
+            text, kv = _split_trailing(line)
+            by = kv.get("by", "legacy")
+            if by not in OWNER_SOURCES:
+                continue
+            kind = "T" if text.startswith("T:") else "A"
+            body = text[2:].strip()
+            ante, cons = (body.split("⇒", 1) + [""])[:2] if kind == "A" else (body, "")
+            words = {w for w in re.split(r"[\s,;]+", kv.get("words", "")) if w}
+            anchors.append({"gene": b.get("entity", ""), "kind": kind, "line": line, "text": body,
+                            "words": words or _content_words(ante), "cons": _content_words(cons), "by": by})
+    return anchors
+
+
+def _present(words: set[str], text: str, token_set: set[str]) -> set[str]:
+    out = set()
+    for w in words:
+        if w in token_set or (not w.isascii() and w in text):
+            out.add(w)
+    return out
+
+
+def recognize(repo: Path, days: int = 1, since: str | None = None, soul: Path | None = None) -> dict:
+    anchors = soul_anchors(repo, soul)
+    events = log_events(repo, days=None if since else days, since=since)
+    turns = [e for e in events if e["who"] == "OWNER" and e["kind"] == "turn" and e["text"]]
+    agent_text = "\n".join(e["text"] for e in events if e["who"] == "AGENT")
+    agent_tokens = _content_words(agent_text)
+    window_text = "\n".join(t["text"] for t in turns)
+    window_tokens = _content_words(window_text)
+    applicable = hits = 0
+    detail = []
+    for a in anchors:
+        pres = _present(a["words"], window_text, window_tokens)
+        if not pres:
+            continue
+        applicable += 1
+        if a["kind"] == "T":
+            need = max(1, _math.ceil(len(a["words"]) / 2))
+            hit = any(len(_present(a["words"], t["text"], _content_words(t["text"]))) >= need for t in turns)
+        else:
+            hit = not _present(a["cons"], agent_text, agent_tokens) if a["cons"] else True
+        hits += 1 if hit else 0
+        detail.append((a["kind"], a["text"][:60], "hit" if hit else "miss"))
+    ratio = hits / applicable if applicable else 0.0
+    # boundary contradictions: done items touching a boundary of soul.md or the hand-off
+    nevers = []
+    for p in (repo / "soul" / "soul.md", _handoff_path(repo)):
+        if p.is_file():
+            nevers += [b["kv"].get("never", "") for b in parse_blocks(read_text(p)) if b["kind"] == "BOUNDARY"]
+    done = []
+    cur = _handoff_path(repo)
+    if cur.is_file():
+        for b in parse_blocks(read_text(cur)):
+            if b["kind"] == "PROGRESS":
+                done = _items(b["kv"].get("done", ""))
+    contradictions = [(it, nv) for it in done for nv in nevers if _touches_boundary(it, nv)]
+    recognized = bool(turns) and applicable > 0 and ratio >= RECOGNIZE_THRESHOLD and not contradictions
+    return {"turns": len(turns), "anchors": len(anchors), "applicable": applicable, "hits": hits, "ratio": round(ratio, 3),
+            "contradictions": contradictions, "recognized": recognized, "detail": detail,
+            "threshold": RECOGNIZE_THRESHOLD}
+
+
+def cmd_recognize(repo: Path, days: int, since: str | None, as_json: bool, soul: Path | None) -> int:
+    r = recognize(repo, days, since, soul)
+    if as_json:
+        print(json.dumps({k: v for k, v in r.items() if k != "detail"}, ensure_ascii=False))
+    else:
+        for kind, text, verdict in r["detail"]:
+            print(f"{verdict:5s} {kind}: {text}")
+        for it, nv in r["contradictions"]:
+            print(f"BOUNDARY done item touches a boundary: {it} <-> {nv}")
+        print(f"recognize: {r['turns']} owner turn(s), {r['applicable']}/{r['anchors']} anchors applicable, "
+              f"{r['hits']} hit, ratio {r['ratio']:.2f} (threshold {RECOGNIZE_THRESHOLD}), "
+              f"{len(r['contradictions'])} boundary contradiction(s) -> {'RECOGNIZED' if r['recognized'] else 'NOT RECOGNIZED'}")
+    if not r["turns"]:
+        return 2
+    return 0 if r["recognized"] else 1
+
+
+# ---------------------------------------------------------------- provenance (by: on every block)
+
+def _prov_files(repo: Path) -> list[Path]:
+    out = []
+    for rel in ("soul/soul.md", "soul/agent.md", "handoff/CURRENT.md"):
+        p = repo / rel
+        if p.is_file():
+            out.append(p)
+    mem = repo / "memory"
+    if mem.is_dir():
+        for p in sorted(mem.rglob("*.md")):
+            if p.name != "MEMORY.md":
+                out.append(p)
+    return out
+
+
+def _stamp_block_line(raw: str, kind: str, adds: dict[str, str]) -> str:
+    """Add missing keys to one block line. STATE uses ', k:v'; DECIDE adds into its second brace; others use '|k:v'."""
+    s = raw.rstrip("\r\n")
+    m = BLOCK_RE.match(s.strip())
+    if not m:
+        return raw
+    indent = s[: len(s) - len(s.lstrip())]
+    if kind == "STATE":
+        _, kv = _fields(m.group(2).strip(), ",")
+        line = s.strip()
+        for k, v in adds.items():
+            if k not in kv:
+                line = _set_state_key(line, k, v)
+        return indent + line
+    if kind == "DECIDE":
+        head, extra = m.group(2), m.group(3) or ""
+        _, kv = _fields(extra, "|")
+        for k, v in adds.items():
+            if k not in kv:
+                extra = (extra + "|" if extra else "") + f"{k}:{v}"
+        return f"{indent}::DECIDE{{{head}}}{{{extra}}}"
+    head = m.group(2)
+    _, kv = _fields(head, "|")
+    for k, v in adds.items():
+        if k not in kv:
+            head = head + f"|{k}:{v}"
+    return f"{indent}::{kind}{{{head}}}"
+
+
+def _stamp_trait_line(raw: str, adds: dict[str, str]) -> str:
+    s = raw.rstrip("\r\n")
+    indent = s[: len(s) - len(s.lstrip())]
+    text, kv = _split_trailing(s.strip())
+    line = s.strip()
+    for k, v in adds.items():
+        if k not in kv:
+            line += f"|{k}:{v}"
+    return indent + line
+
+
+def _set_kv_generic(raw: str, kind: str, key: str, value: str) -> str:
+    """Replace or add key:value on a block line of any kind."""
+    s = raw.rstrip("\r\n")
+    indent = s[: len(s) - len(s.lstrip())]
+    m = BLOCK_RE.match(s.strip())
+    if not m:
+        return raw
+    if kind == "STATE":
+        return indent + _set_state_key(s.strip(), key, value)
+    if kind == "DECIDE":
+        head, extra = m.group(2), m.group(3) or ""
+        parts = [p for p in extra.split("|") if p.strip()]
+        done = False
+        for i, p in enumerate(parts):
+            if re.match(r"^\s*" + key + r"\s*:", p):
+                parts[i] = f"{key}:{value}"
+                done = True
+        if not done:
+            parts.append(f"{key}:{value}")
+        return f"{indent}::DECIDE{{{head}}}{{{'|'.join(parts)}}}"
+    parts = m.group(2).split("|")
+    done = False
+    for i, p in enumerate(parts):
+        if re.match(r"^\s*" + key + r"\s*:", p):
+            parts[i] = f"{key}:{value}"
+            done = True
+    if not done:
+        parts.append(f"{key}:{value}")
+    return f"{indent}::{kind}{{{'|'.join(p.strip() for p in parts)}}}"
+
+
+def _set_trait_kv(raw: str, key: str, value: str) -> str:
+    s = raw.rstrip("\r\n")
+    indent = s[: len(s) - len(s.lstrip())]
+    text, kv = _split_trailing(s.strip())
+    kv[key] = value
+    return indent + text + "".join(f"|{k}:{v}" for k, v in kv.items())
+
+
+def quote_q(text: str) -> str:
+    """The evidence key of a quote: first 8 hex of sha256 over the whitespace-normalized text."""
+    return _sha256(_norm(text).encode("utf-8"))[:8]
+
+
+BACKED_SOURCES = ("owner_verbatim", "owner_confirmed")
+
+
+def _evidence_q(repo_text: str) -> dict[str, str]:
+    """q -> 'backed' (a transcript or the owner confirmed it) or 'claimed' (the agent wrote it down)."""
+    qs: dict[str, str] = {}
+    for b in parse_blocks(repo_text):
+        if b["kind"] == "EVIDENCE":
+            q, text = b["kv"].get("q", ""), b["kv"].get("text", "")
+            if q and text and quote_q(text) == q:
+                level = "backed" if b["kv"].get("by", "") in BACKED_SOURCES else "claimed"
+                if qs.get(q) != "backed":
+                    qs[q] = level
+    return qs
+
+
+def evidence_backing(repo: Path, transcript: Path | None = None) -> dict[str, str]:
+    """Every known evidence key with its backing: EVIDENCE blocks in soul/ memory/ handoff/ and soul/evidence.md;
+    a transcript's user turns are backed (Claude Code JSONL adapter: type user, message.role user)."""
+    out: dict[str, str] = {}
+    files = _prov_files(repo)
+    ev = repo / "soul" / "evidence.md"
+    if ev.is_file() and ev not in files:
+        files.append(ev)
+    for p in files:
+        for q, level in _evidence_q(read_text(p)).items():
+            if out.get(q) != "backed":
+                out[q] = level
+    if transcript is not None:
+        for q in transcript_user_q(transcript):
+            out[q] = "backed"
+    return out
+
+
+def evidence_keys(repo: Path, transcript: Path | None = None) -> set[str]:
+    return set(evidence_backing(repo, transcript))
+
+
+def transcript_user_q(transcript: Path) -> set[str]:
+    qs: set[str] = set()
+    try:
+        raw = transcript.read_bytes().decode("utf-8", errors="replace")
+    except OSError:
+        return qs
+    for line in raw.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            d = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if d.get("type") != "user":
+            continue
+        msg = d.get("message") or {}
+        if msg.get("role") != "user":
+            continue
+        content = msg.get("content")
+        texts = []
+        if isinstance(content, str):
+            texts.append(content)
+        elif isinstance(content, list):
+            for c in content:
+                if isinstance(c, dict) and c.get("type") == "text" and isinstance(c.get("text"), str):
+                    texts.append(c["text"])
+        for t in texts:
+            qs.add(quote_q(t))
+            for para in re.split(r"\n\s*\n", t):
+                if para.strip():
+                    qs.add(quote_q(para))
+    return qs
+
+
+def _evidence_append(repo: Path, q: str, where: str, by: str, src: str, clean: str) -> None:
+    p = repo / "soul" / "evidence.md"
+    head = "" if p.is_file() else ("---\ntype: reference\nname: evidence\ndescription: The owner's words that soul blocks cite by q, with by: saying what backs each one. Appended by brain.py evidence; never edited.\n---\n# Evidence\n\n")
+    block = f"::EVIDENCE{{q:{q}|date:{_today()}|where:{where}|by:{by}" + (f"|src:{src}" if src else "") + f"|text:{clean}}}\n"
+    with open(p, "ab") as fh:
+        fh.write((head + block).encode("utf-8"))
+
+
+def cmd_evidence(repo: Path, action: str, text: str | None, where: str | None, transcript: Path | None = None) -> int:
+    if action == "q":
+        if not text:
+            print("ERROR   evidence q needs the quoted text")
+            return 2
+        print(quote_q(text))
+        return 0
+    if action == "add":
+        if not text:
+            print("ERROR   evidence add needs the owner's words")
+            return 2
+        q = quote_q(text)
+        clean = _norm(text).replace("|", "/").replace("}", ")").replace("{", "(")
+        by, src = "owner_claimed", ""
+        if transcript is not None:
+            if not transcript.is_file():
+                print(f"ERROR   transcript not found: {transcript}")
+                return 2
+            if q in transcript_user_q(transcript):
+                by, src = "owner_verbatim", "transcript:" + _sha256(transcript.read_bytes())[:8]
+            else:
+                print(f"WARN    the text is not a user turn of {transcript.name}; recorded as owner_claimed")
+        _evidence_append(repo, q, (where or "chat").replace("|", "/"), by, src, clean)
+        if by == "owner_verbatim":
+            print(f"evidence q:{q} -> soul/evidence.md (backed by the transcript); tag the block: by:owner_verbatim|q:{q}")
+        else:
+            print(f"evidence q:{q} -> soul/evidence.md as owner_claimed (no transcript backs it); tag the block: by:owner_claimed|q:{q} "
+                  f"(authority of agent_inferred; the owner backs it with: evidence confirm {q}, or add it with --transcript)")
+        return 0
+    if action == "confirm":
+        if not text:
+            print("ERROR   evidence confirm needs the q to confirm")
+            return 2
+        q = text.strip()
+        p = repo / "soul" / "evidence.md"
+        found = None
+        if p.is_file():
+            for b in parse_blocks(read_text(p)):
+                if b["kind"] == "EVIDENCE" and b["kv"].get("q") == q:
+                    found = b["kv"].get("text", "")
+        if found is None:
+            print(f"ERROR   no evidence with q:{q}")
+            return 1
+        _evidence_append(repo, q, "owner_confirm", "owner_confirmed", "", found)
+        print(f"evidence q:{q} confirmed by the owner; blocks citing it may say by:owner_verbatim")
+        return 0
+    print(f"ERROR   unknown evidence action {action}")
+    return 2
+
+
+def provenance_scan(repo: Path, transcript: Path | None = None) -> tuple[list[dict], list[dict]]:
+    """Return (violations, decays). Each entry: file, line (1-based), kind, text, rule, fix."""
+    violations: list[dict] = []
+    decays: list[dict] = []
+    backing = evidence_backing(repo, transcript)
+    qs = set(backing)
+    for p in _prov_files(repo):
+        text = read_text(p)
+        lines = text.replace("\r\n", "\n").split("\n")
+        rel = p.relative_to(repo).as_posix()
+        for b in parse_blocks(text):
+            kind = b["kind"]
+            if kind not in PROV_KINDS:
+                continue
+            kv = b["kv"]
+            by = kv.get("by", "")
+            n = b["line"]
+            if kind == "BOUNDARY" and by and by not in OWNER_SOURCES:
+                violations.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "boundary_without_owner_source", "by": by})
+            if by == "owner_verbatim" and kv.get("q", "") not in qs:
+                violations.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "owner_verbatim_without_evidence", "by": by})
+            elif by == "owner_verbatim" and backing.get(kv.get("q", "")) == "claimed":
+                violations.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "owner_verbatim_without_transcript", "by": by})
+            if kind in ("FACT", "LESSON", "GENE") and kv.get("conf") == "confirmed" and by == "agent_inferred":
+                try:
+                    seen = int(kv.get("seen", "0"))
+                except ValueError:
+                    seen = 0
+                if seen < 3:
+                    violations.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "confirmed_without_three_days", "by": by})
+            age = _days_since(kv.get("last", ""))
+            if age is not None and kind in ("FACT", "LESSON"):
+                if kv.get("conf") == "tentative" and age > TENTATIVE_TTL:
+                    decays.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "tentative_expired", "by": by})
+                elif kv.get("conf") == "confirmed" and by not in OWNER_SOURCES and age > CONFIRMED_AGENT_TTL:
+                    decays.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "agent_confirmed_stale", "by": by})
+            if kind == "GENE":
+                for i, line in enumerate(b["body"], 1):
+                    t, tkv = _split_trailing(line)
+                    tby = tkv.get("by", "")
+                    if t.startswith("A:") and tby and tby not in OWNER_SOURCES:
+                        violations.append({"file": rel, "line": n + i, "kind": "A", "text": line, "rule": "antipattern_without_owner_source", "by": tby})
+                    if tby == "owner_verbatim" and tkv.get("q", "") not in qs:
+                        violations.append({"file": rel, "line": n + i, "kind": "TA", "text": line, "rule": "owner_verbatim_without_evidence", "by": tby})
+                    elif tby == "owner_verbatim" and backing.get(tkv.get("q", "")) == "claimed":
+                        violations.append({"file": rel, "line": n + i, "kind": "TA", "text": line, "rule": "owner_verbatim_without_transcript", "by": tby})
+                    tage = _days_since(tkv.get("last", ""))
+                    if tage is not None and tby not in OWNER_SOURCES and tage > CONFIRMED_AGENT_TTL + TENTATIVE_TTL:
+                        decays.append({"file": rel, "line": n + i, "kind": "TA", "text": line, "rule": "trait_expired", "by": tby})
+    return violations, decays
+
+
+def cmd_provenance(repo: Path, action: str, date: str | None, commit: bool, transcript: Path | None = None) -> int:
+    date = date or _today()
+    if action == "init":
+        stamped = 0
+        for p in _prov_files(repo):
+            text = read_text(p)
+            nl = "\r\n" if "\r\n" in text else "\n"
+            lines = text.replace("\r\n", "\n").split("\n")
+            changed = False
+            for b in parse_blocks(text):
+                kind = b["kind"]
+                if kind not in PROV_KINDS:
+                    continue
+                i = b["line"] - 1
+                adds = {"by": "legacy"}
+                if kind in ("FACT", "LESSON"):
+                    adds["last"] = date
+                new = _stamp_block_line(lines[i], kind, adds)
+                if new != lines[i]:
+                    lines[i] = new
+                    changed = True
+                    stamped += 1
+                if kind == "GENE":
+                    for j in range(1, len(b["body"]) + 1):
+                        new = _stamp_trait_line(lines[i + j], {"by": "legacy", "last": date})
+                        if new != lines[i + j]:
+                            lines[i + j] = new
+                            changed = True
+                            stamped += 1
+            if changed:
+                p.write_bytes(nl.join(lines).encode("utf-8"))
+                print(f"stamp   {p.relative_to(repo).as_posix()}")
+        print(f"provenance init: {stamped} block(s) and trait line(s) stamped by:legacy (last:{date} on facts, lessons, traits)")
+        if commit and stamped:
+            _git(repo, "add", "-A")
+            _git(repo, "commit", "-q", "-m", "mem: provenance init (by:legacy)")
+        return 0
+    violations, decays = provenance_scan(repo, transcript)
+    if action == "check":
+        for v in violations:
+            print(f"VIOLATE {v['file']}:{v['line']} {v['rule']} (by:{v['by'] or 'none'}): {v['text'][:100]}")
+        for d in decays:
+            print(f"DECAY   {d['file']}:{d['line']} {d['rule']}: {d['text'][:100]}")
+        print(f"provenance check: {len(violations)} violation(s), {len(decays)} decay(s) due")
+        return 1 if violations else 0
+    if action == "repair":
+        edits: dict[str, list] = {}
+        for v in violations + decays:
+            edits.setdefault(v["file"], []).append(v)
+        fixed = 0
+        for rel, items in edits.items():
+            p = repo / rel
+            text = read_text(p)
+            nl = "\r\n" if "\r\n" in text else "\n"
+            lines = text.replace("\r\n", "\n").split("\n")
+            removed: set[int] = set()
+            for v in sorted(items, key=lambda x: -x["line"]):
+                i = v["line"] - 1
+                raw = lines[i]
+                rule, kind = v["rule"], v["kind"]
+                if rule == "boundary_without_owner_source":
+                    m = BLOCK_RE.match(raw.strip())
+                    _, kv = _fields(m.group(2), "|")
+                    never = kv.get("never", "")
+                    slug = re.sub(r"[^A-Za-z0-9一-鿿]+", "_", never)[:40].strip("_") or "boundary"
+                    indent = raw[: len(raw) - len(raw.lstrip())]
+                    lines[i] = (f"{indent}::FACT{{key:advice_{slug}|value:{never}|conf:tentative|by:{v['by']}|last:{date}"
+                                f"|note:was_a_boundary_without_owner_evidence}}")
+                elif rule == "antipattern_without_owner_source":
+                    t, tkv = _split_trailing(raw.strip())
+                    body = t[2:].strip()
+                    ante, cons = (body.split("⇒", 1) + [""])[:2]
+                    indent = raw[: len(raw) - len(raw.lstrip())]
+                    newt = f"T:avoid_{ante.strip()}" + (f"_which_leads_to_{cons.strip()}" if cons.strip() else "")
+                    lines[i] = indent + newt + "".join(f"|{k}:{vv}" for k, vv in tkv.items())
+                elif rule in ("owner_verbatim_without_evidence", "owner_verbatim_without_transcript"):
+                    if kind in ("A", "TA"):
+                        lines[i] = _set_trait_kv(raw, "by", "owner_claimed")
+                    else:
+                        lines[i] = _set_kv_generic(raw, kind, "by", "owner_claimed")
+                elif rule == "confirmed_without_three_days":
+                    lines[i] = _set_kv_generic(raw, kind, "conf", "tentative")
+                elif rule == "tentative_expired":
+                    removed.add(i)
+                    if kind == "LESSON" and i + 1 < len(lines) and lines[i + 1].strip() and not BLOCK_RE.match(lines[i + 1].strip()):
+                        removed.add(i + 1)
+                elif rule == "agent_confirmed_stale":
+                    lines[i] = _set_kv_generic(raw, kind, "conf", "tentative")
+                    lines[i] = _set_kv_generic(lines[i], kind, "last", date)
+                elif rule == "trait_expired":
+                    removed.add(i)
+                else:
+                    continue
+                fixed += 1
+            lines = [ln for k, ln in enumerate(lines) if k not in removed]
+            p.write_bytes(nl.join(lines).encode("utf-8"))
+            print(f"repair  {rel}: {len(items)} change(s)")
+        print(f"provenance repair: {fixed} change(s) applied; blocks without owner evidence are read as advice, nothing owner-sourced was touched")
+        if commit and fixed:
+            _git(repo, "add", "-A")
+            _git(repo, "commit", "-q", "-m", "mem: provenance repair")
+        return 0
+    print(f"ERROR   unknown provenance action {action}")
+    return 2
+
+
+# ---------------------------------------------------------------- review (every writer passes the same gate)
+
+def _git_show(repo: Path, rel: str, ref: str = "HEAD") -> str | None:
+    rc, out = _git(repo, "show", f"{ref}:{rel}")
+    return out if rc == 0 else None
+
+
+def review_text(base_text: str | None, cand_text: str, rel: str) -> tuple[list[str], list[str], list[str]]:
+    """Source rules for soul/ and memory/ files. Returns (rejects, downgrades, notes)."""
+    rejects: list[str] = []
+    downgrades: list[str] = []
+    notes: list[str] = []
+    if not rel.startswith(LOG_DIR + "/"):
+        for h in _secret_hits_in_text(cand_text):
+            rejects.append(f"secret-like text: {h}")
+    base = parse_blocks(base_text or "")
+    cand = parse_blocks(cand_text)
+    base_by = {}
+    for b in base:
+        base_by.setdefault(_block_id(b), b)
+    cand_by = {}
+    for b in cand:
+        cand_by.setdefault(_block_id(b), b)
+    tomb = {_norm(b["kv"].get("what", "")[7:]).lower() for b in cand
+            if b["kind"] == "DECIDE" and b["kv"].get("what", "").lower().startswith("retire ")
+            and b["kv"].get("by", "") in OWNER_SOURCES[:2]}
+    for bid, b in base_by.items():
+        if b["kind"] == "BOUNDARY" and bid not in cand_by:
+            if _norm(b["kv"].get("never", "")).lower() in tomb:
+                notes.append(f"boundary retired by an owner tombstone: {b['raw']}")
+            else:
+                rejects.append(f"boundary deleted or rewritten without an owner tombstone: {b['raw']}")
+    for bid, c in cand_by.items():
+        by = c["kv"].get("by", "")
+        if c["kind"] == "BOUNDARY" and bid not in base_by and by not in OWNER_SOURCES[:2]:
+            rejects.append(f"new boundary without owner source (by:{by or 'none'}): {c['raw']}")
+        if c["kind"] == "GENE":
+            base_body = {_norm(x) for x in base_by.get(bid, {}).get("body", [])}
+            for line in c["body"]:
+                t, tkv = _split_trailing(line)
+                if t.startswith("A:") and _norm(line) not in base_body and tkv.get("by", "") not in OWNER_SOURCES[:2]:
+                    rejects.append(f"new anti-pattern line without owner source (by:{tkv.get('by') or 'none'}): {line}")
+        b = base_by.get(bid)
+        if b is not None and b["kind"] in ("FACT", "DECIDE", "LESSON", "STATE"):
+            bby = b["kv"].get("by", "")
+            changed = (_norm(b["raw"]) != _norm(c["raw"])) or ([_norm(x) for x in b["body"]] != [_norm(x) for x in c["body"]])
+            if changed and bby in OWNER_SOURCES and by not in OWNER_SOURCES:
+                rejects.append(f"owner-sourced block changed by a {by or 'unsourced'} writer: {b['raw']}")
+        if b is not None and b["kind"] in ("FACT", "LESSON", "GENE"):
+            if b["kv"].get("conf") == "tentative" and c["kv"].get("conf") == "confirmed" and by not in OWNER_SOURCES:
+                try:
+                    seen = int(c["kv"].get("seen", "0"))
+                except ValueError:
+                    seen = 0
+                if seen < 3:
+                    downgrades.append(f"conf raised without three days (seen:{seen}), read as tentative: {c['raw']}")
+    return rejects, downgrades, notes
+
+
+def cmd_review(repo: Path, files: list[str], staged: bool, fix: bool) -> int:
+    targets = list(files)
+    if staged:
+        rc, out = _git(repo, "diff", "--cached", "--name-only")
+        targets += [ln.strip() for ln in out.splitlines() if ln.strip()]
+    targets = [t for t in dict.fromkeys(targets)]
+    watched = [t for t in targets if t.replace("\\", "/").startswith(("soul/", "memory/", "handoff/")) and t.endswith(".md")]
+    if not watched:
+        print("review: nothing under soul/ memory/ handoff/ to review")
+        return 0
+    total_rejects = 0
+    for rel in watched:
+        rel = rel.replace("\\", "/")
+        p = repo / rel
+        if not p.is_file():
+            print(f"review  {rel}: deleted in the working tree")
+            if rel.startswith("soul/") or rel == "handoff/CURRENT.md":
+                print(f"REJECT  {rel}: deleting this file is not a memory change")
+                total_rejects += 1
+            continue
+        cand_text = _git_show(repo, rel, ":") if staged else read_text(p)
+        if cand_text is None:
+            cand_text = read_text(p)
+        base_text = _git_show(repo, rel, "HEAD")
+        if rel == "handoff/CURRENT.md" and base_text is not None:
+            tmpb = Path(tempfile.gettempdir()) / f"brain-review-base-{os.getpid()}.md"
+            tmpc = Path(tempfile.gettempdir()) / f"brain-review-cand-{os.getpid()}.md"
+            tmpb.write_bytes(base_text.encode("utf-8"))
+            tmpc.write_bytes(cand_text.encode("utf-8"))
+            rc = cmd_handoff_review(repo, tmpc, tmpb, None)
+            tmpb.unlink(missing_ok=True)
+            tmpc.unlink(missing_ok=True)
+            if rc == 1:
+                total_rejects += 1
+            elif rc == 3:
+                print("NOTE    owner items in the hand-off are recorded, not blocking; the owner reads them in the next session")
+        rejects, downgrades, notes = review_text(base_text, cand_text, rel)
+        for s in rejects:
+            print(f"REJECT  {rel}: {s}")
+        for s in downgrades:
+            print(f"DOWNGRADE {rel}: {s}")
+        for s in notes:
+            print(f"NOTE    {rel}: {s}")
+        if downgrades and fix and not staged:
+            text = read_text(p)
+            nl = "\r\n" if "\r\n" in text else "\n"
+            lines = text.replace("\r\n", "\n").split("\n")
+            for b in parse_blocks(text):
+                if b["kind"] in ("FACT", "LESSON", "GENE") and b["kv"].get("conf") == "confirmed" and b["kv"].get("by", "") not in OWNER_SOURCES:
+                    try:
+                        seen = int(b["kv"].get("seen", "0"))
+                    except ValueError:
+                        seen = 0
+                    if seen < 3:
+                        lines[b["line"] - 1] = _set_kv_generic(lines[b["line"] - 1], b["kind"], "conf", "tentative")
+            p.write_bytes(nl.join(lines).encode("utf-8"))
+            print(f"fixed   {rel}: {len(downgrades)} conf downgraded to tentative")
+        total_rejects += len(rejects)
+        if not rejects:
+            print(f"ok      {rel}: {len(downgrades)} downgrade(s), {len(notes)} note(s)")
+    print(f"review: {total_rejects} reject(s) across {len(watched)} file(s)")
+    return 1 if total_rejects else 0
+
+
+# ---------------------------------------------------------------- import (bulk and selective)
+
+def _existing_ids(repo: Path) -> set[tuple]:
+    ids: set[tuple] = set()
+    for p in _prov_files(repo):
+        for b in parse_blocks(read_text(p)):
+            ids.add(_block_id(b))
+    return ids
+
+
+def cmd_import(repo: Path, src: Path, source: str, date: str | None) -> int:
+    date = date or _today()
+    if not src.exists():
+        print(f"ERROR   {src} not found")
+        return 1
+    files = [src] if src.is_file() else sorted(src.rglob("*.md"))
+    existing = _existing_ids(repo)
+    kept: list[str] = []
+    dropped_prose = dropped_dup = converted = 0
+    seen_ids: set[tuple] = set()
+    for f in files:
+        try:
+            text = read_text(f)
+        except UnicodeDecodeError:
+            continue
+        blocks = parse_blocks(text)
+        dropped_prose += max(0, len([ln for ln in text.splitlines() if ln.strip()]) - sum(1 + len(b["body"]) for b in blocks))
+        for b in blocks:
+            kind = b["kind"]
+            if kind not in PROV_KINDS or kind == "STATE":
+                continue
+            bid = _block_id(b)
+            if bid in existing or bid in seen_ids:
+                dropped_dup += 1
+                continue
+            seen_ids.add(bid)
+            raw = b["raw"]
+            if kind == "BOUNDARY":
+                never = b["kv"].get("never", "")
+                slug = re.sub(r"[^A-Za-z0-9一-鿿]+", "_", never)[:40].strip("_") or "boundary"
+                raw = f"::FACT{{key:imported_boundary_{slug}|value:{never}|conf:tentative}}"
+                kind = "FACT"
+                converted += 1
+            raw = _stamp_block_line(raw, kind, {"by": "imported", "from": source, "last": date})
+            raw = _set_kv_generic(raw, kind, "by", "imported")
+            if kind in ("FACT", "LESSON", "GENE"):
+                raw = _set_kv_generic(raw, kind, "conf", "tentative")
+            kept.append(raw)
+            for line in b["body"]:
+                if kind == "GENE":
+                    t, tkv = _split_trailing(line)
+                    if t.startswith("A:"):
+                        body = t[2:].strip()
+                        ante, cons = (body.split("⇒", 1) + [""])[:2]
+                        t = f"T:avoid_{ante.strip()}" + (f"_which_leads_to_{cons.strip()}" if cons.strip() else "")
+                        converted += 1
+                    tkv["by"] = "imported"
+                    tkv.setdefault("last", date)
+                    kept.append("  " + t + "".join(f"|{k}:{v}" for k, v in tkv.items()))
+                else:
+                    kept.append(line)
+    if not kept:
+        print(f"import: nothing kept from {src} ({dropped_prose} prose line(s), {dropped_dup} duplicate(s))")
+        return 1
+    out = repo / "memory" / "imports" / f"{re.sub(r'[^A-Za-z0-9_.-]+', '-', source)}-{date}.md"
+    fm = (f"---\ntype: reference\nname: import-{re.sub(r'[^A-Za-z0-9_.-]+', '-', source)}-{date}\n"
+          f"description: Imported from {source} on {date}; every block by:imported, conf tentative, no authority until the owner re-states it\n---\n")
+    _write_lf(out, fm + "\n".join(kept) + "\n")
+    idx = repo / "memory" / "MEMORY.md"
+    line = f"- [import {source} {date}](imports/{out.name}) — {len(kept)} block line(s), by:imported, no authority\n"
+    if idx.is_file():
+        with open(idx, "ab") as fh:
+            fh.write(line.encode("utf-8"))
+    print(f"import: kept {len(kept)} block line(s) -> {out.relative_to(repo).as_posix()}; dropped {dropped_prose} prose line(s), "
+          f"{dropped_dup} duplicate(s); {converted} boundary/anti-pattern(s) converted to advice; nothing entered soul.md")
+    return 0
+
+
+# ---------------------------------------------------------------- verify (constants with their edges)
+
+def cmd_verify(repo: Path, online: bool, strict: bool) -> int:
+    ids: set[str] = set()
+    facts: list[tuple[str, dict]] = []
+    refs: dict[str, set[str]] = {}
+    for p in _prov_files(repo):
+        rel = p.relative_to(repo).as_posix()
+        for b in parse_blocks(read_text(p)):
+            k = b["kind"]
+            if k == "FACT":
+                ids.add(b["kv"].get("key", ""))
+                facts.append((rel, b))
+            elif k == "LESSON":
+                ids.add(b["kv"].get("id", ""))
+            elif k in ("GENE", "STATE"):
+                ids.add(b.get("entity", "").lstrip("@"))
+    rows, _ = load_ledger(repo)
+    for r in rows:
+        if not r.get("error"):
+            ids.add(r["name"])
+            facts.append((LEDGER_REL, {"kind": "STATE", "kv": r["kv"], "raw": r["raw"], "key": r["name"]}))
+    ids.discard("")
+    missing = []
+    for rel, b in facts:
+        key = b["kv"].get("key") or b.get("key", "")
+        for field in ("why", "used_by"):
+            for t in re.split(r"[\s,]+", b["kv"].get(field, "")):
+                t = t.strip().lstrip("@")
+                if t and t != "none":
+                    refs.setdefault(t, set()).add(key)
+                    if t not in ids:
+                        missing.append((rel, key, field, t))
+    orphans = [(rel, b["kv"].get("key") or b.get("key", "")) for rel, b in facts
+               if not b["kv"].get("why") and (b["kv"].get("key") or b.get("key", "")) not in refs]
+    for rel, key, field, t in missing:
+        print(f"MISSING {rel} {key}: {field} -> {t} (no such constant, function or door)")
+    for rel, key in orphans:
+        print(f"ORPHAN  {rel} {key}: no why and nothing points at it; listed as dead, dropped after {STALE_DAYS} days")
+    checked = 0
+    if online:
+        for rel, b in facts:
+            for field in ("doi", "url", "value"):
+                v = b["kv"].get(field, "")
+                url = f"https://doi.org/{v}" if field == "doi" or re.match(r"^10\.\d{4,}/", v) else (v if v.startswith("http") else "")
+                if not url:
+                    continue
+                try:
+                    req = _urlreq.Request(url, method="HEAD", headers={"User-Agent": "brain.py"})
+                    with _urlreq.urlopen(req, timeout=10) as resp:
+                        code = resp.status
+                except _urlerr.HTTPError as e:
+                    code = e.code
+                except (_urlerr.URLError, OSError):
+                    code = 0
+                checked += 1
+                print(f"{'OK  ' if 200 <= code < 400 else 'DEAD'}    {rel} {b['kv'].get('key', '')}: {url} -> {code}")
+    print(f"verify: {len(facts)} constant(s), {len(missing)} missing edge(s), {len(orphans)} orphan(s)" + (f", {checked} online check(s)" if online else ""))
+    return 1 if (strict and (missing or orphans)) else 0
+
+
+# ---------------------------------------------------------------- instructions (five files mirror the skill body)
+
+INSTRUCTION_FILES = ("CLAUDE.md", "AGENTS.md", "GEMINI.md", ".cursorrules", ".github/copilot-instructions.md")
+
+
+def skill_body(repo: Path) -> str:
+    sk = repo / "skills" / "mem-forever" / "SKILL.md"
+    if not sk.is_file():
+        raise FileNotFoundError(f"{sk.relative_to(repo).as_posix()} missing; a brain made by init has no skill copy, the template repository does")
+    text = read_text(sk).replace("\r\n", "\n")
+    try:
+        _, close_idx, _ = split_frontmatter(text)
+        body = "\n".join(text.split("\n")[close_idx + 1:])
+    except FrontmatterError:
+        body = text
+    return body.lstrip("\n")
+
+
+def cmd_instructions(repo: Path, action: str) -> int:
+    try:
+        body = skill_body(repo)
+    except FileNotFoundError as e:
+        print(f"ERROR   {e}")
+        return 1
+    bad = 0
+    for rel in INSTRUCTION_FILES:
+        p = repo / rel
+        if action == "sync":
+            _write_lf(p, body)
+            print(f"write   {rel}")
+            continue
+        cur = read_text(p).replace("\r\n", "\n") if p.is_file() else None
+        if cur != body:
+            bad += 1
+            print(f"DIFF    {rel}: not identical to the skill body")
+    if action == "check":
+        print(f"instructions check: {len(INSTRUCTION_FILES) - bad}/{len(INSTRUCTION_FILES)} identical")
+    return 1 if bad else 0
+
+
+# ---------------------------------------------------------------- hooks and the private-remote guard
+
+HOOK_PRE_COMMIT = """#!/bin/sh
+# Mem-Forever 3.0: every writer passes the same gate. Reviews staged soul/ memory/ handoff/ files against HEAD
+# with the source rules, then runs check. Installed by brain.py install (core.hooksPath tools/hooks).
+set -u
+PY="${BRAIN_PYTHON:-python}"
+command -v "$PY" >/dev/null 2>&1 || PY=python3
+"$PY" -X utf8 tools/brain.py review --staged || { echo "pre-commit: review rejected the change; nothing committed"; exit 1; }
+"$PY" -X utf8 tools/brain.py check || { echo "pre-commit: check failed; nothing committed"; exit 1; }
+exit 0
+"""
+
+HOOK_PRE_PUSH = """#!/bin/sh
+# Mem-Forever 3.0 push guard: the brain is private. A push that carries soul/ memory/ handoff/ env/ log/ pair/ or log.md
+# goes only to a remote that is private. GitHub and Gitee are checked through their API (brain.py remote-check);
+# a remote the check cannot read needs a one-time confirmation: git config --bool brain.allowPush.<remote> true
+set -u
+remote="$1"; url="$2"
+PATTERN='^(soul|memory|handoff|vault|env|log|pair|projects|mirror|\\.ilang)/|^log\\.md$'
+ZEROS="0000000000000000000000000000000000000000"
+carries=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -n "${local_sha:-}" ] || continue
+  if [ "$remote_sha" = "$ZEROS" ]; then base="$(git rev-parse "${local_sha}^" 2>/dev/null || echo "")"; else base="$remote_sha"; fi
+  [ -n "$base" ] || { carries=1; continue; }
+  files="$(git diff --name-only "$base" "$local_sha" 2>/dev/null)" || continue
+  if printf '%s\\n' "$files" | grep -qE "$PATTERN"; then carries=1; fi
+done
+[ "$carries" = "1" ] || exit 0
+if [ "$(git config --bool "brain.allowPush.$remote" 2>/dev/null)" = "true" ]; then exit 0; fi
+PY="${BRAIN_PYTHON:-python}"
+command -v "$PY" >/dev/null 2>&1 || PY=python3
+"$PY" -X utf8 tools/brain.py remote-check "$url"
+rc=$?
+if [ "$rc" = "0" ]; then exit 0; fi
+if [ "$rc" = "1" ]; then
+  echo "push guard: $url is PUBLIC; this push carries private memory. Push cancelled."
+  exit 1
+fi
+echo "push guard: cannot tell whether $url is private. If it is your own private repository, confirm once:"
+echo "  git config --bool brain.allowPush.$remote true"
+exit 1
+"""
+
+
+REMOTE_RE = re.compile(r"(github\.com|gitee\.com)[:/]([^/\s]+)/([^/\s]+?)(?:\.git)?/?$")
+
+
+def parse_remote(url: str) -> tuple[str, str, str] | None:
+    m = REMOTE_RE.search(url.strip())
+    return (m.group(1), m.group(2), m.group(3)) if m else None
+
+
+def remote_check(url: str) -> int:
+    """0 private or not public as far as the host API shows, 1 public, 2 unknown."""
+    parsed = parse_remote(url)
+    if not parsed:
+        return 2
+    host, owner, name = parsed
+    api = f"https://api.github.com/repos/{owner}/{name}" if host == "github.com" else f"https://gitee.com/api/v5/repos/{owner}/{name}"
+    try:
+        req = _urlreq.Request(api, headers={"User-Agent": "brain.py", "Accept": "application/json"})
+        with _urlreq.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode("utf-8", "replace"))
+            if isinstance(data, dict) and data.get("private") is False:
+                return 1
+            return 0
+    except _urlerr.HTTPError as e:
+        return 0 if e.code == 404 else 2
+    except (_urlerr.URLError, OSError, ValueError):
+        return 2
+
+
+def cmd_remote_check(url: str) -> int:
+    rc = remote_check(url)
+    print({0: "private (or not visible to the public API)", 1: "PUBLIC", 2: "unknown"}[rc] + f": {url}")
+    return rc
+
+
+def install_hooks(repo: Path, dry_run: bool = False) -> int:
+    hooks = repo / "tools" / "hooks"
+    problems = 0
+    for name, text in (("pre-commit", HOOK_PRE_COMMIT), ("pre-push", HOOK_PRE_PUSH)):
+        p = hooks / name
+        if not dry_run:
+            _write_lf(p, text)
+            if os.name != "nt":
+                os.chmod(p, 0o755)
+        print(f"{'DRY  ' if dry_run else ''}hook     tools/hooks/{name}")
+    if not dry_run and (repo / ".git").exists():
+        rc, out = _git(repo, "config", "core.hooksPath", "tools/hooks")
+        if rc != 0:
+            print(f"ERROR    git config core.hooksPath failed: {out}")
+            problems += 1
+        else:
+            print("config   core.hooksPath = tools/hooks")
+    return problems
+
+
+# ---------------------------------------------------------------- migrate 2.1 -> 3.0
+
+def cmd_migrate_2to3(repo: Path, infile: Path | None, identity: Path, age_dir: str | None) -> int:
+    rows_added = files_written = 0
+    rows, lines = load_ledger(repo)
+    names = {r["name"] for r in rows}
+    if not lines:
+        lines = LEDGER_HEADER.rstrip("\n").split("\n")
+
+    def add_row(name: str, door: str, kind: str, ref: str | None, why: str) -> None:
+        nonlocal rows_added
+        base = ledger_name(name) or "ROW"
+        n, k = base, 1
+        while n in names:
+            k += 1
+            n = f"{base}_{k}"
+        names.add(n)
+        fields = [f"@{n}", f"door:{door}", f"kind:{kind}"] + ([f"ref:{ref}"] if ref else []) + \
+                 ["verify:none", "last_verified:none", "recover:none", "scope:legacy", f"top:{'true' if kind in TOP_KINDS else 'false'}", f"why:{why}"]
+        lines.append("::STATE{" + ", ".join(fields) + "}")
+        rows_added += 1
+
+    infile = infile or latest_vault_file(repo)
+    if infile is not None and infile.is_file():
+        try:
+            data = _vault_decrypt(infile, identity, age_dir)
+        except (FileNotFoundError, RuntimeError) as e:
+            print(f"ERROR   {e}")
+            return 1
+        kp = repo / KEYS_REL
+        keys_text = read_text(kp).replace("\r\n", "\n") if kp.is_file() else "# env/keys.env - KEY=value rows referenced by env/ledger.env (ref:KEY). Private repository; never pasted.\n"
+        with tarfile.open(fileobj=io.BytesIO(data), mode="r") as tar:
+            for m in tar.getmembers():
+                if not m.isfile():
+                    continue
+                parts = Path(m.name).parts
+                blob = tar.extractfile(m).read()
+                if parts[0] == "keys" and len(parts) == 2:
+                    dest = repo / "env" / parts[1]
+                    if not dest.exists():
+                        dest.write_bytes(blob)
+                        files_written += 1
+                    add_row(Path(parts[1]).stem, f"env/{parts[1]}", "env_file", None, "migrated_from_vault_keys")
+                elif parts[0] == "ssh" and len(parts) == 2:
+                    dest = repo / "env" / "ssh" / parts[1]
+                    if not dest.exists():
+                        dest.parent.mkdir(parents=True, exist_ok=True)
+                        dest.write_bytes(blob)
+                        files_written += 1
+                    add_row(parts[1], f"env/ssh/{parts[1]}", "ssh_key", None, "migrated_from_vault_ssh")
+                elif m.name == MEMORY_VALUES_NAME:
+                    payload = json.loads(blob)
+                    for e in payload.get("values", []):
+                        ref = re.sub(r"[^A-Za-z0-9_]", "_", e["kind"]).upper()
+                        if not re.search(r"(?m)^" + re.escape(ref) + r"=", keys_text):
+                            keys_text = keys_text.rstrip("\n") + f"\n{ref}={e['value']}\n"
+                        add_row(e["kind"], f"memory marker [REDACTED {e['kind']} {e['fingerprint']}]", "value", ref, "migrated_from_vault_memory_values")
+        del data
+        _write_lf_atomic(kp, keys_text)
+        print(f"vault   {infile.name}: {files_written} file(s) written under env/, rows added for keys, ssh keys and memory values")
+    else:
+        print("vault   no vault/keys-*.age bundle; only provenance init runs")
+    if rows_added:
+        _save_ledger(repo, lines)
+    print(f"migrate-2to3: {rows_added} ledger row(s) added -> {LEDGER_REL}; fill verify and recover for each row, then brain.py ledger verify")
+    rc = cmd_provenance(repo, "init", None, False)
+    print("migrate-2to3: old vault files stay in git history; the owner's age key remains the owner recipient for pairing")
+    return rc
+
+
+# ---------------------------------------------------------------- paste: the ledger without values by default
+
+def ledger_section(repo: Path, with_values: bool) -> str:
+    rows, _ = load_ledger(repo)
+    rows = [r for r in rows if not r.get("error")]
+    if not rows:
+        return ""
+    out = [f"::STATE{{@LEDGER, rows:{len(rows)}, values:{'included' if with_values else 'omitted'}, note:a_key_reaches_a_model_only_when_a_next_item_names_its_door}}"]
+    for r in rows:
+        val = ledger_value(repo, r) if (with_values and not is_top(r)) else None
+        out.append(row_text(r, with_values and not is_top(r), val))
+    return "\n".join(out)
+
+
 # ------------------------------------------------------------------------ main
 
 
@@ -2243,6 +4260,119 @@ def main(argv=None) -> int:
     p.add_argument("--repo", default=str(default_repo))
     p.add_argument("--out", help="写到文件；缺省打到标准输出")
     p.add_argument("--lang", choices=("auto", "zh", "en"), default="auto", help="速查卡与开场句的语言；auto 按交接单判断（中文占比 >= 0.2 取 zh）；有 rules/GRAMMAR-CARD.<lang>.md 就用它")
+    p.add_argument("--with-values", action="store_true", help="3.0：账本行带上值（默认不带；贴给没有工具的聊天模型用不上值）")
+
+    lg = sub.add_parser("ledger", help="3.0 授权账本 env/ledger.env：list / add / verify / show；3.1 encode / decode / harvest / reveal")
+    lg.add_argument("action", choices=("list", "add", "verify", "show", "encode", "decode", "harvest", "reveal"))
+    lg.add_argument("name", nargs="?", help="行名；verify 可用 all")
+    lg.add_argument("--path", action="append", dest="paths", help="harvest：只收这些路径（默认 memory soul handoff）")
+    lg.add_argument("--pepper", help="decode：env/pepper 丢了时用 owner 留的十六进制")
+    lg.add_argument("--grant", choices=("once", "standing"), help="add：授权档，默认顶门 once 其他 standing")
+    lg.add_argument("--repo", default=str(default_repo))
+    lg.add_argument("--door", help="add：这把钥匙开哪扇门（机器 API 仓库 账户）")
+    lg.add_argument("--kind", help="add：种类，例如 ssh_password api_key token root payment")
+    lg.add_argument("--value", help="add：值，写进 env/keys.env 并以 ref 引用")
+    lg.add_argument("--ref", help="add：env/keys.env 里的 KEY 名")
+    lg.add_argument("--verify", help="add：验证命令，退出 0 表示门开着；$LEDGER_VALUE 与 $<REF> 可用")
+    lg.add_argument("--recover", help="add：丢了怎么回来（控制台、救援模式、第二把钥匙、谁手里有）")
+    lg.add_argument("--scope", help="add：范围标签，空格或逗号分隔")
+    lg.add_argument("--why", help="add：这扇门为什么存在（它服务的函数或常数）")
+    lg.add_argument("--top", action="store_true", help="add：顶门，永远不从记录解锁，只认一次性码")
+    lg.add_argument("--with-value", action="store_true", help="show：把值打出来（进上下文）")
+    lg.add_argument("--timeout", type=int, default=30, help="verify：每条命令的秒数")
+
+    ul = sub.add_parser("unlock", help="3.0 解锁一行：当前 next 项点到这扇门且在范围内才打出值；顶门只认一次性码")
+    ul.add_argument("name")
+    ul.add_argument("--repo", default=str(default_repo))
+    ul.add_argument("--scope", help="接手方声明的范围标签")
+    ul.add_argument("--code", help="顶门的一次性码")
+    ul.add_argument("--no-log", action="store_true")
+
+    gr = sub.add_parser("grant", help="3.1 授权记在本机 git config：grant <DOOR> | --all | --write；--revoke 收回；--list 查看")
+    gr.add_argument("door", nargs="?")
+    gr.add_argument("--repo", default=str(default_repo))
+    gr.add_argument("--all", action="store_true", help="本机放行所有 standing 门（顶门与 once 门除外）")
+    gr.add_argument("--write", action="store_true", help="本机允许存新钥匙（ledger add --value / harvest / migrate-cc）")
+    gr.add_argument("--revoke", action="store_true")
+    gr.add_argument("--list", action="store_true")
+
+    ot = sub.add_parser("otp", help="3.0 一次性码（顶门）：issue / revoke / list；owner 在场时发")
+    ot.add_argument("action", choices=("issue", "revoke", "list"))
+    ot.add_argument("name", nargs="?")
+    ot.add_argument("--repo", default=str(default_repo))
+    ot.add_argument("--minutes", type=int, default=120)
+
+    pr = sub.add_parser("pair", help="3.0 配对时封装：把范围内的账本行封给对方公钥与 owner 公钥，写声明块")
+    pr.add_argument("recipient", help="对方 age 公钥（age1...）或存着它的文件")
+    pr.add_argument("--repo", default=str(default_repo))
+    pr.add_argument("--scope", default="", help="对方声明的范围标签")
+    pr.add_argument("--out", help="输出目录；默认 pair/<日期>-<标签>")
+    pr.add_argument("--label")
+    pr.add_argument("--age-dir")
+
+    us = sub.add_parser("unseal", help="3.0 用 owner 私钥解开一个封好的行（工具动作）")
+    us.add_argument("infile")
+    us.add_argument("--identity", help="默认 ~/.age/key.txt")
+    us.add_argument("--age-dir")
+
+    lo = sub.add_parser("log", help="3.0 原始轨迹：owner 的发言原文与 agent 的决策行，按日追加到 log/<日期>.md")
+    lo.add_argument("who", nargs="?", choices=("owner", "agent"), default="owner")
+    lo.add_argument("text", nargs="?", help="文本；- 或缺省读标准输入")
+    lo.add_argument("--repo", default=str(default_repo))
+    lo.add_argument("--file", help="从文件读文本")
+    lo.add_argument("--kind", default="turn", help="turn / decision / unlock ...")
+    lo.add_argument("--show", nargs="?", const="", help="打印某天的日志（缺省今天）")
+
+    rz = sub.add_parser("recognize", help="3.0 认人：owner 发言对 soul 锚点的命中率（默认门槛 0.30）与边界矛盾")
+    rz.add_argument("--repo", default=str(default_repo))
+    rz.add_argument("--days", type=int, default=1, help="窗口天数（含今天）")
+    rz.add_argument("--since", help="窗口起始日期 YYYY-MM-DD")
+    rz.add_argument("--soul", help="默认 soul/soul.md")
+    rz.add_argument("--json", action="store_true")
+
+    pv = sub.add_parser("provenance", help="3.0 来源键 by: ：init 盖 legacy / check / repair（读时规则）")
+    pv.add_argument("action", choices=("init", "check", "repair"))
+    pv.add_argument("--repo", default=str(default_repo))
+    pv.add_argument("--date", help="init：写进 last: 的日期；默认今天")
+    pv.add_argument("--commit", action="store_true", help="改完提交")
+    pv.add_argument("--transcript", help="宿主转录（Claude Code JSONL）：只有出现在 user 消息里的引文算 owner_verbatim 证据")
+
+    ev = sub.add_parser("evidence", help="3.0 证据：add 记进 soul/evidence.md 并给出 q（3.1 默认 owner_claimed，--transcript 命中才 owner_verbatim）；confirm <q> owner 本人确认；q 只算哈希")
+    ev.add_argument("action", choices=("add", "q", "confirm"))
+    ev.add_argument("text", nargs="?")
+    ev.add_argument("--repo", default=str(default_repo))
+    ev.add_argument("--where", help="原话在哪说的（会话、日期、文件）")
+    ev.add_argument("--transcript", help="宿主转录（Claude Code JSONL）；原话是其中一条 user 消息才记 owner_verbatim")
+
+    rv = sub.add_parser("review", help="3.0 同一道门：按来源规则审 soul/ memory/ handoff/ 的改动（--staged 给 pre-commit 用）")
+    rv.add_argument("files", nargs="*")
+    rv.add_argument("--repo", default=str(default_repo))
+    rv.add_argument("--staged", action="store_true")
+    rv.add_argument("--fix", action="store_true", help="把越过计数器抬上去的 conf 改回 tentative")
+
+    im = sub.add_parser("import", help="3.0 灌记忆：一个入口，全部 by:imported、conf 重置、边界降成 FACT，落 memory/imports/")
+    im.add_argument("src")
+    im.add_argument("--from", dest="source", required=True, help="来源名")
+    im.add_argument("--repo", default=str(default_repo))
+    im.add_argument("--date")
+
+    vf = sub.add_parser("verify", help="3.0 常数的边：why / used_by 指向存在的东西，孤儿常数列出来；--online 查 DOI 与 URL")
+    vf.add_argument("--repo", default=str(default_repo))
+    vf.add_argument("--online", action="store_true")
+    vf.add_argument("--strict", action="store_true", help="有缺边或孤儿就退出 1")
+
+    ins = sub.add_parser("instructions", help="3.0 五份指令文件与 SKILL.md 正文逐字一致：sync / check")
+    ins.add_argument("action", choices=("sync", "check"))
+    ins.add_argument("--repo", default=str(default_repo))
+
+    rm = sub.add_parser("remote-check", help="3.0 推送守卫：远端是不是公开仓库（0 私有/看不见，1 公开，2 不知道）")
+    rm.add_argument("url")
+
+    mg = sub.add_parser("migrate-2to3", help="3.0 迁移：把 2.1 的 vault 包解成账本行，所有块盖 by:legacy（owner 跑，要 age 私钥）")
+    mg.add_argument("--repo", default=str(default_repo))
+    mg.add_argument("--in", dest="infile")
+    mg.add_argument("--identity")
+    mg.add_argument("--age-dir")
 
     args = ap.parse_args(argv)
     agent_default = os.environ.get("BRAIN_AGENT") or "brain.py"
@@ -2267,7 +4397,51 @@ def main(argv=None) -> int:
         return cmd_handoff(Path(args.repo).resolve(), args.action, args.agent or agent_default,
                            args.project, args.task, args.slug, args.no_commit)
     if args.cmd == "paste":
-        return cmd_paste(Path(args.repo).resolve(), Path(args.out).resolve() if args.out else None, args.lang)
+        return cmd_paste(Path(args.repo).resolve(), Path(args.out).resolve() if args.out else None, args.lang, args.with_values)
+    if args.cmd == "ledger":
+        return cmd_ledger(Path(args.repo).resolve(), args.action, args.name,
+                          {"door": args.door, "kind": args.kind, "value": args.value, "ref": args.ref, "verify": args.verify,
+                           "recover": args.recover, "scope": args.scope, "why": args.why, "top": args.top,
+                           "with_value": args.with_value, "timeout": args.timeout, "paths": args.paths, "pepper": args.pepper,
+                           "grant": args.grant})
+    if args.cmd == "unlock":
+        return cmd_unlock(Path(args.repo).resolve(), args.name, args.scope, args.code, args.no_log)
+    if args.cmd == "otp":
+        if args.action in ("issue", "revoke") and not args.name:
+            print("ERROR   otp issue/revoke needs the door name")
+            return 2
+        return cmd_otp(Path(args.repo).resolve(), args.action, args.name or "", args.minutes)
+    if args.cmd == "pair":
+        return cmd_pair(Path(args.repo).resolve(), args.recipient, args.scope, Path(args.out).resolve() if args.out else None,
+                        args.age_dir, args.label)
+    if args.cmd == "unseal":
+        identity = Path(args.identity).expanduser() if args.identity else Path.home() / ".age" / "key.txt"
+        return cmd_unseal(Path(args.infile).resolve(), identity, args.age_dir)
+    if args.cmd == "log":
+        return cmd_log(Path(args.repo).resolve(), args.who, args.text, Path(args.file).resolve() if args.file else None, args.kind, args.show)
+    if args.cmd == "recognize":
+        return cmd_recognize(Path(args.repo).resolve(), args.days, args.since, args.json, Path(args.soul).resolve() if args.soul else None)
+    if args.cmd == "provenance":
+        return cmd_provenance(Path(args.repo).resolve(), args.action, args.date, args.commit,
+                              Path(args.transcript).resolve() if args.transcript else None)
+    if args.cmd == "evidence":
+        return cmd_evidence(Path(args.repo).resolve(), args.action, args.text, args.where,
+                            Path(args.transcript).resolve() if args.transcript else None)
+    if args.cmd == "grant":
+        return cmd_grant(Path(args.repo).resolve(), args.door, args.all, args.write, args.revoke, args.list)
+    if args.cmd == "review":
+        return cmd_review(Path(args.repo).resolve(), args.files, args.staged, args.fix)
+    if args.cmd == "import":
+        return cmd_import(Path(args.repo).resolve(), Path(args.src).resolve(), args.source, args.date)
+    if args.cmd == "verify":
+        return cmd_verify(Path(args.repo).resolve(), args.online, args.strict)
+    if args.cmd == "instructions":
+        return cmd_instructions(Path(args.repo).resolve(), args.action)
+    if args.cmd == "remote-check":
+        return cmd_remote_check(args.url)
+    if args.cmd == "migrate-2to3":
+        identity = Path(args.identity).expanduser() if args.identity else Path.home() / ".age" / "key.txt"
+        return cmd_migrate_2to3(Path(args.repo).resolve(), Path(args.infile).resolve() if args.infile else None, identity, args.age_dir)
     if args.cmd == "export-drive":
         return cmd_export_drive(Path(args.repo).resolve(), Path(args.to) if args.to else None, args.account)
     if args.cmd == "status":
