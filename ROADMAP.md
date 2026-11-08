@@ -33,7 +33,8 @@
 - [x] 引导脚本：`bootstrap.ps1`（环境检测 → 官方源安装 Git/Python 需审批 → 克隆 → 验收）
 - [x] 安装安全 v1.0.8：双端引导每步核验退出码、绝对路径执行、`-Yes` 确认门一致、完整身份检查、不覆盖未知目录；旧教程删 `.git` 路线废止
 - [x] 国内镜像 v1.0.8：GitHub 不可达自动切 `gitee.com/monetize/DeepSeekHarness`，iLang 资料自动走 `ilang.cn`（按可达性探测，不按地区猜测）
-- [x] 记忆推送保护 v1.0.8：`tools/guard-pre-push.sh` 钩子随克隆自动安装，私人记忆默认不可推送（`DSH_ALLOW_MEMORY_PUSH=1` 显式放行）
+- [x] 记忆引擎 3.1 v1.1.2：brain.py 2.1、账本 env/ledger.env（值静态编码，用 env/pepper 可逆，不是加密）、本机授权、hooks 并入 tools/hooks、市场登记 3.1.0
+- [x] 记忆推送保护 v1.0.8：钩子随克隆自动安装，私人记忆默认不可推送（显式放行）
 - [x] 技能：`site-design-engine`（爱出海工程书 v2.1，62 地板规则 + 24 命令 + 高斯/傅里叶，`.dsh/skills/`）
 - [x] 门面：README 按工程书重写（受众=纯新手，只粘贴只点头），社媒头图生成
 - [x] 工作方式：索引寻址 + iLang 判断层做记/不记裁决 + 注意力不平铺（写入模板 `soul/agent.md` 与一键安装说明）
@@ -69,8 +70,8 @@
 - 本仓库是**公开模板**：不包含任何个人档案、真实密钥、私人记忆。
 - 私人记忆属于 owner 的私有 brain（本地或私有仓库），与本仓库分离。
 - owner 说「迭代进去」就按上面做，做完一句话汇报接入了什么、放哪了。
-- **文件归属**：上游引擎文件（`tools/brain.py`、`rules/GRAMMAR-CARD*.md`、`docs/OKF.md`、`docs/VAULT.md`、`skills/mem-forever/SKILL.md`）由 upstream-sync 同步，勿本地改；`AGENTS.md` 等五份指令文件保持与上游一致；本仓库的 DSH 补充一律放在 `AGENTS.local.md`、`soul/`、`.dsh/`、`docs/` 内 DSH 文档、`bootstrap.*` 与工作流里。
+- **文件归属**：上游引擎文件（`tools/brain.py`、`rules/GRAMMAR-CARD*.md`、`docs/OKF.md`、`docs/VAULT.md`、`docs/LEDGER.md`、`docs/PRODUCT.md`、`skills/mem-forever/SKILL.md`、`tools/hooks/pre-commit`、`tools/hooks/pre-push`、`tools/test_brain.py`、`env/README.md`）由 upstream-sync 同步，勿本地改；五份指令文件、`.dsh/skills/mem-forever/SKILL.md` 副本与 `MARKET.md` 围栏由同步工作流生成（instructions sync / cp / market_build），勿手改；本仓库的 DSH 补充一律放在 `AGENTS.local.md`、`soul/`、`.dsh/`、`docs/` 内 DSH 文档、`bootstrap.*` 与工作流里。
 - **国内镜像**：`gitee.com/monetize/DeepSeekHarness` 只作产品源，永不作私人记忆备份目标；镜像同步方式由 owner 决定（Gitee 官方镜像或手动 push），每次发版后核对两边 HEAD 一致。
-- **记忆推送保护**：`bootstrap.*` 克隆后自动装 `tools/guard-pre-push.sh` 钩子；开发仓如需推送含 `soul/ memory/ handoff/ vault/ env/ projects/ mirror/ .ilang/ log.md` 的变更，先确认目标是私有仓库，再以 `DSH_ALLOW_MEMORY_PUSH=1` 或 `git config --bool dsh.allowMemoryPush true` 显式放行。
+- **记忆推送保护**：`bootstrap.*` 跑 `brain.py init .` 装 `tools/hooks` 的两只钩子；提交前 review 加 check，推送前核远端私有（GitHub 与 Gitee 自动核，其他远端一次性确认）；开发仓对公开 origin 一次性 `git config --bool brain.allowPush.origin true`。
 - **DSH 版本行**：每次发版同步更新 README 与落地页的「在 DeepSeek Harness X 上验证」一行（X 取自本机 DSH 关于页或 package.json，取不到写「未记录」，不要猜）。
 - **引用规范**：凡用到/引到的算法与组件都按 docs/CITATIONS.md 挂 DOI/arXiv；作者有公开 ORCID 的做 ORCID 锚文本；查不到写「未查到」，不编造；仓库自身 DOI 由 Zenodo 发布 webhook 自动铸；写 DSH 有什么功能以 deepseek-ai/deepseek-harness 仓库为准，查不到不写。

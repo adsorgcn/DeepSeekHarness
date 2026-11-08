@@ -107,7 +107,7 @@ $plan = @()
 if (-not $gitOk)    { $plan += "安装 Git —— 官方源：winget id=Git.Git（git-scm.org 官方版）" }
 if (-not $pyOk)     { $plan += "安装 Python 3.12 —— 官方源：winget id=Python.Python.3.12（python.org 官方版）" }
 if (-not (Test-DshInstalled $TargetDir)) { $plan += "克隆 $cloneUrl -> $TargetDir" }
-$plan += "切目录 $TargetDir 并跑 python tools\brain.py check 验收（失败即停）"
+$plan += "切目录 $TargetDir 并跑 python tools\brain.py init . 与 tools\brain.py check 验收（失败即停）"
 $plan += "安装记忆推送保护钩子（私人记忆不确认不得推送）"
 
 Write-Host "计划："
@@ -199,7 +199,7 @@ if (-not (Test-DshInstalled $TargetDir)) {
     if ($LASTEXITCODE -ne 0) { Write-Host "记录产品源失败，已停止。"; exit 1 }
 }
 
-# 4) 验收（失败即停，不报完成）
+# 4) 装 3.1 钩子与账本，然后验收（失败即停，不报完成）
 Set-Location $TargetDir
 $py = Resolve-Cmd python
 if (-not $py) { $py = Resolve-Cmd py }
@@ -207,20 +207,16 @@ if (-not $py) {
     Write-Host "Python 仍不可用：请新开终端后重跑本脚本。"
     exit 1
 }
+& $py -X utf8 tools\brain.py init .
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "已停止：brain.py init . 失败（退出码 $LASTEXITCODE）。"
+    exit 1
+}
+Write-Host "已装 3.1 钩子（提交前审查与检查；推送前核远端是不是私有仓库，GitHub 与 Gitee 自动核，其他远端一次性确认 git config --bool brain.allowPush.origin true）。"
 & $py -X utf8 tools\brain.py check
 if ($LASTEXITCODE -ne 0) {
     Write-Host "验收失败：brain.py check 未通过（退出码 $LASTEXITCODE），已停止（请按上面 ERROR/WARN 修复）。"
     exit 1
-}
-
-# 5) 记忆推送保护钩子
-$hookSrc = Join-Path $TargetDir "tools\guard-pre-push.sh"
-$hookDst = Join-Path $TargetDir ".git\hooks\pre-push"
-if ((Test-Path $hookSrc) -and (Test-Path (Join-Path $TargetDir ".git"))) {
-    Copy-Item $hookSrc $hookDst -Force
-    Write-Host "已安装记忆推送保护钩子（推私人记忆前需显式确认 DSH_ALLOW_MEMORY_PUSH=1）。"
-} else {
-    Write-Host "（本次克隆的版本不含推送保护钩子；更新到新版本后重跑即可自动安装。）"
 }
 
 Write-Host ""

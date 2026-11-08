@@ -83,7 +83,7 @@ if [ -z "$PY_BIN" ]; then
   if [ "$OS" = "Darwin" ]; then PLAN="$PLAN  - 安装 python3 —— 官方源：brew install python@3.12\n"; else PLAN="$PLAN  - 安装 python3 —— 官方源：apt-get install -y python3\n"; fi
 fi
 dsh_installed "$TARGET" || PLAN="$PLAN  - 克隆 $CLONE_URL -> $TARGET\n"
-PLAN="$PLAN  - 切目录 $TARGET 并跑 brain.py check 验收（失败即停）\n  - 安装记忆推送保护钩子（私人记忆不确认不得推送）"
+PLAN="$PLAN  - 切目录 $TARGET 并跑 brain.py init . 与 brain.py check 验收（失败即停）"
 
 say "计划："
 printf '%b\n' "$PLAN"
@@ -163,19 +163,12 @@ if ! dsh_installed "$TARGET"; then
   "$GIT_BIN" -C "$TARGET" config dsh.source "$product_source" || { say "记录产品源失败，已停止。"; exit 1; }
 fi
 
-# 4) 验收（失败即停，不报完成）
+# 4) 装 3.1 钩子与账本，然后验收（失败即停，不报完成）
 cd "$TARGET" || { say "无法进入 $TARGET，已停止。"; exit 1; }
 [ -n "$PY_BIN" ] || { say "python 仍不可用：请重跑本脚本。"; exit 1; }
+"$PY_BIN" -X utf8 tools/brain.py init . || { say "已停止：brain.py init . 失败。"; exit 1; }
+say "已装 3.1 钩子（提交前审查与检查；推送前核远端是不是私有仓库，GitHub 与 Gitee 自动核，其他远端一次性确认 git config --bool brain.allowPush.origin true）。"
 "$PY_BIN" -X utf8 tools/brain.py check || { say "验收失败：brain.py check 未通过，已停止（请按上面 ERROR/WARN 修复）。"; exit 1; }
-
-# 5) 记忆推送保护钩子
-if [ -f tools/guard-pre-push.sh ] && [ -d .git ]; then
-  cp tools/guard-pre-push.sh .git/hooks/pre-push
-  chmod +x .git/hooks/pre-push
-  say "已安装记忆推送保护钩子（推私人记忆前需显式确认 DSH_ALLOW_MEMORY_PUSH=1）。"
-else
-  say "（本次克隆的版本不含推送保护钩子；更新到新版本后重跑即可自动安装。）"
-fi
 
 say ""
 say "完成。关掉这个窗口重开一个，把 $TARGET 选为工作区，它第一句应该汇报上次做到哪；没看到就把屏幕上的内容贴给你的 DSH。"
