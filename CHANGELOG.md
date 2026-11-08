@@ -1,5 +1,7 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.3** · 2026-11-08 · 1.1.2 的标签缺两份派生指令文件，1.1.3 补齐
+
 **v1.1.2** · 2026-11-08 · 记忆引擎升 Mem-Forever 3.1（审计 DSH-MEM3-ADAPT-A1-A8）
 
 - 修每周同步：原 checkout 名单里有上游不存在的 `.dsh/skills/mem-forever/SKILL.md` 路径，整条命令 pathspec 失败、什么都同步不进来；新工作流只取上游引擎文件，五份指令文件由 `instructions sync` 从技能正文生成，`.dsh` 副本由 cp 得到，市场登记由 market_build 刷新
