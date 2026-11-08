@@ -1,0 +1,22 @@
+{
+  "format": 1,
+  "title": {
+    "en": "iLang DSH Market",
+    "zh": "iLang DSH 市场"
+  },
+  "description": {
+    "en": "Only iLang-conformant DeepSeek Harness plugins: the manifest passes the official validator with zero errors and zero warnings, versions are pinned, licenses are on record. No ranking.",
+    "zh": "只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器 strict 0 错 0 警告，钉提交，许可在案。不排名。"
+  },
+  "metadata": {
+    "labels": {
+      "ilang": {
+        "title": {
+          "en": "iLang-conformant",
+          "zh": "iLang 合规"
+        }
+      }
+    }
+  },
+  "plugins": []
+}
