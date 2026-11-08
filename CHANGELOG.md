@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.0** · 2026-11-07 · 市场上线（审计 DSH-MARKET-P1-P7）
+
+- docs/market/：registry.json 登记三条自家技能（mem-forever / site-design-engine / deai），index.json 按官方格式 1 只收 iLang 合规 bundle（清单过官方校验器 strict 0 错 0 警告，钉 commit，许可在案），市场页 https://dsh.ilang.guide/market/ ，索引地址 https://dsh.ilang.guide/market/index.json ；不排名、不看星数、不爬虫、不收 PR
+- tools/market_admit.py 准入（ADMIT/REJECT），tools/market_build.py 生成（--check 只校验），tools/test_market.py 九场景进 CI，ISSUE_TEMPLATE 市场准入申请
+- mem-forever 增加 MARKET.md 围栏副本（与 SKILL.md GENE 逐字一致，测试比对）；AGENTS.local 加 dsh_market GENE；README、落地页、甄选页各接一处
+- 三个此前未发版的门面提交（品牌统一、SEO、窄屏可读性）随本版一并发出
+
 **v1.0.44** · 2026-11-07 · deai 数字两档（审计 DSH-DEAI-NUMBERS-N1-N4）
 
 - 上游升 v1.6.0（MARK 1.4.0：STEP_3d 改数字两档，去掉 [📊] 标记，RUBRIC 加 no_number_blanks_or_estimates），4 个文件重新 vendor，其余 7 个不变

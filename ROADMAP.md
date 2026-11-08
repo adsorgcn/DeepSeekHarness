@@ -7,7 +7,7 @@
 | owner 丢来 | 落点 | 动作 |
 |---|---|---|
 | 好技能（SKILL.md 等） | `.dsh/skills/<名字>/SKILL.md` | 补 `name`/`description` frontmatter，README 清单登记 |
-| 可安装插件（bundle） | `plugins/<名字>/`（package.json + cordis.patch.yml） | 验证可安装，README 登记，附一句话安装说明 |
+| 可安装插件（bundle） | docs/market/registry.json（kind: bundle，不 vendor 代码） | 跑 tools/market_admit.py，ADMIT 且 owner 说收才进 |
 | 文档 / 点评 / 教程 | `docs/` 或仓库根（面向新手的中文文档放根） | README 文档列表登记 |
 | MCP / 外部数据源 | `mcp/` 配置样例 | 密钥一律占位符（`YOUR_API_KEY`），真实密钥进 vault 或环境变量，绝不进文本 |
 | 好 prompt / 起手式 | `.dsh/skills/` 或 `prompts/` | 同上 |
@@ -61,7 +61,7 @@
 - [x] 收敛：网页/图片打开方式用官方设置（设置 → 网页链接默认打开方式），不装插件替代官方开关
 - [x] 收敛：识图 = 切模型到 `deepseek-flash`（原生读图，一般人够用）；不立工程书、不装插件，提示用户一句话
 - [x] 判断纪律：负向断言先查三层（官方文档 → 用户设置 → 插件配置），只说「哪一层没找到」
-- [ ] 插件索引按官方机制（待官方机制稳定）：发布 `docs/plugins/index.json`（GitHub Pages 已在），按官方插件市场文档的格式列出本仓库 bundle（标题、图标、作者、版本、兼容 DSH 版本）；用户路径：DSH 插件页打开「自定义插件索引」→ 添加 `https://adsorgcn.github.io/DeepSeekHarness/plugins/index.json` → 在「发现」里装；做之前先在本机 DSH 实证一遍能装，实证不了就不发安装说明
+- [x] 市场 v1.1.0：docs/market/（registry.json 登记自家技能；docs/market/index.json 官方格式 1 只收 iLang 合规 bundle；market_admit.py 准入；不排名不爬虫不收 PR；第一条 bundle 收录前维护者必须在自己的 DSH 里从这个索引装一次，装不上不收）
 - [ ] 好技能持续接入（长期，owner 驱动）
 
 ## 长期约定
