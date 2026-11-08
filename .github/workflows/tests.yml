@@ -31,5 +31,9 @@ jobs:
         run: python -X utf8 tools/test_market.py
       - name: Rubrics R1-R9
         run: python -X utf8 tools/check_rubrics.py
+      - name: Brain engine tests
+        run: python -X utf8 tools/test_brain.py
+      - name: Instruction files identical
+        run: python -X utf8 tools/brain.py instructions check
       - name: Brain check
         run: python -X utf8 tools/brain.py check
