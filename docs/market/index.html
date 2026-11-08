@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#f5f5f7">
-  <meta name="description" content="iLang DSH 市场：只收 iLang 合规的 DeepSeek Harness 插件。清单过官方校验器 strict 0 错 0 警告，钉版本，带来源。不排名，不看星数，不爬虫。">
+  <meta name="description" content="iLang DSH 市场：只收 iLang 合规的 DeepSeek Harness 插件。清单过官方校验器 strict 0 错 0 警告，钉版本，带来源。收录顺序就是显示顺序。">
   <title>iLang DSH 市场｜只收 iLang 合规的插件</title>
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:site_name" content="iLang DSH 工具包">
   <meta property="og:title" content="iLang DSH 市场｜进这个市场只有一条门：iLang。">
-  <meta property="og:description" content="只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器，钉版本，带来源。不排名。">
+  <meta property="og:description" content="只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器，钉版本，带来源。收录顺序就是显示顺序。">
   <meta property="og:url" content="https://dsh.ilang.guide/market/">
   <meta property="og:image" content="https://dsh.ilang.guide/assets/social-preview.png">
   <meta property="og:image:type" content="image/png">
@@ -21,7 +21,7 @@
   <meta property="og:image:alt" content="iLang DSH 市场：进这个市场只有一条门：iLang。">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="iLang DSH 市场｜进这个市场只有一条门：iLang。">
-  <meta name="twitter:description" content="只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器，钉版本，带来源。不排名。">
+  <meta name="twitter:description" content="只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器，钉版本，带来源。收录顺序就是显示顺序。">
   <meta name="twitter:image" content="https://dsh.ilang.guide/assets/social-preview.png">
   <meta name="twitter:image:alt" content="iLang DSH 市场：进这个市场只有一条门：iLang。">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -132,14 +132,14 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
     <section class="hero">
       <div class="wrap">
         <h1>进这个市场只有一条门：iLang。</h1>
-        <p>不排名，不看星数，不爬虫。每一条都过官方校验器，钉版本，带来源。</p>
+        <p>每一条都过官方校验器，钉版本，带来源。收录顺序就是显示顺序。</p>
       </div>
     </section>
 
     <section class="block">
       <div class="wrap">
         <span class="section-label">技能（随工具包）</span>
-        <h2>装了工具包就有。</h2>
+        <h2>工具包自带的技能，都在这里。</h2>
         <!-- market:skills -->
 <div class="m-row"><div class="m-name">mem-forever</div><div class="m-desc">窗口关了，进度还在</div><div class="m-meta">2.1.0 · ilang-ai · MIT · <a href="https://github.com/ilang-ai/Mem-Forever" target="_blank" rel="noopener">https://github.com/ilang-ai/Mem-Forever</a> · <a href="https://doi.org/10.5281/zenodo.22865160" target="_blank" rel="noopener">10.5281/zenodo.22865160</a> · <span title="74e9741ea86ddc2968e7f46e82ed05a6666b18779754cf5f4a3930a6d5058232">74e9741ea86d</span> · <span class="m-kit">随工具包</span></div></div>
 <div class="m-row"><div class="m-name">site-design-engine</div><div class="m-desc">把门面做到获奖级</div><div class="m-meta">2.1.0 · ai_chuhai · MIT · — · <span title="0be2adf61c7a33ca3c9ca1448e14c6cd7299096099dee28c7e33801192afc73c">0be2adf61c7a</span> · <span class="m-kit">随工具包</span></div></div>
@@ -152,11 +152,12 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
     <section class="block">
       <div class="wrap">
         <span class="section-label">插件（过门的 DSH 插件）</span>
-        <h2>索引里只出现过门的插件。</h2>
+        <h2>插件区的每一条，都过了门。</h2>
         <!-- market:bundles -->
-
+    <p class="after">索引地址</p>
+    <code class="code">https://dsh.ilang.guide/market/index.json</code>
+    <p class="after">过了门的插件会出现在这里，DSH 里添加这个地址就能看到。</p>
     <!-- /market:bundles -->
-        <p class="after">索引地址 <code class="code">https://dsh.ilang.guide/market/index.json</code>。过了门的插件会出现在这里，DSH 里添加这个地址就能看到。</p>
       </div>
     </section>
 
@@ -171,7 +172,7 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
           <li><b>许可</b><span>仓库里有 OSI 许可文件。</span></li>
         </ul>
         <p class="veto">三类不收：与官方能力重复；要拿走钥匙或记忆；娱乐与不稳定。来源：docs/社区插件甄选.md 第六条。</p>
-        <p class="author-action">自检命令：<code class="code">python -X utf8 tools/market_admit.py &lt;你的仓库 https 地址&gt; &lt;tag 或 commit&gt;</code> 通过后，到 <a href="https://github.com/adsorgcn/DeepSeekHarness/issues/new?template=market-admit.yml" target="_blank" rel="noopener">市场准入申请</a> 提一个 issue。维护者看过准入输出后决定收不收，不排队，不排名。</p>
+        <p class="author-action">自检命令：<code class="code">python -X utf8 tools/market_admit.py &lt;你的仓库 https 地址&gt; &lt;tag 或 commit&gt;</code> 通过后，到 <a href="https://github.com/adsorgcn/DeepSeekHarness/issues/new?template=market-admit.yml" target="_blank" rel="noopener">市场准入申请</a> 提一个 issue。维护者看过准入输出后决定收不收。</p>
       </div>
     </section>
   </main>
