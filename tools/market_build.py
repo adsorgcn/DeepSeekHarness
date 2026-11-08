@@ -195,9 +195,45 @@ def render_page(reg):
     return text
 
 
+def procedure_frontmatter_version(path):
+    """读 procedure 文件 frontmatter 里的 version 行；没有则返回 None。"""
+    text = io.open(os.path.join(ROOT, path), encoding="utf-8").read()
+    m = re.search(r"^version:\s*(.+)$", text, re.M)
+    return m.group(1).strip() if m else None
+
+
+def sync_market_fence(entry):
+    """把 MARKET.md 里 ::GENE 到最后一行 T:/A: 的那一段换成 procedure 文件里同一段。
+
+    manifest 与 procedure 是同一文件时无需同步（site-design-engine、deai）。"""
+    if entry["manifest"] == entry["procedure"]:
+        return None
+    proc_path = os.path.join(ROOT, entry["procedure"])
+    manifest_path = os.path.join(ROOT, entry["manifest"])
+    proc = io.open(proc_path, encoding="utf-8", newline="").read()
+    manifest = io.open(manifest_path, encoding="utf-8", newline="").read()
+    gene_re = re.compile(r"::GENE[{][^\n]*\n(?:[ \t]+[TA]:[^\n]*\n)+")
+    pm = gene_re.search(proc)
+    mm = gene_re.search(manifest)
+    if not pm:
+        raise ValueError("%s 里没有 GENE 块" % entry["procedure"])
+    if not mm:
+        raise ValueError("%s 里没有 GENE 块" % entry["manifest"])
+    if mm.group(0).strip() != pm.group(0).strip():
+        manifest = manifest[: mm.start()] + pm.group(0) + manifest[mm.end():]
+        with open(manifest_path, "w", encoding="utf-8", newline="\n") as f:
+            f.write(manifest)
+    return pm.group(0).strip()
+
+
 def fill_skill_meta(reg, write):
     changed = False
     for e in [x for x in reg["entries"] if x.get("kind") == "skill"]:
+        ver = procedure_frontmatter_version(e["procedure"])
+        if ver and e.get("version") != ver:
+            e["version"] = ver
+            changed = True
+        sync_market_fence(e)
         linted = validate_manifest(e["manifest"])
         sha = sha256_lf(os.path.join(ROOT, e["manifest"]))
         validated = {

@@ -25,7 +25,7 @@
         "zh": "窗口关了，进度还在",
         "en": "Close the window, the progress stays."
       },
-      "version": "2.1.0",
+      "version": "3.1.0",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/skills/mem-forever/MARKET.md",
@@ -34,14 +34,14 @@
         "repo": "https://github.com/ilang-ai/Mem-Forever",
         "doi": "10.5281/zenodo.22865160"
       },
-      "sha256_lf": "74e9741ea86ddc2968e7f46e82ed05a6666b18779754cf5f4a3930a6d5058232",
+      "sha256_lf": "dab07682c0d96ae0118666c00bf720c59e351f6531483e4537675347df1fe785",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-07"
+        "at": "2026-11-08"
       },
       "get": "kit"
     },
@@ -69,7 +69,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-07"
+        "at": "2026-11-08"
       },
       "get": "kit"
     },
@@ -101,7 +101,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-07"
+        "at": "2026-11-08"
       },
       "get": "kit"
     }

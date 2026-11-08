@@ -214,6 +214,17 @@ def test_admit_fixtures():
             shutil.rmtree(t, ignore_errors=True)
 
 
+def test_skill_version_follows_procedure():
+    r = load_json("docs/market/registry.json")
+    bad = []
+    for e in [x for x in r["entries"] if x.get("kind") == "skill"]:
+        proc = read(e["procedure"])
+        m = re.search(r"^version:\s*(.+)$", proc, re.M)
+        if not m or m.group(1).strip() != e.get("version"):
+            bad.append(e["name"])
+    check("skill_version_follows_procedure", not bad, "bad=%s" % bad)
+
+
 def test_page_copy():
     m = read("docs/market/index.html")
     l = read("docs/index.html")
@@ -265,6 +276,7 @@ def main():
     test_skill_manifests_validator()
     test_sha_drift()
     test_mem_forever_fence_copy()
+    test_skill_version_follows_procedure()
     test_index_rules()
     test_bundle_name_parity()
     test_page_rows()
