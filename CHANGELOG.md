@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.1** · 2026-11-08 · 市场文案与布局修正（审计 DSH-MARKET-FIX-S1-S4）
+
+- 否定排比换肯定句：市场页副题/meta/og/twitter/作者段末句按书逐字替换；落地页市场一幕同口径
+- 句号归位：索引地址的 code 块独立成行；落地页市场一幕改整宽居中（去分栏与内联样式）
+- 构建脚本补两种渲染态：有行时给出官方三步（自定义插件索引/添加索引源），空态只给索引地址；index.json 描述同口径（收录顺序就是显示顺序）
+- 测试加到 11 场景（page_copy、render_states）；site-design-engine 全新上下文两页评审
+
 **v1.1.0** · 2026-11-07 · 市场上线（审计 DSH-MARKET-P1-P7）
 
 - docs/market/：registry.json 登记三条自家技能（mem-forever / site-design-engine / deai），index.json 按官方格式 1 只收 iLang 合规 bundle（清单过官方校验器 strict 0 错 0 警告，钉 commit，许可在案），市场页 https://dsh.ilang.guide/market/ ，索引地址 https://dsh.ilang.guide/market/index.json ；不排名、不看星数、不爬虫、不收 PR

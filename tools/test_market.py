@@ -214,6 +214,51 @@ def test_admit_fixtures():
             shutil.rmtree(t, ignore_errors=True)
 
 
+def test_page_copy():
+    m = read("docs/market/index.html")
+    l = read("docs/index.html")
+    stripped = re.sub(r"<style.*?</style>", "", m, flags=re.S)
+    stripped = re.sub(r"<script.*?</script>", "", stripped, flags=re.S)
+    body = stripped[stripped.find("<body"):]
+    text = re.sub(r"<[^>]+>", "\n", body)
+    lines = [x.strip() for x in text.split("\n") if x.strip()]
+    ok = not any(k in m for k in ("不看星数", "不爬虫", "不排队", "不排名")) \
+        and not any(k in l for k in ("不看星数", "不爬虫", "不排队")) \
+        and not any(x.startswith("。") for x in lines) \
+        and "收录顺序就是显示顺序" in m and "收录顺序就是显示顺序" in l \
+        and "维护者看过准入输出后决定收不收。" in m
+    check("page_copy", ok)
+
+
+def test_render_states():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "market_build", os.path.join(ROOT, "tools", "market_build.py"))
+    mb = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mb)
+    fake = {
+        "entries": [{
+            "kind": "bundle", "name": "fake-bundle",
+            "title": {"zh": "fake", "en": "fake"},
+            "description": {"zh": "假的描述", "en": "fake desc"},
+            "author": "tester", "license": "MIT",
+            "homepage": "", "repository": {"url": "https://github.com/t/f"},
+            "versions": [{
+                "version": "1.0.0", "publishTimestamp": 1700000000,
+                "engines_dsh": ">=0.2.1 <0.3.0",
+                "source": {"type": "git", "url": "https://github.com/t/f",
+                           "commit": "a" * 40},
+            }],
+        }]
+    }
+    with_rows = mb.bundles_region(fake)
+    empty = mb.bundles_region({"entries": []})
+    ok = "添加索引源" in with_rows and "自定义插件索引" in with_rows \
+        and "https://dsh.ilang.guide/market/index.json" in with_rows \
+        and "索引地址" in empty and "添加索引源" not in empty
+    check("render_states", ok)
+
+
 def main():
     os.chdir(ROOT)
     test_registry_structure()
@@ -223,7 +268,9 @@ def main():
     test_index_rules()
     test_bundle_name_parity()
     test_page_rows()
+    test_page_copy()
     test_build_check()
+    test_render_states()
     test_admit_fixtures()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)
