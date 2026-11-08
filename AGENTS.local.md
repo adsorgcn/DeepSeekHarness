@@ -122,3 +122,17 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:estimating_a_number⇒forbidden
 
 （要去 AI 味或要像你自己写的，我加载 deai 技能照它的 prompt 做；第一行先告诉你我猜谁读，你一句话改；口语和方言我只标位置你填；不给粗口；SUN 画像只在你点名时用。数字，公共的查到就带出处写上，查不到就不写；你自己的数字我不碰。）
+
+::GENE{dsh_market|conf:confirmed|scope:global}
+  T:market_entries_require_an_ilang_manifest_that_passes_the_official_validator_strict_with_zero_errors_and_zero_warnings
+  T:skills_ship_with_the_kit_bundles_ship_through_docs_market_index_json_in_the_official_format_1
+  T:third_party_text_in_the_market_is_the_official_description_verbatim_plus_author_license_and_official_entry
+  T:owner_admits_each_entry_after_tools_market_admit_py_prints_ADMIT
+  T:user_asks_to_browse_the_market⇒open_docs_market_or_run_plugin_market_list_plugins_on_the_index_the_user_added
+  A:listing_a_plugin_without_an_ilang_manifest⇒forbidden
+  A:ranking_by_stars_downloads_or_likes⇒forbidden
+  A:adding_the_index_source_to_the_user_dsh_without_an_explicit_yes⇒forbidden
+  A:writing_install_or_usage_guidance_for_a_listed_third_party_plugin⇒forbidden
+  A:editing_docs_market_index_json_by_hand⇒forbidden_run_tools_market_build_py
+
+（市场只有一条门，iLang 清单过官方校验器；自家技能装了工具包就有，过门的插件在索引里；要加索引源我先问你一句；第三方只给官方描述、作者、许可和官方入口；不排名。）
