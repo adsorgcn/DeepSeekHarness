@@ -1,5 +1,13 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.2** · 2026-11-08 · 记忆引擎升 Mem-Forever 3.1（审计 DSH-MEM3-ADAPT-A1-A8）
+
+- 修每周同步：原 checkout 名单里有上游不存在的 `.dsh/skills/mem-forever/SKILL.md` 路径，整条命令 pathspec 失败、什么都同步不进来；新工作流只取上游引擎文件，五份指令文件由 `instructions sync` 从技能正文生成，`.dsh` 副本由 cp 得到，市场登记由 market_build 刷新
+- 引擎升 2.1：账本 env/ledger.env 一行一扇门，值静态编码（enc1，用 env/pepper 可逆，不是加密），本机授权走 git config（brain.py grant），密钥扫描改 WARN 加 ledger harvest 收割，不再拒提交；新文件 docs/LEDGER.md、tools/hooks/pre-commit 与 pre-push、tools/test_brain.py、.gitattributes
+- 推送保护并入 3.1 钩子：tools/guard-pre-push.sh 退场，bootstrap 跑 brain.py init .；提交前 review+check，推送前核远端私有（GitHub/Gitee 自动核，其他远端一次性确认）
+- 市场登记 mem-forever 升 3.1.0：skill 版本跟随 procedure frontmatter，MARKET.md 围栏由构建脚本自动与技能正文对齐
+- 自家文案去掉 2.1 说法（docs/README.zh.md 三方套用、适配.md、CITATIONS 加 3.1.0 版本 DOI）；CI 加 Brain engine tests 与 Instruction files identical 两步
+
 **v1.1.1** · 2026-11-08 · 市场文案与布局修正（审计 DSH-MARKET-FIX-S1-S4）
 
 - 否定排比换肯定句：市场页副题/meta/og/twitter/作者段末句按书逐字替换；落地页市场一幕同口径
