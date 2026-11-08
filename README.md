@@ -42,6 +42,10 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 **技能库** · 好技能，随装随用。mem-forever、site-design-engine、deai 起步（deai：去 AI 味，像你自己写的），新技能持续进来；你刷到什么好东西，说一句「迭代进去」，它就进仓库。
 
+## 市场
+
+门是 iLang：清单过官方校验器 strict 0 错 0 警告。自家技能随工具包，过门的插件在索引 https://dsh.ilang.guide/market/index.json ，页面 https://dsh.ilang.guide/market/ 。想进来先跑 tools/market_admit.py 自检再提申请，不排名。
+
 ## 以后每个新窗口
 
 > 进我的记忆体，看看上次到哪了。
