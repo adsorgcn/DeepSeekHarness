@@ -52,6 +52,8 @@ A lost pepper is a lost repository, nothing less and nothing more; the pepper is
 
 A grant is a line of **this machine's** git config, never a file of the repository: `brain.grant.<DOOR> true` for one door, `brain.grant.all true` for every standing door, `brain.grant.write true` for storing new keys. The owner says yes once; the tool records it:
 
+It lives outside the repository on purpose. Whatever reads the repository reads any rule written inside it, and what it can read it can bypass; so the permission is kept where only this machine holds it, in the clone's git config, which no clone carries away and no paste includes. The repository says which doors exist; the machine says which of them open here.
+
 ```
 python -X utf8 tools/brain.py grant HK          # this door, this machine
 python -X utf8 tools/brain.py grant --all       # every standing door on this machine (never a top or once door)
@@ -98,6 +100,10 @@ python -X utf8 tools/brain.py migrate-2to3            # owner runs it; needs ~/.
 ```
 
 It opens the latest `vault/keys-*.age`, writes `keys/*.env` under `env/`, SSH keys under `env/ssh/`, the redacted memory values into `env/keys.env` encoded (3.1), one ledger row for each, then stamps every block `by:legacy` (`provenance init`). Fill `verify` and `recover` for each row, run `ledger verify all`, commit. The old `.age` files stay in git history. `vault pack`, `vault unpack` and `vault verify` remain for reading old bundles.
+
+## Coming from a directory of key files (3.1.2)
+
+Most brains start with a folder of `.env`, `.key` and `.pem` files and an `~/.ssh`. `python -X utf8 tools/brain.py ledger import <dir>` makes one row per file: the row is named after the file without its version or date suffix (`aliyun-zhangmei-v1.0-2026-09-23.env` becomes `ALIYUN_ZHANGMEI`), the kind is read from the extension (`env_file`, `token`, `private_key`, `config`, `ssh_key` for `id_*`), the whole file text is the value, encoded into `env/keys.env`, and the door is `file:<name>` until the owner writes what it really opens. Code, backups, public keys, recipients and certificate chains are skipped by default (`--skip` changes the list, `--glob` picks files, `--kind` overrides the guess), `--dry-run` lists without writing, and the source files are never moved or deleted. It needs the write grant once, like `ledger add`. For `~/.ssh`: `ledger import ~/.ssh --glob "id_*,*.pw"`.
 
 ## The one thing that must always work
 

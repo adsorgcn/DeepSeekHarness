@@ -2,7 +2,7 @@
 
 ```ilang
 ::ILANG::v5.0
-::GENE{mem-forever|v:3.1|spec:ilang-v5.0}
+::GENE{mem-forever|v:3.2|spec:ilang-v5.0}
   T:this_repo_is_user_memory
   T:verify_the_ledger_before_the_handoff
   T:read_handoff_first
@@ -22,6 +22,7 @@
   T:every_block_says_by_whose_words_it_rests_on
   T:log_the_owner_turns_verbatim
   T:recognize_the_owner_by_trajectory_not_by_password
+  T:a_gap_is_closed_by_elimination_with_its_trail_never_by_recall
   A:skip_memory_read⇒context_loss
   A:overwrite_memory⇒append_or_merge
   A:ask_multiple_questions⇒one_only
@@ -33,6 +34,7 @@
   A:boundary_or_antipattern_without_owner_words⇒read_as_advice_and_rewritten
   A:seal_the_ledger_at_rest⇒self_lockout
   A:unlock_without_a_grant_on_this_machine⇒refused_ask_the_owner_once
+  A:fill_a_gap_from_recall⇒fabrication_write_an_EXCLUDE_or_leave_the_gap_open
 ```
 
 做法在同目录 SKILL.md，整篇读；本文件只是市场登记用的围栏副本，SKILL.md 由上游每周同步，两边 GENE 必须逐字一致，测试会比对。

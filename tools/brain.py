@@ -141,6 +141,7 @@ import base64
 import hashlib
 import io
 import json
+import locale
 import os
 import platform
 import re
@@ -153,7 +154,7 @@ from collections import Counter
 from datetime import datetime, timedelta
 from pathlib import Path
 
-VERSION = "2.1"
+VERSION = "2.2"
 GENERATED_BY = f"brain.py/{VERSION}"
 OKF_VERSION = "0.2"
 OKF_DIRS = ("soul", "memory", "handoff")
@@ -458,6 +459,20 @@ def cmd_check(repo: Path) -> int:
     for r in rows:
         if not r.get("error") and not r["kv"].get("door"):
             errors.append(f"{LEDGER_REL}:{r['line'] + 1}: row {r['name']} has no door")
+    # 3.1.1: a standing row with no value and no ref that resolves is not a door yet. Seen in the wild: public
+    # repository addresses written as doors with verify:gh_public. Top and once doors are exempt (the owner's code).
+    keys_now = _keys_env(repo)
+    for r in rows:
+        if r.get("error") or not r["kv"].get("door") or is_top(r) or grant_mode(r) != "standing":
+            continue
+        kv = r["kv"]
+        if kv.get("value") not in (None, "", "none"):
+            continue
+        ref = kv.get("ref") or ""
+        if ref not in ("", "none") and ref in keys_now:
+            continue
+        warnings.append(f"{LEDGER_REL}:{r['line'] + 1}: row {r['name']} has nothing to open (no value, no ref in {KEYS_REL}); "
+                        f"store the key (ledger add --value, or ledger encode) or, if it is a public address, keep it as a ::FACT and drop the row")
     logdir = repo / LOG_DIR
     if logdir.is_dir():
         for p in sorted(logdir.glob("*.md")):
@@ -1344,7 +1359,7 @@ This is the entry point of one person's agent brain. No runtime to load; read in
 2. Then every file under `soul/`: how the owner works and where the lines are, and the agent's own soul in `soul/agent.md`. Follow it; do not recite it.
 3. Then `memory/MEMORY.md`, one line per memory. Open a file under `memory/` only when the task needs it. Code and machines are read from themselves.
 4. Reading or updating the hand-off is not doing the work. Judge each `next` item before acting: it crosses a boundary, stop; evidence is missing, ask; it is the owner's call, defer. A recap or hand-off request authorizes nothing.
-5. New facts: if you can write this repo, edit the file, commit and push at once, one change per commit, each block with `by:`. If you cannot, hand the change back as `::PROGRESS{date|done|next|unverified}`, `::DECIDE{}` or `::LESSON{}` blocks in one code fence, every key present, `none` where there is no material.
+5. New facts: if you can write this repo, edit the file, commit and push at once, one change per commit, each block with `by:`. If you cannot, hand the change back as `::PROGRESS{date|done|next|unverified}`, `::DECIDE{}`, `::LESSON{}` or `::EXCLUDE{}` blocks in one code fence, every key present, `none` where there is no material.
 6. Update `handoff/CURRENT.md` at every milestone, not at session end. Log the owner's words verbatim in `log/`.
 7. No key value in memory text: a key is a ledger row, encoded at rest in this private repository (reversible, not encryption), `{{DOOR}}` where it stood, sealed only when paired.
 8. `::BLOCK{k:v|k:v}`, `T:` and `A:⇒` are declaration notation: read them literally; the quick card is `rules/GRAMMAR-CARD.md`.
@@ -1815,8 +1830,8 @@ def cmd_handoff(repo: Path, action: str, agent: str, project: str | None, task: 
 # ----------------------------------------------------------------------- paste
 
 PASTE_OPENING = {
-    "zh": "下面是一张记法速查卡和一份用这种记法写的工作交接单。请先读卡，再读交接单，然后只回一句「读完了」。后面我会提问。",
-    "en": "Below are a notation quick card and a hand-off note written in that notation. Read the card first, then the hand-off, then reply with just: done reading. I will ask questions after that.",
+    "zh": "下面是一张记法速查卡和一份用这种记法写的工作交接单。请先读卡，再读交接单，然后只回一句「读完了」。后面我会提问。记忆里缺的东西不要靠回忆补：列出候选、每个候选被什么否掉、剩下什么，用 ::EXCLUDE{编号|candidates:…|out:候选(否掉它的常数);…|left:…|conf:tentative} 块交回来。",
+    "en": "Below are a notation quick card and a hand-off note written in that notation. Read the card first, then the hand-off, then reply with just: done reading. I will ask questions after that. A gap in the memory is not filled from recall: list the candidates, what refuted each one, and what remains, and hand it back as an ::EXCLUDE{id|candidates:…|out:candidate(the constant that refutes it);…|left:…|conf:tentative} block.",
 }
 
 
@@ -1998,6 +2013,8 @@ def _block_id(b: dict) -> tuple:
         return (k, kv.get("never", ""))
     if k == "PROGRESS":
         return (k,)
+    if k == "EXCLUDE":
+        return (k, b.get("entity", ""))
     return (k, b["raw"])
 
 
@@ -2668,6 +2685,36 @@ def _save_ledger(repo: Path, lines: list[str]) -> None:
     _write_lf_atomic(ledger_path(repo), "\n".join(lines).rstrip("\n") + "\n")
 
 
+def _decode_output(b: bytes, fallback: str | None = None) -> str:
+    """Text of a child process: UTF-8 when it is UTF-8, else the shell's own codepage (cmd.exe on a Chinese Windows
+    answers in cp936), so a FAIL line shows the shell's words and not replacement characters."""
+    if not b:
+        return ""
+    try:
+        return b.decode("utf-8")
+    except UnicodeDecodeError:
+        pass
+    cands: list[str] = [fallback] if fallback else []
+    if os.name == "nt":
+        try:
+            import ctypes
+            cands.append("cp%d" % ctypes.windll.kernel32.GetOEMCP())
+        except Exception:
+            pass
+    getenc = getattr(locale, "getencoding", None)   # 3.11+: the locale's encoding, UTF-8 mode ignored
+    if getenc:
+        cands.append(getenc())
+    cands.append(locale.getpreferredencoding(False))
+    for enc in cands:
+        if not enc:
+            continue
+        try:
+            return b.decode(enc, errors="replace")
+        except LookupError:
+            continue
+    return b.decode("utf-8", errors="replace")
+
+
 def _ledger_verify_env(repo: Path, row: dict) -> dict:
     env = dict(os.environ)
     val = ledger_value(repo, row)
@@ -2679,6 +2726,92 @@ def _ledger_verify_env(repo: Path, row: dict) -> dict:
     env["LEDGER_NAME"] = row["name"]
     env["LEDGER_DOOR"] = row["kv"].get("door", "")
     return env
+
+
+IMPORT_SKIP = "*.py,*.pyc,*.bak*,*.md,*.pub,*.pub.*,*recipient*,*fullchain*,*.gitkeep"
+IMPORT_KINDS = {".env": "env_file", ".key": "token", ".txt": "token", ".pem": "private_key", ".conf": "config",
+                ".json": "credential_json", ".pw": "password", ".token": "token", ".secret": "token"}
+_IMPORT_VERSION_SUFFIX = re.compile(r"([-_.]v\d+(?:\.\d+)*)?(?:[-_]\d{4}-\d{2}-\d{2})?$")
+
+
+def import_row_name(filename: str) -> str:
+    """ALIYUN_ZHANGMEI from aliyun-zhangmei-v1.0-2026-09-23.env: the stem without a version or date suffix."""
+    stem = filename
+    for ext in sorted(IMPORT_KINDS, key=len, reverse=True):
+        if stem.lower().endswith(ext):
+            stem = stem[: -len(ext)]
+            break
+    stem = _IMPORT_VERSION_SUFFIX.sub("", stem, count=1)
+    return ledger_name(stem) or ledger_name(filename)
+
+
+def import_kind(filename: str) -> str:
+    low = filename.lower()
+    for ext, kind in IMPORT_KINDS.items():
+        if low.endswith(ext):
+            return kind
+    if low.startswith("id_") or low.endswith("_ed25519") or low.endswith("_rsa"):
+        return "ssh_key"
+    return "file"
+
+
+def ledger_import_dir(repo: Path, src: str | None, opts: dict) -> int:
+    """3.1.2: one ledger row per file in a directory, the file text encoded into env/keys.env. Nothing is deleted or moved;
+    the files stay where they are. --glob picks files (comma-separated patterns, default *), --skip drops the public and
+    the code (default IMPORT_SKIP), --kind overrides the kind guessed from the extension, --dry-run only lists."""
+    import fnmatch
+    if not src:
+        print("ERROR   ledger import needs a directory: ledger import <dir> [--glob a,b] [--skip a,b] [--kind k] [--scope s] [--dry-run]")
+        return 2
+    d = Path(src).expanduser()
+    if not d.is_dir():
+        print(f"ERROR   {src} is not a directory")
+        return 2
+    globs = [g.strip() for g in (opts.get("glob") or "*").split(",") if g.strip()]
+    skips = [g.strip() for g in (opts.get("skip") if opts.get("skip") is not None else IMPORT_SKIP).split(",") if g.strip()]
+    dry = bool(opts.get("dry_run"))
+    if not dry and not _need_write_grant(repo, f"ledger import {d.name}"):
+        return 2
+    rows, _ = load_ledger(repo)
+    taken = {r["name"] for r in rows if not r.get("error")}
+    done = skipped = 0
+    for p in sorted(d.iterdir()):
+        if not p.is_file():
+            continue
+        if not any(fnmatch.fnmatch(p.name, g) for g in globs) or any(fnmatch.fnmatch(p.name, g) for g in skips):
+            continue
+        try:
+            value = p.read_bytes().decode("utf-8")
+        except UnicodeDecodeError:
+            print(f"skip    {p.name}: not UTF-8 text")
+            skipped += 1
+            continue
+        if not value.strip():
+            print(f"skip    {p.name}: empty")
+            skipped += 1
+            continue
+        base = import_row_name(p.name)
+        name, n = base, 2
+        while name in taken:
+            name, n = f"{base}_{n}", n + 1
+        kind = opts.get("kind") or import_kind(p.name)
+        if dry:
+            print(f"would   {name} ({kind}, {len(value.encode('utf-8'))} bytes) <- {p.name}")
+            done += 1
+            continue
+        rc = cmd_ledger(repo, "add", name, {
+            "door": f"file:{p.name}", "kind": kind, "value": value, "verify": opts.get("verify") or "none",
+            "recover": opts.get("recover") or f"{d} on {platform.node()}", "scope": opts.get("scope") or "none",
+            "why": opts.get("why") or f"imported {_today()} from {d.name}/; the owner writes the door and the why",
+            "top": bool(opts.get("top")), "grant": opts.get("grant")})
+        if rc != 0:
+            print(f"ERROR   {p.name}: ledger add returned {rc}")
+            return rc
+        taken.add(name)
+        done += 1
+    print(f"ledger import: {done} row(s) {'listed' if dry else 'added'}, {skipped} skipped; files untouched in {d}; "
+          f"values {'not written' if dry else 'encoded in ' + KEYS_REL}; verify:none until the owner fills it")
+    return 0
 
 
 def cmd_ledger(repo: Path, action: str, name: str | None, opts: dict) -> int:
@@ -2817,6 +2950,9 @@ def cmd_ledger(repo: Path, action: str, name: str | None, opts: dict) -> int:
         print(val)
         return 0
 
+    if action == "import":
+        return ledger_import_dir(repo, name, opts)
+
     if action == "harvest":
         if not _need_write_grant(repo, "ledger harvest"):
             return 2
@@ -2849,10 +2985,11 @@ def cmd_ledger(repo: Path, action: str, name: str | None, opts: dict) -> int:
                 skipped += 1
                 continue
             try:
-                res = subprocess.run(cmd, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                res = subprocess.run(cmd, shell=True, capture_output=True,
                                      timeout=timeout, env=_ledger_verify_env(repo, r), cwd=str(repo))
                 rc = res.returncode
-                tail = (res.stdout + res.stderr).strip().splitlines()[-1:] if (res.stdout or res.stderr) else []
+                out = _decode_output(res.stdout) + _decode_output(res.stderr)
+                tail = out.strip().splitlines()[-1:] if out.strip() else []
             except subprocess.TimeoutExpired:
                 rc, tail = 124, ["timeout"]
             except OSError as e:
@@ -3508,6 +3645,25 @@ def cmd_evidence(repo: Path, action: str, text: str | None, where: str | None, t
             print("ERROR   evidence confirm needs the q to confirm")
             return 2
         q = text.strip()
+        # 3.2: the owner confirms an exclusion by its id: left becomes a FACT by:owner_confirmed, the trail stays
+        for p in _prov_files(repo):
+            ptext = read_text(p)
+            for b in parse_blocks(ptext):
+                if b["kind"] == "EXCLUDE" and b.get("entity", "") == q:
+                    nl = "\r\n" if "\r\n" in ptext else "\n"
+                    lines = ptext.replace("\r\n", "\n").split("\n")
+                    i = b["line"] - 1
+                    lines[i] = _set_kv_generic(lines[i], "EXCLUDE", "conf", "confirmed")
+                    left = b["kv"].get("left", "none").strip()
+                    if left and left != "none":
+                        lines.insert(i + 1, f"::FACT{{key:{q}|value:{left}|why:{q}|used_by:none|conf:confirmed|by:owner_confirmed}}")
+                    p.write_bytes(nl.join(lines).encode("utf-8"))
+                    rel = p.relative_to(repo).as_posix()
+                    if left and left != "none":
+                        print(f"exclusion {q} confirmed by the owner; left written as ::FACT{{key:{q}}} by:owner_confirmed in {rel}; the exclusion stays as the trail")
+                    else:
+                        print(f"exclusion {q} confirmed by the owner; nothing was left, the gap stays open and says so in {rel}")
+                    return 0
         p = repo / "soul" / "evidence.md"
         found = None
         if p.is_file():
@@ -3547,7 +3703,7 @@ def provenance_scan(repo: Path, transcript: Path | None = None) -> tuple[list[di
                 violations.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "owner_verbatim_without_evidence", "by": by})
             elif by == "owner_verbatim" and backing.get(kv.get("q", "")) == "claimed":
                 violations.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "owner_verbatim_without_transcript", "by": by})
-            if kind in ("FACT", "LESSON", "GENE") and kv.get("conf") == "confirmed" and by == "agent_inferred":
+            if kind in ("FACT", "LESSON", "GENE", "EXCLUDE") and kv.get("conf") == "confirmed" and by == "agent_inferred":
                 try:
                     seen = int(kv.get("seen", "0"))
                 except ValueError:
@@ -3555,7 +3711,7 @@ def provenance_scan(repo: Path, transcript: Path | None = None) -> tuple[list[di
                 if seen < 3:
                     violations.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "confirmed_without_three_days", "by": by})
             age = _days_since(kv.get("last", ""))
-            if age is not None and kind in ("FACT", "LESSON"):
+            if age is not None and kind in ("FACT", "LESSON", "EXCLUDE"):
                 if kv.get("conf") == "tentative" and age > TENTATIVE_TTL:
                     decays.append({"file": rel, "line": n, "kind": kind, "text": b["raw"], "rule": "tentative_expired", "by": by})
                 elif kv.get("conf") == "confirmed" and by not in OWNER_SOURCES and age > CONFIRMED_AGENT_TTL:
@@ -3716,6 +3872,14 @@ def review_text(base_text: str | None, cand_text: str, rel: str) -> tuple[list[s
                 rejects.append(f"boundary deleted or rewritten without an owner tombstone: {b['raw']}")
     for bid, c in cand_by.items():
         by = c["kv"].get("by", "")
+        if c["kind"] == "EXCLUDE":
+            ekv = c["kv"]
+            if not _items(ekv.get("candidates", "")):
+                rejects.append(f"exclusion without candidates: {c['raw']}")
+            if not _items(ekv.get("out", "")):
+                rejects.append(f"exclusion without out: (a guess, not an elimination): {c['raw']}")
+            if "left" not in ekv:
+                rejects.append(f"exclusion without left: (write left:none when everything was struck): {c['raw']}")
         if c["kind"] == "BOUNDARY" and bid not in base_by and by not in OWNER_SOURCES[:2]:
             rejects.append(f"new boundary without owner source (by:{by or 'none'}): {c['raw']}")
         if c["kind"] == "GENE":
@@ -3889,6 +4053,7 @@ def cmd_verify(repo: Path, online: bool, strict: bool) -> int:
     ids: set[str] = set()
     facts: list[tuple[str, dict]] = []
     refs: dict[str, set[str]] = {}
+    excl: list[tuple[str, dict]] = []
     for p in _prov_files(repo):
         rel = p.relative_to(repo).as_posix()
         for b in parse_blocks(read_text(p)):
@@ -3900,6 +4065,9 @@ def cmd_verify(repo: Path, online: bool, strict: bool) -> int:
                 ids.add(b["kv"].get("id", ""))
             elif k in ("GENE", "STATE"):
                 ids.add(b.get("entity", "").lstrip("@"))
+            elif k == "EXCLUDE":
+                ids.add(b.get("entity", ""))
+                excl.append((rel, b))
     rows, _ = load_ledger(repo)
     for r in rows:
         if not r.get("error"):
@@ -3918,8 +4086,38 @@ def cmd_verify(repo: Path, online: bool, strict: bool) -> int:
                         missing.append((rel, key, field, t))
     orphans = [(rel, b["kv"].get("key") or b.get("key", "")) for rel, b in facts
                if not b["kv"].get("why") and (b["kv"].get("key") or b.get("key", "")) not in refs]
+    # 3.2: an exclusion's out: names what refuted each struck candidate; a door, a FACT key, a log/ date or an evidence q
+    # must exist, a path or free text is taken as named
+    logdir = repo / LOG_DIR
+    log_dates = {p.stem for p in logdir.glob("*.md")} if logdir.is_dir() else set()
+    evp = repo / "soul" / "evidence.md"
+    qs = {b["kv"].get("q", "") for b in parse_blocks(read_text(evp)) if b["kind"] == "EVIDENCE"} if evp.is_file() else set()
+    for rel, b in excl:
+        eid = b.get("entity", "")
+        outs = _items(b["kv"].get("out", ""))
+        if not outs:
+            missing.append((rel, eid, "out", "empty: a guess, not an elimination"))
+        for o in outs:
+            m = re.match(r"^(.*?)\((.*)\)\s*$", o)
+            cand, const = (m.group(1).strip(), m.group(2).strip()) if m else (o, "")
+            if not const:
+                missing.append((rel, eid, "out", f"{cand}: no refuting constant in parentheses"))
+                continue
+            c = const.lstrip("@")
+            if re.fullmatch(r"[A-Z][A-Z0-9_]*", c):
+                ok = c in ids
+            elif re.fullmatch(r"\d{4}-\d{2}-\d{2}", c):
+                ok = c in log_dates
+            elif c.startswith("q:"):
+                ok = c[2:] in qs
+            elif c.startswith("fact:"):
+                ok = c[5:] in ids
+            else:
+                ok = True
+            if not ok:
+                missing.append((rel, eid, "out", f"{cand}: {const} names nothing the brain can see"))
     for rel, key, field, t in missing:
-        print(f"MISSING {rel} {key}: {field} -> {t} (no such constant, function or door)")
+        print(f"MISSING {rel} {key}: {field} -> {t}" + ("" if field == "out" else " (no such constant, function or door)"))
     for rel, key in orphans:
         print(f"ORPHAN  {rel} {key}: no why and nothing points at it; listed as dead, dropped after {STALE_DAYS} days")
     checked = 0
@@ -3940,7 +4138,7 @@ def cmd_verify(repo: Path, online: bool, strict: bool) -> int:
                     code = 0
                 checked += 1
                 print(f"{'OK  ' if 200 <= code < 400 else 'DEAD'}    {rel} {b['kv'].get('key', '')}: {url} -> {code}")
-    print(f"verify: {len(facts)} constant(s), {len(missing)} missing edge(s), {len(orphans)} orphan(s)" + (f", {checked} online check(s)" if online else ""))
+    print(f"verify: {len(facts)} constant(s), {len(excl)} exclusion(s), {len(missing)} missing edge(s), {len(orphans)} orphan(s)" + (f", {checked} online check(s)" if online else ""))
     return 1 if (strict and (missing or orphans)) else 0
 
 
@@ -4262,9 +4460,12 @@ def main(argv=None) -> int:
     p.add_argument("--lang", choices=("auto", "zh", "en"), default="auto", help="速查卡与开场句的语言；auto 按交接单判断（中文占比 >= 0.2 取 zh）；有 rules/GRAMMAR-CARD.<lang>.md 就用它")
     p.add_argument("--with-values", action="store_true", help="3.0：账本行带上值（默认不带；贴给没有工具的聊天模型用不上值）")
 
-    lg = sub.add_parser("ledger", help="3.0 授权账本 env/ledger.env：list / add / verify / show；3.1 encode / decode / harvest / reveal")
-    lg.add_argument("action", choices=("list", "add", "verify", "show", "encode", "decode", "harvest", "reveal"))
-    lg.add_argument("name", nargs="?", help="行名；verify 可用 all")
+    lg = sub.add_parser("ledger", help="3.0 授权账本 env/ledger.env：list / add / verify / show；3.1 encode / decode / harvest / reveal；3.1.2 import <目录>")
+    lg.add_argument("action", choices=("list", "add", "verify", "show", "encode", "decode", "harvest", "reveal", "import"))
+    lg.add_argument("name", nargs="?", help="行名；verify 可用 all；import 时是目录")
+    lg.add_argument("--glob", help="import：只收匹配的文件名，逗号分隔，默认 *")
+    lg.add_argument("--skip", help="import：跳过的文件名模式，逗号分隔，默认跳过代码、备份、公钥、证书链")
+    lg.add_argument("--dry-run", action="store_true", dest="dry_run", help="import：只列出会建哪些行，不写")
     lg.add_argument("--path", action="append", dest="paths", help="harvest：只收这些路径（默认 memory soul handoff）")
     lg.add_argument("--pepper", help="decode：env/pepper 丢了时用 owner 留的十六进制")
     lg.add_argument("--grant", choices=("once", "standing"), help="add：授权档，默认顶门 once 其他 standing")
@@ -4403,7 +4604,7 @@ def main(argv=None) -> int:
                           {"door": args.door, "kind": args.kind, "value": args.value, "ref": args.ref, "verify": args.verify,
                            "recover": args.recover, "scope": args.scope, "why": args.why, "top": args.top,
                            "with_value": args.with_value, "timeout": args.timeout, "paths": args.paths, "pepper": args.pepper,
-                           "grant": args.grant})
+                           "grant": args.grant, "glob": args.glob, "skip": args.skip, "dry_run": args.dry_run})
     if args.cmd == "unlock":
         return cmd_unlock(Path(args.repo).resolve(), args.name, args.scope, args.code, args.no_log)
     if args.cmd == "otp":
