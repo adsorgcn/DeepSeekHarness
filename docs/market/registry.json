@@ -116,13 +116,13 @@
         "zh": "说一句话，从装写作专家、接内容源、建知识库、出文章，一直带到公众号发出第一篇",
         "en": "Say one sentence: it installs the writing expert, connects the content source, builds your library, writes with your own voice and takes the first article to your WeChat Official Account"
       },
-      "version": "0.2.1",
+      "version": "0.2.2",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/ai-global-media/BOOK.md",
       "procedure": ".dsh/books/ai-global-media/BOOK.md",
       "upstream": null,
-      "sha256_lf": "35116bbb942371b8d751e0887679225ee1e53f9e6062bb25ddb1222900e25291",
+      "sha256_lf": "64419e1bf734526cb200ea08ea21b8ec8b797c700685e8c381319ef6a30cd052",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,

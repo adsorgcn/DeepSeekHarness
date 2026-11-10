@@ -1,7 +1,7 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:AI-GLOBAL-MEDIA]
-[VERSION:0.2.1]
+[VERSION:0.2.2]
 [DATE:2026-11-10]
 [LANG:zh]
 
@@ -13,7 +13,7 @@
 ::STATE{@PLUGIN, what:生财有术官方给 DeepSeek Harness 出的插件 许可 MIT, name:dsh-plugin-scys-mcp, source:npm, install:用 plugin_manager 工具安装这个组合包并启用, by_hand:左侧菜单 插件 右上角 添加插件 填 dsh-plugin-scys-mcp 点 安装 再点 立即启用, after:启用后它自动打开浏览器授权页 授权成功后几秒内工具出现, reauth:调用 mcp__scys-mcp__auth 重新打开授权页}
 ::STATE{@DOUBAO, what:豆包电脑版 搬飞书稿用 接法照生财官方教程, path:左侧 技能 连接器 伙伴 再点右上角 新建 选 新建自定义连接器, name:scys-mcp, transport:HTTP, url:https://mcp.scys.com/shengcai-web/mcp, then:点保存 弹出 连接器需要授权 点 去授权 在浏览器里同意 连接器就自动加好, use:对话时选 本地电脑}
 ::STATE{@STORE, what:用户自己的货仓 先落在本机 再进他选的那个库, dir:library, posts:library/posts 每条货一份 Markdown 文件头记标题 来源链接 类目 取回日期, links:library/links.md 外部文档的链接清单 飞书 石墨这一类 每行记标题 链接 类目 再标 已有正文 或 待搬, cards:library/cards 放 ip.md 与 lens.md, articles:library/articles 成稿与母稿, retro:library/retro 用户自己的复盘, pending:library/pending.md 还没进库的货, private:这个文件夹不进版本库 不推送到任何地方}
-::STATE{@LIB_IMA, what:腾讯 ima 知识库, cost:免费 建好后设成私有, official:https://ima.qq.com/agent-interface, how:官方的 ima 技能包 加 API Key 把技能包装进 skills_dir 照包里自带的说明配置, skill_zip:https://app-dl.ima.qq.com/skills/ima-skills-1.1.10.zip 这是那一页上写的地址 页面换了新版就用新版, note:那一页是脚本渲染的 直接抓多半只抓到标题 抓不到就用这里的 skill_zip 再不行请用户把页面上那段提示词复制给你, user_gives:在那一页登录后复制 API Key 交给你}
+::STATE{@LIB_IMA, what:腾讯 ima 知识库, cost:免费 建好后设成私有, official:https://ima.qq.com/agent-interface, how:官方的 ima 技能包 加 API Key 把技能包装进 skills_dir 照包里自带的说明配置, skill_zip:https://app-dl.ima.qq.com/skills/ima-skills-1.1.10.zip 这是那一页上写的地址 页面换了新版就用新版, note:那一页是脚本渲染的 直接抓多半只抓到标题 抓不到就用这里的 skill_zip 再不行请用户把页面上那段提示词复制给你, before:用户先在 ima 里建好一个知识库 设成私有 接口不能替他建库, user_gives:在那一页登录后拿到的两样 Client ID 与 API Key, keys_go:放在技能包自己规定的位置 照它自带的说明, then:用技能包列出他能往里加内容的知识库 只有一个就用它 有几个就问他用哪一个, put:posts 里的文件按上传文件的做法一份一份加进库}
 ::STATE{@LIB_LEXIANG, what:腾讯乐享知识库, cost:要交会员费, official:https://lexiangla.com/mcp, how:官方 MCP 用静态令牌 不走 OAuth 传输是 streamable-http 地址是 mcp.lexiang-app.com 下的 mcp 带 preset 等于 meta 与 company_from 两个参数 请求头带 Authorization Bearer 令牌, user_gives:那一页显示的企业标识 与 访问令牌}
 ::STATE{@LIB_WEKNORA, what:腾讯开源的 WeKnora 知识库, cost:要自己有服务器, official:https://github.com/Tencent/WeKnora, how:它内置 MCP 服务 每个端点有自己的地址和令牌 传输是 Streamable HTTP, user_gives:自己服务器上那个端点的地址和令牌}
 ::STATE{@HAUL_ORDER, first:公众号 起号 写稿 流量主, second:个人 IP 与辨识度, third:出海与各平台, fourth:知识付费与卖课, from:精华帖 航海手册 项目库案例 成体系的先搬 零散的后搬}
@@ -30,7 +30,7 @@
 
 ::BOUNDARY{never:call_any_scys_write_tool_like_favorite_coin_feedback_or_publish|scope:permanent}
 ::BOUNDARY{never:open_scys_pages_with_a_browser_tool_or_a_crawler_yourself;use_the_mcp_tools_only|scope:permanent}
-::BOUNDARY{never:print_a_key_a_token_or_a_password_in_chat_or_write_one_into_memory_handoff_library_or_this_book;they_live_in_the_kit_ledger_or_the_DeepSeek_Harness_credential_store_only|scope:permanent}
+::BOUNDARY{never:print_a_key_a_token_or_a_password_in_chat_or_write_one_into_memory_handoff_library_or_this_book;they_live_only_in_the_kit_ledger_the_DeepSeek_Harness_credential_store_or_the_place_an_official_skill_itself_prescribes|scope:permanent}
 ::BOUNDARY{never:change_one_character_of_the_expert_text_or_of_the_expert_skill_files|scope:permanent}
 ::BOUNDARY{never:scan_a_code_log_in_authorize_pay_or_press_publish_for_the_user|scope:permanent}
 ::BOUNDARY{never:commit_or_push_the_library_folder_anywhere|scope:permanent}
@@ -63,7 +63,7 @@
 ::MODULE{LIBRARY|title:第三环 知识库 三天内把货搬回自己家}
   [STEP] 1 弹一张卡片让用户三选一 不设默认 把各自的代价写在选项上：@LIB_IMA 的 cost；@LIB_LEXIANG 的 cost；@LIB_WEKNORA 的 cost
   [STEP] 2 建好 @STORE 的各个文件夹；在工作区的 .gitignore 里加一行 library/ ；已经有了就跳过
-  [STEP] 3 接上用户选的那个库：读它 official 那一页 照 how 接；user_gives 里的东西一次只向用户要一样 拿到就存进账本或凭据库。用户暂时给不出来：照 never_wait 先往下走 货都先落本机
+  [STEP] 3 接上用户选的那个库：读它 official 那一页 照 how 接；那个库写了 before 的 先请用户把 before 做了；user_gives 里的东西一次只向用户要一样 一开始就说清一共要几样 拿到就存好 不在对话里复述。用户暂时给不出来：照 never_wait 先往下走 货都先落本机
   [STEP] 4 搬第一轮：照 @HAUL_ORDER 的先后 用生财 MCP 只读地找。正文就写在帖子里的：存成 posts 里的一份文件。正文在外部文档里的：生财 MCP 把那篇正文一起带回来了 就照样存成 posts 的一份文件 并在 links 里记一行 标 已有正文；没带回来的 不去读 在 links 里记一行 标 待搬。碰到限流就照返回的秒数等；当天额度用完就停 在交接单里记下搬到哪一类哪一条
   [STEP] 5 库已经接上：把本机新增的货送进库 送一条在 pending 里划掉一条。库还没接上：货留在本机 都记在 pending 里
   [STEP] 6 照 @SCHEDULE 建一条每天的提醒：指令是 照 AI全球自媒体 的第三环再搬一轮。告诉用户体验卡到期前它每天自己搬 不用管
