@@ -7,7 +7,8 @@
 | owner 丢来 | 落点 | 动作 |
 |---|---|---|
 | 好技能（SKILL.md 等） | `.dsh/skills/<名字>/SKILL.md` | 补 `name`/`description` frontmatter，README 清单登记 |
-| 可安装插件（bundle） | docs/market/registry.json（kind: bundle，不 vendor 代码） | 跑 tools/market_admit.py，ADMIT 且 owner 说收才进 |
+| 合作方的工程书或技能 | `books/<名字>/BOOK.md` 或 `.dsh/skills/<名字>/`，登记在 docs/market/registry.json | 跑 tools/market_admit.py，ADMIT 且 owner 说收，原样内置并钉版本；用户装了工具包就有，不用挑 |
+| 不合作的第三方好东西 | docs/社区插件甄选.md | 只给作者的仓库地址与官方原话，名单由 owner 挑；怎么用让用户的 DSH 自己处理 |
 | 文档 / 点评 / 教程 | `docs/` 或仓库根（面向新手的中文文档放根） | README 文档列表登记 |
 | MCP / 外部数据源 | `mcp/` 配置样例 | 密钥一律占位符（`YOUR_API_KEY`），真实密钥进 vault 或环境变量，绝不进文本 |
 | 好 prompt / 起手式 | `.dsh/skills/` 或 `prompts/` | 同上 |
@@ -52,7 +53,7 @@
 - [x] 决策纪律 v1.0.11：agent 先判定做/不做并给默认选择，owner 只答「做/过」，不提问（写入 AGENTS.local.md）
 - [x] 视觉路由 v1.0.27：新手默认 Flash，截图直接贴；视觉路由（看截图→Flash 子代理）是 Pro 开发者路线；输入框贴图在纯文本模型上被宿主拒收是 harness 行为，等官方
 - [x] 视频转文字 v1.0.28：本地化（tools/transcribe.py + SenseVoice sherpa-onnx，与 DSH 语音输入同款），Whisper 不进默认包；视频号与快手 yt-dlp 不支持，提示给文件
-- [x] 第三方吸收规范 v1.0.31：欢迎好产品——进全家桶=装前问+官方源+CITATIONS 署原作者，不把别人的思想转写成自己的工程书（首个：REA，morluto/rea，MIT）
+- [x] 第三方吸收规范 v1.0.31：欢迎好产品——进全家桶=装前问+官方源+CITATIONS 署原作者（首个：REA，morluto/rea，MIT）
 - [x] 社区插件甄选 v1.0.32：docs/社区插件甄选.md 只收录 REA；与官方能力重复、要钥匙或记忆、娱乐不稳定的一律不收（署名只给开发者，不给转发者）
 - [x] 第三方边界 v1.0.34：市场收录规则 v1——只给官方信息与官方入口、一律可选、不写装法用法例句、署名给原作者、无利益往来；REA 为首个样板（退回零安装入口）
 - [x] 收录样板二 v1.0.41：dsh-media-desk（woniuniuniu，MIT）按市场收录规则 v1 入库，三处署名
@@ -62,7 +63,9 @@
 - [x] 收敛：网页/图片打开方式用官方设置（设置 → 网页链接默认打开方式），不装插件替代官方开关
 - [x] 收敛：识图 = 切模型到 `deepseek-flash`（原生读图，一般人够用）；不立工程书、不装插件，提示用户一句话
 - [x] 判断纪律：负向断言先查三层（官方文档 → 用户设置 → 插件配置），只说「哪一层没找到」
-- [x] 市场 v1.1.0：docs/market/（registry.json 登记自家技能；docs/market/index.json 官方格式 1 只收 iLang 合规 bundle；market_admit.py 准入；不排名不爬虫不收 PR；第一条 bundle 收录前维护者必须在自己的 DSH 里从这个索引装一次，装不上不收）
+- [x] 市场 v1.1.0：docs/market/（registry.json 登记自家技能；market_admit.py 准入；不排名不爬虫不收 PR）
+- [x] 货架 v1.1.6：市场改成货架。过了门、owner 说收的技能与工程书原样内置进工具包，用户装了就有，不用挑；撤掉官方格式的插件索引；不合作的第三方只给作者仓库地址；用户想加源或看见别处不错的技能、插件时，agent 提示帮他写一版更好的，照 iLang 母版写成工程书，写好可提交送审；准入脚本与测试改成查工程书
+- [x] 工程书：AI全球自媒体 0.1.0（`books/ai-global-media/`，说一句「AI全球自媒体」开始；这一版做两环：装公众号爆文专家定成人格，接上内容源）
 - [ ] 好技能持续接入（长期，owner 驱动）
 
 ## 长期约定

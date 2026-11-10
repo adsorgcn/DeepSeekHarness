@@ -1,5 +1,5 @@
 name: 市场准入申请
-description: 想让一个 DeepSeek Harness 插件进 iLang DSH 市场（docs/market/）？先跑自检再提申请。
+description: 想让一本 iLang 工程书上 iLang DSH 的货架（docs/market/）？先跑自检再提申请。
 title: "[市场准入] "
 labels: ["market-admit"]
 body:
@@ -7,7 +7,7 @@ body:
     id: repo
     attributes:
       label: 仓库 https 地址
-      description: 插件的公开仓库地址
+      description: 放这本工程书的公开仓库地址
       placeholder: https://github.com/xxx/yyy
     validations:
       required: true
@@ -16,34 +16,34 @@ body:
     attributes:
       label: tag 或 commit
       description: 要收录的精确版本（tag 或 40 位 commit）
-      placeholder: v1.2.3
+      placeholder: v1.0.0
     validations:
       required: true
   - type: input
-    id: manifest
+    id: book
     attributes:
-      label: iLang 清单在仓库里的路径
-      description: 以 ::ILANG::v5.0 开头且含 ::GENE{ 的清单文件
-      placeholder: SKILL.md
-    validations:
-      required: true
-  - type: input
-    id: npm
-    attributes:
-      label: npm 包名
-      description: package.json 里的 name（与版本记录对应）
+      label: 工程书在仓库里的路径
+      description: 第一行和最后一行都是 ::ILANG::v5.0::ENGINEERING_BOOK 的那个文件；在根目录叫 BOOK.md 可以不填
+      placeholder: BOOK.md
     validations:
       required: false
+  - type: input
+    id: say
+    attributes:
+      label: 用户说哪句话开始
+      description: 装了工具包的人说这一句，他的 DSH 就照这本书做
+    validations:
+      required: true
   - type: input
     id: license
     attributes:
       label: 许可
-      description: package.json 的 license 字段与仓库 LICENSE 文件
+      description: 仓库根目录的 LICENSE 文件是哪种 OSI 许可
     validations:
       required: false
   - type: markdown
     attributes:
       value: |
-        只收 iLang 合规的插件：清单过官方校验器 strict 0 错 0 警告，钉 commit，许可在案。维护者会先跑
+        只收 iLang 合规的工程书：首尾两行标记齐全，过官方校验器 strict 0 错 0 警告，钉 commit，许可在案。维护者会先跑
         `python -X utf8 tools/market_admit.py <仓库地址> <tag 或 commit>`，看过准入输出后决定收不收。
-        不排名，不看星数，不排队。
+        收了的，原样内置进工具包，用户装了就有。收录顺序就是显示顺序。
