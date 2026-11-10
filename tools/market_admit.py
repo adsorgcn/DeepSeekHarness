@@ -13,7 +13,7 @@
 
 退出码: 0 ADMIT；1 REJECT（逐条原因）；2 网络或 git 出错。
 只用标准库与本机 git；绝不运行被检查仓库的任何代码；绝不写 registry.json，也不把书放进本仓库。
-ADMIT 之后由 owner 说收，才把这本书原样内置到 books/<name>/BOOK.md 并登记。
+ADMIT 之后由 owner 说收，才把这本书原样内置到 .dsh/books/<name>/BOOK.md 并登记。
 """
 import argparse
 import datetime
@@ -173,8 +173,8 @@ def main(argv=None):
             "version": version,
             "author": "",
             "license": lic,
-            "manifest": "books/%s/BOOK.md" % name,
-            "procedure": "books/%s/BOOK.md" % name,
+            "manifest": ".dsh/books/%s/BOOK.md" % name,
+            "procedure": ".dsh/books/%s/BOOK.md" % name,
             "upstream": {"repo": args.repo.rstrip("/"), "commit": commit,
                          "path": os.path.relpath(book, tmp).replace(os.sep, "/"),
                          "publishTimestamp": ts},

@@ -239,8 +239,8 @@ def check_structure(reg):
                 fail("%s 缺少字段 %s" % (e.get("name", "?"), k))
         if e.get("get") != "kit":
             fail("%s 的 get 必须是 kit：过门的条目一律随工具包内置" % e["name"])
-        if e["kind"] == "book" and not e["manifest"].startswith("books/"):
-            fail("%s 的工程书必须内置在 books/ 下" % e["name"])
+        if e["kind"] == "book" and not e["manifest"].startswith(".dsh/books/"):
+            fail("%s 的工程书必须内置在 .dsh/books/ 下" % e["name"])
 
 
 def main(argv=None):

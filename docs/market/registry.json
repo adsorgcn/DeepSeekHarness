@@ -116,13 +116,13 @@
         "zh": "说一句话，先装写作专家当人格，再接上内容源",
         "en": "Say one sentence: the writing expert becomes the persona, then the content source is connected."
       },
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": "ilang-ai",
       "license": "MIT",
-      "manifest": "books/ai-global-media/BOOK.md",
-      "procedure": "books/ai-global-media/BOOK.md",
+      "manifest": ".dsh/books/ai-global-media/BOOK.md",
+      "procedure": ".dsh/books/ai-global-media/BOOK.md",
       "upstream": null,
-      "sha256_lf": "f7b3120f773a3ab23411169994f3d57973e90d448592f93c15c88c79bf740ba8",
+      "sha256_lf": "74cfd1e92010bf85275e75d4509e109841e69381471bcd12fdf73eb819217bba",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,

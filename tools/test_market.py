@@ -70,7 +70,7 @@ def test_registry_structure():
         and all(all(k in e for k in need) for e in entries) \
         and all("zh" in e["description"] and "en" in e["description"] for e in entries) \
         and all(e.get("get") == "kit" for e in entries) \
-        and all(e["manifest"].startswith("books/") and e.get("say") and e.get("admitted_by") == "@SUN"
+        and all(e["manifest"].startswith(".dsh/books/") and e.get("say") and e.get("admitted_by") == "@SUN"
                 for e in entries if e["kind"] == "book")
     check("registry_structure", ok)
 
@@ -191,7 +191,7 @@ def test_render_states():
             "title": {"zh": "假书", "en": "Fake book"},
             "description": {"zh": "假的描述", "en": "fake desc"},
             "version": "1.0.0", "author": "tester", "license": "MIT",
-            "manifest": "books/fake-book/BOOK.md", "procedure": "books/fake-book/BOOK.md",
+            "manifest": ".dsh/books/fake-book/BOOK.md", "procedure": ".dsh/books/fake-book/BOOK.md",
             "upstream": {"repo": "https://github.com/t/f", "commit": "a" * 40},
             "sha256_lf": "b" * 64, "validated": {}, "say": "假口令", "get": "kit",
         }]
@@ -291,7 +291,7 @@ def test_shelf_rules_in_instructions():
         and "submitted_for_review" in gene \
         and "author_repository_address_only" in gene \
         and "index_json" not in gene \
-        and "::GENE{dsh_ai_global_media" in a and "books/ai-global-media/BOOK.md" in a
+        and "::GENE{dsh_ai_global_media" in a and ".dsh/books/ai-global-media/BOOK.md" in a
     check("shelf_rules_in_instructions", ok)
 
 

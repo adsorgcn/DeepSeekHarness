@@ -7,7 +7,7 @@
 | owner 丢来 | 落点 | 动作 |
 |---|---|---|
 | 好技能（SKILL.md 等） | `.dsh/skills/<名字>/SKILL.md` | 补 `name`/`description` frontmatter，README 清单登记 |
-| 合作方的工程书或技能 | `books/<名字>/BOOK.md` 或 `.dsh/skills/<名字>/`，登记在 docs/market/registry.json | 跑 tools/market_admit.py，ADMIT 且 owner 说收，原样内置并钉版本；用户装了工具包就有，不用挑 |
+| 合作方的工程书或技能 | `.dsh/books/<名字>/BOOK.md` 或 `.dsh/skills/<名字>/`，登记在 docs/market/registry.json | 跑 tools/market_admit.py，ADMIT 且 owner 说收，原样内置并钉版本；用户装了工具包就有，不用挑 |
 | 不合作的第三方好东西 | docs/社区插件甄选.md | 只给作者的仓库地址与官方原话，名单由 owner 挑；怎么用让用户的 DSH 自己处理 |
 | 文档 / 点评 / 教程 | `docs/` 或仓库根（面向新手的中文文档放根） | README 文档列表登记 |
 | MCP / 外部数据源 | `mcp/` 配置样例 | 密钥一律占位符（`YOUR_API_KEY`），真实密钥进 vault 或环境变量，绝不进文本 |
@@ -65,7 +65,7 @@
 - [x] 判断纪律：负向断言先查三层（官方文档 → 用户设置 → 插件配置），只说「哪一层没找到」
 - [x] 市场 v1.1.0：docs/market/（registry.json 登记自家技能；market_admit.py 准入；不排名不爬虫不收 PR）
 - [x] 货架 v1.1.6：市场改成货架。过了门、owner 说收的技能与工程书原样内置进工具包，用户装了就有，不用挑；撤掉官方格式的插件索引；不合作的第三方只给作者仓库地址；用户想加源或看见别处不错的技能、插件时，agent 提示帮他写一版更好的，照 iLang 母版写成工程书，写好可提交送审；准入脚本与测试改成查工程书
-- [x] 工程书：AI全球自媒体 0.1.0（`books/ai-global-media/`，说一句「AI全球自媒体」开始；这一版做两环：装公众号爆文专家定成人格，接上内容源）
+- [x] 工程书：AI全球自媒体 0.1.1（`.dsh/books/ai-global-media/`，说一句「AI全球自媒体」开始；这一版做两环：装公众号爆文专家定成人格，接上内容源）
 - [ ] 好技能持续接入（长期，owner 驱动）
 
 ## 长期约定

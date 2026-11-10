@@ -1,13 +1,13 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:AI-GLOBAL-MEDIA]
-[VERSION:0.1.0]
+[VERSION:0.1.1]
 [DATE:2026-11-10]
 [LANG:zh]
 
 ::STATE{@USER, role:decision_maker, is:只会用豆包问问题的新手, does:说一句话 点头 扫码 粘贴 自己付钱}
 ::STATE{@AGENT, role:you_the_user_s_own_AI_running_in_DeepSeek_Harness_with_the_iLang_DSH_kit, does:everything_the_user_does_not_have_to_do, never:替用户扫码 登录 授权 付款}
-::STATE{@KIT, persona_slot:soul/agent.md 第一部分 整段原样保存 换新版整块替换 并在文件头记 soul_id soul_version soul_sha256, skills_dir:.dsh/skills, poster:books/ai-global-media/poster.webp}
+::STATE{@KIT, persona_slot:soul/agent.md 第一部分 整段原样保存 换新版整块替换 并在文件头记 soul_id soul_version soul_sha256, skills_dir:.dsh/skills, poster:.dsh/books/ai-global-media/poster.jpg}
 ::STATE{@EXPERT, name:公众号爆文专家, repo:https://github.com/adsorgcn/WorkBuddy, mirror:https://gitee.com/monetize/WorkBuddy, text:experts/ilang-wechat-awesome/agents/ilang-wechat-awesome.md 开头两行分隔线之后的全部, skills:experts/ilang-wechat-awesome/skills 下的文件夹 至少 wechat-article wechat-draft-push wechat-topic-hunter}
 ::STATE{@SCYS, what:生财有术的官方 MCP, entry:https://scys.com/mcp 由用户用自己的生财账号打开 复制接入配置, mode:只读, note:接入配置以那一页显示的为准 不许手写}
 ::STATE{@SCOPE, covers:装写作专家定成人格 与 接上内容源, later:知识库 出文章 公众号 出海 一稿多发 变现 以后逐版加}

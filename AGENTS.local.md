@@ -144,9 +144,9 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
 
 ::GENE{dsh_ai_global_media|conf:confirmed|scope:global}
   T:user_says_the_trigger_phrase_of_a_book_on_the_shelf⇒load_that_book_and_follow_it_step_by_step
-  T:the_trigger_phrase_of_books/ai-global-media/BOOK.md_is_written_in_the_note_below
+  T:the_trigger_phrase_of_.dsh/books/ai-global-media/BOOK.md_is_written_in_the_note_below
   T:a_book_is_executed_as_written_one_question_at_a_time
   A:running_a_scys_write_tool⇒forbidden_read_only
   A:scanning_a_code_logging_in_or_paying_for_the_user⇒forbidden
 
-（说一句「AI全球自媒体」，我照 books/ai-global-media/BOOK.md 一步一步带你做：先装写作专家当人格，再领体验卡、接上生财，只读。）
+（说一句「AI全球自媒体」，我照 .dsh/books/ai-global-media/BOOK.md 一步一步带你做：先装写作专家当人格，再领体验卡、接上生财，只读。）
