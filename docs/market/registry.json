@@ -5,14 +5,14 @@
     "zh": "iLang DSH 市场"
   },
   "gate": {
-    "manifest": "清单：仓库里一个以 ::ILANG::v5.0 开头的围栏且含 ::GENE{",
-    "validator": "校验器：tools/ilang_grammar_validator.py --lint --strict 0 错 0 警告且 linted 不小于 1",
-    "pin": "钉死：技能记清单 sha256（CRLF 换 LF 后算），bundle 记 40 位 commit 与精确版本",
+    "manifest": "清单：技能是一个以 ::ILANG::v5.0 开头且含 ::GENE{ 的围栏；工程书的第一行和最后一行都是 ::ILANG::v5.0::ENGINEERING_BOOK",
+    "validator": "校验器：tools/ilang_grammar_validator.py --lint --strict 0 错 0 警告；技能的 linted 不小于 1",
+    "pin": "钉死：记清单或工程书的 sha256（CRLF 换 LF 后算）；来自别的仓库的再记 40 位 commit",
     "license": "许可：仓库里有 OSI 许可文件",
-    "veto": "否决：与官方能力重复、要拿走钥匙或记忆、娱乐与不稳定三类不收，来源 docs/社区插件甄选.md 第六条"
+    "veto": "否决：与官方能力重复、要拿走钥匙或记忆、娱乐与不稳定三类不收，来源 docs/社区插件甄选.md 第六条",
+    "shelf": "货架：过了门、owner 说收的，原样内置进工具包；装了工具包就有，不用挑"
   },
   "ranking": "none",
-  "_bundle_entry_shape": "纯说明，构建脚本忽略下划线开头的键：name（npm 包名）、title{zh,en}、description（package.json 的 description 原话，不改写）、author、license、repository{url}、homepage、manifest{path, sha256_lf}、validated{…}、versions[{version, commit, publishTimestamp, engines_dsh, source: git 或 npm}]、admitted_by 固定 @SUN、admitted_on 日期",
   "entries": [
     {
       "kind": "skill",
@@ -41,7 +41,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-09"
+        "at": "2026-11-10"
       },
       "get": "kit"
     },
@@ -69,7 +69,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-09"
+        "at": "2026-11-10"
       },
       "get": "kit"
     },
@@ -101,9 +101,40 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-09"
+        "at": "2026-11-10"
       },
       "get": "kit"
+    },
+    {
+      "kind": "book",
+      "name": "ai-global-media",
+      "title": {
+        "zh": "AI全球自媒体",
+        "en": "AI Global Media"
+      },
+      "description": {
+        "zh": "说一句话，先装写作专家当人格，再接上内容源",
+        "en": "Say one sentence: the writing expert becomes the persona, then the content source is connected."
+      },
+      "version": "0.1.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": "books/ai-global-media/BOOK.md",
+      "procedure": "books/ai-global-media/BOOK.md",
+      "upstream": null,
+      "sha256_lf": "f7b3120f773a3ab23411169994f3d57973e90d448592f93c15c88c79bf740ba8",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "markers": 2,
+        "at": "2026-11-10"
+      },
+      "say": "AI全球自媒体",
+      "get": "kit",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-10"
     }
   ]
 }

@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 """市场行为测试（纯标准库 + 本机 git，零网络）。
 
-场景：registry 结构；三条 skill 清单过校验器且 linted>=1；sha 漂移检测；
-mem-forever 围栏副本逐字一致；index.json 守官方格式 1；bundle 集合一致；
-市场页行区与零外部加载；market_build --check；market_admit 三个 git 夹具
-（ADMIT / REJECT 无清单 / REJECT 无 dsh.bundle）。
+货架模式：过门的技能与工程书都内置在工具包里，没有供用户添加的索引。
+
+场景：registry 结构；技能清单过校验器且 linted>=1；工程书首尾标记且过校验器；
+sha 漂移检测；mem-forever 围栏副本逐字一致；技能与工程书版本跟随正文；
+没有插件索引也没有加源的说法；市场页行区与零外部加载；市场页文案；
+market_build --check；行区两种渲染态；market_admit 四个 git 夹具
+（ADMIT / REJECT 无工程书 / REJECT 标记不对 / REJECT 无许可）；入口指令里的货架规矩。
 
 用法: python -X utf8 tools/test_market.py （工作目录=仓库根）
 """
@@ -21,6 +24,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = sys.executable
 GIT = shutil.which("git") or shutil.which("git", path=r"C:\Program Files\Git\cmd") or "git"
+MARKER = "::ILANG::v5.0::ENGINEERING_BOOK"
 RESULTS = []
 
 
@@ -42,18 +46,32 @@ def load_json(p):
     return json.load(io.open(os.path.join(ROOT, p), encoding="utf-8"))
 
 
+def run_validator(p):
+    res = subprocess.run([PY, "-B", "-X", "utf8", os.path.join(ROOT, "tools", "ilang_grammar_validator.py"),
+                          "--lint", p, "--strict"], capture_output=True, text=True,
+                         encoding="utf-8", errors="replace")
+    m = re.search(r"linted=([0-9]+)", res.stdout + res.stderr)
+    return res.returncode, int(m.group(1) if m else 0)
+
+
 def test_registry_structure():
     r = load_json("docs/market/registry.json")
     ok = r.get("format") == 1 and "en" in r["title"] and "zh" in r["title"] \
-        and isinstance(r.get("gate"), dict) and all(k in r["gate"] for k in ("manifest", "validator", "pin", "license", "veto")) \
+        and isinstance(r.get("gate"), dict) \
+        and all(k in r["gate"] for k in ("manifest", "validator", "pin", "license", "veto", "shelf")) \
         and r.get("ranking") == "none"
     entries = r["entries"]
     names = [e["name"] for e in entries]
-    skills = [e for e in entries if e.get("kind") == "skill"]
-    ok = ok and len(names) == len(set(names)) and {"mem-forever", "site-design-engine", "deai"} <= set(names) \
-        and all(e.get("kind") in ("skill", "bundle") for e in entries) \
-        and all(all(k in e for k in ("name", "title", "description", "version", "author", "license", "manifest", "procedure", "sha256_lf", "validated")) for e in skills) \
-        and all("zh" in e["description"] and "en" in e["description"] for e in skills)
+    need = ("name", "title", "description", "version", "author", "license",
+            "manifest", "procedure", "sha256_lf", "validated")
+    ok = ok and len(names) == len(set(names)) \
+        and {"mem-forever", "site-design-engine", "deai", "ai-global-media"} <= set(names) \
+        and all(e.get("kind") in ("skill", "book") for e in entries) \
+        and all(all(k in e for k in need) for e in entries) \
+        and all("zh" in e["description"] and "en" in e["description"] for e in entries) \
+        and all(e.get("get") == "kit" for e in entries) \
+        and all(e["manifest"].startswith("books/") and e.get("say") and e.get("admitted_by") == "@SUN"
+                for e in entries if e["kind"] == "book")
     check("registry_structure", ok)
 
 
@@ -61,25 +79,33 @@ def test_skill_manifests_validator():
     r = load_json("docs/market/registry.json")
     ok = True
     for e in [x for x in r["entries"] if x.get("kind") == "skill"]:
-        p = os.path.join(ROOT, e["manifest"])
         text = read(e["manifest"])
-        if text.count("::ILANG::v5.0") < 1:
-            ok = False
-            break
-        res = subprocess.run([PY, "-B", "-X", "utf8", os.path.join(ROOT, "tools", "ilang_grammar_validator.py"),
-                              "--lint", p, "--strict"], capture_output=True, text=True,
-                             encoding="utf-8", errors="replace")
-        m = re.search(r"linted=([0-9]+)", res.stdout + res.stderr)
-        if res.returncode != 0 or int(m.group(1) if m else 0) < 1:
+        rc, linted = run_validator(os.path.join(ROOT, e["manifest"]))
+        if text.count("::ILANG::v5.0") < 1 or rc != 0 or linted < 1:
             ok = False
             break
     check("skill_manifests_validator", ok)
 
 
+def test_book_manifests_validator():
+    r = load_json("docs/market/registry.json")
+    books = [x for x in r["entries"] if x.get("kind") == "book"]
+    ok = bool(books)
+    for e in books:
+        lines = [x.rstrip("\r") for x in read(e["manifest"]).split("\n")]
+        nonempty = [x for x in lines if x.strip()]
+        marks = sum(1 for x in lines if x.strip() == MARKER)
+        rc, _ = run_validator(os.path.join(ROOT, e["manifest"]))
+        if marks != 2 or nonempty[0].strip() != MARKER or nonempty[-1].strip() != MARKER or rc != 0:
+            ok = False
+            break
+    check("book_manifests_validator", ok)
+
+
 def test_sha_drift():
     r = load_json("docs/market/registry.json")
-    bad = [e["name"] for e in r["entries"] if e.get("kind") == "skill"
-           and lf_sha256(os.path.join(ROOT, e["manifest"])) != e.get("sha256_lf")]
+    bad = [e["name"] for e in r["entries"]
+           if lf_sha256(os.path.join(ROOT, e["manifest"])) != e.get("sha256_lf")]
     check("sha_drift", not bad, "bad=%s" % bad)
 
 
@@ -90,139 +116,43 @@ def test_mem_forever_fence_copy():
     check("mem_forever_fence_copy", a == b and a.count("\n") >= 15)
 
 
-def test_index_rules():
-    i = load_json("docs/market/index.json")
+def test_version_follows_text():
     r = load_json("docs/market/registry.json")
-    B = {e["name"] for e in r["entries"] if e.get("kind") == "bundle"}
-    plugins = i["plugins"]
-    names = [p["name"] for p in plugins]
-    md = i.get("metadata", {})
-    lab = md.get("labels", {})
-    ok = i.get("format") == 1 and "en" in i["title"] and "zh" in i["title"] \
-        and "en" in i.get("description", {}) and "zh" in i.get("description", {}) \
-        and "ilang" in lab and "en" in lab["ilang"]["title"] \
-        and not md.get("sortKeys") and not md.get("categories") \
-        and set(names) == B and len(names) == len(set(names))
-    for p in plugins:
-        ok = ok and isinstance(p.get("versions"), list) and p["versions"] \
-            and not p.get("metadata", {}).get("sortKeys") \
-            and "ilang" in p.get("metadata", {}).get("labels", []) \
-            and set(p["metadata"].get("labels", [])) <= set(lab)
-        for v in p["versions"]:
-            ok = ok and isinstance(v.get("publishTimestamp"), int) \
-                and isinstance(v.get("version"), str) and v["version"].strip() \
-                and isinstance(v.get("engines", {}).get("dsh"), str) \
-                and v["engines"]["dsh"].strip() \
-                and (v["source"].get("type") == "npm" or
-                     (v["source"].get("type") == "git"
-                      and v["source"]["url"].startswith("https://")
-                      and re.fullmatch("[0-9a-f]{40}", v["source"].get("commit", ""))))
-    check("index_rules", ok)
+    bad = []
+    for e in r["entries"]:
+        text = read(e["procedure"])
+        if e["kind"] == "skill":
+            m = re.search(r"^version:\s*(.+)$", text, re.M)
+        else:
+            m = re.search(r"^\[VERSION:([^\]\n]+)\]", text, re.M)
+        if not m or m.group(1).strip() != e.get("version"):
+            bad.append(e["name"])
+    check("version_follows_text", not bad, "bad=%s" % bad)
 
 
-def test_bundle_name_parity():
-    i = load_json("docs/market/index.json")
-    r = load_json("docs/market/registry.json")
-    B = {e["name"] for e in r["entries"] if e.get("kind") == "bundle"}
-    check("bundle_name_parity", {p["name"] for p in i["plugins"]} == B)
+def test_no_plugin_index():
+    """货架模式：没有索引文件，也不教人加索引源。"""
+    files = ["docs/market/index.html", "docs/index.html", "README.md", "AGENTS.local.md",
+             "ROADMAP.md", "docs/社区插件甄选.md", ".github/ISSUE_TEMPLATE/market-admit.yml"]
+    hits = [f for f in files if "market/index.json" in read(f) or "添加索引源" in read(f)]
+    ok = not os.path.exists(os.path.join(ROOT, "docs", "market", "index.json")) and not hits
+    check("no_plugin_index", ok, "hits=%s" % hits)
 
 
 def test_page_rows():
     r = load_json("docs/market/registry.json")
     m = read("docs/market/index.html")
     ext = re.findall(r"<a [^>]*href=['\"]https?://[^'\"]*['\"][^>]*>", m)
-    ok = all(e["name"] in m for e in r["entries"]) \
-        and "https://dsh.ilang.guide/market/index.json" in m \
-        and "market:skills" in m and "market:bundles" in m \
+    shown = [e["name"] if e["kind"] == "skill" else e["title"]["zh"] for e in r["entries"]]
+    ok = all(x in m for x in shown) \
+        and all(("说一句「%s」" % e["say"]) in m for e in r["entries"] if e["kind"] == "book") \
+        and "market:skills" in m and "market:books" in m and "market:bundles" not in m \
         and "<script src=" not in m \
         and not re.search(r"<link [^>]*href=['\"]https?://", m) \
         and "@import" not in m \
         and bool(ext) and all("target=" in a and "_blank" in a for a in ext) \
         and "0 个" not in m and "0个" not in m and "暂无" not in m
     check("page_rows", ok, "ext=%d" % len(ext))
-
-
-def test_build_check():
-    res = subprocess.run([PY, "-B", "-X", "utf8", os.path.join(ROOT, "tools", "market_build.py"), "--check"],
-                         capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=ROOT)
-    check("build_check", res.returncode == 0, res.stdout.strip()[-120:])
-
-
-def make_fixture(name, package, license_file=True, manifest=None):
-    """建一个临时 git 仓库；manifest 为 None 则不写清单文件。"""
-    tmp = tempfile.mkdtemp(prefix="market-fixture-%s-" % name)
-    with open(os.path.join(tmp, "package.json"), "w", encoding="utf-8") as f:
-        json.dump(package, f, ensure_ascii=False)
-    if license_file:
-        with open(os.path.join(tmp, "LICENSE"), "w", encoding="utf-8") as f:
-            f.write("MIT License\nCopyright (c) 2026 test\n")
-    if manifest is not None:
-        with open(os.path.join(tmp, "SKILL.md"), "w", encoding="utf-8") as f:
-            f.write(manifest)
-    subprocess.run([GIT, "init", "-q", "-b", "main"], cwd=tmp, check=True)
-    subprocess.run([GIT, "config", "user.email", "test@example.com"], cwd=tmp, check=True)
-    subprocess.run([GIT, "config", "user.name", "test"], cwd=tmp, check=True)
-    subprocess.run([GIT, "add", "-A"], cwd=tmp, check=True)
-    subprocess.run([GIT, "commit", "-q", "-m", "fixture"], cwd=tmp, check=True)
-    subprocess.run([GIT, "tag", "v1.0.0"], cwd=tmp, check=True)
-    return tmp
-
-
-def run_admit(repo, ref):
-    res = subprocess.run([PY, "-B", "-X", "utf8", os.path.join(ROOT, "tools", "market_admit.py"), repo, ref],
-                         capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=ROOT)
-    return res
-
-
-MANIFEST_OK = """# test skill
-
-```ilang
-::ILANG::v5.0
-::GENE{test|v:1.0|spec:ilang-v5.0}
-  T:test_trait
-  A:test_anti⇒forbidden
-```
-"""
-
-PKG_OK = {
-    "name": "test-bundle", "version": "1.0.0", "license": "MIT",
-    "description": "A test bundle.", "author": "tester",
-    "engines": {"dsh": ">=0.2.1 <0.3.0"},
-    "dsh": {"bundle": True},
-}
-
-
-def test_admit_fixtures():
-    tmp_a = make_fixture("admit", dict(PKG_OK), manifest=MANIFEST_OK)
-    tmp_b = make_fixture("nomanifest", dict(PKG_OK), manifest=None)
-    pkg_c = dict(PKG_OK)
-    del pkg_c["dsh"]
-    tmp_c = make_fixture("nobundle", pkg_c, manifest=MANIFEST_OK)
-    try:
-        ra = run_admit(tmp_a, "v1.0.0")
-        rb = run_admit(tmp_b, "v1.0.0")
-        rc = run_admit(tmp_c, "v1.0.0")
-        ok = ra.returncode == 0 and "ADMIT" in ra.stdout \
-            and rb.returncode == 1 and "REJECT" in rb.stdout \
-            and rc.returncode == 1 and "REJECT" in rc.stdout
-        check("admit_fixtures", ok,
-              "admit=%d no_manifest=%d no_bundle=%d" % (ra.returncode, rb.returncode, rc.returncode))
-        if rb.returncode != 1:
-            print("   no-manifest out:", rb.stdout[-200:])
-    finally:
-        for t in (tmp_a, tmp_b, tmp_c):
-            shutil.rmtree(t, ignore_errors=True)
-
-
-def test_skill_version_follows_procedure():
-    r = load_json("docs/market/registry.json")
-    bad = []
-    for e in [x for x in r["entries"] if x.get("kind") == "skill"]:
-        proc = read(e["procedure"])
-        m = re.search(r"^version:\s*(.+)$", proc, re.M)
-        if not m or m.group(1).strip() != e.get("version"):
-            bad.append(e["name"])
-    check("skill_version_follows_procedure", not bad, "bad=%s" % bad)
 
 
 def test_page_copy():
@@ -237,8 +167,16 @@ def test_page_copy():
         and not any(k in l for k in ("不看星数", "不爬虫", "不排队")) \
         and not any(x.startswith("。") for x in lines) \
         and "收录顺序就是显示顺序" in m and "收录顺序就是显示顺序" in l \
-        and "维护者看过准入输出后决定收不收。" in m
+        and "维护者看过准入输出后决定收不收。" in m \
+        and "装了工具包就有" in m and "装了工具包就有" in l \
+        and "帮你写一版更好的" in m
     check("page_copy", ok)
+
+
+def test_build_check():
+    res = subprocess.run([PY, "-B", "-X", "utf8", os.path.join(ROOT, "tools", "market_build.py"), "--check"],
+                         capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=ROOT)
+    check("build_check", res.returncode == 0, res.stdout.strip()[-120:])
 
 
 def test_render_states():
@@ -249,41 +187,129 @@ def test_render_states():
     spec.loader.exec_module(mb)
     fake = {
         "entries": [{
-            "kind": "bundle", "name": "fake-bundle",
-            "title": {"zh": "fake", "en": "fake"},
+            "kind": "book", "name": "fake-book",
+            "title": {"zh": "假书", "en": "Fake book"},
             "description": {"zh": "假的描述", "en": "fake desc"},
-            "author": "tester", "license": "MIT",
-            "homepage": "", "repository": {"url": "https://github.com/t/f"},
-            "versions": [{
-                "version": "1.0.0", "publishTimestamp": 1700000000,
-                "engines_dsh": ">=0.2.1 <0.3.0",
-                "source": {"type": "git", "url": "https://github.com/t/f",
-                           "commit": "a" * 40},
-            }],
+            "version": "1.0.0", "author": "tester", "license": "MIT",
+            "manifest": "books/fake-book/BOOK.md", "procedure": "books/fake-book/BOOK.md",
+            "upstream": {"repo": "https://github.com/t/f", "commit": "a" * 40},
+            "sha256_lf": "b" * 64, "validated": {}, "say": "假口令", "get": "kit",
         }]
     }
-    with_rows = mb.bundles_region(fake)
-    empty = mb.bundles_region({"entries": []})
-    ok = "添加索引源" in with_rows and "自定义插件索引" in with_rows \
-        and "https://dsh.ilang.guide/market/index.json" in with_rows \
-        and "索引地址" in empty and "添加索引源" not in empty
+    with_rows = mb.books_region(fake)
+    empty = mb.books_region({"entries": []})
+    ok = "假书" in with_rows and "说一句「假口令」" in with_rows and "随工具包" in with_rows \
+        and "a" * 12 in with_rows and "装了工具包就有" in with_rows \
+        and "装了工具包就有" in empty and "m-row" not in empty \
+        and "索引" not in with_rows and "索引" not in empty
     check("render_states", ok)
+
+
+BOOK_OK = """::ILANG::v5.0::ENGINEERING_BOOK
+[TYPE:engineering_book]
+[ID:TEST-BOOK]
+[VERSION:1.0.0]
+[DATE:2026-11-10]
+[LANG:en]
+
+::STATE{@USER, role:decision_maker}
+
+::OBJECTIVE{id:g1|owner:user|trust:trusted|version:1|status:active}
+  target: a test book that does nothing
+  ACCEPT: every item of RUBRIC passes
+  NON_GOALS: anything else
+  DONE_WHEN: the report was sent
+
+::MODULE{HOW|title:how}
+  [STEP] 1 say hello
+
+::RUBRIC{A1: it said hello|check:human}
+::ILANG::v5.0::ENGINEERING_BOOK
+"""
+
+
+def make_fixture(name, book=None, license_file=True):
+    """建一个临时 git 仓库；book 为 None 则不写工程书。"""
+    tmp = tempfile.mkdtemp(prefix="market-fixture-%s-" % name)
+    with open(os.path.join(tmp, "README.md"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("fixture\n")
+    if license_file:
+        with open(os.path.join(tmp, "LICENSE"), "w", encoding="utf-8", newline="\n") as f:
+            f.write("MIT License\nCopyright (c) 2026 test\n")
+    if book is not None:
+        with open(os.path.join(tmp, "BOOK.md"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(book)
+    subprocess.run([GIT, "init", "-q", "-b", "main"], cwd=tmp, check=True)
+    subprocess.run([GIT, "config", "user.email", "test@example.com"], cwd=tmp, check=True)
+    subprocess.run([GIT, "config", "user.name", "test"], cwd=tmp, check=True)
+    subprocess.run([GIT, "config", "core.autocrlf", "false"], cwd=tmp, check=True)
+    subprocess.run([GIT, "add", "-A"], cwd=tmp, check=True)
+    subprocess.run([GIT, "commit", "-q", "-m", "fixture"], cwd=tmp, check=True)
+    subprocess.run([GIT, "tag", "v1.0.0"], cwd=tmp, check=True)
+    return tmp
+
+
+def run_admit(repo, ref):
+    res = subprocess.run([PY, "-B", "-X", "utf8", os.path.join(ROOT, "tools", "market_admit.py"), repo, ref],
+                         capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=ROOT)
+    return res
+
+
+def test_admit_fixtures():
+    tmp_a = make_fixture("admit", book=BOOK_OK)
+    tmp_b = make_fixture("nobook", book=None)
+    tmp_c = make_fixture("badmarker", book=BOOK_OK.replace(MARKER + "\n[TYPE", "[TYPE", 1))
+    tmp_d = make_fixture("nolicense", book=BOOK_OK, license_file=False)
+    try:
+        ra = run_admit(tmp_a, "v1.0.0")
+        rb = run_admit(tmp_b, "v1.0.0")
+        rc = run_admit(tmp_c, "v1.0.0")
+        rd = run_admit(tmp_d, "v1.0.0")
+        ok = ra.returncode == 0 and "ADMIT" in ra.stdout and '"kind": "book"' in ra.stdout \
+            and '"name": "test-book"' in ra.stdout and '"get": "kit"' in ra.stdout \
+            and rb.returncode == 1 and "REJECT" in rb.stdout \
+            and rc.returncode == 1 and "REJECT" in rc.stdout \
+            and rd.returncode == 1 and "REJECT" in rd.stdout
+        check("admit_fixtures", ok,
+              "admit=%d no_book=%d bad_marker=%d no_license=%d"
+              % (ra.returncode, rb.returncode, rc.returncode, rd.returncode))
+        if ra.returncode != 0:
+            print("   admit out:", (ra.stdout + ra.stderr)[-300:])
+    finally:
+        for t in (tmp_a, tmp_b, tmp_c, tmp_d):
+            shutil.rmtree(t, ignore_errors=True)
+
+
+def test_shelf_rules_in_instructions():
+    a = read("AGENTS.local.md")
+    i = a.find("::GENE{dsh_market")
+    j = a.find("::GENE{", i + 10)
+    gene = a[i:j if j > 0 else len(a)]
+    ok = i >= 0 \
+        and "ship_inside_the_kit" in gene \
+        and "help_you_write_a_better_version" in gene \
+        and "submitted_for_review" in gene \
+        and "author_repository_address_only" in gene \
+        and "index_json" not in gene \
+        and "::GENE{dsh_ai_global_media" in a and "books/ai-global-media/BOOK.md" in a
+    check("shelf_rules_in_instructions", ok)
 
 
 def main():
     os.chdir(ROOT)
     test_registry_structure()
     test_skill_manifests_validator()
+    test_book_manifests_validator()
     test_sha_drift()
     test_mem_forever_fence_copy()
-    test_skill_version_follows_procedure()
-    test_index_rules()
-    test_bundle_name_parity()
+    test_version_follows_text()
+    test_no_plugin_index()
     test_page_rows()
     test_page_copy()
     test_build_check()
     test_render_states()
     test_admit_fixtures()
+    test_shelf_rules_in_instructions()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)
     print("SUMMARY:", "ALL PASS (%d scenarios)" % len(RESULTS) if not failed else ("FAIL: " + ", ".join(failed)))

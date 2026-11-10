@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""市场构建器：从 docs/market/registry.json 生成 docs/market/index.json（官方格式 1）与页面行区。
+"""市场构建器：校验 docs/market/registry.json 里登记的技能与工程书，回写 sha256 与校验记录，生成市场页的行区。
+
+货架模式：过了门、owner 说收的技能与工程书都原样内置在工具包里，装了工具包就有；
+这里没有供用户自己添加的索引，也不让用户在一堆条目里挑。
 
 用法:
-  python tools/market_build.py           # 校验、回写 sha256_lf/validated、生成 index.json 与页面行区
+  python tools/market_build.py           # 校验、回写 version/sha256_lf/validated、生成页面行区
   python tools/market_build.py --check   # 只校验，不写任何文件
 
-只用标准库与本机 git；绝不运行被登记仓库的任何代码。
+只用标准库；绝不运行被登记内容里的任何代码。
 """
 import argparse
 import datetime
@@ -20,10 +23,11 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTRY = os.path.join(ROOT, "docs", "market", "registry.json")
-INDEX_JSON = os.path.join(ROOT, "docs", "market", "index.json")
 INDEX_HTML = os.path.join(ROOT, "docs", "market", "index.html")
 VALIDATOR = os.path.join(ROOT, "tools", "ilang_grammar_validator.py")
-GIT_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+MARKER = "::ILANG::v5.0::ENGINEERING_BOOK"
+KINDS = ("skill", "book")
+TOOL = "tools/ilang_grammar_validator.py --lint --strict"
 
 
 def fail(msg):
@@ -36,169 +40,57 @@ def sha256_lf(path):
         return hashlib.sha256(f.read().replace(b"\r\n", b"\n")).hexdigest()
 
 
+def run_validator(path):
+    r = subprocess.run([sys.executable, "-X", "utf8", VALIDATOR, "--lint",
+                        os.path.join(ROOT, path), "--strict"],
+                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+    out = r.stdout + r.stderr
+    m = re.search(r"linted=([0-9]+)", out)
+    return r.returncode, out, int(m.group(1)) if m else 0
+
+
 def validate_manifest(path):
-    """返回 (linted, errors, warnings)；违规直接抛异常。"""
+    """技能清单：返回 linted；违规直接抛异常。"""
     if not os.path.exists(os.path.join(ROOT, path)):
         raise ValueError("%s 不存在" % path)
     text = io.open(os.path.join(ROOT, path), encoding="utf-8").read()
     if "::ILANG::v5.0" not in text:
         raise ValueError("%s 缺少 ::ILANG::v5.0" % path)
-    r = subprocess.run([sys.executable, "-X", "utf8", VALIDATOR, "--lint",
-                        os.path.join(ROOT, path), "--strict"],
-                       capture_output=True, text=True, encoding="utf-8", errors="replace")
-    if r.returncode != 0:
-        raise ValueError("%s 校验器未通过：%s" % (path, (r.stdout + r.stderr).strip()[:300]))
-    m = re.search(r"linted=([0-9]+)", r.stdout + r.stderr)
-    linted = int(m.group(1)) if m else 0
+    rc, out, linted = run_validator(path)
+    if rc != 0:
+        raise ValueError("%s 校验器未通过：%s" % (path, out.strip()[:300]))
     if linted < 1:
         raise ValueError("%s 没有 linted 围栏（linted=%d）" % (path, linted))
     return linted
 
 
-def build_index(reg):
-    bundles = [e for e in reg["entries"] if e.get("kind") == "bundle"]
-    plugins = []
-    for e in bundles:
-        name = e["name"]
-        if any(p["name"] == name for p in plugins):
-            raise ValueError("插件名重复：%s" % name)
-        versions = []
-        for v in e["versions"]:
-            ver = v["version"]
-            ts = v["publishTimestamp"]
-            eng = v.get("engines_dsh", "")
-            src = v["source"]
-            if not isinstance(ver, str) or not ver.strip():
-                raise ValueError("%s 有版本缺少精确 version" % name)
-            if not isinstance(ts, int):
-                raise ValueError("%s@%s publishTimestamp 不是整数" % (name, ver))
-            if not isinstance(eng, str) or not eng.strip():
-                raise ValueError("%s@%s engines.dsh 为空" % (name, ver))
-            stype = src.get("type")
-            if stype == "npm":
-                pass
-            elif stype == "git":
-                url = src.get("url", "")
-                if not url.startswith("https://") or not GIT_COMMIT_RE.match(src.get("commit", "")):
-                    raise ValueError("%s@%s git 来源不合法" % (name, ver))
-            else:
-                raise ValueError("%s@%s source.type 只能是 npm 或 git" % (name, ver))
-            versions.append({
-                "version": ver,
-                "publishTimestamp": ts,
-                "source": src,
-                "engines": {"dsh": eng},
-            })
-        plugins.append({
-            "name": name,
-            "title": e.get("title", {"en": name, "zh": name}),
-            "description": e.get("description", {"en": "", "zh": ""}),
-            "author": e.get("author", ""),
-            "homepage": e.get("homepage", ""),
-            "repository": e.get("repository", {"url": ""}),
-            "metadata": {"labels": ["ilang"], "keywords": []},
-            "versions": versions,
-        })
-    labels = {
-        "ilang": {"title": {"en": "iLang-conformant", "zh": "iLang 合规"}},
-    }
-    for p in plugins:
-        for lab in p["metadata"]["labels"]:
-            if lab not in labels:
-                raise ValueError("%s 引用了未声明的标签 %s" % (p["name"], lab))
-    index = {
-        "format": 1,
-        "title": {"en": "iLang DSH Market", "zh": "iLang DSH 市场"},
-        "description": {
-            "en": "Only iLang-conformant DeepSeek Harness plugins: the manifest passes the official validator with zero errors and zero warnings, versions are pinned, licenses are on record. Listing order is admission order.",
-            "zh": "只收 iLang 合规的 DeepSeek Harness 插件：清单过官方校验器 strict 0 错 0 警告，钉提交，许可在案。收录顺序就是显示顺序。",
-        },
-        "metadata": {
-            "labels": labels,
-        },
-        "plugins": plugins,
-    }
-    # 写出前自检官方规则
-    if index["format"] != 1:
-        raise ValueError("format 必须是 1")
-    if "en" not in index["title"]:
-        raise ValueError("title 必须含 en")
-    return index
-
-
-def skill_rows(reg):
-    rows = []
-    for e in [x for x in reg["entries"] if x.get("kind") == "skill"]:
-        up = e.get("upstream")
-        if up:
-            src_html = '<a href="%s" target="_blank" rel="noopener">%s</a>' % (up["repo"], up["repo"])
-            if up.get("doi"):
-                src_html += ' · <a href="https://doi.org/%s" target="_blank" rel="noopener">%s</a>' % (up["doi"], up["doi"])
-            if up.get("tag"):
-                src_html += " · %s" % up["tag"]
-        else:
-            src_html = "—"
-        sha = e.get("sha256_lf", "") or ""
-        rows.append(
-            '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
-            '<div class="m-meta">%s · %s · %s · %s · <span title="%s">%s</span> · <span class="m-kit">随工具包</span></div></div>'
-            % (e["name"], e["description"]["zh"], e["version"], e["author"], e["license"],
-               src_html, sha, sha[:12])
-        )
-    return "\n".join(rows)
-
-
-def bundle_rows(reg):
-    rows = []
-    for e in [x for x in reg["entries"] if x.get("kind") == "bundle"]:
-        repo = e.get("repository", {}).get("url", "")
-        repo_html = ('<a href="%s" target="_blank" rel="noopener">%s</a>' % (repo, repo)) if repo else "—"
-        ver = e["versions"][-1]
-        commit = ver["source"].get("commit", "")
-        meta = "%s · %s · %s · %s" % (e["author"], e["license"], repo_html, ver["version"])
-        if commit:
-            meta += '<span title="%s"> · %s</span>' % (commit, commit[:12])
-        rows.append(
-            '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
-            '<div class="m-meta">%s</div></div>'
-            % (e["name"], e["description"]["zh"], meta)
-        )
-    return "\n".join(rows)
-
-
-def bundles_region(reg):
-    """market:bundles 标记之间的内容：空态（无数量词）或有行态（行区 + 官方三步）。"""
-    addr = '<code class="code">https://dsh.ilang.guide/market/index.json</code>'
-    rows = bundle_rows(reg)
-    if rows:
-        steps = (
-            '<p class="after">在 DSH 里：插件 → 实验性插件 → 打开「自定义插件索引」；'
-            '发现 → 添加索引源 → 贴 %s ；安装前核对确认框里的来源。</p>' % addr
-        )
-        return "\n" + rows + "\n    " + steps
-    return ('\n    <p class="after">索引地址</p>\n'
-            '    <code class="code">https://dsh.ilang.guide/market/index.json</code>\n'
-            '    <p class="after">过了门的插件会出现在这里，DSH 里添加这个地址就能看到。</p>')
-
-
-def render_page(reg):
-    text = io.open(INDEX_HTML, encoding="utf-8").read()
-    a, b = "<!-- market:skills -->", "<!-- /market:skills -->"
-    c, d = "<!-- market:bundles -->", "<!-- /market:bundles -->"
-    for x, y in ((a, b), (c, d)):
-        if x not in text or y not in text:
-            raise ValueError("index.html 缺少 %s 标记" % x)
-    text = re.sub(re.escape(a) + r".*?" + re.escape(b),
-                  a + "\n" + skill_rows(reg) + "\n    " + b, text, flags=re.S)
-    text = re.sub(re.escape(c) + r".*?" + re.escape(d),
-                  c + bundles_region(reg) + "\n    " + d, text, flags=re.S)
-    return text
+def validate_book(path):
+    """工程书：首尾两行都是标记且全文恰好两行，校验器 strict 0 错 0 警告；返回标记行数。"""
+    if not os.path.exists(os.path.join(ROOT, path)):
+        raise ValueError("%s 不存在" % path)
+    text = io.open(os.path.join(ROOT, path), encoding="utf-8").read()
+    lines = [x.rstrip("\r") for x in text.split("\n")]
+    nonempty = [x for x in lines if x.strip()]
+    marks = sum(1 for x in lines if x.strip() == MARKER)
+    if not nonempty or nonempty[0].strip() != MARKER or nonempty[-1].strip() != MARKER or marks != 2:
+        raise ValueError("%s 的第一行和最后一行必须都是 %s，全文恰好两行（现在 %d 行）" % (path, MARKER, marks))
+    rc, out, _ = run_validator(path)
+    if rc != 0:
+        raise ValueError("%s 校验器未通过：%s" % (path, out.strip()[:300]))
+    return marks
 
 
 def procedure_frontmatter_version(path):
     """读 procedure 文件 frontmatter 里的 version 行；没有则返回 None。"""
     text = io.open(os.path.join(ROOT, path), encoding="utf-8").read()
     m = re.search(r"^version:\s*(.+)$", text, re.M)
+    return m.group(1).strip() if m else None
+
+
+def book_header_version(path):
+    """读工程书头部的 [VERSION:...]；没有则返回 None。"""
+    text = io.open(os.path.join(ROOT, path), encoding="utf-8").read()
+    m = re.search(r"^\[VERSION:([^\]\n]+)\]", text, re.M)
     return m.group(1).strip() if m else None
 
 
@@ -226,29 +118,129 @@ def sync_market_fence(entry):
     return pm.group(0).strip()
 
 
-def fill_skill_meta(reg, write):
+def sha_drift(reg):
+    """登记的 sha256 与文件现状不一致的条目名。"""
+    bad = []
+    for e in reg["entries"]:
+        p = os.path.join(ROOT, e["manifest"])
+        if not os.path.exists(p) or sha256_lf(p) != e.get("sha256_lf"):
+            bad.append(e["name"])
+    return bad
+
+
+def fill_meta(reg, write):
+    """回写每条的 version、sha256_lf 与 validated；返回是否有变化。write=False 时不动磁盘上的清单副本。"""
     changed = False
-    for e in [x for x in reg["entries"] if x.get("kind") == "skill"]:
-        ver = procedure_frontmatter_version(e["procedure"])
+    today = datetime.date.today().isoformat()
+    for e in reg["entries"]:
+        if e["kind"] == "skill":
+            ver = procedure_frontmatter_version(e["procedure"])
+            if write:
+                sync_market_fence(e)
+            linted = validate_manifest(e["manifest"])
+            validated = {"tool": TOOL, "strict": True, "errors": 0, "warnings": 0,
+                         "fences_linted": linted, "at": today}
+        else:
+            ver = book_header_version(e["manifest"])
+            marks = validate_book(e["manifest"])
+            validated = {"tool": TOOL, "strict": True, "errors": 0, "warnings": 0,
+                         "markers": marks, "at": today}
         if ver and e.get("version") != ver:
             e["version"] = ver
             changed = True
-        sync_market_fence(e)
-        linted = validate_manifest(e["manifest"])
         sha = sha256_lf(os.path.join(ROOT, e["manifest"]))
-        validated = {
-            "tool": "tools/ilang_grammar_validator.py --lint --strict",
-            "strict": True,
-            "errors": 0,
-            "warnings": 0,
-            "fences_linted": linted,
-            "at": datetime.date.today().isoformat(),
-        }
         if e.get("sha256_lf") != sha or e.get("validated") != validated:
             e["sha256_lf"] = sha
             e["validated"] = validated
             changed = True
     return changed
+
+
+def source_html(e):
+    up = e.get("upstream")
+    if not up:
+        return "—"
+    html = '<a href="%s" target="_blank" rel="noopener">%s</a>' % (up["repo"], up["repo"])
+    if up.get("doi"):
+        html += ' · <a href="https://doi.org/%s" target="_blank" rel="noopener">%s</a>' % (up["doi"], up["doi"])
+    if up.get("tag"):
+        html += " · %s" % up["tag"]
+    if up.get("commit"):
+        html += ' · <span title="%s">%s</span>' % (up["commit"], up["commit"][:12])
+    return html
+
+
+def skill_rows(reg):
+    rows = []
+    for e in [x for x in reg["entries"] if x.get("kind") == "skill"]:
+        sha = e.get("sha256_lf", "") or ""
+        rows.append(
+            '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
+            '<div class="m-meta">%s · %s · %s · %s · <span title="%s">%s</span> · <span class="m-kit">随工具包</span></div></div>'
+            % (e["name"], e["description"]["zh"], e["version"], e["author"], e["license"],
+               source_html(e), sha, sha[:12])
+        )
+    return "\n".join(rows)
+
+
+def book_rows(reg):
+    rows = []
+    for e in [x for x in reg["entries"] if x.get("kind") == "book"]:
+        sha = e.get("sha256_lf", "") or ""
+        say = e.get("say", "")
+        say_html = ("说一句「%s」 · " % say) if say else ""
+        rows.append(
+            '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
+            '<div class="m-meta">%s%s · %s · %s · %s · <span title="%s">%s</span> · <span class="m-kit">随工具包</span></div></div>'
+            % (e["title"]["zh"], e["description"]["zh"], say_html, e["version"], e["author"], e["license"],
+               source_html(e), sha, sha[:12])
+        )
+    return "\n".join(rows)
+
+
+def books_region(reg):
+    """market:books 标记之间的内容：有行态（行区 + 一句用法）或空态（一句话，不带数量词）。"""
+    rows = book_rows(reg)
+    if rows:
+        return ("\n" + rows + "\n"
+                '    <p class="after">装了工具包就有。说出那句话，它照着书一步一步带你做。</p>')
+    return '\n    <p class="after">过了门、owner 说收的工程书放在这里，装了工具包就有。</p>'
+
+
+def render_page(reg):
+    text = io.open(INDEX_HTML, encoding="utf-8").read()
+    a, b = "<!-- market:skills -->", "<!-- /market:skills -->"
+    c, d = "<!-- market:books -->", "<!-- /market:books -->"
+    for x, y in ((a, b), (c, d)):
+        if x not in text or y not in text:
+            raise ValueError("index.html 缺少 %s 标记" % x)
+    text = re.sub(re.escape(a) + r".*?" + re.escape(b),
+                  lambda _m: a + "\n" + skill_rows(reg) + "\n    " + b, text, flags=re.S)
+    text = re.sub(re.escape(c) + r".*?" + re.escape(d),
+                  lambda _m: c + books_region(reg) + "\n    " + d, text, flags=re.S)
+    return text
+
+
+def check_structure(reg):
+    if reg.get("format") != 1 or "en" not in reg.get("title", {}):
+        fail("registry format/title 违规")
+    if reg.get("ranking") != "none":
+        fail("ranking 必须是 none")
+    names = [e.get("name") for e in reg["entries"]]
+    if len(names) != len(set(names)):
+        fail("登记表里有重名条目")
+    need = ("name", "title", "description", "version", "author", "license",
+            "manifest", "procedure", "sha256_lf", "validated")
+    for e in reg["entries"]:
+        if e.get("kind") not in KINDS:
+            fail("%s 的 kind 只能是 skill 或 book" % e.get("name", "?"))
+        for k in need:
+            if k not in e:
+                fail("%s 缺少字段 %s" % (e.get("name", "?"), k))
+        if e.get("get") != "kit":
+            fail("%s 的 get 必须是 kit：过门的条目一律随工具包内置" % e["name"])
+        if e["kind"] == "book" and not e["manifest"].startswith("books/"):
+            fail("%s 的工程书必须内置在 books/ 下" % e["name"])
 
 
 def main(argv=None):
@@ -257,47 +249,28 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     reg = json.load(io.open(REGISTRY, encoding="utf-8"))
-    if reg.get("format") != 1 or "en" not in reg.get("title", {}):
-        fail("registry format/title 违规")
-    if reg.get("ranking") != "none":
-        fail("ranking 必须是 none")
-
-    # bundle 字段预检
-    for e in [x for x in reg["entries"] if x.get("kind") == "bundle"]:
-        for k in ("name", "title", "description", "author", "license", "repository", "versions"):
-            if k not in e:
-                fail("%s 缺少字段 %s" % (e.get("name", "?"), k))
-        if not e["versions"]:
-            fail("%s versions 为空" % e["name"])
-        for v in e["versions"]:
-            if v["source"].get("type") == "git" and not GIT_COMMIT_RE.match(v["source"].get("commit", "")):
-                fail("%s@%s commit 格式非法" % (e["name"], v["version"]))
-
-    changed = fill_skill_meta(reg, write=not args.check)
-    index = build_index(reg)
-
-    if args.check:
-        text = io.open(INDEX_HTML, encoding="utf-8").read()
-        for marker in ("<!-- market:skills -->", "<!-- /market:skills -->",
-                       "<!-- market:bundles -->", "<!-- /market:bundles -->"):
-            if marker not in text:
-                fail("index.html 缺少 %s" % marker)
-        existing = json.load(io.open(INDEX_JSON, encoding="utf-8"))
-        if existing != index:
-            fail("index.json 与登记表不一致（先跑 python tools/market_build.py 重新生成）")
-        print("[market_build] check OK")
-        return 0
+    check_structure(reg)
+    try:
+        if args.check:
+            drift = sha_drift(reg)
+            fill_meta(reg, write=False)
+            if drift:
+                fail("这些条目的 sha256 与登记不一致：%s（先跑 python tools/market_build.py 重新生成）" % ", ".join(drift))
+            if render_page(reg) != io.open(INDEX_HTML, encoding="utf-8").read():
+                fail("市场页的行区不是最新（先跑 python tools/market_build.py 重新生成）")
+            print("[market_build] check OK")
+            return 0
+        fill_meta(reg, write=True)
+        page = render_page(reg)
+    except ValueError as exc:
+        fail(str(exc))
 
     with open(REGISTRY, "w", encoding="utf-8", newline="\n") as f:
         json.dump(reg, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    with open(INDEX_JSON, "w", encoding="utf-8", newline="\n") as f:
-        json.dump(index, f, ensure_ascii=False, indent=2)
-        f.write("\n")
-    page = render_page(reg)
     with open(INDEX_HTML, "w", encoding="utf-8", newline="\n") as f:
         f.write(page)
-    print("[market_build] wrote registry.json / index.json / index.html rows")
+    print("[market_build] wrote registry.json / index.html rows")
     return 0
 
 
