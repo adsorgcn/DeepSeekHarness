@@ -26,8 +26,9 @@ REGISTRY = os.path.join(ROOT, "docs", "market", "registry.json")
 INDEX_HTML = os.path.join(ROOT, "docs", "market", "index.html")
 VALIDATOR = os.path.join(ROOT, "tools", "ilang_grammar_validator.py")
 MARKER = "::ILANG::v5.0::ENGINEERING_BOOK"
-KINDS = ("skill", "book")
+KINDS = ("skill", "book", "plugin")
 TOOL = "tools/ilang_grammar_validator.py --lint --strict"
+COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 def fail(msg):
@@ -119,9 +120,11 @@ def sync_market_fence(entry):
 
 
 def sha_drift(reg):
-    """登记的 sha256 与文件现状不一致的条目名。"""
+    """登记的 sha256 与文件现状不一致的条目名（plugin 条目没有 sha256，跳过）。"""
     bad = []
     for e in reg["entries"]:
+        if e.get("kind") == "plugin":
+            continue
         p = os.path.join(ROOT, e["manifest"])
         if not os.path.exists(p) or sha256_lf(p) != e.get("sha256_lf"):
             bad.append(e["name"])
@@ -129,10 +132,14 @@ def sha_drift(reg):
 
 
 def fill_meta(reg, write):
-    """回写每条的 version、sha256_lf 与 validated；返回是否有变化。write=False 时不动磁盘上的清单副本。"""
+    """回写每条的 version、sha256_lf 与 validated；返回是否有变化。write=False 时不动磁盘上的清单副本。
+
+    plugin 条目钉的是 npm 的 integrity 与 commit，不在此回写。"""
     changed = False
     today = datetime.date.today().isoformat()
     for e in reg["entries"]:
+        if e["kind"] == "plugin":
+            continue
         if e["kind"] == "skill":
             ver = procedure_frontmatter_version(e["procedure"])
             if write:
@@ -233,7 +240,27 @@ def check_structure(reg):
             "manifest", "procedure", "sha256_lf", "validated")
     for e in reg["entries"]:
         if e.get("kind") not in KINDS:
-            fail("%s 的 kind 只能是 skill 或 book" % e.get("name", "?"))
+            fail("%s 的 kind 只能是 skill、book 或 plugin" % e.get("name", "?"))
+        if e["kind"] == "plugin":
+            npm = e.get("npm") or {}
+            up = e.get("upstream") or {}
+            if not isinstance(npm.get("name"), str) or not npm.get("name"):
+                fail("%s 缺 npm.name" % e["name"])
+            if not isinstance(npm.get("version"), str) or not npm.get("version"):
+                fail("%s 缺 npm.version" % e["name"])
+            if not isinstance(npm.get("integrity"), str) or not npm["integrity"].startswith("sha512-"):
+                fail("%s 的 npm.integrity 必须以 sha512- 开头" % e["name"])
+            if not isinstance(up.get("commit"), str) or not COMMIT_RE.match(up["commit"]):
+                fail("%s 的 upstream.commit 必须是 40 位十六进制" % e["name"])
+            if not isinstance(up.get("tag"), str) or up["tag"] != "v" + npm["version"]:
+                fail("%s 的 upstream.tag 必须是 v 加 npm.version" % e["name"])
+            if e.get("get") != "npm":
+                fail("%s 的 get 必须是 npm" % e["name"])
+            for k in ("name", "title", "description", "version", "author", "license",
+                      "manifest", "procedure", "validated", "say"):
+                if k not in e:
+                    fail("%s 缺少字段 %s" % (e.get("name", "?"), k))
+            continue
         for k in need:
             if k not in e:
                 fail("%s 缺少字段 %s" % (e.get("name", "?"), k))

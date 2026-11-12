@@ -58,18 +58,18 @@ def test_registry_structure():
     r = load_json("docs/market/registry.json")
     ok = r.get("format") == 1 and "en" in r["title"] and "zh" in r["title"] \
         and isinstance(r.get("gate"), dict) \
-        and all(k in r["gate"] for k in ("manifest", "validator", "pin", "license", "veto", "shelf")) \
+        and all(k in r["gate"] for k in ("manifest", "validator", "pin", "license", "veto", "shelf", "plugin")) \
         and r.get("ranking") == "none"
     entries = r["entries"]
     names = [e["name"] for e in entries]
     need = ("name", "title", "description", "version", "author", "license",
             "manifest", "procedure", "sha256_lf", "validated")
     ok = ok and len(names) == len(set(names)) \
-        and {"mem-forever", "site-design-engine", "deai", "ai-global-media"} <= set(names) \
-        and all(e.get("kind") in ("skill", "book") for e in entries) \
-        and all(all(k in e for k in need) for e in entries) \
+        and {"mem-forever", "site-design-engine", "deai", "ai-global-media", "dsh-plugin-chuhai"} <= set(names) \
+        and all(e.get("kind") in ("skill", "book", "plugin") for e in entries) \
+        and all(all(k in e for k in need) for e in entries if e.get("kind") != "plugin") \
         and all("zh" in e["description"] and "en" in e["description"] for e in entries) \
-        and all(e.get("get") == "kit" for e in entries) \
+        and all(e.get("get") == "kit" for e in entries if e.get("kind") != "plugin") \
         and all(e["manifest"].startswith(".dsh/books/") and e.get("say") and e.get("admitted_by") == "@SUN"
                 for e in entries if e["kind"] == "book")
     check("registry_structure", ok)
@@ -105,7 +105,8 @@ def test_book_manifests_validator():
 def test_sha_drift():
     r = load_json("docs/market/registry.json")
     bad = [e["name"] for e in r["entries"]
-           if lf_sha256(os.path.join(ROOT, e["manifest"])) != e.get("sha256_lf")]
+           if e.get("kind") != "plugin"
+           and lf_sha256(os.path.join(ROOT, e["manifest"])) != e.get("sha256_lf")]
     check("sha_drift", not bad, "bad=%s" % bad)
 
 
@@ -120,6 +121,8 @@ def test_version_follows_text():
     r = load_json("docs/market/registry.json")
     bad = []
     for e in r["entries"]:
+        if e.get("kind") == "plugin":
+            continue
         text = read(e["procedure"])
         if e["kind"] == "skill":
             m = re.search(r"^version:\s*(.+)$", text, re.M)
@@ -128,6 +131,22 @@ def test_version_follows_text():
         if not m or m.group(1).strip() != e.get("version"):
             bad.append(e["name"])
     check("version_follows_text", not bad, "bad=%s" % bad)
+
+
+def test_plugin_pin():
+    """plugin 条目离线钉核：integrity 形如 sha512-，commit 40 位十六进制，tag 等于 v 加 version，get 是 npm。"""
+    r = load_json("docs/market/registry.json")
+    plugins = [e for e in r["entries"] if e.get("kind") == "plugin"]
+    ok = bool(plugins)
+    for e in plugins:
+        npm = e.get("npm") or {}
+        up = e.get("upstream") or {}
+        ok = ok and npm.get("integrity", "").startswith("sha512-") \
+            and re.fullmatch("[0-9a-f]{40}", up.get("commit", "")) \
+            and up.get("tag") == "v" + e.get("version", "") \
+            and e.get("get") == "npm" \
+            and e.get("admitted_by") == "@SUN"
+    check("plugin_pin", ok, "plugins=%d" % len(plugins))
 
 
 def test_official_plugin_index():
@@ -164,6 +183,12 @@ def test_official_plugin_index():
             bad.append("dsh-plugin-chuhai not listed")
         if "market/index.json" not in m or "dsh-plugin-chuhai" not in m:
             bad.append("market page does not show the official plugin / index url")
+        # index.json 第一个 versions 的 version 等于 registry.json 里 plugin 条目的 version
+        reg = load_json("docs/market/registry.json")
+        plugin_entries = [x for x in reg.get("entries", []) if x.get("kind") == "plugin"]
+        if plugins and plugin_entries and plugins[0].get("versions"):
+            if plugins[0]["versions"][0].get("version") != plugin_entries[0].get("version"):
+                bad.append("index versions[0] != registry plugin version")
         ok = not bad
         detail = "bad=%s" % bad
     check("official_plugin_index", ok, detail)
@@ -173,7 +198,7 @@ def test_page_rows():
     r = load_json("docs/market/registry.json")
     m = read("docs/market/index.html")
     ext = re.findall(r"<a [^>]*href=['\"]https?://[^'\"]*['\"][^>]*>", m)
-    shown = [e["name"] if e["kind"] == "skill" else e["title"]["zh"] for e in r["entries"]]
+    shown = [e["name"] if e["kind"] in ("skill", "plugin") else e["title"]["zh"] for e in r["entries"]]
     ok = all(x in m for x in shown) \
         and all(("说一句「%s」" % e["say"]) in m for e in r["entries"] if e["kind"] == "book") \
         and "market:skills" in m and "market:books" in m and "market:bundles" not in m \
@@ -333,6 +358,7 @@ def main():
     test_sha_drift()
     test_mem_forever_fence_copy()
     test_version_follows_text()
+    test_plugin_pin()
     test_official_plugin_index()
     test_page_rows()
     test_page_copy()

@@ -10,7 +10,8 @@
     "pin": "钉死：记清单或工程书的 sha256（CRLF 换 LF 后算）；来自别的仓库的再记 40 位 commit",
     "license": "许可：仓库里有 OSI 许可文件",
     "veto": "否决：与官方能力重复、要拿走钥匙或记忆、娱乐与不稳定三类不收，来源 docs/社区插件甄选.md 第六条",
-    "shelf": "货架：过了门、owner 说收的，原样内置进工具包；装了工具包就有，不用挑"
+    "shelf": "货架：过了门、owner 说收的，原样内置进工具包；装了工具包就有，不用挑",
+    "plugin": "插件：记 npm 包的 integrity 发包提交的 40 位 commit 和 tag integrity 必须等于 registry.npmjs.org 上该版本的 dist.integrity"
   },
   "ranking": "none",
   "entries": [
@@ -135,6 +136,45 @@
       "get": "kit",
       "admitted_by": "@SUN",
       "admitted_on": "2026-11-10"
+    },
+    {
+      "kind": "plugin",
+      "name": "dsh-plugin-chuhai",
+      "title": {
+        "zh": "自媒体出海",
+        "en": "Going global for creators"
+      },
+      "description": {
+        "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V。",
+        "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account and Premium."
+      },
+      "version": "0.2.2",
+      "author": "ilang",
+      "license": "MIT",
+      "manifest": "skills/zimeiti-chuhai.md",
+      "procedure": "skills/zimeiti-chuhai.md",
+      "upstream": {
+        "repo": "https://github.com/adsorgcn/dsh-plugin-chuhai",
+        "commit": "3d861b32fbd18d1348725c52b02187f0f3bbe1f4",
+        "tag": "v0.2.2"
+      },
+      "npm": {
+        "name": "dsh-plugin-chuhai",
+        "version": "0.2.2",
+        "integrity": "sha512-/e01gLkhennOQtiROCKi/3ufP/Cm4j/qsDD0qe15b2R0FZjvmcGfF+v3HP2gPTva46XmhQQ5EnEM+SY5wUpyGQ==",
+        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.2.2.tgz",
+        "publishedAt": "2026-11-12T23:40:32.272Z"
+      },
+      "validated": {
+        "tool": "npm test",
+        "tests": 11,
+        "failed": 0,
+        "at": "2026-11-12"
+      },
+      "say": "自媒体出海",
+      "get": "npm",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-12"
     }
   ]
 }
