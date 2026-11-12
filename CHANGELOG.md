@@ -1,5 +1,13 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.22** · 2026-11-12 · 货架钉住官方插件 0.2.2（integrity、发包提交、tag）；market_admit 加 --plugin
+
+- registry.json 加 plugin 门：钉 npm 包的 integrity（必须等于 registry.npmjs.org 的 dist.integrity）、发包提交的 40 位 commit 和 tag；dsh-plugin-chuhai 条目钉 0.2.2
+- docs/market/index.json 的 versions 顶部加 0.2.2；市场页官方插件行加版本、integrity 前 16 位与 Release 链接
+- market_build 认 kind plugin（必填 npm.*/upstream.*，sha 与校验记录跳过）；market_admit 加 --plugin：核 npm 的 integrity 与 gitHead=tag，只读包不跑代码
+- test_market 加 plugin_pin 与索引版本一致性断言（14 场景全过）
+- 插件那边的改动：分页 与 两处措辞（0.2.2）
+
 **v1.1.21** · 2026-11-12 · 记忆的门认给定人格；交接单模板占位符不算条目；主书 0.2.4
 
 - 记忆的门（`brain.py review` 和 `provenance`）：`soul/agent.md` 的「Part one · given soul」整段按用户给的算——里面的 BOUNDARY 和 A: 行不用补来源，换新版人格时旧边界跟着走；`provenance init` / `repair` 不碰这一段。此前第一环装专家人格一提交就被拦（正文里 28 行 A: 加 1 条 BOUNDARY 没有 by:），只能往正文里加键，记下的 sha256 就对不上原文了
