@@ -130,13 +130,43 @@ def test_version_follows_text():
     check("version_follows_text", not bad, "bad=%s" % bad)
 
 
-def test_no_plugin_index():
-    """货架模式：没有索引文件，也不教人加索引源。"""
-    files = ["docs/market/index.html", "docs/index.html", "README.md", "AGENTS.local.md",
-             "ROADMAP.md", "docs/社区插件甄选.md", ".github/ISSUE_TEMPLATE/market-admit.yml"]
-    hits = [f for f in files if "market/index.json" in read(f) or "添加索引源" in read(f)]
-    ok = not os.path.exists(os.path.join(ROOT, "docs", "market", "index.json")) and not hits
-    check("no_plugin_index", ok, "hits=%s" % hits)
+def test_official_plugin_index():
+    """官方插件走 DSH 官方索引格式 1：docs/market/index.json 列的是 npm 包，钉精确版本，带 engines；市场页教人加这条索引源。"""
+    p = os.path.join(ROOT, "docs", "market", "index.json")
+    ok = os.path.exists(p)
+    detail = "missing"
+    if ok:
+        idx = load_json("docs/market/index.json")
+        plugins = idx.get("plugins") or []
+        names = [x.get("name") for x in plugins]
+        bad = []
+        if idx.get("format") != 1:
+            bad.append("format")
+        if "zh" not in (idx.get("title") or {}):
+            bad.append("title.zh")
+        if len(names) != len(set(names)):
+            bad.append("dup names")
+        for x in plugins:
+            vs = x.get("versions") or []
+            if not re.match(r"^[a-z0-9][a-z0-9._-]*$", x.get("name", "")):
+                bad.append("name:%s" % x.get("name"))
+            if not vs:
+                bad.append("%s: no versions" % x.get("name"))
+            for v in vs:
+                if not re.match(r"^\d+\.\d+\.\d+", v.get("version", "")):
+                    bad.append("%s: version not pinned" % x.get("name"))
+                if (v.get("source") or {}).get("type") != "npm":
+                    bad.append("%s: source must be npm" % x.get("name"))
+                if not (v.get("engines") or {}).get("dsh"):
+                    bad.append("%s: engines.dsh missing" % x.get("name"))
+        m = read("docs/market/index.html")
+        if "dsh-plugin-chuhai" not in names:
+            bad.append("dsh-plugin-chuhai not listed")
+        if "market/index.json" not in m or "dsh-plugin-chuhai" not in m:
+            bad.append("market page does not show the official plugin / index url")
+        ok = not bad
+        detail = "bad=%s" % bad
+    check("official_plugin_index", ok, detail)
 
 
 def test_page_rows():
@@ -303,7 +333,7 @@ def main():
     test_sha_drift()
     test_mem_forever_fence_copy()
     test_version_follows_text()
-    test_no_plugin_index()
+    test_official_plugin_index()
     test_page_rows()
     test_page_copy()
     test_build_check()

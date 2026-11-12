@@ -421,7 +421,7 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
         <span class="brand-name">iLang DSH 工具包</span>
       </a>
       <nav class="nav" aria-label="页面导航">
-        <a href="#memory">记忆体</a><a href="#tutorial">新手教程</a><a href="#install">一键安装</a><a href="#skills">技能库</a><a href="market/">市场</a><a href="#say">那句话</a>
+        <a href="#journey">自媒体出海</a><a href="#memory">记忆体</a><a href="#tutorial">新手教程</a><a href="#install">一键安装</a><a href="#skills">技能库</a><a href="market/">市场</a><a href="#say">那句话</a>
       </nav>
       <a class="repo" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">GitHub <svg class="icon" aria-hidden="true"><use href="#i-up"/></svg></a>
     </div>
@@ -432,8 +432,8 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-main">
         <h1 class="hero-title" id="hero-title"><span>别人的 <span class="dsh">DSH</span> 是个聊天框。</span><span class="second">你的，一句话<strong>满配</strong>。</span></h1>
-        <p class="hero-sub">记忆体 · 新手教程 · 一键安装 · 技能库</p>
-        <p class="hero-purpose"><span>面向 DeepSeek Harness 用户的开源工具包。</span><span>记住上次进度，按需安装，随时加载技能。</span></p>
+        <p class="hero-sub">装 DSH · 贴那句话 · 说「自媒体出海」</p>
+        <p class="hero-purpose"><span>面向 DeepSeek Harness 用户的开源工具包。</span><span>自动学会 AI 出海自媒体，走向全球。</span></p>
         <div class="actions">
           <a class="btn btn-primary" href="#say">那句话 <svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></a>
           <a class="btn btn-secondary" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">查看仓库 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -441,11 +441,38 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
         <p class="hero-note">你只做两件事：粘贴、点头。</p>
       </div>
       <div class="wrap hero-foot">
-        <p><span>适用于 DeepSeek Harness，已在 0.2.2-rc.1 上验证</span> · <span>连不上 GitHub 自动走国内镜像</span></p>
+        <p><span>适用于 DeepSeek Harness，已在 0.2.2-rc.1 上验证</span> · <span>连不上 GitHub 自动走国内镜像</span> · <span>目前进度：到 X 开蓝 V，更新中</span></p>
       </div>
     </section>
 
-    <!-- 二、站在什么上面 -->
+    <!-- 二、自媒体出海 -->
+    <section id="journey" class="feature filed" aria-labelledby="journey-title">
+      <div class="wrap split reveal">
+        <div class="copy">
+          <span class="section-label">自媒体出海</span>
+          <h2 id="journey-title"><span>三步。</span><span>剩下它带。</span></h2>
+          <p>一、打开 deepseek.com/harness 装好 DSH，登录，充 10 块钱。二、把下面那句话贴给它，工具包和官方插件一起装好。三、对它说一句「自媒体出海」。</p>
+          <p>它从头带：装写作专家、接内容源、建知识库、出文章、公众号走通，再到买海外服务器、配好你的设备、注册 X、开蓝 V。你只做付款、扫码、登录、授权。</p>
+          <p class="proof">目前进度：到 X 开蓝 V · 更新中。插件更新后再说一句，接着走。</p>
+        </div>
+        <figure class="dsh-demo dsh-demo--journey" aria-label="说一句自媒体出海的示例">
+  <div class="dsh-demo__terminal">
+    <div class="dsh-demo__bar">
+      <span class="dsh-demo__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>新窗口 · 装好以后</span>
+      <span class="dsh-demo__bar-end" aria-hidden="true">⌁</span>
+    </div>
+    <div class="dsh-demo__messages">
+      <div class="dsh-demo__user dsh-demo__user--short">自媒体出海</div>
+      <div class="dsh-demo__answer"><b aria-hidden="true">›</b><span>从第一环开始：先把写作专家装成你的人格。<br>你只做付款、扫码、登录、授权，其余我来。<br>先告诉我一句：你是做什么的？</span></div>
+    </div>
+  </div>
+  <figcaption class="dsh-demo__caption">说一句，它接手</figcaption>
+</figure>
+      </div>
+    </section>
+
+    <!-- 三、站在什么上面 -->
     <section id="protocol" class="trust filed" aria-labelledby="trust-title">
       <div class="wrap reveal">
         <span class="section-label">基于</span>
@@ -629,7 +656,7 @@ footer p { margin: 20px 0 10px; font-size: 12px; }
             <label class="command-label" for="install-command">安装指令</label>
             <button class="icon-button" type="button" data-copy aria-label="复制完整安装指令" title="复制完整安装指令"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button>
           </div>
-          <div class="command-body"><textarea id="install-command" rows="4" readonly spellcheck="false">帮我把 https://github.com/adsorgcn/DeepSeekHarness 里的 iLang DSH 工具包安装到本地：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完告诉我以后每个新窗口怎么一句话回到这里。</textarea></div>
+          <div class="command-body"><textarea id="install-command" rows="4" readonly spellcheck="false">帮我把 https://github.com/adsorgcn/DeepSeekHarness 里的 iLang DSH 工具包安装到本地：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完再把官方插件 dsh-plugin-chuhai 装上（问我一次）；最后告诉我以后每个新窗口怎么一句话回到这里，还有「自媒体出海」这句话怎么用。</textarea></div>
         </div>
         <div class="actions">
           <button class="btn btn-primary" type="button" data-copy><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span id="copy-label">复制安装指令</span></button>

@@ -149,4 +149,5 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   A:running_a_scys_write_tool⇒forbidden_read_only
   A:scanning_a_code_logging_in_or_paying_for_the_user⇒forbidden
 
-（说一句「AI全球自媒体」，我照 .dsh/books/ai-global-media/BOOK.md 一步一步带你做：先装写作专家当人格，再领体验卡、接上生财，只读。）
+（说一句「AI全球自媒体」或「自媒体出海」，我照 .dsh/books/ai-global-media/BOOK.md 一步一步带你做：先装写作专家当人格，再领体验卡、接上生财，只读；主书走完接着出海那一段，由官方插件 dsh-plugin-chuhai 的技能 zimeiti-chuhai 带，没装插件我先问你装不装。）
+（官方插件：dsh-plugin-chuhai 是这个工具包的第一个官方插件，自媒体出海全程靠它。第一次在这个工作区开场时用 plugin_manager 看一眼装没装，没装就问你一句，点头就装 dsh-plugin-chuhai；国内连不上 npm 官方源 DSH 会自动走镜像。装不上不拦别的事。）

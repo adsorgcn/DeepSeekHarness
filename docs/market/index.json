@@ -1,0 +1,64 @@
+{
+  "format": 1,
+  "title": {
+    "en": "iLang DSH Market",
+    "zh": "iLang DSH 市场"
+  },
+  "description": {
+    "en": "Official plugins of the iLang DSH toolkit for DeepSeek Harness. One URL, one-click install.",
+    "zh": "iLang DSH 工具包的官方插件。一条地址，一键安装。"
+  },
+  "metadata": {
+    "categories": {
+      "going-global": {
+        "title": {
+          "en": "Going global",
+          "zh": "自媒体出海"
+        }
+      }
+    }
+  },
+  "plugins": [
+    {
+      "name": "dsh-plugin-chuhai",
+      "title": {
+        "en": "Going global for creators",
+        "zh": "自媒体出海"
+      },
+      "description": {
+        "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account and Premium.",
+        "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V。"
+      },
+      "author": "ilang",
+      "homepage": "https://dsh.ilang.guide/",
+      "repository": {
+        "url": "https://github.com/adsorgcn/dsh-plugin-chuhai"
+      },
+      "metadata": {
+        "category": "going-global",
+        "keywords": [
+          "dsh",
+          "deepseek-harness",
+          "dsh-plugin",
+          "ilang",
+          "自媒体",
+          "出海",
+          "自媒体出海",
+          "AI全球自媒体"
+        ]
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1794487940,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.5 <0.3.0"
+          }
+        }
+      ]
+    }
+  ]
+}
