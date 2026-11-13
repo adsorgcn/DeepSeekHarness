@@ -1,5 +1,9 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.23** · 2026-11-12 · 市场页每行末尾的小标签删了（F53）
+
+- 每行末尾的 m-kit 小标签（随工具包 / 贴那句话时顺手装上）与它的「 · 」分隔符一并删掉；节标题与每节下面的那句已经说了同一件事，不再逐行重复
+
 **v1.1.22** · 2026-11-12 · 货架钉住官方插件 0.2.2（integrity、发包提交、tag）；market_admit 加 --plugin
 
 - registry.json 加 plugin 门：钉 npm 包的 integrity（必须等于 registry.npmjs.org 的 dist.integrity）、发包提交的 40 位 commit 和 tag；dsh-plugin-chuhai 条目钉 0.2.2
