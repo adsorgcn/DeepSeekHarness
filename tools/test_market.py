@@ -352,6 +352,31 @@ def test_shelf_rules_in_instructions():
     check("shelf_rules_in_instructions", ok)
 
 
+def test_expert_package_pinned():
+    """主书随带的专家包：每个文件的 sha256（CRLF 换 LF 后算）等于 SOURCE.json 记的，不多不少；来源记着 40 位 commit。"""
+    root = os.path.join(ROOT, ".dsh", "books", "ai-global-media", "expert")
+    man = load_json(".dsh/books/ai-global-media/expert/SOURCE.json")
+    bad = []
+    seen = set()
+    for dp, _dn, fns in os.walk(root):
+        for f in fns:
+            rel = os.path.relpath(os.path.join(dp, f), root).replace(os.sep, "/")
+            if rel == "SOURCE.json":
+                continue
+            seen.add(rel)
+            data = open(os.path.join(dp, f), "rb").read().replace(bytes([13, 10]), bytes([10]))
+            if man["files"].get(rel) != hashlib.sha256(data).hexdigest():
+                bad.append(rel)
+    missing = sorted(set(man["files"]) - seen)
+    up = man.get("upstream", {})
+    skills = ("wechat-article", "wechat-draft-push", "wechat-topic-hunter", "remote-dispatch")
+    ok = (not bad and not missing
+          and re.fullmatch(r"[0-9a-f]{40}", up.get("commit", "")) is not None
+          and "agents/ilang-wechat-awesome.md" in seen
+          and all(("skills/%s/SKILL.md" % n) in seen for n in skills))
+    check("expert_package_pinned", ok, "files=%d drift=%s missing=%s" % (len(seen), bad[:3], missing[:3]))
+
+
 def main():
     os.chdir(ROOT)
     test_registry_structure()
@@ -368,6 +393,7 @@ def main():
     test_render_states()
     test_admit_fixtures()
     test_shelf_rules_in_instructions()
+    test_expert_package_pinned()
     failed = [n for n, ok, _ in RESULTS if not ok]
     print("-" * 60)
     print("SUMMARY:", "ALL PASS (%d scenarios)" % len(RESULTS) if not failed else ("FAIL: " + ", ".join(failed)))
