@@ -1,4 +1,5 @@
 (() => {
+  if (window.__DSH_EXTERNAL_BROWSER_REQUIRED__) return;
   const field = document.getElementById('install-command');
   const toast = document.getElementById('copy-status');
   const copyButtons = [...document.querySelectorAll('[data-copy]')];

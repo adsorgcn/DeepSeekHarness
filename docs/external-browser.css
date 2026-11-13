@@ -1,0 +1,19 @@
+html.dsh-external-browser{overflow:hidden!important;background:#fbfaf7!important}
+html.dsh-external-browser body{visibility:hidden!important;margin:0!important}
+html.dsh-external-browser body>:not(#dsh-external-browser-guard){display:none!important}
+#dsh-external-browser-guard{visibility:visible!important;display:block!important;position:fixed;inset:0;z-index:2147483647;overflow:auto;background:#fbfaf7;color:#24232c;font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;text-align:center;box-sizing:border-box}
+#dsh-external-browser-guard *{box-sizing:border-box}
+#dsh-external-browser-guard [hidden]{display:none!important}
+.dsh-external-browser-inner{max-width:420px;margin:0 auto;padding:clamp(105px,20vh,180px) 25px 40px}
+#dsh-external-browser-guard h1{margin:0 0 18px;font-size:24px;line-height:1.45;letter-spacing:0;color:#24232c;font-weight:700}
+.dsh-external-browser-instruction{margin:0 0 30px;font-size:16px;line-height:1.8;color:#696672}
+.dsh-external-browser-arrow{position:fixed;right:22px;top:12px;color:#6555d8;font-size:48px;line-height:1;font-weight:500}
+.dsh-external-browser-copy{min-height:46px;border:1px solid #6555d8;border-radius:999px;padding:12px 27px;background:#6555d8;color:#fff;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.dsh-external-browser-copy:disabled{opacity:.65;cursor:default}
+.dsh-external-browser-copy:focus-visible,#dsh-external-browser-url:focus-visible{outline:3px solid #b6a9f3;outline-offset:3px}
+.dsh-external-browser-status{min-height:42px;margin:17px 0 0;font-size:13px;line-height:1.8;color:#696672}
+.dsh-external-browser-fallback{margin-top:20px;text-align:left}
+.dsh-external-browser-fallback label{display:block;font-size:13px;line-height:1.8;color:#696672;margin-bottom:9px}
+#dsh-external-browser-url{display:block;width:100%;resize:none;border:1px solid #ddd5f2;border-radius:8px;padding:11px;background:#f3effc;color:#5141bc;font:inherit;font-size:16px;line-height:1.6;overflow-wrap:anywhere;word-break:break-all;user-select:text;-webkit-user-select:text}
+
+.dsh-external-browser-brand{margin:0 0 28px;color:#6555d8;font-size:15px;font-weight:600;letter-spacing:.2px}

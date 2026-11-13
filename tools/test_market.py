@@ -198,11 +198,12 @@ def test_page_rows():
     r = load_json("docs/market/registry.json")
     m = read("docs/market/index.html")
     ext = re.findall(r"<a [^>]*href=['\"]https?://[^'\"]*['\"][^>]*>", m)
+    scripts = re.findall(r"<script[^>]*src=['\"]([^'\"]+)['\"]", m)
     shown = [e["name"] if e["kind"] in ("skill", "plugin") else e["title"]["zh"] for e in r["entries"]]
     ok = all(x in m for x in shown) \
         and all(("说一句「%s」" % e["say"]) in m for e in r["entries"] if e["kind"] == "book") \
         and "market:skills" in m and "market:books" in m and "market:bundles" not in m \
-        and "<script src=" not in m \
+        and scripts == ["../external-browser.js?v=20261113"] \
         and not re.search(r"<link [^>]*href=['\"]https?://", m) \
         and "@import" not in m \
         and bool(ext) and all("target=" in a and "_blank" in a for a in ext) \
