@@ -253,8 +253,9 @@ def test_render_states():
     }
     with_rows = mb.books_region(fake)
     empty = mb.books_region({"entries": []})
-    ok = "假书" in with_rows and "说一句「假口令」" in with_rows and "随工具包" in with_rows \
+    ok = "假书" in with_rows and "说一句「假口令」" in with_rows and "m-kit" not in with_rows \
         and "a" * 12 in with_rows and "装了工具包就有" in with_rows \
+        and "m-kit" not in read("docs/market/index.html") \
         and "装了工具包就有" in empty and "m-row" not in empty \
         and "索引" not in with_rows and "索引" not in empty
     check("render_states", ok)

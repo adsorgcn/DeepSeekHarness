@@ -183,7 +183,7 @@ def skill_rows(reg):
         sha = e.get("sha256_lf", "") or ""
         rows.append(
             '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
-            '<div class="m-meta">%s · %s · %s · %s · <span title="%s">%s</span> · <span class="m-kit">随工具包</span></div></div>'
+            '<div class="m-meta">%s · %s · %s · %s · <span title="%s">%s</span></div></div>'
             % (e["name"], e["description"]["zh"], e["version"], e["author"], e["license"],
                source_html(e), sha, sha[:12])
         )
@@ -198,7 +198,7 @@ def book_rows(reg):
         say_html = ("说一句「%s」 · " % say) if say else ""
         rows.append(
             '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
-            '<div class="m-meta">%s%s · %s · %s · %s · <span title="%s">%s</span> · <span class="m-kit">随工具包</span></div></div>'
+            '<div class="m-meta">%s%s · %s · %s · %s · <span title="%s">%s</span></div></div>'
             % (e["title"]["zh"], e["description"]["zh"], say_html, e["version"], e["author"], e["license"],
                source_html(e), sha, sha[:12])
         )
