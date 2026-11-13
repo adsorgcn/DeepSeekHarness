@@ -60,6 +60,38 @@
         "macos": ["python", "tools/asr_setup.py", "--check"],
         "linux": ["python", "tools/asr_setup.py", "--check"]
       }
+    },
+    {
+      "id": "node",
+      "name": "Node.js LTS（破局 CLI 等 npm 工具的底座）",
+      "why": "官方 winget 包 OpenJS.NodeJS.LTS；macOS 用 brew；Linux 用发行版的 nodejs",
+      "install": {
+        "windows": ["winget", "install", "--id", "OpenJS.NodeJS.LTS", "-e", "--silent", "--accept-source-agreements", "--accept-package-agreements"],
+        "macos": ["brew", "install", "node"],
+        "linux": ["sudo", "apt-get", "install", "-y", "nodejs", "npm"]
+      },
+      "verify": {
+        "windows": ["node", "--version"],
+        "macos": ["node", "--version"],
+        "linux": ["node", "--version"]
+      },
+      "manual": "https://nodejs.org/"
+    },
+    {
+      "id": "breakout-cli",
+      "name": "破局 CLI（AI破局俱乐部官方命令行，接官网内容与 AI 洋哥）",
+      "why": "官方 npm 包，装法照 https://aipoju.com/cli ；要先有 Node.js；装完 breakout auth login 由用户本人在浏览器里点确认登录",
+      "install": {
+        "windows": ["npm.cmd", "install", "-g", "@aipoju/breakout-cli@latest"],
+        "macos": ["npm", "install", "-g", "@aipoju/breakout-cli@latest"],
+        "linux": ["npm", "install", "-g", "@aipoju/breakout-cli@latest"]
+      },
+      "verify": {
+        "windows": ["breakout.cmd", "version"],
+        "macos": ["breakout", "version"],
+        "linux": ["breakout", "version"]
+      },
+      "manual": "https://aipoju.com/cli"
     }
   ],
   "zero_install": [

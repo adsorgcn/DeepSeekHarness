@@ -42,7 +42,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-12"
+        "at": "2026-11-13"
       },
       "get": "kit"
     },
@@ -70,7 +70,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-12"
+        "at": "2026-11-13"
       },
       "get": "kit"
     },
@@ -102,7 +102,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-12"
+        "at": "2026-11-13"
       },
       "get": "kit"
     },
@@ -117,20 +117,20 @@
         "zh": "说一句话，从装写作专家、接内容源、建知识库、出文章，一直带到公众号发出第一篇",
         "en": "Say one sentence: it installs the writing expert, connects the content source, builds your library, writes with your own voice and takes the first article to your WeChat Official Account"
       },
-      "version": "0.2.4",
+      "version": "0.2.5",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/ai-global-media/BOOK.md",
       "procedure": ".dsh/books/ai-global-media/BOOK.md",
       "upstream": null,
-      "sha256_lf": "763e66c97073344f5f9107eb974076a0cdf6ceb47f3722b120bd84d057bc0ba3",
+      "sha256_lf": "936f190ec7b4d9bfeb2207ddf6be27d7e4dff220780f72ed386d15fa2573c686",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-12"
+        "at": "2026-11-13"
       },
       "say": "AI全球自媒体",
       "get": "kit",
@@ -148,33 +148,33 @@
         "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V。",
         "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account and Premium."
       },
-      "version": "0.2.2",
+      "version": "0.2.3",
       "author": "ilang",
       "license": "MIT",
       "manifest": "skills/zimeiti-chuhai.md",
       "procedure": "skills/zimeiti-chuhai.md",
       "upstream": {
         "repo": "https://github.com/adsorgcn/dsh-plugin-chuhai",
-        "commit": "3d861b32fbd18d1348725c52b02187f0f3bbe1f4",
-        "tag": "v0.2.2"
+        "commit": "45021741779a344581aa312d88fe2797e18cd81d",
+        "tag": "v0.2.3"
       },
       "npm": {
         "name": "dsh-plugin-chuhai",
-        "version": "0.2.2",
-        "integrity": "sha512-/e01gLkhennOQtiROCKi/3ufP/Cm4j/qsDD0qe15b2R0FZjvmcGfF+v3HP2gPTva46XmhQQ5EnEM+SY5wUpyGQ==",
-        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.2.2.tgz",
-        "publishedAt": "2026-11-12T23:40:32.272Z"
+        "version": "0.2.3",
+        "integrity": "sha512-intx1EAIHeOkDW1kwFm7SPdpYuobKj9iJZHcnYAbrwXMAtNOF0ObKsMM9PBLk+eD1PW2bm55jL2swyoyrRnfHw==",
+        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.2.3.tgz",
+        "publishedAt": "2026-11-13T03:43:18.846Z"
       },
       "validated": {
         "tool": "npm test",
-        "tests": 11,
+        "tests": 12,
         "failed": 0,
-        "at": "2026-11-12"
+        "at": "2026-11-13"
       },
       "say": "自媒体出海",
       "get": "npm",
       "admitted_by": "@SUN",
-      "admitted_on": "2026-11-12"
+      "admitted_on": "2026-11-13"
     }
   ]
 }
