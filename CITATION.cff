@@ -19,7 +19,7 @@ authors:
 repository-code: "https://github.com/adsorgcn/DeepSeekHarness"
 url: "https://github.com/adsorgcn/DeepSeekHarness"
 license: MIT
-version: "1.1.24"
+version: "1.1.25"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.23998664
