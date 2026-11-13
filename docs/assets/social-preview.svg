@@ -1,10 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
-  <title id="title">iLang DSH 工具包 — 你的，一句话满配。</title>
-  <desc id="description">给 DeepSeek Harness 装上本地记忆和技能。记忆体、新手教程、一键安装、技能库。dsh.ilang.guide。</desc>
-  <rect width="1200" height="630" fill="#f5f5f7"/>
-  <!-- Official iLang mark, preserving the vector from docs/index.html. -->
-  <svg x="568" y="54" width="64" height="64" viewBox="0 0 64 64">
-
+<title id="title">iLang DSH 工具包：一句话，让你的内容走向全球。</title>
+<desc id="description">暖白与淡紫色的内容工作台，从素材知识库到写作配图，再到公众号草稿。</desc>
+<defs><linearGradient id="lavender" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eee9ff"/><stop offset="1" stop-color="#dcd3fb"/></linearGradient><filter id="shadow" x="-40%" y="-40%" width="180%" height="200%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#51457e" flood-opacity=".12"/></filter></defs>
+<rect width="1200" height="630" fill="#fbfaf7"/>
+<circle cx="995" cy="296" r="236" fill="url(#lavender)"/>
+<ellipse cx="960" cy="330" rx="252" ry="151" fill="none" stroke="#c9bdec" stroke-width="1.5" transform="rotate(-28 960 330)"/>
+<circle cx="1104" cy="130" r="9" fill="#6e59cf"/>
+<path d="m1132 448 4 12 12 4-12 4-4 12-4-12-12-4 12-4Z" fill="#8b75d9"/>
+<svg x="64" y="48" width="42" height="42" viewBox="0 0 64 64">
   <defs>
     
     <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
@@ -46,13 +49,22 @@
   <rect x="28.4" y="27.5" width="7.2" height="1.4" fill="url(#gold)"></rect>
   
   <rect x="27.8" y="42.2" width="8.4" height="1.6" fill="url(#gold)"></rect>
-
-  </svg>
-  <g font-family="'Microsoft YaHei', 'Noto Sans SC', sans-serif" text-anchor="middle">
-    <text x="600" y="165" fill="#1d1d1f" font-size="29" font-weight="400">iLang DSH 工具包</text>
-    <text x="600" y="294" fill="#1d1d1f" font-size="80" font-weight="400" letter-spacing="-2">你的，一句话<tspan fill="#0071e3">满配</tspan>。</text>
-    <text x="600" y="365" fill="#515154" font-size="29" font-weight="400">给 DeepSeek Harness 装上本地记忆和技能</text>
-    <text x="600" y="425" fill="#6e6e73" font-size="23" font-weight="400">记忆体 · 新手教程 · 一键安装 · 技能库</text>
-    <text x="600" y="563" fill="#6e6e73" font-size="21" font-weight="400">dsh.ilang.guide</text>
-  </g>
 </svg>
+<g font-family="Microsoft YaHei, sans-serif" fill="#25232e">
+<text x="120" y="77" font-size="23" font-weight="700">iLang DSH 工具包</text>
+<text x="64" y="170" font-size="16" fill="#6555b2" letter-spacing="2">你的 AI 内容工作室 · 免费开源</text>
+<g font-size="65" font-weight="700" letter-spacing="-2"><text x="60" y="262">一句话，</text><text x="60" y="351">让你的内容</text><text x="60" y="440" fill="#6b56ce">走向全球。</text></g>
+<text x="64" y="500" font-size="21" fill="#66616f">你只做两件事：粘贴、点头。</text>
+<text x="64" y="577" font-size="18" fill="#66616f">dsh.ilang.guide</text>
+<g transform="translate(701 174) rotate(-4 190 150)" filter="url(#shadow)"><rect width="388" height="300" rx="22" fill="white"/>
+<path d="M0 46H388" stroke="#eeebf1"/><circle cx="23" cy="23" r="4" fill="#e6d7e3"/><circle cx="39" cy="23" r="4" fill="#dfd4f0"/><circle cx="55" cy="23" r="4" fill="#d9e9dd"/>
+<text x="241" y="28" font-size="12" fill="#8c8498">DSH WORKSPACE</text>
+<rect x="148" y="69" width="214" height="49" rx="15" fill="#eee9ff"/><text x="170" y="100" font-size="22" font-weight="700" fill="#6651bd">自媒体出海</text>
+<text x="26" y="155" font-size="17" fill="#51495e">好，我们从第一篇内容开始。</text>
+<g fill="#5eaa8c"><circle cx="36" cy="191" r="10"/><circle cx="36" cy="231" r="10"/></g>
+<g stroke="white" stroke-width="2" fill="none"><path d="m31 191 4 4 6-8"/><path d="m31 231 4 4 6-8"/></g>
+<text x="57" y="197" font-size="17">整理素材，建立知识库</text><text x="57" y="237" font-size="17">完成写作与配图</text>
+<circle cx="36" cy="270" r="5" fill="#9279d7"/><text x="57" y="276" font-size="17" fill="#735cb7">送入草稿箱，等你点头</text></g>
+<g transform="translate(637 126) rotate(-9 75 45)" filter="url(#shadow)"><rect width="158" height="94" rx="18" fill="#deefe5"/><text x="20" y="35" font-size="13" fill="#42745e">YOUR KNOWLEDGE</text><text x="20" y="65" font-size="22" font-weight="700" fill="#34614d">自己的知识库</text></g>
+<g transform="translate(947 441) rotate(7 85 47)" filter="url(#shadow)"><rect width="186" height="94" rx="18" fill="#f8e6db"/><text x="20" y="35" font-size="13" fill="#9e6650">READY FOR REVIEW</text><text x="20" y="65" font-size="22" font-weight="700" fill="#81503c">下一篇，已就位</text></g>
+</g></svg>
