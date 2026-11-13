@@ -10,7 +10,7 @@
 
 iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地记忆、新手教程、一键安装和技能库。
 
-你只做两件事：粘贴、点头。
+你只做三件事：选创造模式、粘贴、点头。
 
 在线门面：https://dsh.ilang.guide/ （微信、QQ 里分享用下面的指导站地址）
 
@@ -18,9 +18,9 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 ## 那句话
 
-在任意 DSH 会话里，把下面这句原样贴给它：
+新开一个任务，一定先选「创造模式」（装插件的工具只有它有，装不上东西时它能自己修），再把下面这句原样贴给它：
 
-> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 里的 iLang DSH 工具包安装到本地：先按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完再把官方插件 dsh-plugin-chuhai 装上（问我一次）；最后告诉我以后每个新窗口怎么一句话回到这里，还有「自媒体出海」这句话怎么用。
+> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 里的 iLang DSH 工具包安装到本地：先确认你现在是创造模式（手里有装插件的工具），不是就先别动手，让我新开一个任务、模式选「创造模式」再贴一遍；然后按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完再把官方插件 dsh-plugin-chuhai 装上（问我一次）；哪一步装不上或卡住，你自己想办法修好、装好再往下走，被权限拦了就向我申请一次放行；最后告诉我以后每个新窗口怎么一句话回到这里，还有「自媒体出海」这句话怎么用。
 
 剩下它全包：装环境先问你再动手，放好全套，问几个问题认识你。Windows 走 bootstrap.ps1，macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选；软件只从官方源装；默认本机模式，什么都不上传。
 
