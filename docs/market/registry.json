@@ -42,7 +42,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-16"
+        "at": "2026-11-17"
       },
       "get": "kit"
     },
@@ -70,7 +70,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-16"
+        "at": "2026-11-17"
       },
       "get": "kit"
     },
@@ -102,7 +102,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-16"
+        "at": "2026-11-17"
       },
       "get": "kit"
     },
@@ -117,20 +117,20 @@
         "zh": "说一句话，从装写作专家、接内容源、建知识库、出文章，一直带到公众号发出第一篇",
         "en": "Say one sentence: it installs the writing expert, connects the content source, builds your library, writes with your own voice and takes the first article to your WeChat Official Account"
       },
-      "version": "0.2.8",
+      "version": "0.2.9",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/ai-global-media/BOOK.md",
       "procedure": ".dsh/books/ai-global-media/BOOK.md",
       "upstream": null,
-      "sha256_lf": "41b9537cc13e06d71210cfe0e124ad68ae5a7e63e22632c91f77015f71987a6b",
+      "sha256_lf": "b98fcdbb206028bafbdd31731a52ea411e3742fe78e93bb4134d22e099d13999",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-16"
+        "at": "2026-11-17"
       },
       "say": "AI全球自媒体",
       "get": "kit",
