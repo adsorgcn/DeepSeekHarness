@@ -2022,8 +2022,37 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+PLACEHOLDER_ITEM_RE = re.compile(r"^[§\s]*(?:<[^<>]*>[\s§]*)+$")
+
+
 def _items(s: str) -> list[str]:
-    return [i for i in (x.strip() for x in ITEM_SPLIT_RE.split(s or "")) if i and i not in ("none", "无")]
+    """Items of a done/next/unverified value: split on ; or ；, drop none/无 and template placeholders
+    (`<the first thing to do next>`, `§<section> <finished...>`), which are guidance, never items."""
+    return [i for i in (x.strip() for x in ITEM_SPLIT_RE.split(s or ""))
+            if i and i not in ("none", "无") and not PLACEHOLDER_ITEM_RE.match(i)]
+
+
+GIVEN_SOUL_HEAD_RE = re.compile(r"^##\s+Part one\b", re.I)
+SECTION_HEAD_RE = re.compile(r"^##\s+")
+
+
+def given_soul_range(text: str) -> tuple[int, int]:
+    """1-based line range (start, end) of the 'Part one · given soul' section of soul/agent.md, start = heading line,
+    end = next '## ' heading (exclusive); (0, 0) when there is no such section. The persona the owner handed the agent
+    sits there whole and verbatim, so its BOUNDARY and A: lines are the owner's by the act of giving it."""
+    lines = text.replace("\r\n", "\n").split("\n")
+    start = 0
+    for i, ln in enumerate(lines, 1):
+        if start == 0:
+            if GIVEN_SOUL_HEAD_RE.match(ln.strip()):
+                start = i
+        elif SECTION_HEAD_RE.match(ln.strip()):
+            return start, i
+    return (start, len(lines) + 1) if start else (0, 0)
+
+
+def _in_given_soul(b: dict, rng: tuple[int, int]) -> bool:
+    return rng[0] < b["line"] < rng[1]
 
 
 def _touches_boundary(item: str, never: str) -> bool:
@@ -3690,9 +3719,10 @@ def provenance_scan(repo: Path, transcript: Path | None = None) -> tuple[list[di
         text = read_text(p)
         lines = text.replace("\r\n", "\n").split("\n")
         rel = p.relative_to(repo).as_posix()
+        given = given_soul_range(text) if rel == "soul/agent.md" else (0, 0)
         for b in parse_blocks(text):
             kind = b["kind"]
-            if kind not in PROV_KINDS:
+            if kind not in PROV_KINDS or _in_given_soul(b, given):
                 continue
             kv = b["kv"]
             by = kv.get("by", "")
@@ -3741,9 +3771,10 @@ def cmd_provenance(repo: Path, action: str, date: str | None, commit: bool, tran
             nl = "\r\n" if "\r\n" in text else "\n"
             lines = text.replace("\r\n", "\n").split("\n")
             changed = False
+            given = given_soul_range(text) if p.relative_to(repo).as_posix() == "soul/agent.md" else (0, 0)
             for b in parse_blocks(text):
                 kind = b["kind"]
-                if kind not in PROV_KINDS:
+                if kind not in PROV_KINDS or _in_given_soul(b, given):
                     continue
                 i = b["line"] - 1
                 adds = {"by": "legacy"}
@@ -3855,6 +3886,10 @@ def review_text(base_text: str | None, cand_text: str, rel: str) -> tuple[list[s
             rejects.append(f"secret-like text: {h}")
     base = parse_blocks(base_text or "")
     cand = parse_blocks(cand_text)
+    # soul/agent.md Part one is a persona the owner gave, kept verbatim: its blocks are owner-given as a whole,
+    # and a new version replaces the whole section, old boundaries included.
+    given_b = given_soul_range(base_text or "") if rel == "soul/agent.md" else (0, 0)
+    given_c = given_soul_range(cand_text) if rel == "soul/agent.md" else (0, 0)
     base_by = {}
     for b in base:
         base_by.setdefault(_block_id(b), b)
@@ -3866,12 +3901,19 @@ def review_text(base_text: str | None, cand_text: str, rel: str) -> tuple[list[s
             and b["kv"].get("by", "") in OWNER_SOURCES[:2]}
     for bid, b in base_by.items():
         if b["kind"] == "BOUNDARY" and bid not in cand_by:
-            if _norm(b["kv"].get("never", "")).lower() in tomb:
+            if _in_given_soul(b, given_b):
+                notes.append(f"given soul replaced, its boundary goes with it: {b['raw']}")
+            elif _norm(b["kv"].get("never", "")).lower() in tomb:
                 notes.append(f"boundary retired by an owner tombstone: {b['raw']}")
             else:
                 rejects.append(f"boundary deleted or rewritten without an owner tombstone: {b['raw']}")
+    given_n = sum(1 for c in cand if _in_given_soul(c, given_c))
+    if given_n:
+        notes.append(f"given soul: {given_n} block(s) in Part one taken as the owner's, verbatim")
     for bid, c in cand_by.items():
         by = c["kv"].get("by", "")
+        if _in_given_soul(c, given_c):
+            continue
         if c["kind"] == "EXCLUDE":
             ekv = c["kv"]
             if not _items(ekv.get("candidates", "")):

@@ -355,6 +355,46 @@ class BrainTests(unittest.TestCase):
         self.assertIn("new boundary without owner source", out)
         self.assertIn("new anti-pattern line without owner source", out)
 
+    def test_given_soul_in_agent_md_passes_the_gate_verbatim_and_can_be_replaced(self):
+        head = ("---\ntype: profile\nname: agent-soul\ndescription: t\nstatus: stable\nsoul_id: x\nsoul_version: 1\n"
+                "soul_sha256: none\nupdated: none\n---\n# agent\n\n## Part one · given soul\n\n")
+        persona = "::BOUNDARY{never:promise a result|scope:global}\n::GENE{style|conf:confirmed|scope:global}\n  T:short\n  A:long_preface⇒cut\n"
+        tail = "\n## Part two · grown with this owner\n\n"
+        self.write("soul/agent.md", head + persona + tail)
+        rc, out = quiet(brain.cmd_review, self.repo, ["soul/agent.md"], False, False)
+        self.assertEqual(rc, 0, out)
+        self.assertIn("taken as the owner's, verbatim", out)
+        r = self.commit_all("persona")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        rc, out = quiet(brain.cmd_provenance, self.repo, "init", "2026-11-12", False)
+        self.assertEqual(rc, 0, out)
+        self.assertIn(persona, self.read("soul/agent.md"))
+        rc, out = quiet(brain.cmd_provenance, self.repo, "check", None, False)
+        self.assertEqual(rc, 0, out)
+        persona2 = "::BOUNDARY{never:promise a date|scope:global}\n::GENE{style|conf:confirmed|scope:global}\n  A:jargon⇒plain\n"
+        self.write("soul/agent.md", head + persona2 + tail)
+        rc, out = quiet(brain.cmd_review, self.repo, ["soul/agent.md"], False, False)
+        self.assertEqual(rc, 0, out)
+        self.assertIn("given soul replaced", out)
+        self.write("soul/agent.md", head + persona2 + tail
+                   + "::BOUNDARY{never:x|scope:global}\n::GENE{g|conf:tentative|scope:global|by:agent_inferred}\n  A:a⇒b|by:agent_inferred\n")
+        rc, out = quiet(brain.cmd_review, self.repo, ["soul/agent.md"], False, False)
+        self.assertEqual(rc, 1)
+        self.assertIn("new boundary without owner source", out)
+        self.assertIn("new anti-pattern line without owner source", out)
+
+    def test_first_real_handoff_fill_over_template_placeholders_is_not_a_drop(self):
+        cur = self.read("handoff/CURRENT.md")
+        cur = re.sub(r"done:§<[^|]*>", "done:ring one persona installed", cur, count=1)
+        cur = re.sub(r"next:<[^|]*>", "next:ring two sources", cur, count=1)
+        cur = re.sub(r"unverified:<[^|]*>", "unverified:none", cur, count=1)
+        self.write("handoff/CURRENT.md", cur)
+        rc, out = quiet(brain.cmd_review, self.repo, ["handoff/CURRENT.md"], False, False)
+        self.assertEqual(rc, 0, out)
+        self.assertNotIn("dropped without a word", out)
+        self.assertEqual(brain._items("§<section> <finished, listed by milestone>"), [])
+        self.assertEqual(brain._items("a; <b>; none; c"), ["a", "c"])
+
     def test_review_rejects_owner_block_changed_by_agent_and_downgrades_conf(self):
         self.write("soul/soul.md", "---\ntype: profile\nname: soul\ndescription: t\nstatus: stable\n---\n"
                    "::FACT{key:home|value:hk|conf:confirmed|by:legacy}\n::FACT{key:guess|value:a|conf:tentative|by:agent_inferred|seen:1}\n")
