@@ -29,7 +29,13 @@ jobs:
           # `brain.py instructions sync`; the .dsh skill copy is obtained by cp; MARKET.md and the
           # registry rows are refreshed by tools/market_build.py. The .dsh path does not exist
           # upstream, so it must not appear on the checkout line (it would fail the whole command).
-          git checkout upstream/main -- tools/brain.py rules/GRAMMAR-CARD.md rules/GRAMMAR-CARD.zh.md docs/OKF.md docs/VAULT.md docs/LEDGER.md docs/PRODUCT.md skills/mem-forever/SKILL.md tools/hooks/pre-commit tools/hooks/pre-push tools/test_brain.py env/README.md
+          # Four files are the kit's own and stay off this line: tools/brain.py and tools/test_brain.py
+          # carry two kit changes (a persona placed in soul/agent.md counts as given by the owner; the
+          # placeholders of the hand-off template are not items), and tools/hooks/pre-commit and
+          # tools/hooks/pre-push are stored executable here. Copying them from upstream undid all of
+          # that on 2026-11-16 while the gate below still passed, because the test file was replaced
+          # too. An upstream engine change is merged into them by hand.
+          git checkout upstream/main -- rules/GRAMMAR-CARD.md rules/GRAMMAR-CARD.zh.md docs/OKF.md docs/VAULT.md docs/LEDGER.md docs/PRODUCT.md skills/mem-forever/SKILL.md env/README.md
           cp skills/mem-forever/SKILL.md .dsh/skills/mem-forever/SKILL.md
           python -X utf8 tools/brain.py instructions sync
           python -X utf8 tools/market_build.py
