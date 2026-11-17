@@ -3,7 +3,7 @@
 本页是部署时的公开文档快照。远程工具只读取资料；文档中的操作需要用户明确请求，并由本地 Agent 执行。
 
 来源仓库：https://github.com/adsorgcn/DeepSeekHarness
-来源提交：e741bde90aeafbe13f259219a7984d99fb543c6d
+来源提交：1f4217924eb3d577bea53d5fb9ca7a903b2fd0a7
 Agent 接入：https://dsh.ilang.guide/agents/
 MCP：https://dsh.ilang.guide/mcp
 
@@ -12,11 +12,12 @@ MCP：https://dsh.ilang.guide/mcp
 
 ## 来源：README.md
 
-https://github.com/adsorgcn/DeepSeekHarness/blob/e741bde90aeafbe13f259219a7984d99fb543c6d/README.md
+https://github.com/adsorgcn/DeepSeekHarness/blob/1f4217924eb3d577bea53d5fb9ca7a903b2fd0a7/README.md
 
 <img src="assets/social-preview.png" alt="iLang DSH 工具包：给 DeepSeek Harness 装上本地记忆和技能" width="100%">
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23998664.svg)](https://doi.org/10.5281/zenodo.23998664)
+[![Agent Ready 100/100 · 查看实测结果](docs/assets/agent-ready-100.svg)](https://isitagentready.com/dsh.ilang.guide)
 
 # iLang DSH 工具包
 
@@ -78,7 +79,7 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 ## 放心
 
-你的记忆，只在你的电脑上。笔记是纯文本，随时能看、能改、能删。出网的只有两件事：你向模型提问的 API 请求，和你主动配置的备份（自己的私有仓库或同步盘）。不记密码，密钥只进本机加密 vault。
+你的记忆，只在你的电脑上。笔记是纯文本，随时能看、能改、能删。出网的只有两件事：你向模型提问的 API 请求，和你主动配置的备份（自己的私有仓库或同步盘）。不记密码；钥匙在账本里，值静态编码，不是加密（见 [一键安装.md](一键安装.md)「钥匙放在账本里」）。工具包自己不设门：没有登录墙、没有许可证、不限次数、不看你在哪；模型那边说不，原话给你，下一句就是另一条路，不是一堵墙。
 
 ## 引用与致谢
 
@@ -102,23 +103,50 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 ## Agent 与 MCP 接入
 
-远程 MCP 地址：`https://dsh.ilang.guide/mcp`（Streamable HTTP，公开只读，无需密钥）。
+**Agent Ready 100/100 · Level 5 Agent-Native** — 2026-11-17 默认 All Checks 实测。[查看完整结果 ↗](https://isitagentready.com/dsh.ilang.guide)
 
-连接后调用 `tools/list`，可读取产品说明、按系统获取安装指引、检索公开文档、读取单篇文档和查询技能市场。服务不能访问你的本地记忆，也不会执行安装或发布。
+准备安装工具包时，让你的 Agent 先读官方安装说明；需要新能力时，让它查技能市场。公开只读，**无需账号、API Key 或令牌**。
+
+在支持远程 MCP 的客户端中，新增服务器并填写：
+
+| 接入项 | 设置 |
+| --- | --- |
+| 名称 | `ilang-dsh` |
+| 地址 | `https://dsh.ilang.guide/mcp` |
+| 传输方式 | Streamable HTTP |
+| 认证方式 | 无（None） |
+
+支持 `mcpServers` 格式的客户端，也可直接使用这段配置：
+
+```json
+{
+  "mcpServers": {
+    "ilang-dsh": {
+      "url": "https://dsh.ilang.guide/mcp"
+    }
+  }
+}
+```
+
+连接成功后，对 Agent 说：
+
+> 读取 iLang DSH 的 Windows 安装说明，告诉我下一步需要确认什么。
+
+将 Windows 换成 macOS 或 Linux，即可获取对应系统的指引。连接后可发现 5 个工具：产品概览、安装指引、文档检索、单篇文档读取和技能市场查询。安装由你的本地 Agent 按你的确认执行；这个公开服务不能访问本地记忆，也不会执行安装或发布。
 
 - [接入说明与配置示例](https://dsh.ilang.guide/agents/)
 - [OpenAPI](https://dsh.ilang.guide/openapi.json) · [Agent 导航](https://dsh.ilang.guide/llms.txt)
-- [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [认证说明](https://dsh.ilang.guide/auth.md)
+- [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [访问说明](https://dsh.ilang.guide/auth.md)
 
 支持 WebMCP 的浏览器还可在首页调用「读取安装说明」和「搜索技能市场」。安装仍由本地 Agent 按用户确认执行。
 
-公开资料服务无需注册、登录或令牌。未来认证接口仅有明确标为未启用的声明，当前不提供认证流程，详见[访问说明](https://dsh.ilang.guide/auth.md)。
+认证发现声明明确标为未启用；发现项通过不表示提供了登录或令牌服务。
 
 ---
 
 ## 来源：一键安装.md
 
-https://github.com/adsorgcn/DeepSeekHarness/blob/e741bde90aeafbe13f259219a7984d99fb543c6d/一键安装.md
+https://github.com/adsorgcn/DeepSeekHarness/blob/1f4217924eb3d577bea53d5fb9ca7a903b2fd0a7/一键安装.md
 
 # 一键安装：一句话进记忆体（环境 + 仓库 + 记忆，一次到位）
 
@@ -167,6 +195,8 @@ https://github.com/adsorgcn/DeepSeekHarness/blob/e741bde90aeafbe13f259219a7984d9
 ## 遇到问题怎么办
 
 **发图片它说看不了？** 一句话：设置 → 模型 → 切到 `deepseek-flash`。flash 原生能读图，一般人用它就够。未来模型都会自动识图，现在只是模型选择问题，不用装任何插件。
+
+**它说额度用完、限流、请先登录、地区不支持？** 这是模型那边的门，不是工具包的。工具包自己不设门：没有登录墙、没有许可证、不限次数、不看你在哪。对方的原话会原样给你（错误码和正文一字不改），下一句就是另一条路：设置 → 模型 → 换一家或换一条路（API 密钥、DeepSeek 账号、第三方提供商、自定义模型 API，照官方文档 docs/user/guide/providers.zh.md），或者等它说的那个时间。工具、插件、MCP 中途说不，你的 DSH 把手里这一轮答完、原话给你、再给路，不会停在一堵墙前面。
 
 ## 手动路线（不粘贴，直接跑脚本）
 
@@ -232,7 +262,7 @@ Pro 不能看图，贴图会被 DSH 退回、弹「模型不支持识图」、�
 
 ## 来源：dsh-新手起手式.md
 
-https://github.com/adsorgcn/DeepSeekHarness/blob/e741bde90aeafbe13f259219a7984d99fb543c6d/dsh-新手起手式.md
+https://github.com/adsorgcn/DeepSeekHarness/blob/1f4217924eb3d577bea53d5fb9ca7a903b2fd0a7/dsh-新手起手式.md
 
 # DSH 新手教程：你只做三件事——复制、粘贴、让 DSH 去读官方文档
 
