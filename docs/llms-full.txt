@@ -3,7 +3,7 @@
 本页是部署时的公开文档快照。远程工具只读取资料；文档中的操作需要用户明确请求，并由本地 Agent 执行。
 
 来源仓库：https://github.com/adsorgcn/DeepSeekHarness
-来源提交：ac1e8937cb85e8c99596adb728e25e35615bfa22
+来源提交：e741bde90aeafbe13f259219a7984d99fb543c6d
 Agent 接入：https://dsh.ilang.guide/agents/
 MCP：https://dsh.ilang.guide/mcp
 
@@ -12,7 +12,7 @@ MCP：https://dsh.ilang.guide/mcp
 
 ## 来源：README.md
 
-https://github.com/adsorgcn/DeepSeekHarness/blob/ac1e8937cb85e8c99596adb728e25e35615bfa22/README.md
+https://github.com/adsorgcn/DeepSeekHarness/blob/e741bde90aeafbe13f259219a7984d99fb543c6d/README.md
 
 <img src="assets/social-preview.png" alt="iLang DSH 工具包：给 DeepSeek Harness 装上本地记忆和技能" width="100%">
 
@@ -56,7 +56,7 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 **一键安装** · 新电脑，一句话装齐。缺什么补什么，每步问你，只走官方源。可选免费全家桶：视频下载与视频转文字、笔记、语音，一件一审批。只装你点头同意的；删掉工作区项目文件就没了，另装的工具单独卸。
 
-**技能库** · 好技能，随装随用。mem-forever、site-design-engine、deai 起步（deai：去 AI 味，像你自己写的），新技能持续进来；你刷到什么好东西，说一句「迭代进去」，它就进仓库。
+**技能库** · 好技能，随装随用。mem-forever、site-design-engine、deai、source-book 起步（deai：去 AI 味，像你自己写的；source-book：看见攻略，说一句「变工程书」，变成 AI 能照着执行的工程书），新技能持续进来；你刷到什么好东西，说一句「迭代进去」，它就进仓库。
 
 ## 市场
 
@@ -100,11 +100,25 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 基于 [iLang](https://ilang.ai) v5.0 与 [Mem-Forever](https://github.com/ilang-ai/Mem-Forever) · MIT
 
+## Agent 与 MCP 接入
+
+远程 MCP 地址：`https://dsh.ilang.guide/mcp`（Streamable HTTP，公开只读，无需密钥）。
+
+连接后调用 `tools/list`，可读取产品说明、按系统获取安装指引、检索公开文档、读取单篇文档和查询技能市场。服务不能访问你的本地记忆，也不会执行安装或发布。
+
+- [接入说明与配置示例](https://dsh.ilang.guide/agents/)
+- [OpenAPI](https://dsh.ilang.guide/openapi.json) · [Agent 导航](https://dsh.ilang.guide/llms.txt)
+- [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [认证说明](https://dsh.ilang.guide/auth.md)
+
+支持 WebMCP 的浏览器还可在首页调用「读取安装说明」和「搜索技能市场」。安装仍由本地 Agent 按用户确认执行。
+
+公开资料服务无需注册、登录或令牌。未来认证接口仅有明确标为未启用的声明，当前不提供认证流程，详见[访问说明](https://dsh.ilang.guide/auth.md)。
+
 ---
 
 ## 来源：一键安装.md
 
-https://github.com/adsorgcn/DeepSeekHarness/blob/ac1e8937cb85e8c99596adb728e25e35615bfa22/一键安装.md
+https://github.com/adsorgcn/DeepSeekHarness/blob/e741bde90aeafbe13f259219a7984d99fb543c6d/一键安装.md
 
 # 一键安装：一句话进记忆体（环境 + 仓库 + 记忆，一次到位）
 
@@ -218,7 +232,7 @@ Pro 不能看图，贴图会被 DSH 退回、弹「模型不支持识图」、�
 
 ## 来源：dsh-新手起手式.md
 
-https://github.com/adsorgcn/DeepSeekHarness/blob/ac1e8937cb85e8c99596adb728e25e35615bfa22/dsh-新手起手式.md
+https://github.com/adsorgcn/DeepSeekHarness/blob/e741bde90aeafbe13f259219a7984d99fb543c6d/dsh-新手起手式.md
 
 # DSH 新手教程：你只做三件事——复制、粘贴、让 DSH 去读官方文档
 
@@ -282,6 +296,8 @@ https://github.com/adsorgcn/DeepSeekHarness/blob/ac1e8937cb85e8c99596adb728e25e3
 | 视频转文字自检 | `跑一下视频转文字自检` |
 | 去 AI 味 | `DeAI: <粘贴初稿>` |
 | 像自己写的 | `加载 deai 技能，把这篇改得像我自己写的，读者是<谁>` |
+| 攻略变工程书 | `变工程书：<贴上攻略，或给链接、截图>` |
+| 照书执行 | `照这本书做` |
 | 任何卡住 | `去读官方文档（给出文档地址），然后告诉我下一步。` |
 
 **开发者用 Pro**：Pro 不能看图，贴图会被 DSH 退回、弹「模型不支持识图」、发送按不动，这是 DSH 的事；要看图就截图后不贴、只说「看截图，<问题>」，第一次它会问你开「子代理模型选择」，说好就行。新手不用看这一节。
