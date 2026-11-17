@@ -123,6 +123,15 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
 
 （要去 AI 味或要像你自己写的，我加载 deai 技能照它的 prompt 做；第一行先告诉你我猜谁读，你一句话改；口语和方言我只标位置你填；不给粗口；SUN 画像只在你点名时用。数字，公共的查到就带出处写上，查不到就不写；你自己的数字我不碰。）
 
+::GENE{dsh_source_book|conf:confirmed|scope:global}
+  T:user_hands_over_a_tutorial_and_says_make_it_a_book⇒load_.dsh/skills/source-book_and_follow_the_source_book_in_.github/bot_verbatim
+  T:the_book_is_saved_under_books_in_the_workspace_and_checked_with_tools/ilang_grammar_validator.py
+  T:user_says_carry_out_this_book⇒read_that_BOOK.md_and_do_what_it_says
+  A:doing_the_tutorial_while_writing_the_book⇒forbidden
+  A:copying_the_tutorial_s_numbers_prices_or_earning_claims_into_the_book⇒forbidden
+
+（你看见攻略、教程，贴给我或给我链接、截图，说一句「变工程书」，我照随工具包带着的母版写成一本工程书，存在 books/ 下；攻略里的数字我去官方核实，核不到的不写，收入不抄。写好以后你说「照这本书做」，我就照书执行，要你决定、授权、付款的地方停下来等你。）
+
 ::GENE{dsh_market|conf:confirmed|scope:global}
   T:market_entries_require_an_ilang_manifest_or_an_engineering_book_that_passes_the_official_validator_strict_with_zero_errors_and_zero_warnings
   T:admitted_skills_and_engineering_books_ship_inside_the_kit_the_user_never_picks_from_a_list

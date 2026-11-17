@@ -107,6 +107,38 @@
       "get": "kit"
     },
     {
+      "kind": "skill",
+      "name": "source-book",
+      "title": {
+        "zh": "变工程书",
+        "en": "Source Book"
+      },
+      "description": {
+        "zh": "看见攻略，说一句「变工程书」，变成 AI 能照着执行的工程书",
+        "en": "Hand over any tutorial and get an engineering book an agent can carry out."
+      },
+      "version": "2.9",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/skills/source-book/SKILL.md",
+      "procedure": ".dsh/skills/source-book/SKILL.md",
+      "upstream": {
+        "repo": "https://github.com/ilang-ai/ilang-spec",
+        "tag": "v5.0.14",
+        "doi": "10.5281/zenodo.21821452"
+      },
+      "sha256_lf": "fae5be9c30fa66701cd735562cbc100d5c37ed3f50f31a4a5a03d82ada71bf94",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "fences_linted": 1,
+        "at": "2026-11-17"
+      },
+      "get": "kit"
+    },
+    {
       "kind": "book",
       "name": "ai-global-media",
       "title": {
