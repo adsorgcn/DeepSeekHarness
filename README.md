@@ -1,6 +1,7 @@
 <img src="assets/social-preview.png" alt="iLang DSH 工具包：给 DeepSeek Harness 装上本地记忆和技能" width="100%">
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23998664.svg)](https://doi.org/10.5281/zenodo.23998664)
+[![Agent Ready 100/100 · 查看实测结果](docs/assets/agent-ready-100.svg)](https://isitagentready.com/dsh.ilang.guide)
 
 # iLang DSH 工具包
 
@@ -86,14 +87,41 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 ## Agent 与 MCP 接入
 
-远程 MCP 地址：`https://dsh.ilang.guide/mcp`（Streamable HTTP，公开只读，无需密钥）。
+**Agent Ready 100/100 · Level 5 Agent-Native** — 2026-11-17 默认 All Checks 实测。[查看完整结果 ↗](https://isitagentready.com/dsh.ilang.guide)
 
-连接后调用 `tools/list`，可读取产品说明、按系统获取安装指引、检索公开文档、读取单篇文档和查询技能市场。服务不能访问你的本地记忆，也不会执行安装或发布。
+准备安装工具包时，让你的 Agent 先读官方安装说明；需要新能力时，让它查技能市场。公开只读，**无需账号、API Key 或令牌**。
+
+在支持远程 MCP 的客户端中，新增服务器并填写：
+
+| 接入项 | 设置 |
+| --- | --- |
+| 名称 | `ilang-dsh` |
+| 地址 | `https://dsh.ilang.guide/mcp` |
+| 传输方式 | Streamable HTTP |
+| 认证方式 | 无（None） |
+
+支持 `mcpServers` 格式的客户端，也可直接使用这段配置：
+
+```json
+{
+  "mcpServers": {
+    "ilang-dsh": {
+      "url": "https://dsh.ilang.guide/mcp"
+    }
+  }
+}
+```
+
+连接成功后，对 Agent 说：
+
+> 读取 iLang DSH 的 Windows 安装说明，告诉我下一步需要确认什么。
+
+将 Windows 换成 macOS 或 Linux，即可获取对应系统的指引。连接后可发现 5 个工具：产品概览、安装指引、文档检索、单篇文档读取和技能市场查询。安装由你的本地 Agent 按你的确认执行；这个公开服务不能访问本地记忆，也不会执行安装或发布。
 
 - [接入说明与配置示例](https://dsh.ilang.guide/agents/)
 - [OpenAPI](https://dsh.ilang.guide/openapi.json) · [Agent 导航](https://dsh.ilang.guide/llms.txt)
-- [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [认证说明](https://dsh.ilang.guide/auth.md)
+- [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [访问说明](https://dsh.ilang.guide/auth.md)
 
 支持 WebMCP 的浏览器还可在首页调用「读取安装说明」和「搜索技能市场」。安装仍由本地 Agent 按用户确认执行。
 
-公开资料服务无需注册、登录或令牌。未来认证接口仅有明确标为未启用的声明，当前不提供认证流程，详见[访问说明](https://dsh.ilang.guide/auth.md)。
+认证发现声明明确标为未启用；发现项通过不表示提供了登录或令牌服务。

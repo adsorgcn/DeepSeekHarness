@@ -44,6 +44,43 @@
   }
   copyButtons.forEach(button => button.addEventListener('click', copyCommand));
 
+  const mcpStatus = document.getElementById('mcp-copy-status');
+  document.querySelectorAll('[data-copy-target]').forEach(button => {
+    const label = button.querySelector('[data-label]');
+    const originalLabel = label.textContent;
+    let resetTimer;
+    button.addEventListener('click', async () => {
+      const source = document.getElementById(button.dataset.copyTarget);
+      const text = source.value ?? source.textContent;
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } catch {
+        if (typeof source.select === 'function') {
+          source.focus({ preventScroll: true });
+          source.select();
+        } else {
+          const range = document.createRange();
+          range.selectNodeContents(source);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+        try { copied = document.execCommand('copy'); } catch { copied = false; }
+        if (copied) button.focus({ preventScroll: true });
+      }
+      clearTimeout(resetTimer);
+      label.textContent = copied ? '已复制' : '请手动复制';
+      button.querySelector('use').setAttribute('href', copied ? '#i-check' : '#i-copy');
+      mcpStatus.textContent = copied ? `${button.dataset.copyName}已复制。` : '内容已选中，请按 Ctrl+C 或使用系统复制。';
+      resetTimer = setTimeout(() => {
+        label.textContent = originalLabel;
+        button.querySelector('use').setAttribute('href', '#i-copy');
+      }, 3000);
+    });
+  });
+
   const header = document.querySelector('.mast');
   const menu = document.querySelector('.menu-toggle');
   function closeMenu(returnFocus = false) {

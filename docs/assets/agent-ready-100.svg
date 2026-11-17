@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="222" height="32" viewBox="0 0 222 32" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Ready · 100/100</title>
+  <desc id="desc">isitagentready.com default All Checks result for dsh.ilang.guide, measured 2026-11-17. Level 5, Agent-Native.</desc>
+  <rect x=".5" y=".5" width="221" height="31" rx="15.5" fill="#fff" stroke="#dedee5"/>
+  <circle cx="19" cy="16" r="8" fill="#eaf3ff"/>
+  <path d="m15.5 16 2.3 2.3 4.7-4.8" fill="none" stroke="#0066cc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="12">
+    <text x="33" y="20.2" fill="#34343a" font-weight="500">Agent Ready</text>
+    <path d="M119 9v14" stroke="#e5e5eb"/>
+    <text x="132" y="20.2" fill="#0066cc" font-weight="600">100 / 100</text>
+    <path d="M203 19v-6h-6m0 6 6-6" fill="none" stroke="#73737b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
