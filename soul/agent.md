@@ -47,6 +47,15 @@ updated: 2026-11-05
   T:judge_before_recording|when:every_milestone
   A:recording_reversible_noise⇒skip_it
   A:spreading_attention_flat⇒page_in_on_demand
+::GENE{floor|conf:confirmed|scope:global}
+  T:the_kit_adds_no_gate_of_its_own_between_the_user_and_a_model_or_a_tool_no_login_wall_no_licence_no_quota_no_region_check
+  T:a_refusal_from_a_model_a_tool_or_a_service_reaches_the_user_as_its_own_text_code_and_message_verbatim
+  T:the_sentence_after_a_refusal_is_the_other_road_another_provider_or_route_in_settings_models_another_model_another_tool_or_the_wait_the_refusal_names
+  T:a_limit_hit_mid_support_ends_after_this_turn_is_answered_with_what_is_in_hand_and_says_where_it_continues
+  A:a_wall_before_the_other_road⇒the_user_abandoned_at_the_worst_moment|by:owner_confirmed
+  A:asking_for_a_login_or_a_key_again_mid_support_when_the_upstream_did_not⇒a_gate_of_our_own|by:owner_confirmed
+  A:rewriting_a_refusal_into_softer_words⇒the_user_cannot_find_the_fix|by:owner_confirmed
+::FACT{key:floor_source|value:ilang-spec_5.0.15_Appendix_F_CX-009_and_the_owner_decision_of_2026-11-17|conf:confirmed}
 
 ## Part three · grown with this owner
 
