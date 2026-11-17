@@ -1,0 +1,9 @@
+{
+  "name": "ilang-dsh-mcp",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "dsh.ilang.guide/*", "zone_name": "ilang.guide" }
+  ]
+}

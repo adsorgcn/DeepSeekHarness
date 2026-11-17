@@ -1,0 +1,33 @@
+# iLang DSH 工具包
+
+> iLang 为 DeepSeek Harness 提供的开源工具包：本地记忆、新手教程、安装工具和技能市场。网站接口公开只读，不读取个人记忆，不执行安装或发布。
+
+产品支持 Windows、macOS 和 Linux。安装先在 DeepSeek Harness 新建任务并选择「创造模式」，再读取完整安装说明、逐项确认。工具包 MIT 开源；模型调用、服务器和第三方订阅由相应服务计费。
+
+## Agent 接入
+
+- [接入说明](https://dsh.ilang.guide/agents/): MCP 地址、工具与使用方式
+- [MCP 服务](https://dsh.ilang.guide/mcp): Streamable HTTP，无需认证
+- [MCP Server Card](https://dsh.ilang.guide/.well-known/mcp/server-card.json): 服务与工具发现
+- [OpenAPI](https://dsh.ilang.guide/openapi.json): 公开只读 HTTP API
+- [Agent Skills](https://dsh.ilang.guide/.well-known/agent-skills/index.json): 安装规划、文档检索、市场查阅
+- [访问与认证](https://dsh.ilang.guide/auth.md): 无需注册、密钥或 OAuth
+
+## 产品与资料
+
+- [首页](https://dsh.ilang.guide/): 产品介绍和完整安装指令
+- [技能市场](https://dsh.ilang.guide/market/): 技能、工程书与插件
+- [机器可读市场目录](https://dsh.ilang.guide/market/registry.json): 版本、来源、许可和获取方式
+- [文本说明](https://dsh.ilang.guide/llms-full.txt): 产品说明与安装指引的部署快照
+- [最新 README](https://github.com/adsorgcn/DeepSeekHarness/blob/main/README.md): 当前仓库说明
+- [完整安装指南](https://github.com/adsorgcn/DeepSeekHarness/blob/main/一键安装.md): 安装步骤与验收
+- [新手起手式](https://github.com/adsorgcn/DeepSeekHarness/blob/main/dsh-新手起手式.md): 初次使用指南
+- [国内指导站](https://ilang.cn/guide/dsh/): 国内分享与阅读入口
+- [迭代清单](https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md): 后续计划，不等同于已实现功能
+
+## 项目来源
+
+- [公开源码](https://github.com/adsorgcn/DeepSeekHarness)
+- [国内镜像](https://gitee.com/monetize/DeepSeekHarness)
+- [iLang 协议](https://ilang.ai/)
+- [Mem-Forever](https://github.com/ilang-ai/Mem-Forever)

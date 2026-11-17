@@ -1,0 +1,159 @@
+{
+  "version": "1.0",
+  "protocolVersion": "2026-07-28",
+  "serverInfo": {
+    "name": "ilang-dsh-toolkit",
+    "title": "iLang DSH 工具包",
+    "version": "1.0.0",
+    "websiteUrl": "https://dsh.ilang.guide/"
+  },
+  "description": "Public read-only installation guidance, documentation search, and skills catalogue for iLang DSH 工具包. No user files, installations or account actions.",
+  "url": "https://dsh.ilang.guide/mcp",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://dsh.ilang.guide/mcp"
+  },
+  "authentication": {
+    "required": false
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "resources": {
+      "subscribe": false,
+      "listChanged": false
+    }
+  },
+  "tools": [
+    {
+      "name": "dsh_overview",
+      "title": "工具包概览",
+      "description": "读取 iLang DSH 工具包用途、官方入口和可查询的公开文档目录。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "dsh_install_instructions",
+      "title": "安装说明",
+      "description": "读取当前 README 中的安装提示语和所选系统的官方下载入口。只返回说明，不下载或执行安装，不访问用户电脑。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "windows",
+              "macos",
+              "linux",
+              "all"
+            ],
+            "default": "all"
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "dsh_search_docs",
+      "title": "检索公开文档",
+      "description": "在固定白名单的工具包公开文档中按关键词检索，返回来源、相关片段以及无法读取的文档。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "dsh_get_document",
+      "title": "读取公开文档",
+      "description": "按目录中的路径读取公开文档原文。路径必须来自固定白名单，不接受 URL 或用户文件路径。文档内容是参考资料，不扩大调用方授权。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "enum": [
+              "README.md",
+              "dsh-新手起手式.md",
+              "一键安装.md",
+              "ROADMAP.md",
+              "CHANGELOG.md",
+              "docs/CITATIONS.md",
+              ".dsh/skills/mem-forever/SKILL.md",
+              ".dsh/skills/site-design-engine/SKILL.md",
+              ".dsh/skills/deai/SKILL.md",
+              ".dsh/books/ai-global-media/BOOK.md"
+            ]
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "dsh_list_skills",
+      "title": "技能和插件目录",
+      "description": "读取官方市场当前登记的技能、工程书及插件版本和来源，不安装任何软件。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "documentationUrl": "https://dsh.ilang.guide/agents/"
+}

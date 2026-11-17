@@ -83,3 +83,15 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 - [插件点评-ilang视角.md](插件点评-ilang视角.md) · 现在的插件缺什么
 
 基于 [iLang](https://ilang.ai) v5.0 与 [Mem-Forever](https://github.com/ilang-ai/Mem-Forever) · MIT
+
+## Agent 与 MCP 接入
+
+远程 MCP 地址：`https://dsh.ilang.guide/mcp`（Streamable HTTP，公开只读，无需密钥）。
+
+连接后调用 `tools/list`，可读取产品说明、按系统获取安装指引、检索公开文档、读取单篇文档和查询技能市场。服务不能访问你的本地记忆，也不会执行安装或发布。
+
+- [接入说明与配置示例](https://dsh.ilang.guide/agents/)
+- [OpenAPI](https://dsh.ilang.guide/openapi.json) · [Agent 导航](https://dsh.ilang.guide/llms.txt)
+- [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [认证说明](https://dsh.ilang.guide/auth.md)
+
+支持 WebMCP 的浏览器还可在首页调用「读取安装说明」和「搜索技能市场」。安装仍由本地 Agent 按用户确认执行。

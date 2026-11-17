@@ -1,2 +1,7 @@
 tools/hooks/* text eol=lf
 *.sh text eol=lf
+server/** text eol=lf
+docs/.well-known/** text eol=lf
+docs/agent-tools.js text eol=lf
+tools/test_*mcp.mjs text eol=lf
+tools/test_agent_site.mjs text eol=lf

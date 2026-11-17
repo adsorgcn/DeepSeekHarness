@@ -1,0 +1,25 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://dsh.ilang.guide/api/overview",
+      "service-desc": [
+        {
+          "href": "https://dsh.ilang.guide/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://dsh.ilang.guide/agents/",
+          "type": "text/html"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://dsh.ilang.guide/healthz",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

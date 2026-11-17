@@ -1,0 +1,309 @@
+# iLang DSH 工具包：公开资料文本版
+
+本页是部署时的公开文档快照。远程工具只读取资料；文档中的操作需要用户明确请求，并由本地 Agent 执行。
+
+来源仓库：https://github.com/adsorgcn/DeepSeekHarness
+来源提交：ac1e8937cb85e8c99596adb728e25e35615bfa22
+Agent 接入：https://dsh.ilang.guide/agents/
+MCP：https://dsh.ilang.guide/mcp
+
+
+---
+
+## 来源：README.md
+
+https://github.com/adsorgcn/DeepSeekHarness/blob/ac1e8937cb85e8c99596adb728e25e35615bfa22/README.md
+
+<img src="assets/social-preview.png" alt="iLang DSH 工具包：给 DeepSeek Harness 装上本地记忆和技能" width="100%">
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23998664.svg)](https://doi.org/10.5281/zenodo.23998664)
+
+# iLang DSH 工具包
+
+**别人的 DSH 是个聊天框。你的，一句话满配。**
+
+> One sentence and your DeepSeek Harness remembers you. Memory · tutorial · one-click install · skills.
+
+iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地记忆、新手教程、一键安装和技能库。
+
+你只做三件事：选创造模式、粘贴、点头。
+
+在线门面：https://dsh.ilang.guide/ （微信、QQ 里分享用下面的指导站地址）
+
+指导站：https://ilang.cn/guide/dsh/ ——一页讲清贴哪句、会发生什么、怎么验收，Agent 可读的孪生在同一页；微信、QQ 里分享用这个地址。
+
+## 那句话
+
+新开一个任务，一定先选「创造模式」（装插件的工具只有它有，装不上东西时它能自己修），再把下面这句原样贴给它：
+
+> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 里的 iLang DSH 工具包安装到本地：先确认你现在是创造模式（手里有装插件的工具），不是就先别动手，让我新开一个任务、模式选「创造模式」再贴一遍；然后按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完再把官方插件 dsh-plugin-chuhai 装上（问我一次）；哪一步装不上或卡住，你自己想办法修好、装好再往下走，被权限拦了就向我申请一次放行；最后告诉我以后每个新窗口怎么一句话回到这里，还有「自媒体出海」这句话怎么用。
+
+剩下它全包：装环境先问你再动手，放好全套，问几个问题认识你。Windows 走 bootstrap.ps1，macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选；软件只从官方源装；默认本机模式，什么都不上传。
+
+连不上 GitHub：自动走国内镜像 gitee.com/monetize/DeepSeekHarness，iLang 官方资料自动走 ilang.cn。
+
+在 DeepSeek Harness 0.2.2-rc.1 上验证（DSH 还是 Developer Preview，官方说可能有破坏性变更；装不上先看这一行）。
+
+## 验收时刻
+
+关掉窗口。重开。把那个文件夹选为工作区，什么都不说。它第一句就汇报上次做到哪。看到了，就是装好了。
+
+## 里面有什么
+
+**记忆体** · 窗口关了，进度还在。你的习惯、决定、规矩写成本地文件；换窗口不忘，换电脑贴一句「把我的记忆体备份到我自己的私有仓库」。每笔记忆 = 一次 git 提交，哈希链就是防伪链。
+
+**新手教程** · 第一句，先学 iLang。教程不教你用 DSH：第一句让它去读 iLang 运行文件，读完用三句话告诉你学到了什么；第二句让它把你跑起来；第三句配模型，新手默认 deepseek-flash；第四句把灵魂写进去。四句话照抄，配模型、选协议、写人格全是它的活。
+
+**一键安装** · 新电脑，一句话装齐。缺什么补什么，每步问你，只走官方源。可选免费全家桶：视频下载与视频转文字、笔记、语音，一件一审批。只装你点头同意的；删掉工作区项目文件就没了，另装的工具单独卸。
+
+**技能库** · 好技能，随装随用。mem-forever、site-design-engine、deai 起步（deai：去 AI 味，像你自己写的），新技能持续进来；你刷到什么好东西，说一句「迭代进去」，它就进仓库。
+
+## 市场
+
+门是 iLang：清单过官方校验器 strict 0 错 0 警告。过了门、owner 说收的技能和工程书原样内置在工具包里，装了工具包就有，不用挑；货架在 https://dsh.ilang.guide/market/ 。第一本内置工程书：说一句「AI全球自媒体」。在别处看见不错的技能或插件，告诉你的 DSH，它帮你写一版更好的。想上货架先跑 tools/market_admit.py 自检再提申请，收录顺序就是显示顺序。
+
+## 以后每个新窗口
+
+> 进我的记忆体，看看上次到哪了。
+
+或者把目录选成 DSH 的工作区，连这句话都不用说。
+
+更新引擎：
+
+> 把 iLang DSH 工具包的引擎更新到最新，不要动我的记忆。
+
+看图：新手用 Flash，截图直接贴；说「认真想」才请 Pro。
+
+视频转文字：贴链接或文件，出文字和字幕，本地跑，不上传。
+
+## 放心
+
+你的记忆，只在你的电脑上。笔记是纯文本，随时能看、能改、能删。出网的只有两件事：你向模型提问的 API 请求，和你主动配置的备份（自己的私有仓库或同步盘）。不记密码，密钥只进本机加密 vault。
+
+## 引用与致谢
+
+本仓库站在公开学术工作之上，每一层都带 DOI / arXiv 锚点，作者有 ORCID 的挂 ORCID：
+
+- iLang（[Long Quan Zhu](https://orcid.org/0009-0004-4540-8082)）：[DOI 10.5281/zenodo.21821452](https://doi.org/10.5281/zenodo.21821452)
+- Mem-Forever（同作者）：[DOI 10.5281/zenodo.22865160](https://doi.org/10.5281/zenodo.22865160)
+- DeepSeek-V4（DeepSeek-AI，arXiv 提交人 Wenfeng Liang）：[DOI 10.48550/arXiv.2606.19348](https://doi.org/10.48550/arXiv.2606.19348)
+
+完整清单（R1 / V3 / SenseVoice / DSec 与标准组件）见 [docs/CITATIONS.md](docs/CITATIONS.md)。
+
+## 想看更多
+
+- [dsh-新手起手式.md](dsh-新手起手式.md) · 四句话，从零开始
+- [一键安装.md](一键安装.md) · 装的时候发生了什么
+- [CHANGELOG.md](CHANGELOG.md) · 更新记录，每次改动即发版
+- [ROADMAP.md](ROADMAP.md) · 迭代清单
+- [插件点评-ilang视角.md](插件点评-ilang视角.md) · 现在的插件缺什么
+
+基于 [iLang](https://ilang.ai) v5.0 与 [Mem-Forever](https://github.com/ilang-ai/Mem-Forever) · MIT
+
+---
+
+## 来源：一键安装.md
+
+https://github.com/adsorgcn/DeepSeekHarness/blob/ac1e8937cb85e8c99596adb728e25e35615bfa22/一键安装.md
+
+# 一键安装：一句话进记忆体（环境 + 仓库 + 记忆，一次到位）
+
+> 用户只做三件事：**选创造模式、粘贴一句话、审批**。其余全自动。
+> 模式 = DSH 审批模式：**不需要审批的自动加载，需要审批的人类审批。**
+> 网页版与 Agent 孪生：https://ilang.cn/guide/dsh/ （微信、QQ 里分享用这个地址）
+
+## 那句话（新开一个任务，一定先选「创造模式」再粘贴）
+
+> 帮我把 https://github.com/adsorgcn/DeepSeekHarness 装成本地 DSH 全套：先确认你现在是创造模式（手里有装插件的工具），不是就先别动手，让我新开一个任务、模式选「创造模式」再贴一遍；然后按我的系统下载并运行仓库里的 bootstrap.ps1（Windows）或 bootstrap.sh（macOS、Linux），打不开 GitHub 就从 https://gitee.com/monetize/DeepSeekHarness 取同名文件；它默认只检测，缺什么软件列给我，逐个征得我同意后再从官方源安装；装完再把官方插件 dsh-plugin-chuhai 装上（问我一次）；哪一步装不上或卡住，你自己想办法修好、装好再往下走，被权限拦了就向我申请一次放行；最后告诉我以后每个新窗口怎么一句话回到这里，还有「自媒体出海」这句话怎么用。
+
+## 会发生什么（自动 / 审批分工）
+
+| 步骤 | 模式 |
+|---|---|
+| 检测环境（git / python / winget 有没有） | **自动**，零改动 |
+| 克隆仓库到本机、切进目录、AGENTS.md 注入、技能发现 | **自动** |
+| `brain.py check` 验收、建立你的档案、写交接单 | **自动** |
+| 装官方插件 dsh-plugin-chuhai（自媒体出海） | **需审批** → 问你一次，点头才装；装不上不拦别的事 |
+| 安装 Git（git-scm.org 官方版） | **需审批** → agent 问你「装吗？」，你点头才装 |
+| 安装 Python 3.12（python.org 官方版） | **需审批** → 同上 |
+| 其他一切动到系统的操作 | 一律先问 |
+
+**所有软件只从官方源安装**：winget 官方包 id（`Git.Git` / `Python.Python.3.12`）；winget 不可用时给官方下载链接，人类点一下。
+
+## 记忆存在哪
+
+默认**本机模式**：记忆只在你电脑的这个文件夹里，不需要 GitHub 账号，也什么都不上传。想换电脑接着用，再贴一句「把我的记忆体备份到我自己的私有仓库」，那时才需要 GitHub 账号和一个空的私有仓库。
+
+## 它自带的工作方式（装完就是这样干活）
+
+1. **索引寻址，不整仓搬**：记忆里始终维护一份索引 + 交接单；干活时只读当次需要的文件，其余按需调页——上下文里永远不装整个仓库。
+2. **iLang 判断层当「记不记」的裁决器**：可回滚、可由文件/git 重建的东西（草稿、工具输出、中间态）**不记**，回滚即恢复；承重的（决定、边界、教训、状态机当前态）**立即记并提交**。
+3. **注意力不平铺**：只铺在「索引 + 当前一步 + 承重不变量」上。
+4. **超长文开发**：默认维护四件套——项目索引、设定卡（人物/伏笔/时间线状态机）、交接单、未验证清单；一章一文件，小步多轮。
+5. **经验全部 iLang 交叉验证**：你教的每条经验都写成 iLang 声明、过官方语法校验、带归属行才入库——协议 + 语法 + 归属 + git 哈希四重锚点，别人抄走文字也抄不走这条链。
+
+这套工作方式写在 `soul/agent.md` 里（每次会话开场必读），你随时可改、可删。
+
+## 钥匙放在账本里
+
+钥匙是账本里的一行：`env/ledger.env` 一行一扇门，值静态编码（用仓库自己的 `env/pepper` 可逆，不是加密）。工作走到哪扇门、这台机器有你点过一次头的授权，钥匙才到 Agent 手里；root、付款、注册商这类顶门只认你发的一次性码。只有把记忆体配对给不持有仓库的人才封存，那时才装 age，装前先问。用法见 [docs/LEDGER.md](docs/LEDGER.md)。
+
+2026-11-08 之前装的、用过旧密钥库（`vault/`）的老用户：贴一句 `把我的旧密钥库迁进账本`，Agent 会跑 `python -X utf8 tools/brain.py migrate-2to3`，要你的 age 私钥，迁完跑 `ledger verify all` 看每扇门还开不开。
+
+## 遇到问题怎么办
+
+**发图片它说看不了？** 一句话：设置 → 模型 → 切到 `deepseek-flash`。flash 原生能读图，一般人用它就够。未来模型都会自动识图，现在只是模型选择问题，不用装任何插件。
+
+## 手动路线（不粘贴，直接跑脚本）
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "Invoke-WebRequest https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/bootstrap.ps1 -OutFile $env:TEMP\bootstrap.ps1; & $env:TEMP\bootstrap.ps1"
+```
+
+连不上 GitHub 的国内下载：
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "Invoke-WebRequest https://gitee.com/monetize/DeepSeekHarness/raw/main/bootstrap.ps1 -OutFile $env:TEMP\bootstrap.ps1; & $env:TEMP\bootstrap.ps1 -Source gitee"
+```
+
+（Windows 走 bootstrap.ps1；macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选。）
+
+- 默认只检测并打印计划（**零改动**）；
+- 确认后：`& $env:TEMP\bootstrap.ps1 -Install -Yes`（在 DSH 里则逐项审批后执行）。
+
+## 国内网络（连不上 GitHub 时）
+
+- 产品仓库自动切国内镜像：`https://gitee.com/monetize/DeepSeekHarness`（与 GitHub 同源，由 owner 维护）；按实际可达性探测，不按地区猜测。
+- iLang 官方资料自动切国内官网：`https://ilang.cn`（运行时核心 `https://ilang.cn/runtime/ilang-latest.md`）。
+- 克隆后自动安装「记忆推送保护钩子」：私人记忆（soul/ memory/ handoff/ 等）默认拦在本地不能推送；确认目标是你自己的私有仓库后才显式放行。
+
+## 装完先验一下
+
+关掉这个窗口，重开一个，把这个文件夹选成工作区，什么都不说；它第一句应该是汇报上次做到哪。看到了，就是装好了。没看到就把屏幕上的内容贴给你的 DSH。贴一张截图问它「这是什么」，它答得出就是 Flash 配好了。装了视频转文字的，再贴「跑一下视频转文字自检」，看到 SELFTEST OK 就是能用。
+
+## 怎么卸载
+
+删掉这个文件夹，DSH 里把工作区换掉，就全没了；它装过的只有你点头同意过的 Git 和 Python，留着不碍事，要删也按官方方式删。（起手式「用户唯一要记住的几件事」第 4 条是同一条规矩。）
+
+## 进阶：免费全家桶（可选）
+
+不装也不影响记忆体。要装就贴这句：
+
+> 帮我装免费全家桶：先跑 tools/free_station.py plan 看缺什么，再逐个征得我同意后从官方源安装；装完告诉我每件怎么用。
+
+- **yt-dlp + FFmpeg**：视频下载与转文字
+- **视频转文字**：贴链接或文件，出文字和字幕，本地跑，不上传（首次约 160MB 模型，装前问你）；引擎与模型装在你的用户目录 .deepseekharness/asr 下，不占仓库，引擎更新不丢
+- **REA（第三方，可选）**：morluto/rea，MIT；它官方自带 MCP，想用自己接；怎么用问你的 DSH 或看它官方文档 https://github.com/morluto/rea
+- **Obsidian**：装好后直接打开记忆文件夹就是你的笔记金库
+- **语音**：零安装——DSH 自带语音输入（实验性插件，本地 SenseVoice，官方带国内模型源），朗读用系统自带语音
+- **NotebookLM（海外）**：零安装——需谷歌账号、国内网络打不开，没有就跳过；对 agent 说「把交接单导出成学习笔记」
+
+全部官方源（winget 官方 id / brew），每件安装前先问你，装没装上以命令输出为准，失败即停。
+
+## 看图直接贴
+
+新手用 Flash，截图直接贴进输入框发出去，它看得见；想深一点说「认真想」，它会请 Pro 来想。
+
+### 开发者用 Pro
+
+Pro 不能看图，贴图会被 DSH 退回、弹「模型不支持识图」、发送按不动，这是 DSH 的事；要看图就截图后不贴、只说「看截图，<问题>」，第一次它会问你开「子代理模型选择」，说好就行。新手不用看这一节。
+
+## 之后每个新窗口
+
+- 把目录选为 DSH 工作区 → 开场自动汇报进度，零句话；
+- 或一句话：`进我的记忆体目录，看看上次到哪了。`
+- 更新引擎就贴这句：`把 DeepSeekHarness 的引擎更新到最新，不要动我的记忆，更新完跑一次 tools/brain.py init .`（永远不碰你的记忆文件）。
+
+---
+
+## 来源：dsh-新手起手式.md
+
+https://github.com/adsorgcn/DeepSeekHarness/blob/ac1e8937cb85e8c99596adb728e25e35615bfa22/dsh-新手起手式.md
+
+# DSH 新手教程：你只做三件事——复制、粘贴、让 DSH 去读官方文档
+
+> 用户的工作到此为止：**复制、粘贴、命令 DSH 去读官方文档**。
+> 配模型、选协议、写 persona、装插件……全是 DSH 的活，你只负责抄句子和按它说的做。
+
+---
+
+## 起手式（第 1 句，直接粘贴）
+
+> 先去读 https://runtime.ilang.app/ilang-latest.md（国内打不开就读 https://ilang.cn/runtime/ilang-latest.md），读完用三句话告诉我你学到了什么，再回来找我。
+
+就这一句。为什么：iLang 是给 AI 的母语级通信协议，它教的第一条纪律「模型感知，代码决定」恰好就是 DSH 的运行法则——先学懂，再动手。
+
+（备选：DSH 支持 MCP 的话，也可以直接接 https://mcp.ilang.ai/mcp，让它自己调 ilang_runtime。）
+
+---
+
+## 第 2 句：它学的时候，让它把你跑起来
+
+> 去读 DeepSeek Harness 的官方文档（https://github.com/deepseek-ai/deepseek-harness 里的 README 和 docs 目录，以及 https://deepseek-harness.github.io/deepseek-harness/），然后一步步带我完成：启动、配模型密钥、选工作区。我是新手，每一步告诉我点哪里、粘什么；能你做的你直接做，需要我做的才叫我。
+
+（接下来你只跟着它说的点几下——最终需要你亲手的只有两处：**粘贴 API 密钥**、**点同意审批**。）
+
+---
+
+## 第 3 句：模型——新手就用 deepseek-flash
+
+> 去读 DeepSeek Harness 官方模型配置文档（docs/user/guide/providers.zh.md），然后帮我把模型配成 deepseek-flash，并用一句话告诉我为什么：它能看图、上下文 1M、便宜，新手够用；Pro 更贵且不能看图，先不用。需要我提供密钥就告诉我贴在哪；如果我是 DeepSeek 账号登录，就告诉我在模型选择里选 deepseek-flash 这一次就行。
+
+（其他家的协议以后再说。你只要记住：看图直接贴，想深一点说「认真想」。）
+
+---
+
+## 第 4 句：学完 iLang 回来了，把灵魂写进去
+
+> 把你刚学到的 iLang 写进你的灵魂（persona），要求：
+> 1. 你叫 Prometheus：诚实、真诚、思维严谨、表达灵活。
+> 2. 语言：用户用什么语言你就用什么语言，默认简体中文。
+> 3. 回答：能答就答完整；不知道就直说“我不知道”——幻觉就是不诚实；能给步骤给步骤，能给模板给模板。
+> 4. 送佛送到西：帮人帮到底。
+> 5. 用心：你真诚，用户才会包容你。
+> 让这个人格在以后每个新窗口都生效。做完告诉我：怎么生效、怎么撤销。
+
+（写预设、建 bundle、安装、验证、回滚——全部是它自己的活。）
+
+---
+
+## 日常玩法：照抄这些句子
+
+| 场景 | 粘贴这句 |
+|------|---------|
+| 第一次跑任务 | `Summarize this repository and identify its main packages.` |
+| 办文档 | `先加载 office 技能，再把这份数据做成 Excel 报表。` |
+| 并行外包 | `派两个子智能体同时干：一个做 A，一个做 B，最后汇总给我。` |
+| 长任务 | `把这个任务设成持续目标，自动推进，做完回来汇报。` |
+| 改 DSH 本身 | `去读官方插件开发文档（docs/user/develop/basic/index.zh.md），教我或直接帮我给 DSH 加一个「一键导出笔记」功能。` |
+| 看图 | 直接把截图贴进输入框，再问它 |
+| 想深一点 | `认真想，这个任务` |
+| 视频转文字 | `把这个视频转成文字和字幕：<链接或文件>` |
+| 视频转文字自检 | `跑一下视频转文字自检` |
+| 去 AI 味 | `DeAI: <粘贴初稿>` |
+| 像自己写的 | `加载 deai 技能，把这篇改得像我自己写的，读者是<谁>` |
+| 任何卡住 | `去读官方文档（给出文档地址），然后告诉我下一步。` |
+
+**开发者用 Pro**：Pro 不能看图，贴图会被 DSH 退回、弹「模型不支持识图」、发送按不动，这是 DSH 的事；要看图就截图后不贴、只说「看截图，<问题>」，第一次它会问你开「子代理模型选择」，说好就行。新手不用看这一节。
+
+---
+
+## 用户唯一要记住的几件事
+
+1. **第一句永远是「先去读 iLang 运行时核心，读完三句话汇报」**。
+2. **让 DSH 读文档，而不是自己看文档**——你的任务是把文档地址贴给它。
+3. 它请示你时：**要密钥就给密钥，要审批就点同意/拒绝**，其余一律说“你看着办，做完汇报”。
+4. 任何它做的改动，跟一句“怎么撤销？”——答不上来的不要用。（怎么卸载详见 一键安装.md 的「怎么卸载」）
+5. 诚实的“我不知道”永远强过幻觉——这条已经写进它的 persona 里了。
+
+## 官方文档速查（你只需要复制地址）
+
+- DSH 仓库与文档：https://github.com/deepseek-ai/deepseek-harness · https://deepseek-harness.github.io/deepseek-harness/
+- DSH 模型配置：docs/user/guide/providers.zh.md（贴给第 3 句）
+- iLang 运行时核心：https://runtime.ilang.app/ilang-latest.md（国内镜像 https://ilang.cn/runtime/ilang-latest.md）（贴给第 1 句）
+
+---
+
+## 装完先验一下
+
+关掉这个窗口，重开一个，把这个文件夹选成工作区，什么都不说；它第一句应该是汇报上次做到哪。看到了，就是装好了。没看到就把屏幕上的内容贴给你的 DSH。

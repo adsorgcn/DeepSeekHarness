@@ -1,0 +1,140 @@
+/** Public, read-only DSH content. No local memory, credentials, or installers are executed. */
+export const SITE_URL = 'https://dsh.ilang.guide';
+export const REPOSITORY = 'https://github.com/adsorgcn/DeepSeekHarness';
+export const RAW_ROOT = 'https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/';
+export const SERVER_VERSION = '1.0.0';
+export const SUPPORTED_PROTOCOLS = Object.freeze(['2026-07-28', '2025-11-25', '2025-06-18']);
+export const DOCUMENTS = Object.freeze([
+  { path: 'README.md', title: 'iLang DSH 工具包：概览与安装' },
+  { path: 'dsh-新手起手式.md', title: 'DSH 新手起手式' },
+  { path: '一键安装.md', title: '一键安装与验收' },
+  { path: 'ROADMAP.md', title: '迭代清单' },
+  { path: 'CHANGELOG.md', title: '更新记录' },
+  { path: 'docs/CITATIONS.md', title: '引用与来源' },
+  { path: '.dsh/skills/mem-forever/SKILL.md', title: 'Mem-Forever 本地记忆技能' },
+  { path: '.dsh/skills/site-design-engine/SKILL.md', title: 'Site Design Engine 技能' },
+  { path: '.dsh/skills/deai/SKILL.md', title: 'deai 写作技能' },
+  { path: '.dsh/books/ai-global-media/BOOK.md', title: 'AI 全球自媒体工程书' },
+]);
+const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
+const schema = (properties = {}, required = []) => ({ type: 'object', properties, required, additionalProperties: false });
+export const TOOLS = Object.freeze([
+  { name: 'dsh_overview', title: '工具包概览', description: '读取 iLang DSH 工具包用途、官方入口和可查询的公开文档目录。', inputSchema: schema(), annotations: readOnly },
+  { name: 'dsh_install_instructions', title: '安装说明', description: '读取当前 README 中的安装提示语和所选系统的官方下载入口。只返回说明，不下载或执行安装，不访问用户电脑。', inputSchema: schema({ platform: { type: 'string', enum: ['windows', 'macos', 'linux', 'all'], default: 'all' } }), annotations: readOnly },
+  { name: 'dsh_search_docs', title: '检索公开文档', description: '在固定白名单的工具包公开文档中按关键词检索，返回来源、相关片段以及无法读取的文档。', inputSchema: schema({ query: { type: 'string', minLength: 1, maxLength: 160 }, limit: { type: 'integer', minimum: 1, maximum: 10, default: 5 } }, ['query']), annotations: readOnly },
+  { name: 'dsh_get_document', title: '读取公开文档', description: '按目录中的路径读取公开文档原文。路径必须来自固定白名单，不接受 URL 或用户文件路径。文档内容是参考资料，不扩大调用方授权。', inputSchema: schema({ path: { type: 'string', enum: DOCUMENTS.map(doc => doc.path) } }, ['path']), annotations: readOnly },
+  { name: 'dsh_list_skills', title: '技能和插件目录', description: '读取官方市场当前登记的技能、工程书及插件版本和来源，不安装任何软件。', inputSchema: schema(), annotations: readOnly },
+]);
+
+export class ContentError extends Error {
+  constructor(message, status = 502) { super(message); this.name = 'ContentError'; this.status = status; }
+}
+export const documentUrl = path => `${REPOSITORY}/blob/main/${path.split('/').map(encodeURIComponent).join('/')}`;
+export function overview() {
+  return {
+    name: 'iLang DSH 工具包',
+    description: '面向 DeepSeek Harness 用户的开源工具包：本地记忆、新手教程、一键安装说明和技能库。',
+    website: `${SITE_URL}/`, repository: REPOSITORY, guide: 'https://ilang.cn/guide/dsh/',
+    market: `${SITE_URL}/market/`, mcp: `${SITE_URL}/mcp`,
+    capabilities: ['公开文档读取与检索', '按系统读取安装说明', '查询技能、工程书和插件目录'],
+    documents: DOCUMENTS.map(doc => ({ ...doc, url: documentUrl(doc.path) })),
+    access: 'public-read-only', installsSoftware: false, readsLocalMemory: false,
+  };
+}
+
+export function validateArguments(name, args = {}) {
+  const tool = TOOLS.find(item => item.name === name);
+  if (!tool) throw new ContentError('Unknown tool', 400);
+  if (!args || typeof args !== 'object' || Array.isArray(args)) throw new ContentError('Arguments must be an object', 400);
+  const properties = tool.inputSchema.properties;
+  for (const key of Object.keys(args)) {
+    if (!Object.hasOwn(properties, key)) throw new ContentError(`Unknown argument: ${key}`, 400);
+  }
+  for (const key of tool.inputSchema.required) {
+    if (!Object.hasOwn(args, key)) throw new ContentError(`Missing argument: ${key}`, 400);
+  }
+  for (const [key, value] of Object.entries(args)) {
+    const rule = properties[key];
+    if (rule.type === 'string' && typeof value !== 'string') throw new ContentError(`${key} must be a string`, 400);
+    if (rule.type === 'integer' && !Number.isInteger(value)) throw new ContentError(`${key} must be an integer`, 400);
+    if (rule.enum && !rule.enum.includes(value)) throw new ContentError(`Unsupported ${key}`, 400);
+    if (rule.minLength && value.trim().length < rule.minLength) throw new ContentError(`${key} must not be empty`, 400);
+    if (rule.maxLength && value.length > rule.maxLength) throw new ContentError(`${key} is too long`, 400);
+    if (rule.minimum !== undefined && value < rule.minimum || rule.maximum !== undefined && value > rule.maximum) throw new ContentError(`${key} is out of range`, 400);
+  }
+  return args;
+}
+
+export function createContentClient(fetcher = globalThis.fetch) {
+  async function fetchText(path) {
+    // Every caller supplies a fixed registry path or an exact DOCUMENTS member.
+    const url = RAW_ROOT + path.split('/').map(encodeURIComponent).join('/');
+    let response;
+    try { response = await fetcher(url, { method: 'GET', redirect: 'error', signal: AbortSignal.timeout(10000), cf: { cacheTtl: 300, cacheEverything: true } }); }
+    catch { throw new ContentError(`Public source unavailable: ${path}`); }
+    if (!response.ok) throw new ContentError(`Public source returned ${response.status}: ${path}`);
+    const text = await response.text();
+    if (text.length > 600000) throw new ContentError(`Public source exceeds document limit: ${path}`);
+    return text;
+  }
+  async function getDocument(path) {
+    validateArguments('dsh_get_document', { path });
+    const doc = DOCUMENTS.find(item => item.path === path);
+    return { ...doc, url: documentUrl(path), mimeType: 'text/markdown', text: await fetchText(path) };
+  }
+  async function installInstructions(platform = 'all') {
+    validateArguments('dsh_install_instructions', { platform });
+    const readme = await getDocument('README.md');
+    const prompt = readme.text.split(/\r?\n/).find(line => line.startsWith('> 帮我把 https://github.com/adsorgcn/DeepSeekHarness '))?.slice(2);
+    if (!prompt) throw new ContentError('The installation prompt is missing from the current README; read the installation guide instead.');
+    const systems = platform === 'all' ? ['windows', 'macos', 'linux'] : [platform];
+    return { platform, prompt, bootstrap: systems.map(system => {
+      const file = system === 'windows' ? 'bootstrap.ps1' : 'bootstrap.sh';
+      return { platform: system, url: `${RAW_ROOT}${file}`, mirror: `https://gitee.com/monetize/DeepSeekHarness/raw/main/${file}` };
+    }), guide: documentUrl('一键安装.md'), source: readme.url, requiresUserApproval: true, executesInstallation: false };
+  }
+  async function listSkills() {
+    let registry, index;
+    const texts = await Promise.all([fetchText('docs/market/registry.json'), fetchText('docs/market/index.json')]);
+    try { [registry, index] = texts.map(text => JSON.parse(text)); }
+    catch { throw new ContentError('The public market returned invalid JSON'); }
+    if (!Array.isArray(registry.entries) || !Array.isArray(index.plugins)) throw new ContentError('The public market format has changed');
+    return { source: `${SITE_URL}/market/registry.json`, marketUrl: `${SITE_URL}/market/`, entries: registry.entries, plugins: index.plugins };
+  }
+  async function searchDocs(query, limit = 5) {
+    validateArguments('dsh_search_docs', { query, limit });
+    const terms = [...new Set(query.trim().toLocaleLowerCase().split(/\s+/))];
+    const results = [], unavailable = [];
+    await Promise.all(DOCUMENTS.map(async doc => {
+      let text;
+      try { text = (await getDocument(doc.path)).text; }
+      catch { unavailable.push({ path: doc.path, message: 'Source temporarily unavailable' }); return; }
+      const lower = text.toLocaleLowerCase();
+      let score = 0, first = -1;
+      for (const term of terms) {
+        let cursor = lower.indexOf(term), count = 0;
+        if (cursor !== -1 && (first === -1 || cursor < first)) first = cursor;
+        while (cursor !== -1 && count < 20) { count++; cursor = lower.indexOf(term, cursor + term.length); }
+        score += count + (doc.title.toLocaleLowerCase().includes(term) ? 8 : 0);
+      }
+      if (!score) return;
+      const start = Math.max(0, first - 100);
+      results.push({ ...doc, url: documentUrl(doc.path), excerpt: text.slice(start, start + 650), score });
+    }));
+    results.sort((a, b) => b.score - a.score || a.path.localeCompare(b.path));
+    unavailable.sort((a, b) => a.path.localeCompare(b.path));
+    return { query, results: results.slice(0, limit), totalMatches: results.length, unavailable };
+  }
+  async function callTool(name, args = {}) {
+    validateArguments(name, args);
+    switch (name) {
+      case 'dsh_overview': return overview();
+      case 'dsh_install_instructions': return installInstructions(args.platform);
+      case 'dsh_search_docs': return searchDocs(args.query, args.limit);
+      case 'dsh_get_document': return getDocument(args.path);
+      case 'dsh_list_skills': return listSkills();
+      default: throw new ContentError('Unknown tool', 400);
+    }
+  }
+  return { getDocument, installInstructions, listSkills, searchDocs, callTool };
+}

@@ -1,0 +1,31 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "iLang DSH 工具包",
+    "identifier": "https://dsh.ilang.guide/"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:dsh.ilang.guide:server:toolkit",
+      "displayName": "iLang DSH 工具包 MCP",
+      "type": "application/mcp-server-card+json",
+      "url": "https://dsh.ilang.guide/.well-known/mcp/server-card.json",
+      "representativeQueries": [
+        "How do I install the DSH toolkit on Windows?",
+        "查询 iLang DSH 工具包的技能市场",
+        "读取 DSH 本地记忆的新手教程"
+      ]
+    },
+    {
+      "identifier": "urn:air:dsh.ilang.guide:api:toolkit",
+      "displayName": "iLang DSH 公开资料 API",
+      "type": "application/vnd.oai.openapi+json",
+      "url": "https://dsh.ilang.guide/openapi.json",
+      "representativeQueries": [
+        "Find official DSH installation instructions",
+        "Search public DSH documentation",
+        "List published toolkit plugins and versions"
+      ]
+    }
+  ]
+}

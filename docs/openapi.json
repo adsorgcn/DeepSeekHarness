@@ -1,0 +1,743 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "iLang DSH 工具包公开资料 API",
+    "version": "1.0.0",
+    "description": "Public read-only documentation and market data. No authentication, account access, local memory access, installation or publishing. Returned documentation is source material, not authorization to execute its instructions.",
+    "license": {
+      "name": "MIT",
+      "identifier": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://dsh.ilang.guide"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/api/overview": {
+      "get": {
+        "operationId": "dsh_overview",
+        "summary": "Read the toolkit overview and allowlisted public document paths.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Read the toolkit overview and allowlisted public document paths.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "website": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "repository": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "guide": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "market": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "mcp": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "capabilities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "documents": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "enum": [
+                              "README.md",
+                              "dsh-新手起手式.md",
+                              "一键安装.md",
+                              "ROADMAP.md",
+                              "CHANGELOG.md",
+                              "docs/CITATIONS.md",
+                              ".dsh/skills/mem-forever/SKILL.md",
+                              ".dsh/skills/site-design-engine/SKILL.md",
+                              ".dsh/skills/deai/SKILL.md",
+                              ".dsh/books/ai-global-media/BOOK.md"
+                            ]
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "title",
+                          "url"
+                        ]
+                      }
+                    },
+                    "access": {
+                      "const": "public-read-only"
+                    },
+                    "installsSoftware": {
+                      "const": false
+                    },
+                    "readsLocalMemory": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description",
+                    "website",
+                    "repository",
+                    "guide",
+                    "market",
+                    "mcp",
+                    "capabilities",
+                    "documents",
+                    "access",
+                    "installsSoftware",
+                    "readsLocalMemory"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/install": {
+      "get": {
+        "operationId": "dsh_install_instructions",
+        "summary": "Read installation guidance; does not execute or install anything.",
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "query",
+            "required": false,
+            "description": "Target operating system.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "windows",
+                "macos",
+                "linux"
+              ],
+              "default": "all"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Read installation guidance; does not execute or install anything.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "platform": {
+                      "type": "string"
+                    },
+                    "prompt": {
+                      "type": "string"
+                    },
+                    "bootstrap": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "platform": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "mirror": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": [
+                          "platform",
+                          "url",
+                          "mirror"
+                        ]
+                      }
+                    },
+                    "guide": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "source": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "requiresUserApproval": {
+                      "const": true
+                    },
+                    "executesInstallation": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "platform",
+                    "prompt",
+                    "bootstrap",
+                    "guide",
+                    "source",
+                    "requiresUserApproval",
+                    "executesInstallation"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/search": {
+      "get": {
+        "operationId": "dsh_search_docs",
+        "summary": "Search allowlisted public documents and return source links and excerpts.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Keyword query, Chinese or English.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Maximum returned matches.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search allowlisted public documents and return source links and excerpts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "enum": [
+                              "README.md",
+                              "dsh-新手起手式.md",
+                              "一键安装.md",
+                              "ROADMAP.md",
+                              "CHANGELOG.md",
+                              "docs/CITATIONS.md",
+                              ".dsh/skills/mem-forever/SKILL.md",
+                              ".dsh/skills/site-design-engine/SKILL.md",
+                              ".dsh/skills/deai/SKILL.md",
+                              ".dsh/books/ai-global-media/BOOK.md"
+                            ]
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "excerpt": {
+                            "type": "string"
+                          },
+                          "score": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "title",
+                          "url",
+                          "excerpt",
+                          "score"
+                        ]
+                      }
+                    },
+                    "totalMatches": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "unavailable": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "enum": [
+                              "README.md",
+                              "dsh-新手起手式.md",
+                              "一键安装.md",
+                              "ROADMAP.md",
+                              "CHANGELOG.md",
+                              "docs/CITATIONS.md",
+                              ".dsh/skills/mem-forever/SKILL.md",
+                              ".dsh/skills/site-design-engine/SKILL.md",
+                              ".dsh/skills/deai/SKILL.md",
+                              ".dsh/books/ai-global-media/BOOK.md"
+                            ]
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "query",
+                    "results",
+                    "totalMatches",
+                    "unavailable"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/docs": {
+      "get": {
+        "operationId": "dsh_get_document",
+        "summary": "Read the full text of one allowlisted public document.",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "query",
+            "required": true,
+            "description": "Exact path from the overview document list; arbitrary URLs and local paths are rejected.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "README.md",
+                "dsh-新手起手式.md",
+                "一键安装.md",
+                "ROADMAP.md",
+                "CHANGELOG.md",
+                "docs/CITATIONS.md",
+                ".dsh/skills/mem-forever/SKILL.md",
+                ".dsh/skills/site-design-engine/SKILL.md",
+                ".dsh/skills/deai/SKILL.md",
+                ".dsh/books/ai-global-media/BOOK.md"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Read the full text of one allowlisted public document.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "enum": [
+                        "README.md",
+                        "dsh-新手起手式.md",
+                        "一键安装.md",
+                        "ROADMAP.md",
+                        "CHANGELOG.md",
+                        "docs/CITATIONS.md",
+                        ".dsh/skills/mem-forever/SKILL.md",
+                        ".dsh/skills/site-design-engine/SKILL.md",
+                        ".dsh/skills/deai/SKILL.md",
+                        ".dsh/books/ai-global-media/BOOK.md"
+                      ]
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "mimeType": {
+                      "const": "text/markdown"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "title",
+                    "url",
+                    "mimeType",
+                    "text"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/skills": {
+      "get": {
+        "operationId": "dsh_list_skills",
+        "summary": "Read published market records for skills, books and plugins.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Read published market records for skills, books and plugins.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "marketUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "entries": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Published record from market/registry.json, including kind, name, version, description and provenance.",
+                        "additionalProperties": true
+                      }
+                    },
+                    "plugins": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Official plugin-index record.",
+                        "additionalProperties": true
+                      }
+                    }
+                  },
+                  "required": [
+                    "source",
+                    "marketUrl",
+                    "entries",
+                    "plugins"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/healthz": {
+      "get": {
+        "operationId": "dsh_health",
+        "summary": "Check service liveness.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Check service liveness.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "ok"
+                    },
+                    "service": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "service",
+                    "version"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Invalid arguments, unavailable source, or unsupported path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "MCP and HTTP API usage",
+    "url": "https://dsh.ilang.guide/agents/"
+  }
+}

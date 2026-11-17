@@ -15,6 +15,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: MCP protocol and read-only tool behavior
+        run: node --test server/worker.test.mjs
+      - name: Agent discovery and browser tools
+        run: |
+          node tools/test_agent_site.mjs
+          node tools/test_webmcp.mjs
       - name: Behavior tests (bot, quotas, book validation)
         run: python -X utf8 tools/test_bot.py
       - name: Behavior tests (free station installer)
