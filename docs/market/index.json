@@ -26,8 +26,8 @@
         "zh": "自媒体出海"
       },
       "description": {
-        "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account and Premium.",
-        "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V。"
+        "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account, Premium, and Grok Bot with its first book.",
+        "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V、装 Grok Bot 并把第一本书交给它。"
       },
       "author": "ilang",
       "homepage": "https://dsh.ilang.guide/",
@@ -48,6 +48,16 @@
         ]
       },
       "versions": [
+        {
+          "version": "0.3.1",
+          "publishTimestamp": 1794905821,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.5 <0.3.0"
+          }
+        },
         {
           "version": "0.3.0",
           "publishTimestamp": 1794817532,

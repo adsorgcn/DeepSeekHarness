@@ -145,36 +145,36 @@
         "en": "Going global for creators"
       },
       "description": {
-        "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V。",
-        "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account and Premium."
+        "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V、装 Grok Bot 并把第一本书交给它。",
+        "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account, Premium, and Grok Bot with its first book."
       },
-      "version": "0.3.0",
+      "version": "0.3.1",
       "author": "ilang",
       "license": "MIT",
       "manifest": "skills/zimeiti-chuhai.md",
       "procedure": "skills/zimeiti-chuhai.md",
       "upstream": {
         "repo": "https://github.com/adsorgcn/dsh-plugin-chuhai",
-        "commit": "fd048cf51ead21554c5dba75eda79c2a505a15e5",
-        "tag": "v0.3.0"
+        "commit": "c6fd4ba5292c7d697423af98dc3646d467537bb6",
+        "tag": "v0.3.1"
       },
       "npm": {
         "name": "dsh-plugin-chuhai",
-        "version": "0.3.0",
-        "integrity": "sha512-R+b+5MtlAk8a6TBLuNqw8/0RCTPbxrEpJkMqWOC3PRSXUHSqwZ8/15tM93/VGyz1NzDCRtR7yDyJAmNLmuRFlw==",
-        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.3.0.tgz",
-        "publishedAt": "2026-11-16T08:25:32.451Z"
+        "version": "0.3.1",
+        "integrity": "sha512-F+uJn9m0hNZZAM1LwuGp42BNxVgMcr5uRZYoBnxYOCsfmDtYA0hED4htfJpOmbcP3xsNIADf+1mDoWJjHAmFgg==",
+        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.3.1.tgz",
+        "publishedAt": "2026-11-17T08:57:01.250Z"
       },
       "validated": {
         "tool": "npm test",
-        "tests": 19,
+        "tests": 22,
         "failed": 0,
-        "at": "2026-11-16"
+        "at": "2026-11-17"
       },
       "say": "自媒体出海",
       "get": "npm",
       "admitted_by": "@SUN",
-      "admitted_on": "2026-11-16"
+      "admitted_on": "2026-11-17"
     }
   ]
 }
