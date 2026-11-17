@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DSH-FIX-A1-A9 的 RUBRIC 检查器：R1-R9（R6 已撤回，R10 由 @SUN 人工走）。
+"""DSH-FIX-A1-A9 的 RUBRIC 检查器：R1-R9 与 R11（R6 已撤回，R10 由 @SUN 人工走）。
 
 用法: python -X utf8 tools/check_rubrics.py
 每项打印「R<n> PASS/FAIL + 命令输出原文」。
@@ -127,6 +127,30 @@ if "issue.number" not in w or "cancel-in-progress" not in w:
     reasons.append("concurrency not per-issue")
 results["R9"] = ok9
 print(f"[R9] {'PASS' if ok9 else 'FAIL'} ({'; '.join(reasons) if reasons else 'constants, event dedup, pagination, live recheck, per-issue concurrency verified'})")
+print("-" * 60)
+
+# R11：地板钉在三个文件里，工具包自己的脚本里没有门
+soul_t = io.open("soul/agent.md", encoding="utf-8").read()
+guide_t = io.open("一键安装.md", encoding="utf-8").read()
+readme_t = io.open("README.md", encoding="utf-8").read()
+soul_ok = soul_t.count("::GENE{floor|conf:confirmed|scope:global}") == 1 \
+    and "T:the_kit_adds_no_gate_of_its_own" in soul_t \
+    and "A:a_wall_before_the_other_road" in soul_t
+guide_ok = "工具包自己不设门" in guide_t and "原话" in guide_t and "另一条路" in guide_t
+readme_ok = "工具包自己不设门" in readme_t and "另一条路" in readme_t
+gate_words = ("激活码", "授权码", "许可证", "license_key", "LICENSE_KEY", "余额不足", "地区不支持")
+hits11 = []
+for _p in ("bootstrap.ps1", "bootstrap.sh", "tools/free_station.py", "server/worker.mjs", "server/content.mjs"):
+    try:
+        _t = io.open(_p, encoding="utf-8", errors="replace").read()
+    except OSError:
+        continue
+    for _w in gate_words:
+        if _w in _t:
+            hits11.append("%s:%s" % (_p, _w))
+ok11 = soul_ok and guide_ok and readme_ok and not hits11
+results["R11"] = ok11
+print(f"[R11] {'PASS' if ok11 else 'FAIL'} (soul={soul_ok}, guide={guide_ok}, readme={readme_ok}, gate words found: {hits11 or 'none'})")
 print("-" * 60)
 
 failed = [k for k, v in results.items() if not v]
