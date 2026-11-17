@@ -229,3 +229,32 @@ test('asset origin cannot point back at the public host', async () => {
   const response = await handler(new Request(`${SITE_URL}/redesign.css`), { STATIC_ORIGIN: `${SITE_URL}/` });
   assert.equal(response.status, 503);
 });
+
+test('all outbound fetches use Workers-supported manual redirects and reject 3xx without following', async () => {
+  const requests = [];
+  const redirecting = createHandler(async (url, init) => {
+    // Cloudflare's native Request rejects redirect:error before sending anything.
+    // This mirrors the platform restriction observed during live deployment.
+    assert.ok(['follow', 'manual'].includes(init.redirect), 'Workers supports only follow/manual');
+    assert.equal(init.redirect, 'manual', 'Public source requests must never auto-follow');
+    requests.push(String(url));
+    return new Response('redirect', { status: 302, headers: { Location: 'https://outside-allowlist.example/private' } });
+  });
+  const source = await redirecting(new Request(`${SITE_URL}/api/docs?path=README.md`));
+  assert.equal(source.status, 502);
+  assert.match((await source.json()).error, /Public source redirect rejected/);
+  const asset = await redirecting(new Request(`${SITE_URL}/redesign.css`));
+  assert.equal(asset.status, 502);
+  assert.equal((await asset.json()).error, 'Static origin redirect rejected');
+  assert.equal(asset.headers.has('location'), false);
+  assert.deepEqual(requests, [`${RAW_ROOT}README.md`, `${RAW_ROOT}docs/redesign.css`]);
+});
+
+test('network failures do not expose runtime diagnostic text', async () => {
+  const failing = createHandler(async () => { throw new TypeError('private runtime diagnostic'); });
+  for (const path of ['/api/docs?path=README.md', '/redesign.css']) {
+    const response = await failing(new Request(`${SITE_URL}${path}`));
+    assert.equal(response.status, 502);
+    assert.doesNotMatch(await response.text(), /diagnostic|TypeError/);
+  }
+});

@@ -70,8 +70,10 @@ export function createContentClient(fetcher = globalThis.fetch) {
     // Every caller supplies a fixed registry path or an exact DOCUMENTS member.
     const url = RAW_ROOT + path.split('/').map(encodeURIComponent).join('/');
     let response;
-    try { response = await fetcher(url, { method: 'GET', redirect: 'error', signal: AbortSignal.timeout(10000), cf: { cacheTtl: 300, cacheEverything: true } }); }
+    // Workers supports only manual/follow; reject redirects without leaving the fixed origin.
+    try { response = await fetcher(url, { method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(10000), cf: { cacheTtl: 300, cacheEverything: true } }); }
     catch { throw new ContentError(`Public source unavailable: ${path}`); }
+    if (response.status >= 300 && response.status < 400) { await response.body?.cancel(); throw new ContentError(`Public source redirect rejected: ${path}`); }
     if (!response.ok) throw new ContentError(`Public source returned ${response.status}: ${path}`);
     const text = await response.text();
     if (text.length > 600000) throw new ContentError(`Public source exceeds document limit: ${path}`);

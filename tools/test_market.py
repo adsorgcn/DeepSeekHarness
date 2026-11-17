@@ -199,12 +199,13 @@ def test_page_rows():
     m = read("docs/market/index.html")
     ext = re.findall(r"<a [^>]*href=['\"]https?://[^'\"]*['\"][^>]*>", m)
     scripts = re.findall(r"<script[^>]*src=['\"]([^'\"]+)['\"]", m)
+    remote_links = re.findall(r"<link [^>]*href=['\"]https?://[^>]*>", m)
     shown = [e["name"] if e["kind"] in ("skill", "plugin") else e["title"]["zh"] for e in r["entries"]]
     ok = all(x in m for x in shown) \
         and all(("说一句「%s」" % e["say"]) in m for e in r["entries"] if e["kind"] == "book") \
         and "market:skills" in m and "market:books" in m and "market:bundles" not in m \
         and scripts == ["../external-browser.js?v=20261113"] \
-        and not re.search(r"<link [^>]*href=['\"]https?://", m) \
+        and all('rel="canonical"' in link and 'href="https://dsh.ilang.guide/market/"' in link for link in remote_links) \
         and "@import" not in m \
         and bool(ext) and all("target=" in a and "_blank" in a for a in ext) \
         and "0 个" not in m and "0个" not in m and "暂无" not in m

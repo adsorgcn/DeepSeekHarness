@@ -232,7 +232,8 @@ export function createHandler(fetcher = globalThis.fetch) {
           let relative = path.replace(/^\/+/, '');
           if (!relative || relative.endsWith('/')) relative += 'index.html';
           const upstreamUrl = new URL(relative.split('/').map(encodeURIComponent).join('/'), origin.href.endsWith('/') ? origin : `${origin.href}/`);
-          const upstream = await fetcher(upstreamUrl.href, { method: 'GET', redirect: 'error', signal: AbortSignal.timeout(10000), cf: { cacheTtl: 120, cacheEverything: true } });
+          const upstream = await fetcher(upstreamUrl.href, { method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(10000), cf: { cacheTtl: 120, cacheEverything: true } });
+          if (upstream.status >= 300 && upstream.status < 400) { await upstream.body?.cancel(); throw new ContentError('Static origin redirect rejected'); }
           const extension = relative.split('.').pop().toLowerCase();
           const type = MIME[extension] || (relative === '.well-known/api-catalog' ? 'application/linkset+json' : 'application/octet-stream');
           const headers = new Headers({ 'Content-Type': type + (/^(text\/|application\/(json|javascript|xml|linkset\+json))/.test(type) ? '; charset=utf-8' : '') });
