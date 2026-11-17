@@ -1,0 +1,32 @@
+{
+  "status": "under_construction",
+  "available": false,
+  "capabilities_status": "planned_contract_only",
+  "launch_date": null,
+  "message": "Coming soon declaration only. Authentication is not enabled and has no scheduled launch. All current DSH tools are public; do not register or request tokens.",
+  "issuer": "https://dsh.ilang.guide",
+  "authorization_endpoint": "https://dsh.ilang.guide/agent-auth/authorize",
+  "token_endpoint": "https://dsh.ilang.guide/agent-auth/token",
+  "jwks_uri": "https://dsh.ilang.guide/.well-known/jwks.json",
+  "grant_types_supported": ["authorization_code", "urn:ietf:params:oauth:grant-type:jwt-bearer"],
+  "response_types_supported": ["code"],
+  "code_challenge_methods_supported": ["S256"],
+  "scopes_supported": ["dsh:read"],
+  "service_documentation": "https://dsh.ilang.guide/auth.md",
+  "agent_auth": {
+    "status": "under_construction",
+    "available": false,
+    "capabilities_status": "planned_contract_only",
+    "launch_date": null,
+    "skill": "https://dsh.ilang.guide/auth.md",
+    "register_uri": "https://dsh.ilang.guide/agent-auth/register",
+    "claim_uri": "https://dsh.ilang.guide/agent-auth/claim",
+    "identity_types_supported": ["anonymous"],
+    "anonymous": {
+      "status": "under_construction",
+      "available": false,
+      "capabilities_status": "planned_contract_only",
+      "credential_types_supported": ["access_token"]
+    }
+  }
+}

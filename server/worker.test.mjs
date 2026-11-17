@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import { createHandler, markdownForHttp } from './worker.mjs';
 import { DOCUMENTS, RAW_ROOT, SITE_URL } from './content.mjs';
 
@@ -256,5 +256,176 @@ test('network failures do not expose runtime diagnostic text', async () => {
     const response = await failing(new Request(`${SITE_URL}${path}`));
     assert.equal(response.status, 502);
     assert.doesNotMatch(await response.text(), /diagnostic|TypeError/);
+  }
+});
+
+function assertUnavailableDeclaration(value, { launchDate = true } = {}) {
+  assert.equal(value.status, 'under_construction');
+  assert.equal(value.available, false);
+  assert.equal(value.capabilities_status, 'planned_contract_only');
+  if (launchDate) assert.equal(value.launch_date, null);
+}
+
+function assertNoAuthenticationSideEffects(response) {
+  for (const header of ['Set-Cookie', 'Location', 'WWW-Authenticate']) {
+    assert.equal(response.headers.has(header), false, `${header} must be absent`);
+  }
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
+  assert.match(response.headers.get('X-Robots-Tag'), /\bnoindex\b/);
+}
+
+test('planned OAuth declarations explicitly remain unavailable with exact origin identifiers', async () => {
+  const paths = [
+    ['/.well-known/oauth-authorization-server', 'application/json'],
+    ['/.well-known/oauth-protected-resource', 'application/json'],
+    ['/.well-known/jwks.json', 'application/jwk-set+json'],
+  ];
+  const documents = new Map();
+  for (const [path, type] of paths) {
+    const response = await handler(new Request(`${SITE_URL}${path}`));
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('Content-Type').split(';')[0], type);
+    assertNoAuthenticationSideEffects(response);
+    const body = await response.json();
+    assertUnavailableDeclaration(body);
+    documents.set(path, body);
+    const head = await handler(new Request(`${SITE_URL}${path}`, { method: 'HEAD' }));
+    assert.equal(head.status, 200);
+    assertNoAuthenticationSideEffects(head);
+    assert.equal(await head.text(), '');
+  }
+  const as = documents.get(paths[0][0]);
+  const prm = documents.get(paths[1][0]);
+  assert.equal(as.issuer, SITE_URL);
+  assert.equal(prm.resource, SITE_URL);
+  assert.deepEqual(prm.authorization_servers, [SITE_URL]);
+  assert.equal(as.jwks_uri, `${SITE_URL}/.well-known/jwks.json`);
+  assertUnavailableDeclaration(as.agent_auth);
+  assertUnavailableDeclaration(as.agent_auth.anonymous, { launchDate: false });
+  assert.deepEqual(documents.get(paths[2][0]).keys, []);
+  assert.deepEqual(prm.bearer_methods_supported, ['header']);
+  const operationPaths = [as.authorization_endpoint, as.token_endpoint,
+    as.agent_auth.register_uri, as.agent_auth.claim_uri, prm.planned_resource_endpoint];
+  for (const url of operationPaths) {
+    assert.equal(new URL(url).origin, SITE_URL);
+    assert.ok(new URL(url).pathname.startsWith('/agent-auth/'));
+    assert.equal((await handler(new Request(url))).status, 503);
+  }
+});
+
+test('all reserved authentication routes reject every requested method without state or redirects', async () => {
+  const isolated = createHandler(() => { throw new Error('Reserved routes must not fetch'); });
+  const paths = ['/agent-auth', '/agent-auth/', '/agent-auth/authorize', '/agent-auth/token',
+    '/agent-auth/register', '/agent-auth/claim', '/agent-auth/resource', '/agent-auth/unknown/nested'];
+  for (const path of paths) {
+    for (const method of ['GET', 'HEAD', 'POST', 'OPTIONS']) {
+      const response = await isolated(new Request(`${SITE_URL}${path}`, {
+        method,
+        headers: { Origin: 'https://untrusted.example', 'Content-Type': 'application/json' },
+        ...(method === 'POST' ? { body: '{malformed data that must never be parsed' } : {}),
+      }));
+      assert.equal(response.status, 503, `${method} ${path}`);
+      assert.equal(response.headers.get('Content-Type').split(';')[0], 'application/json');
+      assertNoAuthenticationSideEffects(response);
+      if (method === 'HEAD') assert.equal(await response.text(), '');
+      else {
+        const body = await response.json();
+        assertUnavailableDeclaration(body);
+        assert.equal(body.error, 'temporarily_unavailable');
+        assert.equal(body.public_mcp, `${SITE_URL}/mcp`);
+        assert.equal('access_token' in body, false);
+      }
+    }
+  }
+});
+
+test('reserved authentication POSTs never inspect or consume an incoming body stream', async () => {
+  const isolated = createHandler(() => { throw new Error('Reserved routes must not fetch'); });
+  for (const path of ['/agent-auth', '/agent-auth/token', '/agent-auth/register', '/agent-auth/claim']) {
+    let reads = 0;
+    const poison = () => { reads++; throw new Error('Request body must stay unread'); };
+    const stream = new ReadableStream({ pull: poison }, { highWaterMark: 0 });
+    const request = new Request(`${SITE_URL}${path}`, {
+      method: 'POST', body: stream, duplex: 'half', headers: { 'Content-Type': 'application/json' },
+    });
+    Object.defineProperty(request, 'body', { get: poison });
+    for (const method of ['json', 'text', 'arrayBuffer', 'formData', 'bytes', 'clone']) {
+      Object.defineProperty(request, method, { value: poison });
+    }
+    const response = await isolated(request);
+    assert.equal(response.status, 503);
+    assert.equal(reads, 0);
+    assert.equal(request.bodyUsed, false);
+    assertNoAuthenticationSideEffects(response);
+  }
+});
+
+test('public API and MCP discovery have no authentication requirements or owner interfaces', async () => {
+  const specification = await (await handler(new Request(`${SITE_URL}/openapi.json`))).json();
+  assert.deepEqual(specification.security, []);
+  for (const path of Object.values(specification.paths)) {
+    for (const [method, operation] of Object.entries(path)) {
+      if (['get', 'post', 'put', 'patch', 'delete', 'head', 'options'].includes(method)) {
+        assert.deepEqual(operation.security ?? specification.security, []);
+      }
+    }
+  }
+  const card = await (await handler(new Request(`${SITE_URL}/.well-known/mcp/server-card.json`))).json();
+  assert.equal(card.authentication.required, false);
+  assert.equal(card.transport.endpoint, `${SITE_URL}/mcp`);
+  const { response, body } = await modernRpc('server/discover');
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.has('WWW-Authenticate'), false);
+  assert.equal(response.headers.has('Set-Cookie'), false);
+  assert.equal(body.result.capabilities.extensions?.['io.modelcontextprotocol/oauth-client-credentials'], undefined);
+  for (const path of ['/agent/owner', '/agent/owner/register', '/agent/owner/login',
+    '/agent/owner/session', '/agent/claim', '/oauth/register', '/oauth/token', '/mcp/authorized']) {
+    assert.equal((await handler(new Request(`${SITE_URL}${path}`))).status, 404, path);
+  }
+});
+
+test('withdrawn authentication implementation and claim UI are absent from the product', async () => {
+  for (const path of ['server/auth.mjs', 'server/auth-schema.sql', 'server/auth.test.mjs',
+    'server/auth-smoke.mjs']) {
+    await assert.rejects(access(new URL(path, root)), { code: 'ENOENT' }, path);
+  }
+  const claimFiles = await readdir(new URL('docs/agents/claim/', root)).catch(error => {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  });
+  assert.deepEqual(claimFiles, [], 'No claim UI files may remain');
+  const worker = await readFile(new URL('server/worker.mjs', root), 'utf8');
+  const configuration = await readFile(new URL('server/wrangler.jsonc', root), 'utf8');
+  assert.doesNotMatch(worker, /from ['"]\.\/auth\.mjs['"]|handleAuthRequest|authorizeMcp|cleanupAuth/);
+  assert.doesNotMatch(configuration, /d1_databases|AUTH_DB|AUTH_PASSWORD_PEPPER|"crons"/);
+});
+
+test('construction OpenAPI describes the actual unavailable responses and no security requirement', async () => {
+  const declared = await handler(new Request(`${SITE_URL}/openapi-auth.json`));
+  assert.equal(declared.status, 200);
+  assertNoAuthenticationSideEffects(declared);
+  const specification = await declared.json();
+  assert.equal(specification['x-available'], false);
+  assert.equal(specification['x-status'], 'under_construction');
+  assert.equal(specification['x-capabilities-status'], 'planned_contract_only');
+  assert.deepEqual(specification.security, []);
+  for (const [path, operations] of Object.entries(specification.paths)) {
+    for (const [method, operation] of Object.entries(operations)) {
+      if (!['get', 'post'].includes(method)) continue;
+      assert.deepEqual(operation.security, []);
+      assert.equal(operation['x-available'], false);
+      const response = await handler(new Request(`${SITE_URL}${path}`, { method: method.toUpperCase() }));
+      assert.equal(response.status, 503);
+      const contract = operation.responses['503'];
+      const body = await response.json();
+      const schema = contract.content['application/json'].schema;
+      for (const required of schema.required || []) assert.ok(Object.hasOwn(body, required), `${method} ${path}: missing ${required}`);
+      for (const [name, property] of Object.entries(schema.properties || {})) {
+        if ('const' in property) assert.equal(body[name], property.const, `${method} ${path}: ${name}`);
+      }
+      for (const [name, header] of Object.entries(contract.headers || {})) {
+        if ('const' in (header.schema || {})) assert.equal(response.headers.get(name), header.schema.const, `${method} ${path}: ${name}`);
+      }
+    }
   }
 });

@@ -12,8 +12,11 @@ const LINKS = [
   '</.well-known/ai-catalog.json>; rel="ai-catalog"; type="application/json"',
   '</llms.txt>; rel="alternate"; type="text/plain"',
   '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+  '</.well-known/oauth-protected-resource>; rel="oauth-protected-resource"; type="application/json"',
+  '</auth.md>; rel="service-doc"; type="text/markdown"',
 ].join(', ');
 const MIME = { html: 'text/html', css: 'text/css', js: 'application/javascript', mjs: 'application/javascript', json: 'application/json', xml: 'application/xml', md: 'text/markdown', txt: 'text/plain', svg: 'image/svg+xml', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp', ico: 'image/x-icon', woff2: 'font/woff2', pdf: 'application/pdf' };
+const AUTH_DECLARATIONS = new Set(['/.well-known/oauth-authorization-server', '/.well-known/oauth-protected-resource', '/.well-known/jwks.json', '/auth.md', '/openapi-auth.json']);
 const json = (body, status = 200, extra = {}) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', ...extra } });
 const rpcError = (id, code, message, status = 200, data) => json({ jsonrpc: '2.0', id: id ?? null, error: { code, message, ...(data === undefined ? {} : { data }) } }, status);
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -208,6 +211,9 @@ export function createHandler(fetcher = globalThis.fetch) {
     const url = new URL(request.url);
     let response, cache = false;
     try {
+      if (url.pathname === '/agent-auth' || url.pathname.startsWith('/agent-auth/')) {
+        return finish(json({ status: 'under_construction', available: false, capabilities_status: 'planned_contract_only', launch_date: null, error: 'temporarily_unavailable', message: 'Authentication is not enabled. Use the public MCP endpoint without registering or requesting a token.', public_mcp: `${SITE_URL}/mcp` }, 503, { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' }), request);
+      }
       if (request.method === 'OPTIONS') return finish(new Response(null, { status: 204 }), request);
       if (url.pathname === '/mcp' || url.pathname === '/mcp/') response = await mcp(request);
       else if (!['GET', 'HEAD'].includes(request.method)) response = json({ error: 'Method not allowed' }, 405, { Allow: 'GET, HEAD, OPTIONS' });
@@ -235,8 +241,12 @@ export function createHandler(fetcher = globalThis.fetch) {
           const upstream = await fetcher(upstreamUrl.href, { method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(10000), cf: { cacheTtl: 120, cacheEverything: true } });
           if (upstream.status >= 300 && upstream.status < 400) { await upstream.body?.cancel(); throw new ContentError('Static origin redirect rejected'); }
           const extension = relative.split('.').pop().toLowerCase();
-          const type = MIME[extension] || (relative === '.well-known/api-catalog' ? 'application/linkset+json' : 'application/octet-stream');
+          const type = relative === '.well-known/jwks.json' ? 'application/jwk-set+json' : MIME[extension] || (relative === '.well-known/api-catalog' ? 'application/linkset+json' : AUTH_DECLARATIONS.has(path) ? 'application/json' : 'application/octet-stream');
           const headers = new Headers({ 'Content-Type': type + (/^(text\/|application\/(json|javascript|xml|linkset\+json))/.test(type) ? '; charset=utf-8' : '') });
+          if (AUTH_DECLARATIONS.has(path)) {
+            headers.set('Cache-Control', 'no-store');
+            headers.set('X-Robots-Tag', 'noindex, nofollow');
+          }
           if (['/', '/index.html'].includes(path)) headers.set('Vary', 'Accept');
           for (const name of ['etag', 'last-modified']) if (upstream.headers.has(name)) headers.set(name, upstream.headers.get(name));
           response = new Response(upstream.body, { status: upstream.status, headers }); cache = true;

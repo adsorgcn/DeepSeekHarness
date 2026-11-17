@@ -1,0 +1,8 @@
+{
+  "keys": [],
+  "status": "under_construction",
+  "available": false,
+  "capabilities_status": "planned_contract_only",
+  "launch_date": null,
+  "message": "No signing keys or token validation are available. Use the public MCP and HTTP APIs without authentication."
+}

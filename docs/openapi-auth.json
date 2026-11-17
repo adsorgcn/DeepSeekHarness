@@ -1,0 +1,584 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "iLang DSH 未来认证接口：未启用",
+    "version": "0.0.0",
+    "description": "Coming soon. Authentication is unavailable. This document describes only current HTTP 503 construction responses. All public toolkit tools remain available without authentication."
+  },
+  "x-status": "under_construction",
+  "x-available": false,
+  "x-capabilities-status": "planned_contract_only",
+  "x-launch-date": null,
+  "servers": [
+    {
+      "url": "https://dsh.ilang.guide"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/agent-auth/authorize": {
+      "get": {
+        "summary": "Coming soon: authorize is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getUnavailableAuthorize"
+      },
+      "post": {
+        "summary": "Coming soon: authorize is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postUnavailableAuthorize"
+      }
+    },
+    "/agent-auth/token": {
+      "get": {
+        "summary": "Coming soon: token is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getUnavailableToken"
+      },
+      "post": {
+        "summary": "Coming soon: token is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postUnavailableToken"
+      }
+    },
+    "/agent-auth/register": {
+      "get": {
+        "summary": "Coming soon: register is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getUnavailableRegister"
+      },
+      "post": {
+        "summary": "Coming soon: register is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postUnavailableRegister"
+      }
+    },
+    "/agent-auth/claim": {
+      "get": {
+        "summary": "Coming soon: claim is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getUnavailableClaim"
+      },
+      "post": {
+        "summary": "Coming soon: claim is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postUnavailableClaim"
+      }
+    },
+    "/agent-auth/resource": {
+      "get": {
+        "summary": "Coming soon: resource is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getUnavailableResource"
+      },
+      "post": {
+        "summary": "Coming soon: resource is unavailable.",
+        "description": "Planned contract only. Do not submit credentials or identity data. This route does not process request bodies, perform authentication, issue tokens or start redirects. Use the public /mcp and /api/* services instead.",
+        "x-status": "under_construction",
+        "x-available": false,
+        "x-capabilities-status": "planned_contract_only",
+        "security": [],
+        "responses": {
+          "503": {
+            "description": "Authentication is not enabled. This is a construction-state response, not an OAuth error response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Robots-Tag": {
+                "schema": {
+                  "type": "string",
+                  "const": "noindex, nofollow"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "under_construction"
+                    },
+                    "available": {
+                      "const": false
+                    },
+                    "error": {
+                      "const": "temporarily_unavailable"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "available",
+                    "error",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postUnavailableResource"
+      }
+    }
+  },
+  "externalDocs": {
+    "url": "https://dsh.ilang.guide/auth.md",
+    "description": "Use the public read-only service. Do not register or request tokens."
+  }
+}

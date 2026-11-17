@@ -1,6 +1,6 @@
 # iLang DSH 工具包
 
-> iLang 为 DeepSeek Harness 提供的开源工具包：本地记忆、新手教程、安装工具和技能市场。网站接口公开只读，不读取个人记忆，不执行安装或发布。
+> iLang 为 DeepSeek Harness 提供的开源工具包：本地记忆、新手教程、安装工具和技能市场。MCP 工具只读取公开资料，不读取个人记忆，不执行安装或发布。
 
 产品支持 Windows、macOS 和 Linux。安装先在 DeepSeek Harness 新建任务并选择「创造模式」，再读取完整安装说明、逐项确认。工具包 MIT 开源；模型调用、服务器和第三方订阅由相应服务计费。
 
@@ -11,7 +11,7 @@
 - [MCP Server Card](https://dsh.ilang.guide/.well-known/mcp/server-card.json): 服务与工具发现
 - [OpenAPI](https://dsh.ilang.guide/openapi.json): 公开只读 HTTP API
 - [Agent Skills](https://dsh.ilang.guide/.well-known/agent-skills/index.json): 安装规划、文档检索、市场查阅
-- [访问与认证](https://dsh.ilang.guide/auth.md): 无需注册、密钥或 OAuth
+- [公开访问说明](https://dsh.ilang.guide/auth.md): 当前无需注册、登录或令牌；未来认证声明 available=false，不应调用注册或令牌接口
 
 ## 产品与资料
 

@@ -95,3 +95,5 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 - [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [认证说明](https://dsh.ilang.guide/auth.md)
 
 支持 WebMCP 的浏览器还可在首页调用「读取安装说明」和「搜索技能市场」。安装仍由本地 Agent 按用户确认执行。
+
+公开资料服务无需注册、登录或令牌。未来认证接口仅有明确标为未启用的声明，当前不提供认证流程，详见[访问说明](https://dsh.ilang.guide/auth.md)。

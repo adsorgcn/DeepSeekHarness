@@ -1,6 +1,6 @@
 # iLang DSH 工具包的公开 Agent 服务
 
-`worker.mjs` 是无状态 Cloudflare Worker，`content.mjs` 提供工具定义和固定公开文档目录。它不需要第三方 npm 依赖。
+`worker.mjs` 是无状态 Cloudflare Worker，`content.mjs` 提供工具定义和固定公开文档目录。公开 MCP 请求不创建会话，不需要账户、认证数据库或第三方 npm 依赖。
 
 ## 服务入口
 
@@ -16,13 +16,25 @@ MCP 同时支持 `2026-07-28` 和旧客户端使用的 `2025-11-25`、`2025-06-1
 
 POST 的 `Accept` 包含 `application/json, text/event-stream`。本服务不创建会话，不主动推送消息，`GET /mcp` 返回 405。
 
-所有操作公开、只读，无需登录或 API key。工具读取固定 GitHub 仓库的公开资料；返回安装说明不会执行安装。用户的本地记忆、密钥和工作区不在服务数据范围内。文档原文作为资料返回，不改变调用方获得的用户授权。
+公开 `/mcp` 和 `/api/*` 无需登录或 API key。MCP 工具读取固定 GitHub 仓库的公开资料；返回安装说明不会执行安装。用户的本地记忆、模型密钥和工作区不在工具数据范围内。文档原文作为资料返回，不改变调用方获得的用户授权。
+
+## 未启用的认证声明
+
+当前产品的 `/mcp` 和 `/api/*` 全部公开免认证。OAuth 发现文档只声明未来接口，明确带有 `status: under_construction`、`available: false`、`capabilities_status: planned_contract_only`、`launch_date: null`；它们不是运行中的 OAuth 或 OIDC 服务。
+
+- `/.well-known/oauth-authorization-server` 与 `/.well-known/oauth-protected-resource` 发布上述不可用状态；资源标识是原站 origin，未来操作路径另列于 `planned_resource_endpoint`。
+- `/.well-known/jwks.json` 是停用的空密钥集合（`keys: []`），不用于验证令牌。
+- `/agent-auth/authorize`、`/agent-auth/token`、`/agent-auth/register`、`/agent-auth/claim`、`/agent-auth/resource` 始终返回 HTTP 503、简短不可用说明与 `Cache-Control: no-store`。处理器不读取或存储身份正文，不创建账户，不签发令牌，不发送邮件，也不发起授权跳转。
+- 声明和未来路由不加入 sitemap；响应应标记 `X-Robots-Tag: noindex`。它们不会给公开服务增加 401 门槛、`WWW-Authenticate` 或 OpenAPI security 要求。
+
+[`docs/auth.md`](../docs/auth.md) 告诉 Agent 在不可用期间继续使用公开工具；[`docs/openapi-auth.json`](../docs/openapi-auth.json) 仅记录未来路由当前的 503 合约。发现文件中的计划字段不能作为认证已可用的证据。
 
 ## 回源与部署
 
 默认静态回源为 `https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/docs/`；文档回源限定为同一仓库 `main` 的固定白名单。不存在从请求参数读取任意 URL 的通道。
 
 可使用 `STATIC_ORIGIN` 指定另一个明确的 HTTPS 静态资源根目录；不能指向正在处理请求的域名，避免回环。静态页面和资源继续跟随原仓库，Worker 代码变动需重新部署。
+
 
 ## 本地验收
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agent 接入与 MCP｜iLang DSH 工具包</title>
-  <meta name="description" content="通过 MCP 或 HTTP API 读取 iLang DSH 工具包的安装说明、公开文档和技能市场。公开只读，无需密钥。">
+  <meta name="description" content="通过 MCP 或 HTTP API 读取 iLang DSH 工具包的安装说明、公开文档和技能市场。公开只读，无需注册、登录或密钥。">
   <link rel="canonical" href="https://dsh.ilang.guide/agents/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="alternate" type="text/markdown" href="/llms-full.txt">
@@ -15,9 +15,9 @@
   </style>
 </head>
 <body><main>
-  <header><a class="brand" href="/"><img src="/favicon.svg" alt="" width="32" height="32">iLang DSH 工具包</a><h1>让你的 Agent，<br>直接找到该怎么用。</h1><p class="lead">准备安装工具包时，让 Agent 先读取官方安装说明；需要某项能力时，再查技能市场。所有接口只读公开资料，无需密钥。</p></header>
+  <header><a class="brand" href="/"><img src="/favicon.svg" alt="" width="32" height="32">iLang DSH 工具包</a><h1>让你的 Agent，<br>直接找到该怎么用。</h1><p class="lead">准备安装工具包时，让 Agent 先读取官方安装说明；需要某项能力时，再查技能市场。默认入口公开只读，无需密钥。</p></header>
   <h2>MCP 接入</h2>
-  <p>在支持远程 MCP 的客户端中添加以下地址，传输方式选择 <strong>Streamable HTTP</strong>，认证方式选择「无」。</p>
+  <p>在支持远程 MCP 的客户端中添加以下地址，传输方式选择 <strong>Streamable HTTP</strong>，认证方式选择「无」，无需注册账户或申请令牌。</p>
   <pre><code>https://dsh.ilang.guide/mcp</code></pre>
   <p>也可使用客户端支持的 JSON 配置格式：</p>
   <pre><code>{
@@ -40,7 +40,7 @@
     <li><a href="/openapi.json">HTTP API 规范</a>：供支持 OpenAPI 的工具调用。</li>
     <li><a href="/llms.txt">Agent 导航</a>与<a href="/llms-full.txt">文本说明</a>：适合直接读取网页资料的 Agent。</li>
     <li><a href="/.well-known/agent-skills/index.json">Agent Skills 索引</a>：安装规划、资料检索与市场查阅的操作说明。</li>
-    <li><a href="/auth.md">访问与认证说明</a>：公开只读，不需要登录或令牌。</li>
+    <li><a href="/auth.md">访问说明</a>：当前服务无需注册、登录或令牌；未来认证声明明确标为未启用。</li>
   </ul>
   <p>在支持 WebMCP 的浏览器中，首页还提供「读取安装说明」和「搜索技能市场」工具。浏览器未提供该 API 时，网页照常使用。</p>
   <h2>数据与权限</h2>

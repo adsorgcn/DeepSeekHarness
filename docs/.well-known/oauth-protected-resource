@@ -1,0 +1,13 @@
+{
+  "status": "under_construction",
+  "available": false,
+  "capabilities_status": "planned_contract_only",
+  "launch_date": null,
+  "message": "Coming soon declaration only. Public MCP and HTTP APIs remain available without authentication. This document does not protect or gate current content.",
+  "resource": "https://dsh.ilang.guide",
+  "planned_resource_endpoint": "https://dsh.ilang.guide/agent-auth/resource",
+  "authorization_servers": ["https://dsh.ilang.guide"],
+  "scopes_supported": ["dsh:read"],
+  "bearer_methods_supported": ["header"],
+  "resource_documentation": "https://dsh.ilang.guide/auth.md"
+}
