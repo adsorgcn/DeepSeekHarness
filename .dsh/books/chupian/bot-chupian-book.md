@@ -1,7 +1,7 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:CHUPIAN-BOT-BOOK]
-[VERSION:1.2]
+[VERSION:1.3]
 [DATE:2026-11-18]
 [LANG:zh]
 
@@ -59,7 +59,7 @@
   [STEP] 2 出图出片都用你自己的模型 PREFLIGHT 里查工具就查你自己有没有 不要钥匙
   [STEP] 3 交付前照 TAIL
 ::MODULE{TAIL|title:每一件成品的尾巴 媒体链}
-  [STEP] 1 每次出图出视频调用的原件留在 chupian/takes/ 最终成片和交付的每一张关键图 各作一个版本进 chupian/series/<系列ID>/ 照母版 VERSION 模块 写 GEN 行 算 JUDGE 块 GEN 行写用户要的那件成品 原件能封就封进文件 成片是 ffmpeg 从几个 take 剪出来的不是生成器原件 一律用 sidecar 再加一行 FACT 写明它由哪几个 take 剪成 母版要 c2patool 嵌入的也用 sidecar 因为门禁 check_series.py 配 c2patool 0.29.0 --detailed 读不到嵌入的断言
+  [STEP] 1 每次出图出视频调用的原件留在 chupian/takes/ 最终成片和交付的每一张关键图 各作一个版本进 chupian/series/<系列ID>/ 照母版 VERSION 模块 写 GEN 行 算 JUDGE 块 GEN 行写用户要的那件成品 原件能封就封进文件 成片是 ffmpeg 从几个 take 剪出来的不是生成器原件 一律用 sidecar 再加一行 FACT 写明它由哪几个 take 剪成 平台已签名的文件照母版只用 sidecar 没签名的原件能嵌就嵌 门禁读得到 c2patool 0.29.0 的嵌入
   [STEP] 2 系列文档记每个版本 用户的原话进 DECIDE 行 一字不改
   [STEP] 3 有工具就跑母版 @CANON 的门禁 0 失败才算 没工具就把系列文档和每个 sidecar 的文本各放一个代码块交给用户
 ::MODULE{REPORT|title:交片回六行}
