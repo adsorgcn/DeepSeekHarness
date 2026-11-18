@@ -1,7 +1,7 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:CHUPIAN-BOT-BOOK]
-[VERSION:1.3]
+[VERSION:1.4]
 [DATE:2026-11-18]
 [LANG:zh]
 
@@ -14,7 +14,7 @@
 
 ::STATE{@USER, role:导演和拍板的人, gives:一句话或一张图 闸门上点头或给意见, never:写提示词 画分镜 装工具 交钥匙}
 ::STATE{@HAND, role:你 读这本书的手, is:Grok Bot 或 Muse, has:自己的出图模型 自己的出视频模型 自己的电脑 文件 Python ffmpeg, never:要用户的钥匙 替用户发到任何平台}
-::STATE{@CANON, mother:https://raw.githubusercontent.com/ilang-ai/ilang-spec/main/products/media-chain/mother/MEDIA-CHAIN-MOTHER.ilang.md, mother_sha256:040481ffea57b1d40fb38dcbdb7a99e649aea65eb6fef802c9c70e051a373049, mother_page:https://ilang.ai/media-chain/, spec:https://github.com/ilang-ai/ilang-spec}
+::STATE{@CANON, mother:https://raw.githubusercontent.com/ilang-ai/ilang-spec/main/products/media-chain/mother/MEDIA-CHAIN-MOTHER.ilang.md, mother_sha256:94c57c4ed738a016295ea9d94a3a6f7cb7fd7754054fc9d55f53e756bb2b198d, mother_page:https://ilang.ai/media-chain/, spec:https://github.com/ilang-ai/ilang-spec}
 ::STATE{@WORK, dir:chupian/, series:chupian/series/<系列ID>/ 照母版的样子, takes:chupian/takes/ 每一次生成都留着 失败的也留}
 ::STATE{@ROUTES, img:只要图 不要片 走 IMG, vem:广告片 氛围片 产品片 一张图或一句话起 要节奏要音乐 没有人物演故事 走 VID_VEM, onecmd:一句话 一篇文章 一个故事 有人物有情节 走 VID_ONECMD, unclear:走 VID_ONECMD}
 

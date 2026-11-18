@@ -180,13 +180,13 @@
         "zh": "说一句「出片」，一句话或一张图，交给你的 Grok Bot 出图出视频，每一件成品都带着请求和判决",
         "en": "Say one phrase: a sentence or a picture goes to your Grok Bot, which makes the images and the video, every file carrying its request and its judgment"
       },
-      "version": "1.3",
+      "version": "1.4",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/chupian/BOOK.md",
       "procedure": ".dsh/books/chupian/BOOK.md",
       "upstream": null,
-      "sha256_lf": "3b0f855bb2415f90a174b44d595087ef485cffe95bbc3ada6a82bbd5ef47d793",
+      "sha256_lf": "a3860f38a335449b9f931717851233ac7a73e36190be30832dd1a79a493637c4",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,

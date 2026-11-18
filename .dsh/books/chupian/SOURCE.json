@@ -25,12 +25,13 @@
   },
   "media_chain_mother": {
     "url": "https://raw.githubusercontent.com/ilang-ai/ilang-spec/main/products/media-chain/mother/MEDIA-CHAIN-MOTHER.ilang.md",
-    "sha256": "040481ffea57b1d40fb38dcbdb7a99e649aea65eb6fef802c9c70e051a373049",
+    "sha256": "94c57c4ed738a016295ea9d94a3a6f7cb7fd7754054fc9d55f53e756bb2b198d",
+    "version": "1.2",
     "page": "https://ilang.ai/media-chain/"
   },
   "hand_book": {
     "file": "bot-chupian-book.md",
-    "sha256_lf": "b3796291c5bf46aea976fc94aa80a1b9ae121526c52731b8239c7db626fdbbd6"
+    "sha256_lf": "2f8e59c04494ca8a56904f03c07609628510d1451ab5d4f84338a715ce62c25e"
   },
   "taken_on": "2026-11-18"
 }
