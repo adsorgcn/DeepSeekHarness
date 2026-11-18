@@ -1,0 +1,415 @@
+@charset "UTF-8";
+
+/* The artwork is decorative. Platform status lives in the directory below. */
+.platforms {
+  --platform-line: #e8ecee;
+  --platform-text: #172124;
+  --platform-muted: #617078;
+  padding: 0;
+  overflow: clip;
+  color: var(--platform-text);
+  background: #fff;
+  border-block: 1px solid var(--platform-line);
+  scroll-margin-top: -36px; /* The landing page reserves 36px above hash targets. */
+}
+
+.platform-frame {
+  position: relative;
+  width: calc(100% - 64px);
+  max-width: 1280px;
+  margin-inline: auto;
+  border-inline: 1px solid var(--platform-line);
+}
+
+.platform-intro {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin-inline: auto;
+  padding: clamp(52px, 5vw, 84px) 32px 0;
+  text-align: center;
+}
+
+.platform-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 44px;
+  color: #0069b1;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: .02em;
+}
+
+.platform-kicker:hover {
+  text-decoration: underline;
+  text-underline-offset: .24em;
+}
+
+.platform-intro h2 {
+  margin: 12px 0 14px;
+  font-size: clamp(38px, 3.8vw, 64px);
+  font-weight: 500;
+  line-height: 1.24;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+
+.platform-intro p {
+  max-width: 570px;
+  margin-inline: auto;
+  color: var(--platform-muted);
+  font-size: 15px;
+  line-height: 1.9;
+  text-wrap: pretty;
+}
+
+/* Eight columns and three rows stay fixed until the mobile breakpoint. */
+.platform-stage {
+  --platform-tile-size: clamp(62px, 8vw, 104px);
+  --platform-tile-gap: clamp(16px, 2vw, 26px);
+  position: relative;
+  height: calc(var(--platform-tile-size) * 2.7 + var(--platform-tile-gap));
+  margin-top: 22px;
+  overflow: hidden;
+  isolation: isolate;
+  perspective: 980px;
+  perspective-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.platform-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 56%,
+    rgb(255 255 255 / .24) 65%,
+    rgb(255 255 255 / .84) 82%,
+    #fff 91%
+  );
+  pointer-events: none;
+}
+
+.platform-plane {
+  position: absolute;
+  top: calc(var(--platform-tile-size) * -.45);
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(8, var(--platform-tile-size));
+  grid-template-rows: repeat(3, var(--platform-tile-size));
+  gap: var(--platform-tile-gap);
+  width: max-content;
+  transform: translate3d(-50%, 0, 0) rotateX(52deg);
+  transform-origin: 50% 45%;
+  transform-style: preserve-3d;
+}
+
+.platform-tile {
+  --platform-brand: #182529;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--platform-tile-size);
+  height: var(--platform-tile-size);
+  border-radius: 20%;
+  color: #fff;
+  background: var(--platform-brand);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .2),
+    0 2px 0 rgb(21 38 45 / .1),
+    0 9px 14px -7px rgb(21 38 45 / .22);
+  backface-visibility: hidden;
+}
+
+.platform-tile svg {
+  display: block;
+  width: 63%;
+  height: 63%;
+  overflow: visible;
+  fill: currentColor;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .platform-tile {
+    pointer-events: auto;
+    transition: transform 240ms cubic-bezier(.22, 1, .36, 1), box-shadow 240ms ease;
+  }
+
+  .platform-tile:hover {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / .25),
+      0 2px 0 rgb(21 38 45 / .1),
+      0 17px 23px -9px rgb(21 38 45 / .3);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .platform-tile:hover {
+    transform: translate3d(0, -4px, 10px);
+  }
+}
+
+/* Use light and dark tiles so each glyph keeps its recognizable silhouette. */
+.platform-tile[data-brand="wechat"] { --platform-brand: #07c160; }
+.platform-tile[data-brand="x"] { --platform-brand: #000; }
+.platform-tile[data-brand="youtube"] { --platform-brand: #fff; color: #ff0033; }
+.platform-tile[data-brand="bilibili"] { --platform-brand: #f781a7; }
+.platform-tile[data-brand="xiaohongshu"] { --platform-brand: #ff2442; }
+.platform-tile[data-brand="tiktok"] { --platform-brand: #101010; }
+.platform-tile[data-brand="tiktok"] svg { filter: drop-shadow(-1.4px -1px 0 #25f4ee) drop-shadow(1.4px 1px 0 #fe2c55); }
+.platform-tile[data-brand="sinaweibo"] { --platform-brand: #fff6df; color: #d8282d; }
+.platform-tile[data-brand="zhihu"] { --platform-brand: #0084ff; }
+.platform-tile[data-brand="medium"] { --platform-brand: #000; }
+.platform-tile[data-brand="instagram"] { --platform-brand: radial-gradient(circle at 19% 100%, #ffdb7c 1%, #ff8757 25%, #f02c6b 49%, #bc2ab7 74%, #565ed1); }
+.platform-tile[data-brand="threads"] { --platform-brand: #000; }
+.platform-tile[data-brand="substack"] { --platform-brand: #ff6719; }
+.platform-tile[data-brand="reddit"] { --platform-brand: #fff; color: #ff4500; }
+.platform-tile[data-brand="pinterest"] { --platform-brand: #bd081c; }
+.platform-tile[data-brand="telegram"] { --platform-brand: #26a5e4; }
+.platform-tile[data-brand="bluesky"] { --platform-brand: #fff; color: #1185fe; }
+.platform-tile[data-brand="spotify"] { --platform-brand: #1ed760; color: #10281a; }
+.platform-tile[data-brand="line"] { --platform-brand: #00c300; }
+.platform-tile[data-brand="naver"] { --platform-brand: #03c75a; }
+.platform-tile[data-brand="applepodcasts"] { --platform-brand: linear-gradient(150deg,#dc8af8,#8030b6); }
+.platform-tile[data-brand="quora"] { --platform-brand: #b92b27; }
+.platform-tile[data-brand="facebook"] { --platform-brand: #0866ff; }
+.platform-tile[data-brand="whatsapp"] { --platform-brand: #25d366; }
+.platform-tile[data-brand="vk"] { --platform-brand: #0077ff; }
+
+.platform-directory {
+  position: relative;
+  z-index: 3;
+  padding: 28px 56px 64px;
+  background: #fff;
+  scroll-margin-top: 36px;
+}
+
+.platform-directory > h3 {
+  color: #52666f;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
+.platform-current {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin: 20px 0 34px;
+  padding: 0;
+  list-style: none;
+}
+
+.platform-current li {
+  min-width: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--platform-line);
+}
+
+.platform-current strong {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+  font-weight: 550;
+  line-height: 1.6;
+}
+
+.platform-current strong::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #419d72;
+}
+
+.platform-current span {
+  display: block;
+  margin-top: 7px;
+  color: var(--platform-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.platform-plan {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 45px;
+  padding-top: 28px;
+  border-top: 1px solid var(--platform-line);
+}
+
+.platform-plan > div {
+  min-width: 0;
+}
+
+.platform-plan h4 {
+  margin: 0 0 9px;
+  color: #61747d;
+  font-size: 11px;
+  font-weight: 550;
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
+.platform-plan p {
+  color: #53636c;
+  font-size: 14px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+.platform-plan p span {
+  white-space: nowrap;
+}
+
+/* Motion changes position only: no hidden or faded first render. */
+@media (prefers-reduced-motion: no-preference) {
+  .platform-intro {
+    animation: platform-intro-settle 800ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  .platform-plane {
+    animation: platform-plane-settle 1200ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .platform-plane {
+      animation-name: platform-plane-scroll;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 60%;
+    }
+  }
+}
+
+@keyframes platform-intro-settle {
+  from { transform: translateY(10px); }
+  to { transform: translateY(0); }
+}
+
+@keyframes platform-plane-settle {
+  from { transform: translate3d(-50%, 12px, 0) rotateX(56deg); }
+  to { transform: translate3d(-50%, 0, 0) rotateX(52deg); }
+}
+
+@keyframes platform-plane-scroll {
+  from { transform: translate3d(-50%, 9px, 0) rotateX(55deg); }
+  to { transform: translate3d(-50%, -3px, 0) rotateX(51deg); }
+}
+
+@media (max-width: 1000px) {
+  .platform-intro {
+    padding-top: 52px;
+  }
+
+  .platform-directory {
+    padding-inline: 32px;
+  }
+
+  .platform-current {
+    gap: 20px;
+  }
+
+  .platform-plan {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  .platform-frame {
+    width: calc(100% - 32px);
+  }
+
+  .platform-intro {
+    padding: 39px 17px 0;
+  }
+
+  .platform-kicker {
+    font-size: 14px;
+  }
+
+  .platform-intro h2 {
+    margin: 9px 0 12px;
+    font-size: clamp(31px, 7.8vw, 44px);
+    line-height: 1.3;
+    letter-spacing: -.05em;
+  }
+
+  .platform-intro p {
+    max-width: 420px;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .platform-intro p span {
+    display: block;
+  }
+
+  .platform-stage {
+    --platform-tile-size: clamp(54px, 16vw, 76px);
+    --platform-tile-gap: clamp(13px, 3.5vw, 19px);
+    height: calc(var(--platform-tile-size) * 2.75 + var(--platform-tile-gap));
+    margin-top: 14px;
+    perspective: 585px;
+  }
+
+  .platform-plane {
+    grid-template-columns: repeat(4, var(--platform-tile-size));
+  }
+
+  .platform-tile:nth-child(n + 13) {
+    display: none;
+  }
+
+  .platform-directory {
+    padding: 15px 22px 42px;
+  }
+
+  .platform-current {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 16px 0 24px;
+  }
+
+  .platform-current li {
+    padding: 16px 0;
+  }
+
+  .platform-current strong {
+    font-size: 14px;
+  }
+
+  .platform-current span {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  .platform-plan {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding-top: 24px;
+  }
+
+  .platform-plan p {
+    font-size: 14px;
+    line-height: 2.1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .platforms *,
+  .platforms *::before,
+  .platforms *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
