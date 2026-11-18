@@ -271,7 +271,7 @@ test('HTML and Markdown negotiation preserve the page and declare Vary', async (
 test('HTTP Markdown resolves repository links while MCP resources retain original bytes', async () => {
   const homepage = await (await handler(new Request(`${SITE_URL}/`, { headers: { Accept: 'text/markdown' } }))).text();
   assert.ok(homepage.includes('https://github.com/adsorgcn/DeepSeekHarness/blob/main/' + encodeURIComponent('插件点评-ilang视角.md')));
-  assert.ok(homepage.includes(`${RAW_ROOT}assets/social-preview.png`));
+  assert.ok(homepage.includes(`${RAW_ROOT}docs/assets/social-preview-20261118.jpg`));
   const install = await (await handler(new Request(`${SITE_URL}/${encodeURIComponent('一键安装.md')}`))).text();
   assert.ok(install.includes('https://github.com/adsorgcn/DeepSeekHarness/blob/main/docs/LEDGER.md'));
   const original = await readFile(new URL('README.md', root), 'utf8');
