@@ -201,6 +201,37 @@
       "admitted_on": "2026-11-18"
     },
     {
+      "kind": "book",
+      "name": "fenshen",
+      "title": {
+        "zh": "云端分身",
+        "en": "Cloud twin"
+      },
+      "description": {
+        "zh": "说一句「云端分身」，工作区进私有仓库，分身书交给你的 Grok Bot，出门用手机说「出文」「出片」「发到 YouTube」，改的是同一个仓库",
+        "en": "Say one phrase: the workspace goes to a private repository and your Grok Bot clones it; away from the desk you say 出文, 出片 or 发到 YouTube from your phone, and both sides write the same repository"
+      },
+      "version": "1.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/books/fenshen/BOOK.md",
+      "procedure": ".dsh/books/fenshen/BOOK.md",
+      "upstream": null,
+      "sha256_lf": "5086997a39c539777864394577b19aee044b95991067f311e2caa76cd3400c5d",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "markers": 2,
+        "at": "2026-11-18"
+      },
+      "say": "云端分身",
+      "get": "kit",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-18"
+    },
+    {
       "kind": "plugin",
       "name": "dsh-plugin-chuhai",
       "title": {
