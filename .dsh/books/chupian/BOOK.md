@@ -1,14 +1,14 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:DSH-CHUPIAN]
-[VERSION:1.1]
+[VERSION:1.2]
 [DATE:2026-11-18]
 [LANG:zh]
 
 ::STATE{@USER, role:decision_maker, is:会用 DSH 出文章的人, does:说一句话或丢一张图 看样片 点头或给意见, never:写提示词 画分镜 装工具 交钥匙}
 ::STATE{@AGENT, role:you_the_user_s_own_AI_running_in_DeepSeek_Harness_with_the_iLang_DSH_kit, does:把出片书交到手上 收回成片 账和系列文档 记进交接单, never:自己生成图或视频 替用户扫码 登录 付款 点发布}
 ::STATE{@HANDS, first:Grok Bot 用户在「自媒体出海」里装好的 Premium 起带, second:Muse 用户在手脚那一步开的, none:先走「自媒体出海」到装 Grok Bot 那一环, model:手自带什么出图出片模型就用什么 不装别的 不要任何钥匙}
-::STATE{@BOOK, kit_copy:.dsh/books/chupian/bot-chupian-book.md 随工具包带着, kit_sha256:1ea3f061e71064bae07eb9e85b732c4963bfd80ef9c89df6bcfed6359e0d3318, workspace_copy:bot-chupian-book.md 放在工作区根目录 和 kit_copy 一字不差, same_for:Grok Bot 与 Muse 同一本}
+::STATE{@BOOK, kit_copy:.dsh/books/chupian/bot-chupian-book.md 随工具包带着, kit_sha256:97cd661c91476bf98523460c57a25b18263962b17a559335a341bc364224db8a, workspace_copy:bot-chupian-book.md 放在工作区根目录 和 kit_copy 一字不差, same_for:Grok Bot 与 Muse 同一本}
 ::STATE{@CANON, media_chain_mother:https://raw.githubusercontent.com/ilang-ai/ilang-spec/main/products/media-chain/mother/MEDIA-CHAIN-MOTHER.ilang.md, mother_sha256:040481ffea57b1d40fb38dcbdb7a99e649aea65eb6fef802c9c70e051a373049, mother_page:https://ilang.ai/media-chain/, validator:tools/ilang_grammar_validator.py}
 ::STATE{@SOURCES, vem:IML-VEM v1.2.2 自 https://x.com/ai_chuhai/status/2113817133838713167 所引的 X 文章, onecmd:AI-VIDEO-ONECMD v1.0 自 https://x.com/ai_chuhai/status/2118812420521054659 它由 @EianLu 发表的流程整理而来, where:.dsh/books/chupian/sources 与 SOURCE.json, rule:两本原文一字不改 随书带着}
 ::STATE{@SCOPE, covers:出图 出视频 一句话或一张图起 成品带媒体链, later:多语言版本 多平台发 以后逐版加}
