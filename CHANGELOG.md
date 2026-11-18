@@ -6,6 +6,7 @@
 - 分辨率按路算：ONECMD 路按首尾帧同给时手的模型能出的最高档，VEM 路按只给首帧时算，不查订阅；原书没给默认的音乐记 no，预算按 @INPUT 记 minimize
 - 媒体链：母版要 c2patool 嵌入的也先用 sidecar，因为门禁 check_series.py 配母版指定的 c2patool 0.29.0 --detailed 读不到嵌入的断言（Bot 实测：嵌入回读对、门禁判 FAIL）；脚本另修，书里先绕
 - 来源：2026-11-18 owner 的 Grok Bot 按出片书 1.1 复跑的回包（strict 0/0，原文逐字一致，出图路线门禁 PASS JEJU-TANGERINE-20261118，两条出片路线停在第一道闸门等用户点头，S=0.92）
+- 货架：registry.json 的 plugin 条目钉 dsh-plugin-chuhai 0.3.2（进度行写到手脚：邮箱、Gmail、InstaBox、Muse），index.json 顶部加 0.3.2；来源：出片环 Bot 实跑过、2026-11-18 owner 说「出片了 没啥问题了」后拍发（补记，不升版本）
 
 **v1.1.34** · 2026-11-18 · 出片书 1.1：Grok Bot 实跑回包后的七处修正
 
