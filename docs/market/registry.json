@@ -180,13 +180,13 @@
         "zh": "说一句「出片」，一句话或一张图，交给你的 Grok Bot 出图出视频，每一件成品都带着请求和判决",
         "en": "Say one phrase: a sentence or a picture goes to your Grok Bot, which makes the images and the video, every file carrying its request and its judgment"
       },
-      "version": "1.4",
+      "version": "1.5",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/chupian/BOOK.md",
       "procedure": ".dsh/books/chupian/BOOK.md",
       "upstream": null,
-      "sha256_lf": "a3860f38a335449b9f931717851233ac7a73e36190be30832dd1a79a493637c4",
+      "sha256_lf": "b6ebda6bcc0f805563bb45c04f6e465a4c8590a49807aec15d4f42499a121183",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,
@@ -211,13 +211,13 @@
         "zh": "说一句「云端分身」，工作区进私有仓库，分身书交给你的 Grok Bot，出门用手机说「出文」「出片」「发到 YouTube」，改的是同一个仓库",
         "en": "Say one phrase: the workspace goes to a private repository and your Grok Bot clones it; away from the desk you say 出文, 出片 or 发到 YouTube from your phone, and both sides write the same repository"
       },
-      "version": "1.0",
+      "version": "1.1",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/fenshen/BOOK.md",
       "procedure": ".dsh/books/fenshen/BOOK.md",
       "upstream": null,
-      "sha256_lf": "5086997a39c539777864394577b19aee044b95991067f311e2caa76cd3400c5d",
+      "sha256_lf": "f0f895ac15cc8f52f6053472439113ae4241e6a21086cbc674575a19963db83a",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,

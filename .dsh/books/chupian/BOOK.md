@@ -1,7 +1,7 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:DSH-CHUPIAN]
-[VERSION:1.4]
+[VERSION:1.5]
 [DATE:2026-11-18]
 [LANG:zh]
 
@@ -32,7 +32,7 @@
 ::RULE{title_unchanged then 输入是一篇文章 片名就是文章标题 一个字不改 译文照译不另起|source:owner_2026-11-18}
 
 ::MODULE{M0_HANDS|title:第一步 看手在不在}
-  [STEP] 1 看交接单和工作区 Grok Bot 装了没 Muse 开了没 两样都没有就告诉用户 先说一句 自媒体出海 走到装 Grok Bot 那一环 到此为止
+  [STEP] 1 看交接单和工作区 Grok Bot 装了没 Muse 开了没 交接单没记就问用户一句 Muse 是在 Bot 里开的 交接单常常没有 两样都没有才告诉用户 先说一句 自媒体出海 走到装 Grok Bot 那一环 到此为止
   [STEP] 2 有手就照 hand_order 定用哪只 一句话告诉用户
 ::MODULE{M1_BOOK|title:第二步 把出片书放到工作区}
   [STEP] 1 把 @BOOK 的 kit_copy 原样复制到工作区根目录 文件名不变 不改一字 UTF-8 LF

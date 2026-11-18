@@ -1,14 +1,14 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:DSH-FENSHEN]
-[VERSION:1.0]
+[VERSION:1.1]
 [DATE:2026-11-18]
 [LANG:zh]
 
 ::STATE{@USER, role:decision_maker, is:在电脑上用 DSH 出过文 出过片 装了 Grok Bot 的人, does:给仓库地址 在 GitHub 加一把钥匙 在公众号后台加一个 IP 点头, never:贴钥匙到聊天}
 ::STATE{@AGENT, role:you_the_user_s_own_AI_running_in_DeepSeek_Harness_with_the_iLang_DSH_kit, does:把工作区推成私有仓库 把分身书交到手上 以后每次开工先 pull, never:把账本的值写进聊天 替用户注册 付款 点发布}
 ::STATE{@HANDS, first:Grok Bot 用户在「自媒体出海」里装好的, second:Muse, none:先走「自媒体出海」到装 Grok Bot 那一环}
-::STATE{@BOOK, kit_copy:.dsh/books/fenshen/bot-fenshen-book.md 随工具包带着, kit_sha256:2a2bd501a06574d2f404f22cb2a232a041c3daacd2fceabd6f812da6f3df63d3, workspace_copy:bot-fenshen-book.md 放在工作区根目录 和 kit_copy 一字不差}
+::STATE{@BOOK, kit_copy:.dsh/books/fenshen/bot-fenshen-book.md 随工具包带着, kit_sha256:91b6766aefefabd3685bc46157f414aed0419bdaea84853a7764f68e6e1d2132, workspace_copy:bot-fenshen-book.md 放在工作区根目录 和 kit_copy 一字不差}
 ::STATE{@REPO, mode:git config dsh.mode 是 sync 就已经有私有远端 是 local 就还没有, remote:私有 GitHub 仓库 用户自己建 名字他起, guard:tools/hooks/pre-push 拒绝推到公开远端 不绕}
 ::STATE{@SCOPE, covers:工作区进私有仓库 分身书交到手上 两头共用一个仓库, later:多个分身 多平台 以后逐版加}
 
