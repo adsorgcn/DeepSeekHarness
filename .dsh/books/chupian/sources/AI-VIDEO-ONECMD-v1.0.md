@@ -48,6 +48,7 @@
     [NOTE] any frame frozen at any second must look good as a still image. Default composition: golden ratio (subject at 38% or 62% from left, not center).
   [STEP] 3 design color palette BEFORE drawing any frame. List exact colors per scene. Convert to black-and-white and check: if subject blends into background, contrast is too low, redesign palette.
   [STEP] 4 present storyboard to user. GATE 2: user approves or gives notes. Do not proceed until approved.
+
 ::MODULE{ART_STYLE|title:Lock visual style and draw character sheets}
   [STEP] 1 if user provided reference images: analyze style, extract: line quality, color treatment, texture, lighting approach
   [STEP] 2 if no reference: propose 2-3 style options (hand-drawn/flat color/realistic/American cartoon), let user pick
@@ -115,6 +116,7 @@
     [NOTE] dialogue completeness: any words cut off? Subtitles readable in time?
     [NOTE] ambient sound: door sound when no door moved? Rain stopping abruptly?
     [NOTE] music: too loud during dialogue? Sudden cut on scene transition?
+
 ::MODULE{REVIEW|title:Fresh-eyes review of final cut}
   [STEP] 1 open fresh internal review agent. Give it ONLY the final video file. No story, no storyboard, no conclusions.
   [STEP] 2 agent watches as first-time viewer: writes what story it understood, lists anything confusing

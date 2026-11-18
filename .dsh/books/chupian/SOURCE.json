@@ -15,7 +15,7 @@
     "id": "AI-VIDEO-ONECMD",
     "version": "1.0",
     "file": "sources/AI-VIDEO-ONECMD-v1.0.md",
-    "sha256_lf": "f2bd57b3459819903e31efa4458e2b1b70276d70ff975d0ba7142100e9411b01",
+    "sha256_lf": "3a58ebc41a53495431d0292a360bb63555b3607e152de4598b30354180546ab4",
     "sha256_x_text": "e3da203a8bf4f9dd59d2f3ca46eb898d4a3a0638857a475e0fabe041e6ec1e8b",
     "post": "https://x.com/ai_chuhai/status/2118812420521054659",
     "structured_from": "https://x.com/i/article/2118298893238845441 (@EianLu, 2026-11-05)",
@@ -30,7 +30,7 @@
   },
   "hand_book": {
     "file": "bot-chupian-book.md",
-    "sha256_lf": "726b0717a4ca126c7987632f00968b8f303e8adcdf1449ec6d5dd18beaf77ee4"
+    "sha256_lf": "1ea3f061e71064bae07eb9e85b732c4963bfd80ef9c89df6bcfed6359e0d3318"
   },
   "taken_on": "2026-11-18"
 }
