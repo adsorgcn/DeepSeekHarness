@@ -1,5 +1,10 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.37** · 2026-11-18 · 出片书 1.4：媒体链母版升到 1.2，书里钉的 sha 跟上
+
+- 正典 products/media-chain 1.2（修正案 MC-CX-001：多个 take 剪成的成片有自己的 GEN 行、一行 FACT 记 takes、链走 XMP sidecar）与母版 1.2 已上，出片书 @CANON 钉的母版 sha256 换成 94c57c4e…，SOURCE.json 记母版 1.2；书的正文不变
+- 来源：2026-11-18 owner 拍「进 1.2」
+
 **v1.1.36** · 2026-11-18 · 出片书 1.3：门禁修好了，嵌入那句改回母版的口径
 
 - 出片书 TAIL 那句不再说「门禁读不到所以 sidecar」：平台已签名的文件照母版只用 sidecar，没签名的原件能嵌就嵌，门禁从 2026-11-18 起读得到 c2patool 0.29.0 的嵌入（数据集 i-Lang/media-chain 提交 0836390b）；成片仍是 sidecar 加一行 FACT 记由哪几个 take 剪成（正典 products/media-chain/records 的 MC-CX-001）
