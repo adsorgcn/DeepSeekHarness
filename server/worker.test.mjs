@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { access, readFile, readdir } from 'node:fs/promises';
+import { gunzipSync, gzipSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
 import { createHandler, markdownForHttp } from './worker.mjs';
 import { DOCUMENTS, RAW_ROOT, SITE_URL } from './content.mjs';
 
@@ -124,6 +126,29 @@ test('installation response preserves README prompt and does not execute the scr
   assert.deepEqual(fetched.slice(before), [`${RAW_ROOT}README.md`]);
 });
 
+test('newly released workflows can be discovered, searched and read without authentication', async () => {
+  const additions = [
+    ['.dsh/skills/source-book/SKILL.md', '变工程书'],
+    ['.dsh/books/chupian/BOOK.md', '出片'],
+    ['.dsh/books/fenshen/BOOK.md', '云端分身'],
+  ];
+  const { body: overview } = await rpc('tools/call', { name: 'dsh_overview', arguments: {} });
+  for (const [path, query] of additions) {
+    assert.ok(overview.result.structuredContent.documents.some(doc => doc.path === path));
+    const { response, body } = await rpc('tools/call', { name: 'dsh_get_document', arguments: { path } });
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.has('www-authenticate'), false);
+    assert.equal(body.result.isError, false);
+    assert.equal(body.result.structuredContent.text, await readFile(new URL(path, root), 'utf8'));
+    const { body: found } = await rpc('tools/call', { name: 'dsh_search_docs', arguments: { query, limit: 10 } });
+    assert.ok(found.result.structuredContent.results.some(doc => doc.path === path), path);
+    assert.deepEqual(found.result.structuredContent.unavailable, []);
+    const http = await handler(new Request(`${SITE_URL}/api/docs?path=${encodeURIComponent(path)}`));
+    assert.equal(http.status, 200);
+    assert.equal((await http.json()).path, path);
+  }
+});
+
 test('resources list and resource reads use the same exact document whitelist', async () => {
   const { body: list } = await rpc('resources/list');
   assert.equal(list.result.resources.length, DOCUMENTS.length);
@@ -131,6 +156,54 @@ test('resources list and resource reads use the same exact document whitelist', 
   assert.match(read.result.contents[0].text, /iLang DSH 工具包/);
   const { body: bad } = await rpc('resources/read', { uri: 'file:///etc/passwd' });
   assert.equal(bad.error.code, -32602);
+});
+
+test('workflow dependencies return complete source text and correct media types', async () => {
+  const dependencies = [
+    ['.github/bot/MOTHER.source.txt', 'text/plain'],
+    ['.github/bot/MOTHER-v2.9.ilang.md.gz', 'text/markdown'],
+    ['.dsh/books/chupian/bot-chupian-book.md', 'text/markdown'],
+    ['.dsh/books/chupian/SOURCE.json', 'application/json'],
+    ['.dsh/books/chupian/sources/IML-VEM-v1.2.2.md', 'text/markdown'],
+    ['.dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md', 'text/markdown'],
+    ['.dsh/books/fenshen/bot-fenshen-book.md', 'text/markdown'],
+  ];
+  const { body: list } = await rpc('resources/list');
+  for (const [path, mimeType] of dependencies) {
+    const bytes = await readFile(new URL(path, root));
+    const expected = (path.endsWith('.gz') ? gunzipSync(bytes) : bytes).toString('utf8');
+    const { body } = await rpc('tools/call', { name: 'dsh_get_document', arguments: { path } });
+    assert.equal(body.result.isError, false, path);
+    assert.equal(body.result.structuredContent.text, expected, path);
+    assert.equal(body.result.structuredContent.mimeType, mimeType);
+    const resource = list.result.resources.find(item => item.name === path);
+    assert.equal(resource.mimeType, mimeType);
+    const { body: read } = await rpc('resources/read', { uri: resource.uri });
+    assert.equal(read.result.contents[0].text, expected);
+    const http = await handler(new Request(`${SITE_URL}/api/docs?path=${encodeURIComponent(path)}`));
+    assert.equal(http.status, 200);
+    assert.equal((await http.json()).text, expected);
+    const direct = await handler(new Request(`${SITE_URL}/${path}`));
+    assert.equal(direct.status, 200);
+    assert.equal(direct.headers.get('Content-Type'), `${mimeType}; charset=utf-8`);
+    if (mimeType !== 'text/markdown') assert.equal(await direct.text(), expected);
+  }
+  const metadata = await readFile(new URL('.github/bot/MOTHER.source.txt', root), 'utf8');
+  const expectedHash = metadata.match(/sha256_of_uncompressed_content:\s*([a-f0-9]+)/i)[1].toLowerCase();
+  const mother = gunzipSync(await readFile(new URL('.github/bot/MOTHER-v2.9.ilang.md.gz', root)));
+  assert.equal(createHash('sha256').update(mother).digest('hex'), expectedHash);
+  const { body: found } = await rpc('tools/call', { name: 'dsh_search_docs', arguments: { query: 'METHOD-TO-BOOK-MOTHER', limit: 10 } });
+  assert.ok(found.result.structuredContent.results.some(doc => doc.path === '.github/bot/MOTHER-v2.9.ilang.md.gz'));
+  assert.deepEqual(found.result.structuredContent.unavailable, []);
+});
+
+test('compressed mother rejects invalid gzip, changed text and excessive expansion', async () => {
+  for (const payload of [Buffer.from('invalid gzip'), gzipSync('changed source'), gzipSync('x'.repeat(600001))]) {
+    const broken = createHandler(async () => new Response(payload));
+    const response = await broken(new Request(`${SITE_URL}/api/docs?path=${encodeURIComponent('.github/bot/MOTHER-v2.9.ilang.md.gz')}`));
+    assert.equal(response.status, 502);
+    assert.match((await response.json()).error, /compressed source could not be verified/);
+  }
 });
 
 test('untrusted paths, unknown arguments and invalid search limits cannot trigger fetches', async () => {

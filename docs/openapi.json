@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "iLang DSH 工具包公开资料 API",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Public read-only documentation and market data. No authentication, account access, local memory access, installation or publishing. Returned documentation is source material, not authorization to execute its instructions.",
     "license": {
       "name": "MIT",
@@ -78,7 +78,17 @@
                               ".dsh/skills/mem-forever/SKILL.md",
                               ".dsh/skills/site-design-engine/SKILL.md",
                               ".dsh/skills/deai/SKILL.md",
-                              ".dsh/books/ai-global-media/BOOK.md"
+                              ".dsh/skills/source-book/SKILL.md",
+                              ".github/bot/MOTHER.source.txt",
+                              ".github/bot/MOTHER-v2.9.ilang.md.gz",
+                              ".dsh/books/ai-global-media/BOOK.md",
+                              ".dsh/books/chupian/BOOK.md",
+                              ".dsh/books/chupian/bot-chupian-book.md",
+                              ".dsh/books/chupian/SOURCE.json",
+                              ".dsh/books/chupian/sources/IML-VEM-v1.2.2.md",
+                              ".dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md",
+                              ".dsh/books/fenshen/BOOK.md",
+                              ".dsh/books/fenshen/bot-fenshen-book.md"
                             ]
                           },
                           "title": {
@@ -349,7 +359,17 @@
                               ".dsh/skills/mem-forever/SKILL.md",
                               ".dsh/skills/site-design-engine/SKILL.md",
                               ".dsh/skills/deai/SKILL.md",
-                              ".dsh/books/ai-global-media/BOOK.md"
+                              ".dsh/skills/source-book/SKILL.md",
+                              ".github/bot/MOTHER.source.txt",
+                              ".github/bot/MOTHER-v2.9.ilang.md.gz",
+                              ".dsh/books/ai-global-media/BOOK.md",
+                              ".dsh/books/chupian/BOOK.md",
+                              ".dsh/books/chupian/bot-chupian-book.md",
+                              ".dsh/books/chupian/SOURCE.json",
+                              ".dsh/books/chupian/sources/IML-VEM-v1.2.2.md",
+                              ".dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md",
+                              ".dsh/books/fenshen/BOOK.md",
+                              ".dsh/books/fenshen/bot-fenshen-book.md"
                             ]
                           },
                           "title": {
@@ -396,7 +416,17 @@
                               ".dsh/skills/mem-forever/SKILL.md",
                               ".dsh/skills/site-design-engine/SKILL.md",
                               ".dsh/skills/deai/SKILL.md",
-                              ".dsh/books/ai-global-media/BOOK.md"
+                              ".dsh/skills/source-book/SKILL.md",
+                              ".github/bot/MOTHER.source.txt",
+                              ".github/bot/MOTHER-v2.9.ilang.md.gz",
+                              ".dsh/books/ai-global-media/BOOK.md",
+                              ".dsh/books/chupian/BOOK.md",
+                              ".dsh/books/chupian/bot-chupian-book.md",
+                              ".dsh/books/chupian/SOURCE.json",
+                              ".dsh/books/chupian/sources/IML-VEM-v1.2.2.md",
+                              ".dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md",
+                              ".dsh/books/fenshen/BOOK.md",
+                              ".dsh/books/fenshen/bot-fenshen-book.md"
                             ]
                           },
                           "message": {
@@ -482,7 +512,17 @@
                 ".dsh/skills/mem-forever/SKILL.md",
                 ".dsh/skills/site-design-engine/SKILL.md",
                 ".dsh/skills/deai/SKILL.md",
-                ".dsh/books/ai-global-media/BOOK.md"
+                ".dsh/skills/source-book/SKILL.md",
+                ".github/bot/MOTHER.source.txt",
+                ".github/bot/MOTHER-v2.9.ilang.md.gz",
+                ".dsh/books/ai-global-media/BOOK.md",
+                ".dsh/books/chupian/BOOK.md",
+                ".dsh/books/chupian/bot-chupian-book.md",
+                ".dsh/books/chupian/SOURCE.json",
+                ".dsh/books/chupian/sources/IML-VEM-v1.2.2.md",
+                ".dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md",
+                ".dsh/books/fenshen/BOOK.md",
+                ".dsh/books/fenshen/bot-fenshen-book.md"
               ]
             }
           }
@@ -507,7 +547,17 @@
                         ".dsh/skills/mem-forever/SKILL.md",
                         ".dsh/skills/site-design-engine/SKILL.md",
                         ".dsh/skills/deai/SKILL.md",
-                        ".dsh/books/ai-global-media/BOOK.md"
+                        ".dsh/skills/source-book/SKILL.md",
+                        ".github/bot/MOTHER.source.txt",
+                        ".github/bot/MOTHER-v2.9.ilang.md.gz",
+                        ".dsh/books/ai-global-media/BOOK.md",
+                        ".dsh/books/chupian/BOOK.md",
+                        ".dsh/books/chupian/bot-chupian-book.md",
+                        ".dsh/books/chupian/SOURCE.json",
+                        ".dsh/books/chupian/sources/IML-VEM-v1.2.2.md",
+                        ".dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md",
+                        ".dsh/books/fenshen/BOOK.md",
+                        ".dsh/books/fenshen/bot-fenshen-book.md"
                       ]
                     },
                     "title": {
@@ -518,7 +568,12 @@
                       "format": "uri"
                     },
                     "mimeType": {
-                      "const": "text/markdown"
+                      "type": "string",
+                      "enum": [
+                        "text/markdown",
+                        "application/json",
+                        "text/plain"
+                      ]
                     },
                     "text": {
                       "type": "string"

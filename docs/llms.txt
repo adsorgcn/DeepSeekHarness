@@ -2,7 +2,7 @@
 
 > iLang 为 DeepSeek Harness 提供的开源工具包：本地记忆、新手教程、安装工具和技能市场。MCP 工具只读取公开资料，不读取个人记忆，不执行安装或发布。
 
-产品支持 Windows、macOS 和 Linux。安装先在 DeepSeek Harness 新建任务并选择「创造模式」，再读取完整安装说明、逐项确认。工具包 MIT 开源；模型调用、服务器和第三方订阅由相应服务计费。
+产品支持 Windows、macOS 和 Linux。安装先在 DeepSeek Harness 新建任务并选择「创造模式」，再读取完整安装说明、逐项确认。工具包 MIT 开源；模型调用、服务器和第三方订阅由相应服务计费。已收录的工作流包括自媒体出海、变工程书、出片与云端分身；执行发生在用户授权的本地 Agent、Grok Bot 或 Muse，公开 MCP 只提供资料。
 
 ## Agent 接入
 
@@ -22,6 +22,12 @@
 - [最新 README](https://github.com/adsorgcn/DeepSeekHarness/blob/main/README.md): 当前仓库说明
 - [完整安装指南](https://github.com/adsorgcn/DeepSeekHarness/blob/main/一键安装.md): 安装步骤与验收
 - [新手起手式](https://github.com/adsorgcn/DeepSeekHarness/blob/main/dsh-新手起手式.md): 初次使用指南
+- [变工程书](https://dsh.ilang.guide/.dsh/skills/source-book/SKILL.md): 把攻略、链接或截图整理为工程书；写书与执行分开
+- [变工程书母版全文](https://dsh.ilang.guide/.github/bot/MOTHER-v2.9.ilang.md.gz): 服务解压并核对 SHA256 后返回 UTF-8 原文；[来源与校验值](https://dsh.ilang.guide/.github/bot/MOTHER.source.txt)
+- [出片](https://dsh.ilang.guide/.dsh/books/chupian/BOOK.md): 将出片书交给 Grok Bot 或 Muse，按用户审阅推进图像和视频制作
+- [出片执行正文](https://dsh.ilang.guide/.dsh/books/chupian/bot-chupian-book.md): 给 Grok Bot / Muse 的完整书，包含两份原书全文；[来源记录](https://dsh.ilang.guide/.dsh/books/chupian/SOURCE.json)、[IML-VEM v1.2.2](https://dsh.ilang.guide/.dsh/books/chupian/sources/IML-VEM-v1.2.2.md)、[AI-VIDEO-ONECMD v1.0](https://dsh.ilang.guide/.dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md)
+- [云端分身](https://dsh.ilang.guide/.dsh/books/fenshen/BOOK.md): 用户的电脑与 Grok Bot 共用私有工作仓库，用手机接续已配置的工作流
+- [云端分身执行正文](https://dsh.ilang.guide/.dsh/books/fenshen/bot-fenshen-book.md): 给 Grok Bot / Muse 的完整书；其引用的 AI 全球自媒体与出片书也在公开文档目录中
 - [国内指导站](https://ilang.cn/guide/dsh/): 国内分享与阅读入口
 - [迭代清单](https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md): 后续计划，不等同于已实现功能
 

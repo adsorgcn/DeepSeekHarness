@@ -1,4 +1,4 @@
-import { SITE_URL, RAW_ROOT, SERVER_VERSION, SUPPORTED_PROTOCOLS, DOCUMENTS, TOOLS, documentUrl, overview, createContentClient, ContentError } from './content.mjs';
+import { SITE_URL, RAW_ROOT, SERVER_VERSION, SUPPORTED_PROTOCOLS, DOCUMENTS, TOOLS, documentUrl, documentMimeType, overview, createContentClient, ContentError } from './content.mjs';
 
 const MODERN_PROTOCOL = '2026-07-28';
 const LEGACY_PROTOCOLS = SUPPORTED_PROTOCOLS.filter(version => version !== MODERN_PROTOCOL);
@@ -176,7 +176,7 @@ export function createHandler(fetcher = globalThis.fetch) {
           }
           break;
         }
-        case 'resources/list': result = { resources: DOCUMENTS.map(doc => ({ uri: `dsh://docs/${encodeURIComponent(doc.path)}`, name: doc.path, title: doc.title, mimeType: 'text/markdown' })) }; break;
+        case 'resources/list': result = { resources: DOCUMENTS.map(doc => ({ uri: `dsh://docs/${encodeURIComponent(doc.path)}`, name: doc.path, title: doc.title, mimeType: documentMimeType(doc.path) })) }; break;
         case 'resources/templates/list': result = { resourceTemplates: [] }; break;
         case 'resources/read': {
           const doc = DOCUMENTS.find(item => `dsh://docs/${encodeURIComponent(item.path)}` === params.uri);
@@ -229,7 +229,7 @@ export function createHandler(fetcher = globalThis.fetch) {
         const doc = DOCUMENTS.find(item => `/${item.path}` === path);
         if (doc) {
           const value = await content.getDocument(doc.path);
-          response = new Response(markdownForHttp(value.text, doc.path), { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } }); cache = true;
+          response = new Response(value.mimeType === 'text/markdown' ? markdownForHttp(value.text, doc.path) : value.text, { headers: { 'Content-Type': `${value.mimeType}; charset=utf-8` } }); cache = true;
         } else {
           // Fixed GitHub raw origin avoids recursion through the public Worker domain.
           // A deployment may replace STATIC_ORIGIN with another explicit HTTPS asset origin.

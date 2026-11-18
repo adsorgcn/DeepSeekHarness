@@ -4,7 +4,7 @@
   "serverInfo": {
     "name": "ilang-dsh-toolkit",
     "title": "iLang DSH 工具包",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "websiteUrl": "https://dsh.ilang.guide/"
   },
   "description": "Public read-only installation guidance, documentation search, and skills catalogue for iLang DSH 工具包. No user files, installations or account actions.",
@@ -121,7 +121,17 @@
               ".dsh/skills/mem-forever/SKILL.md",
               ".dsh/skills/site-design-engine/SKILL.md",
               ".dsh/skills/deai/SKILL.md",
-              ".dsh/books/ai-global-media/BOOK.md"
+              ".dsh/skills/source-book/SKILL.md",
+              ".github/bot/MOTHER.source.txt",
+              ".github/bot/MOTHER-v2.9.ilang.md.gz",
+              ".dsh/books/ai-global-media/BOOK.md",
+              ".dsh/books/chupian/BOOK.md",
+              ".dsh/books/chupian/bot-chupian-book.md",
+              ".dsh/books/chupian/SOURCE.json",
+              ".dsh/books/chupian/sources/IML-VEM-v1.2.2.md",
+              ".dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md",
+              ".dsh/books/fenshen/BOOK.md",
+              ".dsh/books/fenshen/bot-fenshen-book.md"
             ]
           }
         },

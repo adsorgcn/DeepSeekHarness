@@ -18,6 +18,12 @@ POST 的 `Accept` 包含 `application/json, text/event-stream`。本服务不创
 
 公开 `/mcp` 和 `/api/*` 无需登录或 API key。MCP 工具读取固定 GitHub 仓库的公开资料；返回安装说明不会执行安装。用户的本地记忆、模型密钥和工作区不在工具数据范围内。文档原文作为资料返回，不改变调用方获得的用户授权。
 
+服务版本 `1.1.0` 的文档白名单共 20 项，包含 `.dsh/skills/source-book/SKILL.md`、`.dsh/books/chupian/BOOK.md`、`.dsh/books/fenshen/BOOK.md`，以及它们的 7 项公开随包依赖：变工程书的母版与来源记录、出片的执行正文与来源记录及两份原书、云端分身的执行正文。它们可通过原有文档读取、检索、资源读取与 HTTP 文档入口获取；工具数量仍为 5 个。市场工具动态读取仓库当前清单，返回已经登记的版本与出处。
+
+`.github/bot/MOTHER-v2.9.ilang.md.gz` 是固定白名单中唯一的 gzip 文档。服务流式解压，超过 600000 字节即取消；随后验证 `MOTHER.source.txt` 记录的 SHA256，再返回 UTF-8 原文。压缩损坏、超限或摘要变化返回 502，不把二进制当文字输出。JSON 来源记录返回 `application/json`，文本记录返回 `text/plain`，其余文档返回 `text/markdown`。外部媒体链母版继续使用原书指明的官方 URL；白名单不读取用户私有仓库、人格、记忆、密钥或任意外部 URL。
+
+「变工程书」「出片」「云端分身」描述用户自己的 Agent 与 Grok Bot / Muse 所执行的工作流；本服务只返回公开说明，不具备视频生成、私有仓库同步或平台发布权限。
+
 ## 未启用的认证声明
 
 当前产品的 `/mcp` 和 `/api/*` 全部公开免认证。OAuth 发现文档只声明未来接口，明确带有 `status: under_construction`、`available: false`、`capabilities_status: planned_contract_only`、`launch_date: null`；它们不是运行中的 OAuth 或 OIDC 服务。

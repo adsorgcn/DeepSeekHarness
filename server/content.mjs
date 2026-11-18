@@ -2,7 +2,7 @@
 export const SITE_URL = 'https://dsh.ilang.guide';
 export const REPOSITORY = 'https://github.com/adsorgcn/DeepSeekHarness';
 export const RAW_ROOT = 'https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/';
-export const SERVER_VERSION = '1.0.0';
+export const SERVER_VERSION = '1.1.0';
 export const SUPPORTED_PROTOCOLS = Object.freeze(['2026-07-28', '2025-11-25', '2025-06-18']);
 export const DOCUMENTS = Object.freeze([
   { path: 'README.md', title: 'iLang DSH 工具包：概览与安装' },
@@ -14,8 +14,23 @@ export const DOCUMENTS = Object.freeze([
   { path: '.dsh/skills/mem-forever/SKILL.md', title: 'Mem-Forever 本地记忆技能' },
   { path: '.dsh/skills/site-design-engine/SKILL.md', title: 'Site Design Engine 技能' },
   { path: '.dsh/skills/deai/SKILL.md', title: 'deai 写作技能' },
+  { path: '.dsh/skills/source-book/SKILL.md', title: '变工程书：把攻略写成可执行工程书' },
+  { path: '.github/bot/MOTHER.source.txt', title: '变工程书母版：来源与原文校验值' },
+  { path: '.github/bot/MOTHER-v2.9.ilang.md.gz', title: '变工程书母版 v2.9：完整原文（解压读取）' },
   { path: '.dsh/books/ai-global-media/BOOK.md', title: 'AI 全球自媒体工程书' },
+  { path: '.dsh/books/chupian/BOOK.md', title: '出片：交给 Grok Bot 或 Muse 的图像与视频工作流' },
+  { path: '.dsh/books/chupian/bot-chupian-book.md', title: '出片：Grok Bot / Muse 完整执行正文' },
+  { path: '.dsh/books/chupian/SOURCE.json', title: '出片原书：来源、版本与校验值' },
+  { path: '.dsh/books/chupian/sources/IML-VEM-v1.2.2.md', title: '出片原书：IML-VEM v1.2.2' },
+  { path: '.dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md', title: '出片原书：AI-VIDEO-ONECMD v1.0' },
+  { path: '.dsh/books/fenshen/BOOK.md', title: '云端分身：私有仓库与手机接续工作' },
+  { path: '.dsh/books/fenshen/bot-fenshen-book.md', title: '云端分身：Grok Bot / Muse 完整执行正文' },
 ]);
+// This exact public compressed source is the mother named by source-book/SKILL.md.
+// Its uncompressed digest is recorded in the same repository's MOTHER.source.txt.
+const COMPRESSED_SOURCE_HASHES = Object.freeze({
+  '.github/bot/MOTHER-v2.9.ilang.md.gz': '20debddbb0b536eb1335495e3e8a15cf2989f164174f93c96909587efcab5503',
+});
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const schema = (properties = {}, required = []) => ({ type: 'object', properties, required, additionalProperties: false });
 export const TOOLS = Object.freeze([
@@ -30,10 +45,11 @@ export class ContentError extends Error {
   constructor(message, status = 502) { super(message); this.name = 'ContentError'; this.status = status; }
 }
 export const documentUrl = path => `${REPOSITORY}/blob/main/${path.split('/').map(encodeURIComponent).join('/')}`;
+export const documentMimeType = path => path.endsWith('.json') ? 'application/json' : path.endsWith('.txt') ? 'text/plain' : 'text/markdown';
 export function overview() {
   return {
     name: 'iLang DSH 工具包',
-    description: '面向 DeepSeek Harness 用户的开源工具包：本地记忆、新手教程、一键安装说明和技能库。',
+    description: '面向 DeepSeek Harness 用户的开源工具包：本地记忆、安装指引、技能与工程书，涵盖自媒体出海、变工程书、出片和云端分身。远程服务只读取这些公开资料。',
     website: `${SITE_URL}/`, repository: REPOSITORY, guide: 'https://ilang.cn/guide/dsh/',
     market: `${SITE_URL}/market/`, mcp: `${SITE_URL}/mcp`,
     capabilities: ['公开文档读取与检索', '按系统读取安装说明', '查询技能、工程书和插件目录'],
@@ -75,14 +91,36 @@ export function createContentClient(fetcher = globalThis.fetch) {
     catch { throw new ContentError(`Public source unavailable: ${path}`); }
     if (response.status >= 300 && response.status < 400) { await response.body?.cancel(); throw new ContentError(`Public source redirect rejected: ${path}`); }
     if (!response.ok) throw new ContentError(`Public source returned ${response.status}: ${path}`);
-    const text = await response.text();
+    let text;
+    if (Object.hasOwn(COMPRESSED_SOURCE_HASHES, path)) {
+      try {
+        const reader = response.body.pipeThrough(new DecompressionStream('gzip')).getReader();
+        const chunks = [];
+        let length = 0;
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            length += value.byteLength;
+            if (length > 600000) { await reader.cancel(); throw new Error('Document limit'); }
+            chunks.push(value);
+          }
+        } finally { reader.releaseLock(); }
+        const bytes = new Uint8Array(length);
+        let offset = 0;
+        for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+        const digest = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), byte => byte.toString(16).padStart(2, '0')).join('');
+        if (digest !== COMPRESSED_SOURCE_HASHES[path]) throw new Error('Digest mismatch');
+        text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+      } catch { throw new ContentError(`Public compressed source could not be verified: ${path}`); }
+    } else text = await response.text();
     if (text.length > 600000) throw new ContentError(`Public source exceeds document limit: ${path}`);
     return text;
   }
   async function getDocument(path) {
     validateArguments('dsh_get_document', { path });
     const doc = DOCUMENTS.find(item => item.path === path);
-    return { ...doc, url: documentUrl(path), mimeType: 'text/markdown', text: await fetchText(path) };
+    return { ...doc, url: documentUrl(path), mimeType: documentMimeType(path), text: await fetchText(path) };
   }
   async function installInstructions(platform = 'all') {
     validateArguments('dsh_install_instructions', { platform });
