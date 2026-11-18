@@ -1,0 +1,36 @@
+{
+  "note": "两本原书的正本。随书带着，一字不改；bot-chupian-book.md 里的 BOOK_VEM / BOOK_ONECMD 模块是它们缩进四格的原样副本。sha256 按 LF 算。",
+  "vem": {
+    "id": "IML-VEM",
+    "version": "1.2.2",
+    "file": "sources/IML-VEM-v1.2.2.md",
+    "sha256_lf": "07d20d2c64a73b311a1c57dc3913b9acda2b2eb969aeb42253954d5acaa5b117",
+    "post": "https://x.com/ai_chuhai/status/2113817133838713167",
+    "article": "https://x.com/i/article/2113795383507779584",
+    "author": "@ai_chuhai",
+    "published": "2026-10-24",
+    "shape": "X 文章里第 7 到 170 段的英文原文，标题、列表与表格按 Markdown 落下，词句未动"
+  },
+  "onecmd": {
+    "id": "AI-VIDEO-ONECMD",
+    "version": "1.0",
+    "file": "sources/AI-VIDEO-ONECMD-v1.0.md",
+    "sha256_lf": "f2bd57b3459819903e31efa4458e2b1b70276d70ff975d0ba7142100e9411b01",
+    "sha256_x_text": "e3da203a8bf4f9dd59d2f3ca46eb898d4a3a0638857a475e0fabe041e6ec1e8b",
+    "post": "https://x.com/ai_chuhai/status/2118812420521054659",
+    "structured_from": "https://x.com/i/article/2118298893238845441 (@EianLu, 2026-11-05)",
+    "author": "@ai_chuhai",
+    "published": "2026-11-06",
+    "shape": "X 回复里的原文，去掉首尾两行标记，把 X 压掉的换行放回，词句未动"
+  },
+  "media_chain_mother": {
+    "url": "https://raw.githubusercontent.com/ilang-ai/ilang-spec/main/products/media-chain/mother/MEDIA-CHAIN-MOTHER.ilang.md",
+    "sha256": "040481ffea57b1d40fb38dcbdb7a99e649aea65eb6fef802c9c70e051a373049",
+    "page": "https://ilang.ai/media-chain/"
+  },
+  "hand_book": {
+    "file": "bot-chupian-book.md",
+    "sha256_lf": "726b0717a4ca126c7987632f00968b8f303e8adcdf1449ec6d5dd18beaf77ee4"
+  },
+  "taken_on": "2026-11-18"
+}

@@ -42,7 +42,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-17"
+        "at": "2026-11-18"
       },
       "get": "kit"
     },
@@ -70,7 +70,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-17"
+        "at": "2026-11-18"
       },
       "get": "kit"
     },
@@ -102,7 +102,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-17"
+        "at": "2026-11-18"
       },
       "get": "kit"
     },
@@ -134,7 +134,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-17"
+        "at": "2026-11-18"
       },
       "get": "kit"
     },
@@ -162,12 +162,43 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-17"
+        "at": "2026-11-18"
       },
       "say": "AI全球自媒体",
       "get": "kit",
       "admitted_by": "@SUN",
       "admitted_on": "2026-11-10"
+    },
+    {
+      "kind": "book",
+      "name": "chupian",
+      "title": {
+        "zh": "出片",
+        "en": "Make the clip"
+      },
+      "description": {
+        "zh": "说一句「出片」，一句话或一张图，交给你的 Grok Bot 出图出视频，每一件成品都带着请求和判决",
+        "en": "Say one phrase: a sentence or a picture goes to your Grok Bot, which makes the images and the video, every file carrying its request and its judgment"
+      },
+      "version": "1.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/books/chupian/BOOK.md",
+      "procedure": ".dsh/books/chupian/BOOK.md",
+      "upstream": null,
+      "sha256_lf": "c2bcf31f407bd16903e41a7b1bc6aa79bb75045675d806b9d4cacb47ddd19a94",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "markers": 2,
+        "at": "2026-11-18"
+      },
+      "say": "出片",
+      "get": "kit",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-18"
     },
     {
       "kind": "plugin",

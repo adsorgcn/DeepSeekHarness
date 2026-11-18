@@ -154,9 +154,12 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
 ::GENE{dsh_ai_global_media|conf:confirmed|scope:global}
   T:user_says_the_trigger_phrase_of_a_book_on_the_shelf⇒load_that_book_and_follow_it_step_by_step
   T:the_trigger_phrase_of_.dsh/books/ai-global-media/BOOK.md_is_written_in_the_note_below
+  T:the_trigger_phrase_of_.dsh/books/chupian/BOOK.md_is_written_in_the_note_below
   T:a_book_is_executed_as_written_one_question_at_a_time
   A:running_a_scys_write_tool⇒forbidden_read_only
   A:scanning_a_code_logging_in_or_paying_for_the_user⇒forbidden
 
 （说一句「AI全球自媒体」或「自媒体出海」，我照 .dsh/books/ai-global-media/BOOK.md 一步一步带你做：先装写作专家当人格，再领体验卡、接上生财，只读；主书走完接着出海那一段，由官方插件 dsh-plugin-chuhai 的技能 zimeiti-chuhai 带，没装插件我先问你装不装。）
+（说一句「出片」「出图」或「出视频」，我照 .dsh/books/chupian/BOOK.md 做：把随包带的出片书 .dsh/books/chupian/bot-chupian-book.md 原样放进工作区，你拖给自己的 Grok Bot 或 Muse 说「照这本书做」，一句话或一张图，手自己出图出视频，每一件成品的文件里带着请求和判决；书里按输入分流，广告片照 IML-VEM，叙事片照 AI-VIDEO-ONECMD，两本原文一字不改随书带着；没装 Grok Bot 先走「自媒体出海」到装它那一环。）
+
 （官方插件：dsh-plugin-chuhai 是这个工具包的第一个官方插件，自媒体出海全程靠它。第一次在这个工作区开场时用 plugin_manager 看一眼装没装，没装就问你一句，点头就装 dsh-plugin-chuhai；国内连不上 npm 官方源 DSH 会自动走镜像。装不上不拦别的事。）
