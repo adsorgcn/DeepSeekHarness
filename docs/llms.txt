@@ -30,6 +30,7 @@
 - [云端分身执行正文](https://dsh.ilang.guide/.dsh/books/fenshen/bot-fenshen-book.md): 给 Grok Bot / Muse 的完整书；其引用的 AI 全球自媒体与出片书也在公开文档目录中
 - [SEM 与付费投流（AdsPilot）](https://dsh.ilang.guide/.dsh/books/adspilot-sem/BOOK.md): 在用户自有账号与机器上跑通合规的 SEM 联盟投放，从装机自检、凭据账本、Cloudflare 落地位、选品到 Google Ads 上线、无人值守日循环与 7 天校准；默认 dry-run，KYC、付款、申诉由用户完成
 - [一稿多发](https://dsh.ilang.guide/.dsh/books/yigaoduofa/BOOK.md): 一篇稿照每个平台的卡改成该平台的版本，用户点头进队列，到点由手发出去；只改平台外壳，不改观点、数字、标题
+- [爆文公式](https://dsh.ilang.guide/.dsh/books/baowen/BOOK.md): 专家写完稿之后的节奏自查，209 条标题与 15 篇正文量出来的要素、字数、金额、问句、段长、禁词与合规；合规和专家的结构压在公式上面
 - [一稿多发执行正文](https://dsh.ilang.guide/.dsh/books/yigaoduofa/bot-yigaoduofa-book.md): 给 Grok Bot 的书，到点照队列发，X 走官方接口，YouTube 先私密，公众号到草稿箱，发错的原样记一行
 - [安装指令全文（给 Agent）](https://ilang.cn/guide/dsh/install.md): 国际兜底 https://dsh.ilang.guide/install.md 是同一份。用户贴「帮我装 iLang DSH 工具包，照 https://ilang.cn/guide/dsh/install.md 做。」后，Agent 读这页一步一步装：先确认创造模式，取脚本，只检测，缺什么一样一样问，官方源装，问一次装不装插件，最后告诉用户怎么回来
 - [国内指导站](https://ilang.cn/guide/dsh/): 国内分享与阅读入口

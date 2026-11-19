@@ -149,13 +149,13 @@
         "zh": "说一句话，从装写作专家、接内容源、建知识库、出文章，一直带到公众号发出第一篇",
         "en": "Say one sentence: it installs the writing expert, connects the content source, builds your library, writes with your own voice and takes the first article to your WeChat Official Account"
       },
-      "version": "0.2.9",
+      "version": "0.2.10",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/ai-global-media/BOOK.md",
       "procedure": ".dsh/books/ai-global-media/BOOK.md",
       "upstream": null,
-      "sha256_lf": "b98fcdbb206028bafbdd31731a52ea411e3742fe78e93bb4134d22e099d13999",
+      "sha256_lf": "ba8e90cf8d5df33096c0d921dad172ef83c8d26293d4a0e79470f5ed18e0f6c4",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,
@@ -258,6 +258,37 @@
         "at": "2026-11-19"
       },
       "say": "一稿多发",
+      "get": "kit",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-19"
+    },
+    {
+      "kind": "book",
+      "name": "baowen",
+      "title": {
+        "zh": "爆文公式",
+        "en": "Viral-article rhythm check"
+      },
+      "description": {
+        "zh": "专家写完稿之后过的一道节奏自查，209 条出海爆文标题和 15 篇正文量出来的：标题命中 3 个要素、3000 到 5000 字、金额至少 4 次、问句至少 8 个、段落不超 3 句、禁词、合规；主书第四环自动过，也可以说一句「爆文公式」单独量一篇稿",
+        "en": "A rhythm check that runs after the expert writes, measured from 209 viral titles and 15 full articles: three title elements, 3000 to 5000 characters, at least four figures, at least eight questions, paragraphs of three sentences, no filler, compliance; the main book runs it in ring four, or say 爆文公式 to check one draft"
+      },
+      "version": "1.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/books/baowen/BOOK.md",
+      "procedure": ".dsh/books/baowen/BOOK.md",
+      "upstream": null,
+      "sha256_lf": "0b6eea9b27bac7004f976773b8fddf149ae95e187ed790127e16058a2779d073",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "markers": 2,
+        "at": "2026-11-19"
+      },
+      "say": "爆文公式",
       "get": "kit",
       "admitted_by": "@SUN",
       "admitted_on": "2026-11-19"

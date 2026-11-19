@@ -158,6 +158,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   T:the_trigger_phrase_of_.dsh/books/fenshen/BOOK.md_is_written_in_the_note_below
   T:the_trigger_phrase_of_.dsh/books/adspilot-sem/BOOK.md_is_written_in_the_note_below
   T:the_trigger_phrase_of_.dsh/books/yigaoduofa/BOOK.md_is_written_in_the_note_below
+  T:the_trigger_phrase_of_.dsh/books/baowen/BOOK.md_is_written_in_the_note_below
   T:a_book_is_executed_as_written_one_question_at_a_time
   A:running_a_scys_write_tool⇒forbidden_read_only
   A:scanning_a_code_logging_in_or_paying_for_the_user⇒forbidden
@@ -170,5 +171,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
 （说一句「SEM」或「付费投流」，我照 .dsh/books/adspilot-sem/BOOK.md 做：先看 dsh-memory 同级有没有克隆 AdsPilot 仓库，没有就克隆；装机自检、凭据进账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线、无人值守日循环、7 天校准，一环一环带你；脚本和 MCP 默认 dry-run，花钱要你在本机 config 里开 apply；KYC、绑卡付款、申诉三件你自己做，我不碰。装了官方插件 adspilot（npm）就多一个 sem 技能和 adspilot_book 分页读书工具，书每小时在线核一次新版。）
 
 （说一句「一稿多发」，或直接说「发到 X 和公众号」「明天发到所有平台」，我照 .dsh/books/yigaoduofa/BOOK.md 做：取你最近那篇成稿，照 publish/cards.md 每个平台的卡改成该平台的版本，只改排版、长度、标签、配图、链接、语言，不改观点、数字、标题、论证；每版先给你看，你说「发」才进队列；公众号我推草稿、你在后台点发布，X 和 YouTube 由你的 Grok Bot 到点走官方接口发（随包带的 .dsh/books/yigaoduofa/bot-yigaoduofa-book.md 给它），发完链接写回队列，发错的原样记一行；小红书、抖音、哔哩哔哩这些没接口的平台，版本先出好放 publish/outbox/，第二阶段由 Grok Bot 指挥 Muse 在它的真实浏览器里发。）
+
+（说一句「爆文公式」并给我一篇稿，我照 .dsh/books/baowen/BOOK.md 只做自查和改稿：数标题要素、字数、金额、问句、段长、禁词和合规，没过的改到过，结果一行一项和稿一起给你看；没给稿我请你先说「AI全球自媒体」让专家写。主书第四环写完稿也会自动过这一遍，专家的结构和合规在它上面。）
 
 （官方插件：dsh-plugin-chuhai 是这个工具包的第一个官方插件，自媒体出海全程靠它。第一次在这个工作区开场时用 plugin_manager 看一眼装没装，没装就问你一句，点头就装 dsh-plugin-chuhai；国内连不上 npm 官方源 DSH 会自动走镜像。装不上不拦别的事。）
