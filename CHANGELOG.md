@@ -6,6 +6,7 @@
 - 这个仓库第一个跑：tools/code_chain.py 三个命令，seal 用正典的 f_v5 算模式并过两个校验器后打印六行，check 从 git log 读回来数链、过校验器，show 看一个提交的链；tools/ilang_judge_validator.py 是正典判断校验器的副本；CI 加一步 check --since v1.1.52，先只数、只在链写错时失败
 - 从这一笔起本仓库的提交都带链；第一笔就是本次（见 git log -1 --format=%B）
 - 来源：2026-11-19 owner 拍「做 先在DSH自己的commit上跑」
+- 补：CI 的 checkout 改成取全历史（fetch-depth 0），不然门禁在 CI 里找不到 v1.1.52；首跑挂在这里，内容没错
 
 **v1.1.52** · 2026-11-19 · 爆文公式：专家写完稿之后的一道节奏自查，209 条标题与 15 篇正文量出来的
 
