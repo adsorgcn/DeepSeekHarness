@@ -258,3 +258,89 @@ footer a:focus-visible {
   .dispatch-targets li { gap: 8px; padding-inline: 9px; }
   .dispatch-targets svg { width: 20px; height: 20px; }
 }
+
+/* The install prompt is a single copyable sentence. */
+.start-section {
+  text-align: left;
+  padding-block: clamp(56px, 7vw, 100px);
+}
+
+.start-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: clamp(30px, 5vw, 72px);
+}
+
+.start-layout .section-heading { margin: 0; }
+.start-layout .section-heading h2 { margin-block: 12px 15px; line-height: 1.16; }
+.start-layout .section-heading p {
+  max-width: 25em;
+  font-size: 15px;
+  color: var(--dsh-caption);
+  text-wrap: balance;
+}
+.start-layout .section-heading .link { margin-top: 12px; }
+
+.start-layout .install-panel {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(20px, 2.6vw, 34px);
+  background: #fff;
+  border: 1px solid #cfdee3;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px #3e5e6f0b;
+}
+
+.start-layout .install-top {
+  align-items: baseline;
+  border: 0;
+  padding: 0;
+  gap: 12px;
+}
+
+.install-top label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #203b46;
+}
+
+.install-top > span { color: #506670; font-size: 12px; }
+
+.start-layout #install-command {
+  display: block;
+  margin: 14px 0 16px;
+  padding: 12px 14px;
+  min-height: 0;
+  border: 1px solid #dce6e9;
+  border-radius: 8px;
+  background: #f6f9fa;
+  color: #213b46;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+@supports (field-sizing: content) {
+  .start-layout #install-command { field-sizing: content; }
+}
+
+.install-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; }
+.install-actions .button { inline-size: 10.5rem; max-inline-size: 100%; min-height: 44px; justify-content: center; }
+.start-layout .link { display: inline-flex; align-items: center; min-height: 44px; color: var(--dsh-action); }
+.start-layout .link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+@media (max-width: 800px) {
+  .start-layout { grid-template-columns: 1fr; gap: 22px; max-width: 620px; }
+  .start-layout .section-heading h2 br { display: none; }
+  .start-layout .section-heading p { max-width: none; }
+  .start-layout .section-heading .link { margin-top: 2px; }
+}
+
+@media (max-width: 480px) {
+  .start-layout { gap: 16px; }
+  .start-layout .install-panel { padding: 18px 15px; }
+  .start-layout .install-top > span { font-size: 11px; }
+  .start-layout #install-command { font-size: 15px; padding: 10px 12px; }
+  .start-layout .section-heading h2 { font-size: 32px; }
+}

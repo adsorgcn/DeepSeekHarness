@@ -79,7 +79,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="landing.css?v=20261118.1">
   <link rel="stylesheet" href="platforms.css?v=20261118.1">
-  <link rel="stylesheet" href="redesign.css?v=20261119">
+  <link rel="stylesheet" href="redesign.css?v=20261119&amp;rev=1147">
   <script src="landing.js?v=20261118.1" defer></script>
   <link rel="alternate" type="text/markdown" href="https://dsh.ilang.guide/llms-full.txt">
   <link rel="api-catalog" href="https://dsh.ilang.guide/.well-known/api-catalog">
@@ -246,7 +246,27 @@
 }</code></pre><p>适用于支持此格式的远程 MCP 客户端。</p></details><div class="mcp-example"><span>连接后，可以这样问</span><p>“查一下 iLang DSH 的云端分身工程书。”</p><small>服务返回公开说明，执行由你的本地 Agent 按授权完成。</small></div></div>
   </div></section>
 
-  <section class="start-section" id="start" aria-labelledby="start-title"><div class="wrap"><div class="section-heading" data-reveal><span class="eyebrow">从这一句话开始</span><h2 id="start-title">选创造模式。<br>粘贴，点头。</h2><p>安装 DeepSeek Harness 后，新开一个任务，<br>选择「创造模式」，把这一句交给它。</p></div><div class="install-panel" data-reveal><div class="install-top"><div><span class="live-dot"></span> iLang DSH 工具包 <small>Windows · macOS · Linux</small></div><button type="button" class="button button-dark" data-copy-target="install-command"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制安装指令</span></button></div><label for="install-command" class="sr-only">安装指令</label><textarea id="install-command" readonly spellcheck="false" rows="2">帮我装 iLang DSH 工具包，照 https://dsh.ilang.guide/install.md 做。</textarea><div class="install-foot"><span>按系统选择安装方式 · 软件从官方源获取 · 逐项确认</span><a href="https://www.deepseek.com/harness/" target="_blank" rel="noopener">先下载 DSH <span aria-hidden="true">↗</span></a></div></div></div></section>
+  <section class="start-section" id="start" aria-labelledby="start-title">
+    <div class="wrap start-layout">
+      <div class="section-heading" data-reveal>
+        <span class="eyebrow">安装工具包</span>
+        <h2 id="start-title">选创造模式，<br>贴这一句。</h2>
+        <p>在 DeepSeek Harness 新开任务，粘贴指令后，按提示逐项确认。</p>
+        <a class="link" href="https://www.deepseek.com/harness/" target="_blank" rel="noopener">先下载 DeepSeek Harness <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="install-panel" data-reveal>
+        <div class="install-top">
+          <label for="install-command">安装指令</label>
+          <span>Windows · macOS · Linux</span>
+        </div>
+        <textarea id="install-command" readonly spellcheck="false" rows="2">帮我装 iLang DSH 工具包，照 https://dsh.ilang.guide/install.md 做。</textarea>
+        <div class="install-actions">
+          <button type="button" class="button button-dark" data-copy-target="install-command" data-copy-name="安装指令"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制安装指令</span></button>
+          <a class="link" href="install.md">阅读安装说明 <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="section wrap faq-section" id="faq" aria-labelledby="faq-title"><div><span class="eyebrow">开始前，你可能想知道</span><h2 id="faq-title">几件事，<br>说清楚。</h2><a class="link" href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/dsh-新手起手式.md" target="_blank" rel="noopener">阅读起手式 <span aria-hidden="true">↗</span></a></div><div class="faq-list">
     <details><summary>工具包和 DeepSeek Harness 是什么关系？<span>＋</span></summary><p>DeepSeek Harness 是 DeepSeek 的桌面 Agent 工具。iLang DSH 工具包是 iLang 为它提供的开源工具包，接入本地记忆、安装工具、技能和内容工作流。</p></details>
