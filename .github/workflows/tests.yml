@@ -46,3 +46,5 @@ jobs:
         run: python -X utf8 tools/brain.py instructions check
       - name: Brain check
         run: python -X utf8 tools/brain.py check
+      - name: code-chain gate (counts since v1.1.52, fails only on an invalid chain)
+        run: python -X utf8 tools/code_chain.py check --since v1.1.52
