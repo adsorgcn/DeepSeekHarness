@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.51** · 2026-11-19 · 国内优先，国际兜底：那一句指向 ilang.cn，脚本先走 gitee
+
+- 那一句改成「帮我装 iLang DSH 工具包，照 https://ilang.cn/guide/dsh/install.md 做。」，README、首页、一键安装.md、llms.txt、agent-skills 卡同一句；https://dsh.ilang.guide/install.md 是同一份，国际兜底。install.md 1.2 写明国内优先国际兜底，ilang.cn 打不开就读国际那份
+- bootstrap.ps1 与 bootstrap.sh 的自动探测改成国内镜像优先：先探 gitee，不通再 GitHub；-Source 强制参数不变
+- MCP 安装说明工具 1.3.2：bootstrap 的 url 给 gitee、mirror 给 GitHub，guide 指 ilang.cn 那份；openapi、well-known 版本同步
+- 来源：2026-11-19 owner 说「dsh 优先国内镜像 比如 ilang.cn 国际的兜底 毕竟 dsh 是中文产品」
+
 **v1.1.50** · 2026-11-19 · 第三个国内镜像：腾讯 CNB，三处镜像随 GitHub 发版自动同步
 
 - mirror-sync 加 cnb.cool/ilang/DeepSeekHarness 一步；Gitee 与 CNB 的令牌已进仓库密钥，Gitee 镜像从 11-18 的 92b0758 追平到当前 main，CNB 从空仓一次性推平（本地克隆原来是浅的，CNB 不收浅推送，取全历史后才推上）
