@@ -1,6 +1,6 @@
-name: Mirror to GitCode and Gitee
-# Every push to main and every v* tag is pushed on to the two China mirrors, so a release on GitHub is a release on
-# GitCode and Gitee in the same minute. A mirror whose token is not set is skipped, not failed. Plain pushes only:
+name: Mirror to GitCode, Gitee and CNB
+# Every push to main and every v* tag is pushed on to the three China mirrors, so a release on GitHub is a release on
+# GitCode, Gitee and CNB in the same minute. A mirror whose token is not set is skipped, not failed. Plain pushes only:
 # a mirror that has diverged makes this job fail and a person looks, nothing is force-pushed.
 on:
   push:
@@ -34,3 +34,12 @@ jobs:
           if [ "$GITHUB_REF_TYPE" = "branch" ]; then git push "$url" HEAD:refs/heads/main; fi
           git push "$url" --tags
           echo "Gitee: main and tags pushed from $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: CNB (ilang/DeepSeekHarness)
+        env:
+          TOKEN: ${{ secrets.CNB_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then echo "CNB_TOKEN is not set; skipped" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          url="https://cnb:${TOKEN}@cnb.cool/ilang/DeepSeekHarness.git"
+          if [ "$GITHUB_REF_TYPE" = "branch" ]; then git push "$url" HEAD:refs/heads/main; fi
+          git push "$url" --tags
+          echo "CNB: main and tags pushed from $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
