@@ -79,6 +79,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="landing.css?v=20261118.1">
   <link rel="stylesheet" href="platforms.css?v=20261118.1">
+  <link rel="stylesheet" href="redesign.css?v=20261119">
   <script src="landing.js?v=20261118.1" defer></script>
   <link rel="alternate" type="text/markdown" href="https://dsh.ilang.guide/llms-full.txt">
   <link rel="api-catalog" href="https://dsh.ilang.guide/.well-known/api-catalog">
@@ -109,7 +110,7 @@
     </div></header>
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <a class="release-note" href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/CHANGELOG.md" target="_blank" rel="noopener"><span class="live-dot"></span> 新增「出片」与「云端分身」 <span aria-hidden="true">↗</span></a>
+        <a class="release-note" href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/CHANGELOG.md" target="_blank" rel="noopener"><span class="live-dot"></span> 新增「一稿多发」与 AdsPilot <span aria-hidden="true">↗</span></a>
         <h1 id="hero-title">让你的 AI，<br>接着把事做完。</h1>
         <p>给 DeepSeek Harness 装上记忆、技能和内容工作流。<br>从电脑上的一个想法，到随时接续的出海工作室。</p>
         <div class="hero-actions"><button class="button button-dark" type="button" data-copy-target="install-command"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制安装指令</span></button><a class="hero-secondary" href="#demo">看看它怎么工作 <span aria-hidden="true">↓</span></a></div>
@@ -138,7 +139,25 @@
       <article class="memory-feature" id="memory" data-reveal><div class="feature-copy"><span class="feature-index">01 / 本地记忆</span><h3>窗口关了，<br>进度还在。</h3><p>习惯、决定和任务进度写进本地工作区。重新打开，从上次的下一步继续。</p><p class="memory-ledger">钥匙也在：每扇门一行账本，值静态编码，门要在你这台机器上开，先由你点一次头。</p></div><div class="memory-art" aria-label="工作区记忆文件示意"><div class="memory-orbit"></div><div class="memory-core"><img src="favicon.svg" width="44" height="44" alt=""><span>你的工作区</span></div><div class="memory-file mf-a"><img src="assets/official/markdown.svg" width="29" height="29" alt=""><div>MEMORY.md<small>习惯与决定</small></div></div><div class="memory-file mf-b"><img src="assets/official/markdown.svg" width="29" height="29" alt=""><div>CURRENT.md<small>下一步做什么</small></div></div><div class="memory-file mf-c"><span>✓</span><div>记忆已接续<small>换个窗口，继续</small></div></div></div><span class="feature-foot">Mem-Forever · 你能看、能改的本地文件</span></article>
       <article class="book-feature" data-reveal><div class="feature-copy"><span class="feature-index">02 / 可执行工程书</span><h3>看见好方法，<br>就把它变成能力。</h3><p>交一篇攻略、一个链接或一张截图，说「变工程书」。下次说「照这本书做」，让 Agent 按步骤推进。</p></div><div class="book-art" aria-label="从教程到可执行工程书的流程示意"><div class="source-note"><span>你的素材</span><div class="note-line"></div><div class="note-line"></div><div class="note-line short"></div><span class="source-icons"><img src="assets/official/pdf.svg" width="25" height="25" alt="PDF"><img src="assets/official/word.svg" width="25" height="25" alt="文档"><span>↗</span></span></div><span class="convert-arrow" aria-hidden="true">→</span><div class="book-page"><span class="book-brand">iLang</span><strong>BOOK.md</strong><div><i>01</i> 目标与素材</div><div><i>02</i> 执行步骤</div><div><i>03</i> 结果验收</div><span class="book-check">可交给 Agent 执行</span></div></div><a class="feature-foot link" href="market/">探索 source-book 与技能市场 <span aria-hidden="true">↗</span></a></article>
     </div>
-    <article class="official-feature" data-reveal><div class="official-copy"><span class="feature-index">03 / 工具与技能</span><h3>需要的能力，<br>接进同一个工作区。</h3><p>DSH 提供插件和工具底座，iLang 工具包把记忆、写作、工程书与内容工作流组织起来。安装前逐项确认，从官方源获取。</p><p class="market-note">内置技能与工程书，装了工具包就有；两个官方插件从 npm 装。市场里的收录顺序就是显示顺序。</p><div class="skill-tags"><span>mem-forever</span><span>deai</span><span>source-book</span><span>site-design-engine</span></div><div class="skill-tags"><span>插件 dsh-plugin-chuhai</span><span>插件 adspilot</span></div><a class="link" href="https://www.deepseek.com/harness/" target="_blank" rel="noopener">了解 DeepSeek Harness <span aria-hidden="true">↗</span></a></div><figure class="official-visual"><img src="assets/official/feat-plugins-zh.webp" alt="DeepSeek Harness 官网的插件管理界面" width="2590" height="1619" loading="lazy"><figcaption>DeepSeek Harness 官方界面 · 素材来自官网</figcaption></figure></article>
+    <article class="official-feature" data-reveal>
+      <div class="official-copy">
+        <span class="feature-index">03 / 工具与技能</span>
+        <h3>需要的能力，<br>接进同一个工作区。</h3>
+        <p>4 个内置技能、5 本工程书，装了工具包就有。两个官方插件从 npm 装，安装前逐项确认。</p>
+        <div class="tool-inventory">
+          <div><span>技能</span><ul><li>mem-forever</li><li>deai</li><li>source-book</li><li>site-design-engine</li></ul></div>
+          <div><span>插件</span><ul><li>dsh-plugin-chuhai</li><li>adspilot</li></ul></div>
+        </div>
+        <p class="market-note">技能市场的收录顺序就是显示顺序。</p>
+        <a class="link" href="https://www.deepseek.com/harness/" target="_blank" rel="noopener">了解 DeepSeek Harness <span aria-hidden="true">↗</span></a>
+      </div>
+      <figure class="official-visual"><img src="assets/official/feat-plugins-zh.webp" alt="DeepSeek Harness 官网的插件管理界面" width="2590" height="1619" loading="lazy"><figcaption>DeepSeek Harness 官方界面 · 素材来自官网</figcaption></figure>
+      <aside class="ads-track" id="adspilot" aria-labelledby="ads-title">
+        <div class="ads-name"><span>AdsPilot</span><h4 id="ads-title">SEM 与付费投流</h4></div>
+        <p>说「SEM」或「付费投流」，在自己的机器与账号上从环境自检走到 Google Ads 系列上线与日常投放，默认先模拟运行（dry-run）。</p>
+        <a class="link" href="https://dsh.ilang.guide/market/" target="_blank" rel="noopener">查看插件 <span aria-hidden="true">↗</span></a>
+      </aside>
+    </article>
   </section>
 
   <section class="workflow-section" id="journey" aria-labelledby="journey-title"><div class="wrap">
@@ -147,6 +166,22 @@
       <article class="story-card" data-reveal><div class="story-art article-art" aria-label="图文草稿示意"><div class="editor-sheet"><span class="editor-kicker">DRAFT / 你的下一篇内容</span><div class="editor-cover"><span>让积累<br>成为作品。</span><div class="cover-circle"></div></div><span class="editor-title">从一个想法，开始出发</span><div class="editor-lines"><i></i><i></i><i></i></div><div class="editor-status"><span class="live-dot"></span> 已保存草稿 · 等你审阅</div></div></div><div class="story-copy"><span class="command-tag">说「自媒体出海」</span><h3>从素材，到公众号草稿。</h3><p>整理知识库，形成写作画像，完成文章与配图。你完成登录、授权和审阅，最后决定何时发布。</p></div></article>
       <article class="story-card" id="muse-railway" data-reveal><div class="story-art video-art" aria-label="图像与视频工作流示意"><div class="video-frame"><div class="video-sun"></div><div class="video-ridge ridge-back"></div><div class="video-ridge ridge-front"></div><span class="video-play" aria-hidden="true">▶</span><div class="video-caption">从一句话，到一个画面。</div><div class="video-timeline"><i></i></div><span class="video-tag">画面示意</span></div><div class="render-chip"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> 请求 · 成品 · 验收记录</div></div><div class="story-copy"><span class="command-tag">说「出片」</span><h3>图和视频，交给你的 Bot。</h3><p>把一句话或一张图交给 Grok Bot 或 Muse，生成图或视频。每件成品保留请求与验收记录。</p><p><strong>Muse 开一台 Railway 免费云服务器</strong>（插件 v0.3.3 工程书 B13，已测通）。Grok Bot 跑在 xAI 云上，无需另配服务器。</p></div></article>
       <article class="story-card" data-reveal><div class="story-art twin-art" aria-label="手机与私有工作区连接示意"><div class="twin-cloud"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><span>同一个私有工作区</span></div><div class="sync-line" aria-hidden="true"><i></i></div><div class="phone-shell"><div class="phone-island"></div><span class="phone-title">我的云端分身</span><div class="phone-message">出文</div><div class="phone-reply">读取工作区，<br>接着上次的素材继续。</div><div class="phone-message">出片</div><span class="phone-bottom">在路上，也能继续。</span></div></div><div class="story-copy"><span class="command-tag">说「云端分身」</span><h3>离开电脑，工作接得上。</h3><p>授权后，把工作区放进私有仓库，配置你的 Grok Bot 分身。手机上发口令，成品回到同一个工作区。</p></div></article>
+      <article class="story-card distribution" id="syndication" aria-labelledby="distribution-title" data-reveal>
+        <div class="story-copy">
+          <span class="command-tag">说「一稿多发」</span>
+          <h3 id="distribution-title">一篇稿，<br>发到不同平台。</h3>
+          <p>按各个平台的规则改写，你点头后各版入队，到点由手发出。</p>
+        </div>
+        <div class="dispatch-map" role="group" aria-label="各平台的发送方式">
+          <div class="dispatch-source"><strong>原稿</strong><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
+          <div class="dispatch-branch" aria-hidden="true"></div>
+          <ul class="dispatch-targets">
+            <li><svg class="mark-wechat" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/platforms/platforms.svg#p-wechat"/></svg><div><strong>微信公众号</strong><small>推草稿，由你点发布</small></div></li>
+            <li><svg class="mark-x" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/platforms/platforms.svg#p-x"/></svg><div><strong>X</strong><small>走官方接口</small></div></li>
+            <li><svg class="mark-youtube" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/platforms/platforms.svg#p-youtube"/></svg><div><strong>YouTube</strong><small>先私密，由你点公开</small></div></li>
+          </ul>
+        </div>
+      </article>
     </div>
   </div></section>
 
@@ -201,7 +236,7 @@
   </section>
 
   <section class="section wrap agent-section" id="mcp" aria-labelledby="mcp-title"><div class="agent-grid">
-    <div class="agent-copy" data-reveal><span class="eyebrow">也为你的 Agent 准备好了</span><h2 id="mcp-title">接上 MCP，<br>从官方资料开始。</h2><p>让 Agent 查安装方法、找技能、读取工程书。「变工程书」「出片」「云端分身」「一稿多发」「SEM 与付费投流」的公开说明，也在同一套入口里。</p><a class="ready-badge" href="https://isitagentready.com/dsh.ilang.guide" target="_blank" rel="noopener" aria-label="Agent Ready 100分，查看实测结果"><img src="assets/agent-ready-100.svg" width="222" height="32" alt="Agent Ready 100/100"></a><span class="score-note">Level 5 · Agent-Native<br>默认 All Checks · 2026.11.18 实测</span><a class="link" href="agents/">完整接入文档与工具清单 <span aria-hidden="true">↗</span></a></div>
+    <div class="agent-copy" data-reveal><span class="eyebrow">也为你的 Agent 准备好了</span><h2 id="mcp-title">接上 MCP，<br>从官方资料开始。</h2><p>Agent 可用 5 个只读工具查阅 23 项公开资源，包括安装方法、技能和工程书。<span class="query-name">「变工程书」</span><span class="query-name">「出片」</span><span class="query-name">「云端分身」</span><span class="query-name">「一稿多发」</span><span class="query-name">「SEM 与付费投流」</span>的公开说明，也在同一套入口里。</p><a class="ready-badge" href="https://isitagentready.com/dsh.ilang.guide" target="_blank" rel="noopener" aria-label="Agent Ready 100分，查看实测结果"><img src="assets/agent-ready-100.svg" width="222" height="32" alt="Agent Ready 100/100"></a><span class="score-note">Level 5 · Agent-Native<br>默认 All Checks · 2026.11.18 实测</span><a class="link" href="agents/">完整接入文档与工具清单 <span aria-hidden="true">↗</span></a></div>
     <div class="mcp-card" data-reveal><div class="mcp-heading"><span class="mcp-glyph" aria-hidden="true">⌘</span><div><h3>iLang DSH MCP</h3><p>公开只读 · 无需账号或 API Key</p></div><span class="mcp-status"><i class="live-dot"></i> 可连接</span></div><label for="mcp-endpoint">远程 MCP 地址</label><div class="endpoint-field"><input id="mcp-endpoint" value="https://dsh.ilang.guide/mcp" readonly spellcheck="false"><button type="button" class="copy-mini" data-copy-target="mcp-endpoint" aria-label="复制 MCP 地址"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制</span></button></div><dl class="mcp-settings"><div><dt>传输方式</dt><dd>Streamable HTTP</dd></div><div><dt>认证方式</dt><dd>无（None）</dd></div></dl><details class="mcp-config"><summary>使用 JSON 配置 <span aria-hidden="true">＋</span></summary><div class="code-top"><span>mcpServers</span><button type="button" class="copy-mini" data-copy-target="mcp-json" aria-label="复制 MCP JSON 配置"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制配置</span></button></div><pre><code id="mcp-json">{
   "mcpServers": {
     "ilang-dsh": {
