@@ -7,6 +7,7 @@
 - 货架 book baowen（say 爆文公式）；AGENTS.local 口令说明；README 第五本与 MCP 24 项；起手式一行；MCP 服务 1.3.3 白名单加这本（24 项），openapi、well-known、llms.txt、agents 页同步，线上 Worker 重新部署
 - 数据来源：owner 2026-11-18 用 Apify 拉公众号得到；拉取数 143 篇与书里 209 条标题的口径由 owner 定，书里按 209/15 写
 - 来源：2026-11-19 owner 贴来草稿说「你看看」，拍「改」
+- 货架：plugin 条目钉 dsh-plugin-chuhai 0.3.5（随带主书 0.2.10 与爆文公式那本，目录工具多报一行它在哪），index.json 顶部加 0.3.5，市场页由构建器从登记表重画；来源：2026-11-19 owner 拍「弄完」
 
 **v1.1.51** · 2026-11-19 · 国内优先，国际兜底：那一句指向 ilang.cn，脚本先走 gitee
 

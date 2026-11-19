@@ -340,22 +340,22 @@
         "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V、装 Grok Bot 并把第一本书交给它，再给它配手脚（邮箱、Gmail、InstaBox 免费云主机、Muse、Railway、家宽 IP、YouTube 频道）。",
         "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account, Premium, and Grok Bot with its first book and its hands (a mailbox, Gmail, an InstaBox machine, Muse, Railway, a home IP, a YouTube channel)."
       },
-      "version": "0.3.4",
+      "version": "0.3.5",
       "author": "ilang",
       "license": "MIT",
       "manifest": "skills/zimeiti-chuhai.md",
       "procedure": "skills/zimeiti-chuhai.md",
       "upstream": {
         "repo": "https://github.com/adsorgcn/dsh-plugin-chuhai",
-        "commit": "aa466d4c3a73affa091f1e3cde2d09d401498787",
-        "tag": "v0.3.4"
+        "commit": "4ac6a98c4bc118735612e2d483119174398ae38a",
+        "tag": "v0.3.5"
       },
       "npm": {
         "name": "dsh-plugin-chuhai",
-        "version": "0.3.4",
-        "integrity": "sha512-T+W2yg0iwF/J0s/CxND6Scft9iS1zOvJCbEmvCDk8Uf84+f0HvByeMGmn12DVgopB4KKt4W5KHbC/ssbKKa91g==",
-        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.3.4.tgz",
-        "publishedAt": "2026-11-19T05:46:39.536Z"
+        "version": "0.3.5",
+        "integrity": "sha512-LL4PBbhnt6h1L1oYok0H94MDPW402TXEacugjDYRNepaoh1cD2G15PgLQFDdnVxyQMmOxKnU7ImI2BP7OIOi6g==",
+        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.3.5.tgz",
+        "publishedAt": "2026-11-19T12:05:47.888Z"
       },
       "validated": {
         "tool": "npm test",
