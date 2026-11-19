@@ -119,7 +119,7 @@ test('installation response preserves README prompt and does not execute the scr
   const data = await response.json();
   const readme = await readFile(new URL('README.md', root), 'utf8');
   assert.ok(readme.includes(`> ${data.prompt}`));
-  assert.match(data.prompt, /创造模式/);
+  assert.match(data.prompt, /dsh\.ilang\.guide\/install\.md/);
   assert.equal(data.bootstrap.length, 1);
   assert.ok(data.bootstrap[0].url.endsWith('/bootstrap.ps1'));
   assert.equal(data.executesInstallation, false);

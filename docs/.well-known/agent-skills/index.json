@@ -6,7 +6,7 @@
       "type": "skill-md",
       "description": "Plan an iLang DSH toolkit installation for Windows, macOS or Linux using the official instructions and explicit local approval.",
       "url": "https://dsh.ilang.guide/.well-known/agent-skills/dsh-install/SKILL.md",
-      "digest": "sha256:319193162b4a4c598a79ded0e7cdfe6eeaa58c582d4cbee620084cf2b0165dc9"
+      "digest": "sha256:82f5f1fdfa923e0495e83259a7f564eba212b4ba99e39df344bb1378a425acbe"
     },
     {
       "name": "dsh-docs",

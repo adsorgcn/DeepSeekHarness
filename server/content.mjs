@@ -2,7 +2,7 @@
 export const SITE_URL = 'https://dsh.ilang.guide';
 export const REPOSITORY = 'https://github.com/adsorgcn/DeepSeekHarness';
 export const RAW_ROOT = 'https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/';
-export const SERVER_VERSION = '1.3.0';
+export const SERVER_VERSION = '1.3.1';
 export const SUPPORTED_PROTOCOLS = Object.freeze(['2026-07-28', '2025-11-25', '2025-06-18']);
 export const DOCUMENTS = Object.freeze([
   { path: 'README.md', title: 'iLang DSH 工具包：概览与安装' },
@@ -128,13 +128,13 @@ export function createContentClient(fetcher = globalThis.fetch) {
   async function installInstructions(platform = 'all') {
     validateArguments('dsh_install_instructions', { platform });
     const readme = await getDocument('README.md');
-    const prompt = readme.text.split(/\r?\n/).find(line => line.startsWith('> 帮我把 https://github.com/adsorgcn/DeepSeekHarness '))?.slice(2);
+    const prompt = readme.text.split(/\r?\n/).find(line => line.startsWith('> 帮我装 iLang DSH 工具包'))?.slice(2);
     if (!prompt) throw new ContentError('The installation prompt is missing from the current README; read the installation guide instead.');
     const systems = platform === 'all' ? ['windows', 'macos', 'linux'] : [platform];
     return { platform, prompt, bootstrap: systems.map(system => {
       const file = system === 'windows' ? 'bootstrap.ps1' : 'bootstrap.sh';
       return { platform: system, url: `${RAW_ROOT}${file}`, mirror: `https://gitee.com/monetize/DeepSeekHarness/raw/main/${file}` };
-    }), guide: documentUrl('一键安装.md'), source: readme.url, requiresUserApproval: true, executesInstallation: false };
+    }), guide: `${SITE_URL}/install.md`, source: readme.url, requiresUserApproval: true, executesInstallation: false };
   }
   async function listSkills() {
     let registry, index;
