@@ -1,8 +1,8 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:CHUPIAN-BOT-BOOK]
-[VERSION:1.4]
-[DATE:2026-11-18]
+[VERSION:1.5]
+[DATE:2026-11-19]
 [LANG:zh]
 
 ::FACT{context|conf:confirmed}
@@ -62,12 +62,13 @@
   [STEP] 1 每次出图出视频调用的原件留在 chupian/takes/ 最终成片和交付的每一张关键图 各作一个版本进 chupian/series/<系列ID>/ 照母版 VERSION 模块 写 GEN 行 算 JUDGE 块 GEN 行写用户要的那件成品 原件能封就封进文件 成片是 ffmpeg 从几个 take 剪出来的不是生成器原件 一律用 sidecar 再加一行 FACT 写明它由哪几个 take 剪成 平台已签名的文件照母版只用 sidecar 没签名的原件能嵌就嵌 门禁读得到 c2patool 0.29.0 的嵌入
   [STEP] 2 系列文档记每个版本 用户的原话进 DECIDE 行 一字不改
   [STEP] 3 有工具就跑母版 @CANON 的门禁 0 失败才算 没工具就把系列文档和每个 sidecar 的文本各放一个代码块交给用户
-::MODULE{REPORT|title:交片回六行}
-  [LINE] CLIP-READY 系列 ID 走的哪条路
+::MODULE{REPORT|title:交片回六行 每行开头的标签照抄}
+  [NOTE] 六行 一行一项 每行开头的标签一个字不改 标签后面才是你的内容 瑕疵和剩余另起一段写在六行之后 不混进六行
+  [LINE] CLIP-READY 系列 ID 走的哪条路 IMG 或 VID_VEM 或 VID_ONECMD
   [LINE] 成品 时长 分辨率 帧率 文件名 图的时长和帧率写 none
-  [LINE] 版本数 最后一版用户说了什么
-  [LINE] 花了多少 调用了几次
-  [LINE] 门禁结果 或 没工具 文本已交
+  [LINE] 版本 版本数 最后一版用户说了什么 原话
+  [LINE] 花费 花了多少 调用了几次
+  [LINE] 门禁 结果 PASS 或 FAIL 或 没工具 文本已交
   [LINE] S=0.00
 ::MODULE{BOOK_VEM|title:IML-VEM v1.2.2 原文 一字不改}
   T:下面缩进四个空格的每一行是原文 来源 https://x.com/ai_chuhai/status/2113817133838713167 所引的 X 文章 2113795383507779584
