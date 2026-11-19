@@ -1,7 +1,7 @@
 html.dsh-external-browser{overflow:hidden!important;background:#fbfaf7!important}
 html.dsh-external-browser body{visibility:hidden!important;margin:0!important}
 html.dsh-external-browser body>:not(#dsh-external-browser-guard){display:none!important}
-#dsh-external-browser-guard{visibility:visible!important;display:block!important;position:fixed;inset:0;z-index:2147483647;overflow:auto;background:#fbfaf7;color:#24232c;font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;text-align:center;box-sizing:border-box}
+#dsh-external-browser-guard{visibility:visible!important;display:block!important;position:fixed;inset:0;z-index:2147483647;overflow:auto;background:#fbfaf7;color:#24232c;font-family:var(--font-ui, system-ui),sans-serif;text-align:center;box-sizing:border-box}
 #dsh-external-browser-guard *{box-sizing:border-box}
 #dsh-external-browser-guard [hidden]{display:none!important}
 .dsh-external-browser-inner{max-width:420px;margin:0 auto;padding:clamp(105px,20vh,180px) 25px 40px}

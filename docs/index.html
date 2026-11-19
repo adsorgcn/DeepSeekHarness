@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <link rel="stylesheet" href="external-browser.css?v=20261113">
+  <link rel="preload" href="assets/fonts/noto-sans-sc-ui.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="external-browser.css?v=20261119.1">
   <script src="external-browser.js?v=20261113"></script>
   <meta name="theme-color" content="#eefaff">
   <meta name="description" content="iLang DSH 工具包是面向 DeepSeek Harness 用户的开源工具包，提供本地记忆、内容工作流、出片、云端分身与公开 MCP 接入。复制安装指令、逐项确认，让新窗口接着上次的进度工作。支持 Windows、macOS 和 Linux。">
@@ -77,9 +78,10 @@
   }
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="landing.css?v=20261118.1">
+  <link rel="stylesheet" href="landing.css?v=20261119.1">
   <link rel="stylesheet" href="platforms.css?v=20261118.1">
-  <link rel="stylesheet" href="redesign.css?v=20261119&amp;rev=1147">
+  <link rel="stylesheet" href="typography.css?v=20261119.1">
+  <link rel="stylesheet" href="redesign.css?v=20261119.2">
   <script src="landing.js?v=20261118.1" defer></script>
   <link rel="alternate" type="text/markdown" href="https://dsh.ilang.guide/llms-full.txt">
   <link rel="api-catalog" href="https://dsh.ilang.guide/.well-known/api-catalog">
@@ -112,7 +114,7 @@
       <div class="hero-copy">
         <a class="release-note" href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/CHANGELOG.md" target="_blank" rel="noopener"><span class="live-dot"></span> 新增「一稿多发」与 AdsPilot <span aria-hidden="true">↗</span></a>
         <h1 id="hero-title">让你的 AI，<br>接着把事做完。</h1>
-        <p>给 DeepSeek Harness 装上记忆、技能和内容工作流。<br>从电脑上的一个想法，到随时接续的出海工作室。</p>
+        <p>给 DeepSeek Harness 装上记忆、技能和<span class="keep-phrase">内容工作流。</span><br>从电脑上的一个想法，到随时接续的<span class="keep-phrase">出海工作室。</span></p>
         <div class="hero-actions"><button class="button button-dark" type="button" data-copy-target="install-command"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制安装指令</span></button><a class="hero-secondary" href="#demo">看看它怎么工作 <span aria-hidden="true">↓</span></a></div>
         <span class="hero-platforms">Windows · macOS · Linux <i></i> 免费开源</span>
       </div>

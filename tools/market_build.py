@@ -13,6 +13,8 @@
 """
 import argparse
 import datetime
+from html import escape
+from urllib.parse import quote
 import hashlib
 import io
 import json
@@ -163,68 +165,106 @@ def fill_meta(reg, write):
     return changed
 
 
-def source_html(e):
-    up = e.get("upstream")
-    if not up:
-        return "—"
-    html = '<a href="%s" target="_blank" rel="noopener">%s</a>' % (up["repo"], up["repo"])
+def external_link(url, label):
+    return '<a href="%s" target="_blank" rel="noopener">%s</a>' % (escape(url, quote=True), escape(label))
+
+
+def meta_field(label, value_html):
+    return "<div><dt>%s</dt><dd>%s</dd></div>" % (label, value_html)
+
+
+def entry_source(e):
+    up = e.get("upstream") or {}
+    fields = [
+        meta_field("作者", escape(e["author"])),
+        meta_field("许可", escape(e["license"])),
+    ]
+    if e["kind"] != "plugin":
+        fields.append(meta_field("工具包文件", external_link(
+            "https://github.com/adsorgcn/DeepSeekHarness/blob/main/" + quote(e["manifest"]),
+            e["manifest"])))
+    if up.get("repo"):
+        fields.append(meta_field("上游仓库", external_link(up["repo"], up["repo"].removeprefix("https://github.com/"))))
     if up.get("doi"):
-        html += ' · <a href="https://doi.org/%s" target="_blank" rel="noopener">%s</a>' % (up["doi"], up["doi"])
+        fields.append(meta_field("DOI", external_link("https://doi.org/" + up["doi"], up["doi"])))
     if up.get("tag"):
-        html += " · %s" % up["tag"]
+        fields.append(meta_field("版本标签", external_link(
+            up["repo"] + "/tree/" + quote(up["tag"], safe=""), up["tag"])))
     if up.get("commit"):
-        html += ' · <span title="%s">%s</span>' % (up["commit"], up["commit"][:12])
-    return html
+        fields.append(meta_field("来源提交", external_link(
+            up["repo"] + "/commit/" + up["commit"], up["commit"])))
+    if e.get("npm"):
+        npm = e["npm"]
+        fields.append(meta_field("npm 包", external_link(
+            "https://www.npmjs.com/package/" + quote(npm["name"]), npm["name"])))
+        fields.append(meta_field("npm integrity", '<code>%s</code>' % escape(npm["integrity"])))
+    elif e.get("sha256_lf"):
+        fields.append(meta_field("SHA-256 · LF", '<code>%s</code>' % escape(e["sha256_lf"])))
+    return "\n".join(fields)
 
 
-def skill_rows(reg):
-    rows = []
-    for e in [x for x in reg["entries"] if x.get("kind") == "skill"]:
-        sha = e.get("sha256_lf", "") or ""
-        rows.append(
-            '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
-            '<div class="m-meta">%s · %s · %s · %s · <span title="%s">%s</span></div></div>'
-            % (e["name"], e["description"]["zh"], e["version"], e["author"], e["license"],
-               source_html(e), sha, sha[:12])
-        )
-    return "\n".join(rows)
-
-
-def book_rows(reg):
-    rows = []
-    for e in [x for x in reg["entries"] if x.get("kind") == "book"]:
-        sha = e.get("sha256_lf", "") or ""
-        say = e.get("say", "")
-        say_html = ("说一句「%s」 · " % say) if say else ""
-        rows.append(
-            '<div class="m-row"><div class="m-name">%s</div><div class="m-desc">%s</div>'
-            '<div class="m-meta">%s%s · %s · %s · %s · <span title="%s">%s</span></div></div>'
-            % (e["title"]["zh"], e["description"]["zh"], say_html, e["version"], e["author"], e["license"],
-               source_html(e), sha, sha[:12])
-        )
-    return "\n".join(rows)
+def catalog_rows(reg, kind):
+    cards = []
+    display_names = {"site-design-engine": "网站设计", "deai": "写作去 AI 味"}
+    for e in reg["entries"]:
+        if e["kind"] != kind:
+            continue
+        name = escape(e["name"], quote=True)
+        title = escape(display_names.get(e["title"]["zh"], e["title"]["zh"]))
+        say = e.get("say")
+        description = e["description"]["zh"]
+        invocation = ""
+        if say:
+            lead = re.match(r"^(说一句「[^」]+」(?:或「[^」]+」)*)[，,]\s*", description)
+            if lead:
+                command = lead.group(1)
+                description = description[lead.end():]
+            else:
+                command = "说一句" + "或".join("「%s」" % word for word in say.split(" / "))
+            invocation = '\n  <p class="invocation">%s</p>' % escape(command)
+        identifier = '<span class="identifier">%s</span>' % name if title != name else ""
+        cards.append(f'''<article class="entry" id="entry-{name}" data-kind="{kind}">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>{title}</h3>{identifier}</div>
+    <span class="version" aria-label="版本 {escape(e['version'])}">v{escape(e['version'])}</span>
+  </header>
+  <p class="entry-description">{escape(description)}</p>{invocation}
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · {title}</span></summary>
+    <dl class="entry-meta">{entry_source(e)}</dl>
+  </details>
+</article>''')
+    return "\n".join(cards)
 
 
 def books_region(reg):
-    """market:books 标记之间的内容：有行态（行区 + 一句用法）或空态（一句话，不带数量词）。"""
-    rows = book_rows(reg)
+    rows = catalog_rows(reg, "book")
     if rows:
-        return ("\n" + rows + "\n"
-                '    <p class="after">装了工具包就有。说出那句话，它照着书一步一步带你做。</p>')
-    return '\n    <p class="after">过了门、owner 说收的工程书放在这里，装了工具包就有。</p>'
+        return ('<div class="entries">%s</div>\n' % rows
+                + '<p class="section-note">工程书装了工具包就有，说出卡片上的口令即可开始。</p>')
+    return '<p class="section-note">收录的工程书装了工具包就有。</p>'
 
 
 def render_page(reg):
     text = io.open(INDEX_HTML, encoding="utf-8").read()
-    a, b = "<!-- market:skills -->", "<!-- /market:skills -->"
-    c, d = "<!-- market:books -->", "<!-- /market:books -->"
-    for x, y in ((a, b), (c, d)):
-        if x not in text or y not in text:
-            raise ValueError("index.html 缺少 %s 标记" % x)
-    text = re.sub(re.escape(a) + r".*?" + re.escape(b),
-                  lambda _m: a + "\n" + skill_rows(reg) + "\n    " + b, text, flags=re.S)
-    text = re.sub(re.escape(c) + r".*?" + re.escape(d),
-                  lambda _m: c + books_region(reg) + "\n    " + d, text, flags=re.S)
+    categories = (("skills", "skill", "内置技能"), ("books", "book", "工程书"), ("plugins", "plugin", "官方插件"))
+    nav = []
+    for section, kind, label in categories:
+        count = sum(e["kind"] == kind for e in reg["entries"])
+        nav.append(f'<a href="#{section}">{label}<span class="count">{count}</span></a>')
+    regions = {
+        "nav": "\n".join(nav),
+        "skills": catalog_rows(reg, "skill"),
+        "books": books_region(reg),
+        "plugins": catalog_rows(reg, "plugin"),
+    }
+    for name, content in regions.items():
+        start, end = f"<!-- market:{name} -->", f"<!-- /market:{name} -->"
+        if text.count(start) != 1 or text.count(end) != 1 or text.index(start) >= text.index(end):
+            raise ValueError("index.html 缺少成对的 %s 标记" % name)
+        text = re.sub(re.escape(start) + r".*?" + re.escape(end),
+                      lambda _m: start + "\n" + content + "\n" + end, text, flags=re.S)
     return text
 
 

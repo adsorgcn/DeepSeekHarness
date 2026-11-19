@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/inter-latin-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  src: url("./assets/fonts/noto-sans-sc-ui.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Noto Sans SC Common";
+  src: url("./assets/fonts/noto-sans-sc-common.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+4E00-9FFF;
+}
+
+:root {
+  --font-ui: "Inter", "Noto Sans SC", "Noto Sans SC Common", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans SC", "Noto Sans SC Common", monospace;
+  font-family: var(--font-ui);
+  font-optical-sizing: auto;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-code);
+}

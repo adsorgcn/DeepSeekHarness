@@ -4,230 +4,370 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <link rel="stylesheet" href="../external-browser.css?v=20261113">
-  <script src="../external-browser.js?v=20261113"></script>
-  <meta name="theme-color" content="#f5f5f7">
-  <meta name="description" content="iLang DSH 市场：过了门的技能和工程书原样内置在工具包里，装了就有。清单过官方校验器 strict 0 错 0 警告，钉版本，带来源。收录顺序就是显示顺序。">
-  <title>iLang DSH 市场｜过了门的，装了工具包就有</title>
+  <meta name="theme-color" content="#eff5f2">
+  <title>技能市场 · iLang DSH 工具包</title>
+  <meta name="description" content="查阅 iLang DSH 工具包内置的技能、可执行工程书与官方 npm 插件。每个条目附有用法、固定版本及来源。">
   <link rel="canonical" href="https://dsh.ilang.guide/market/">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:site_name" content="iLang DSH 工具包">
-  <meta property="og:title" content="iLang DSH 市场｜进这个市场只有一条门：iLang。">
-  <meta property="og:description" content="过了门的技能和工程书原样内置在工具包里，装了就有：清单过官方校验器，钉版本，带来源。收录顺序就是显示顺序。">
+  <meta property="og:title" content="技能市场 · iLang DSH 工具包">
+  <meta property="og:description" content="按用途查找内置技能、可执行工程书和官方插件，查看口令、版本与来源。">
   <meta property="og:url" content="https://dsh.ilang.guide/market/">
   <meta property="og:image" content="https://dsh.ilang.guide/assets/social-preview.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="iLang DSH 市场：进这个市场只有一条门：iLang。">
+  <meta property="og:image:alt" content="iLang DSH 工具包">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="iLang DSH 市场｜进这个市场只有一条门：iLang。">
-  <meta name="twitter:description" content="过了门的技能和工程书原样内置在工具包里，装了就有：清单过官方校验器，钉版本，带来源。收录顺序就是显示顺序。">
+  <meta name="twitter:title" content="技能市场 · iLang DSH 工具包">
+  <meta name="twitter:description" content="浏览内置技能、可执行工程书和官方插件。">
   <meta name="twitter:image" content="https://dsh.ilang.guide/assets/social-preview.png">
-  <meta name="twitter:image:alt" content="iLang DSH 市场：进这个市场只有一条门：iLang。">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <style>
-:root {
-  --paper: #fff;
-  --mist: #f5f5f7;
-  --ink: #1d1d1f;
-  --quiet: #606064;
-  --note: #6e6e73;
-  --line: #d2d2d7;
-  --blue: #0071e3;
-  --link: #0066cc;
-  --sans: "SF Pro SC", "PingFang SC", "Noto Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
-  --mono: "SFMono-Regular", Consolas, "Liberation Mono", "PingFang SC", "Microsoft YaHei", monospace;
-  color-scheme: light;
-}
-*, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 84px; }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
-a { color: inherit; text-decoration: none; }
-a:focus-visible, button:focus-visible { outline: 3px solid #2997ff; outline-offset: 3px; }
-::selection { background: #c2e0ff; color: #1d1d1f; }
-h1, h2, p { margin: 0; }
-.wrap { width: min(1080px, calc(100% - 96px)); margin-inline: auto; }
-.skip { position: fixed; top: -80px; left: 16px; z-index: 20; padding: 10px 16px; background: var(--paper); color: var(--ink); }
-.skip:focus { top: 12px; }
-.mast { position: sticky; top: 0; z-index: 10; background: rgb(255 255 255 / .96); border-bottom: 1px solid #e6e6e8; }
-.header-inner { display: flex; align-items: center; gap: 34px; min-height: 58px; }
-.brand { display: inline-flex; align-items: center; gap: 9px; color: var(--ink); white-space: nowrap; }
-.brand img { display: block; width: 28px; height: 28px; }
-.brand-name { font: 550 19px/1.3 var(--sans); letter-spacing: -.01em; }
-.nav { display: flex; align-items: center; gap: 29px; margin-left: auto; }
-.nav a, .repo { font-weight: 450; font-size: 13px; line-height: 26px; color: #515154; }
-.nav a:hover, .nav a[aria-current="location"], .repo:hover { color: var(--link); }
-.repo { display: inline-flex; align-items: center; gap: 5px; padding-left: 24px; border-left: 1px solid #dedee2; }
-.hero { background: var(--mist); padding: clamp(64px, 8.5vh, 108px) 0 52px; text-align: center; }
-.hero h1 { font-size: clamp(34px, 4.4vw, 60px); font-weight: 550; line-height: 1.3; letter-spacing: -.023em; text-wrap: balance; }
-.hero p { margin: 16px auto 0; max-width: 34em; color: var(--quiet); font-size: 17px; line-height: 1.75; text-wrap: balance; }
-section.block { padding: clamp(64px, 7vw, 96px) 0; }
-.section-label { display: block; color: var(--quiet); font: 500 16px/1.4 var(--sans); letter-spacing: .012em; }
-h2 { margin: 26px 0 22px; font-size: clamp(28px, 3.1vw, 42px); font-weight: 550; line-height: 1.3; letter-spacing: -.02em; text-wrap: balance; }
-.m-rows { border-top: 1px solid var(--line); }
-.m-row { display: grid; grid-template-columns: minmax(140px, 220px) 1fr; gap: 4px 28px; padding: 18px 0; border-bottom: 1px solid #ececef; }
-.m-name { font-weight: 600; font-size: 17px; overflow-wrap: anywhere; }
-.m-desc { color: var(--quiet); font-size: 16px; line-height: 1.6; }
-.m-meta { grid-column: 2; color: var(--note); font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
-.m-meta a { color: var(--link); }
-.m-meta a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.after { margin-top: 20px; color: var(--quiet); font-size: 16px; line-height: 1.75; }
-.code { display: block; width: min(640px, 100%); margin: 18px 0 0; padding: 14px 18px; background: var(--mist); border: 1px solid #dcdce1; border-radius: 14px; color: #4c4c50; font: 400 14px/1.7 var(--mono); overflow-wrap: anywhere; }
-.gates { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.gates li { display: flex; gap: 14px; padding: 15px 0; border-bottom: 1px solid #ececef; color: #515154; font-size: 16px; line-height: 1.7; }
-.gates li b { color: var(--ink); font-weight: 600; white-space: nowrap; }
-.veto { margin-top: 18px; color: var(--quiet); font-size: 16px; line-height: 1.75; }
-.author-action { margin-top: 22px; color: var(--quiet); font-size: 16px; line-height: 1.75; }
-.author-action a { color: var(--link); }
-.author-action a:hover { text-decoration: underline; text-underline-offset: 3px; }
-footer { padding: 43px 0; color: var(--quiet); background: var(--mist); }
-.footer-links { display: flex; flex-wrap: wrap; gap: 15px 26px; }
-.footer-links a { color: #424245; font-size: 13px; }
-.footer-links a:hover, .doi:hover { color: var(--link); text-decoration: underline; }
-footer p { margin: 20px 0 10px; font-size: 12px; }
-.doi { display: inline-flex; align-items: center; border: 1px solid #c5c5cb; color: #56565b; border-radius: 3px; font: 12px/1.7 var(--mono); }
-.doi span { padding: 0 6px; }
-.doi span:first-child { border-right: 1px solid #c5c5cb; }
-.entered { animation: appear .45s ease-out both; }
-@keyframes appear { from { opacity: .35; transform: translateY(7px); } to { opacity: 1; transform: none; } }
-@media (max-width: 900px) { .wrap { width: calc(100% - 56px); } }
-@media (max-width: 720px) {
-  html { scroll-padding-top: 68px; }
-  .wrap { width: calc(100% - 40px); }
-  .header-inner { min-height: 52px; justify-content: space-between; gap: 12px; }
-  .brand img { width: 24px; height: 24px; }
-  .brand-name { font-size: 16px; }
-  .nav { display: none; }
-  .repo { padding-left: 0; border: 0; font-size: 12px; }
-  .hero { padding: 52px 0 40px; }
-  .hero h1 { font-size: clamp(28px, 7.4vw, 40px); }
-  section.block { padding: 56px 0; }
-  h2 { font-size: clamp(24px, 6.4vw, 34px); }
-  .m-row { grid-template-columns: 1fr; gap: 4px; }
-  .m-meta { grid-column: 1; }
-  footer { padding: 33px 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-}
-  </style>
+  <meta name="twitter:image:alt" content="iLang DSH 工具包">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preload" href="../assets/fonts/noto-sans-sc-ui.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../typography.css?v=20261119.1">
+  <link rel="stylesheet" href="market.css?v=20261119.1">
+  <link rel="stylesheet" href="../external-browser.css?v=20261119.1">
+  <script src="../external-browser.js?v=20261113"></script>
 </head>
 <body>
   <a href="#main" class="skip">跳到正文</a>
   <header class="mast">
-    <div class="wrap header-inner">
-      <a class="brand" href="../" aria-label="iLang DSH 工具包首页">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNTYiPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjEyIiBmaWxsPSIjMGIwZjFhIi8+PHJlY3QgeD0iMS41IiB5PSIxLjUiIHdpZHRoPSI2MSIgaGVpZ2h0PSI2MSIgcng9IjEwLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0YTg1OCIgc3Ryb2tlLXdpZHRoPSIuNiIgb3BhY2l0eT0iLjU1Ii8+PHBhdGggZD0iTTE4IDE3IEwxMyAxNyBMMTMgNDcgTDE4IDQ3IiBmaWxsPSJub25lIiBzdHJva2U9IiNkNGExNTgiIHN0cm9rZS13aWR0aD0iMi44Ii8+PHBhdGggZD0iTTQ2IDE3IEw1MSAxNyBMNTEgNDcgTDQ2IDQ3IiBmaWxsPSJub25lIiBzdHJva2U9IiNkNGE1NzAiIHN0cm9rZS13aWR0aD0iMi44Ii8+PHBhdGggZD0iTTE2IDQ3IEwyNCAzMSBMMzIgNDcgTTQ4IDQ3IEw0MCAzMSBMMzIgNDciIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0YTU4MSIgc3Ryb2tlLXdpZHRoPSIyLjgiLz48L3N2Zz4=" alt="iLang DSH 工具包标志">
-        <span class="brand-name">iLang DSH 工具包</span>
-      </a>
-      <nav class="nav" aria-label="页面导航">
-        <a href="../#memory">记忆体</a><a href="../#tutorial">新手教程</a><a href="../#install">一键安装</a><a href="../#skills">技能库</a><a href="./" aria-current="location">市场</a><a href="../#say">那句话</a>
+    <div class="wrap topbar">
+      <a class="brand" href="../" aria-label="iLang DSH 工具包首页"><img src="../favicon.svg" width="32" height="32" alt=""><span>iLang <strong>DSH 工具包</strong></span></a>
+      <nav class="main-nav" aria-label="主导航">
+        <a href="../#features">工具能力</a>
+        <a href="../#journey">内容工作流</a>
+        <a href="../#mcp">MCP 接入</a>
+        <a href="./" aria-current="page">技能市场</a>
       </nav>
-      <a class="repo" href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="top-action" href="../#start">安装工具包</a>
     </div>
   </header>
+
   <main id="main">
-    <section class="hero">
-      <div class="wrap">
-        <h1>进这个市场只有一条门：iLang。</h1>
-        <p>每一条都过官方校验器，钉版本，带来源。过了门的，原样内置在工具包里，装了就有。收录顺序就是显示顺序。</p>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="shelf-sign" aria-hidden="true"><i></i></span><span lang="en">DSH / MARKET</span></div>
+          <h1 id="page-title">技能市场</h1>
+          <p>查找内置技能、工程书和官方插件。<br class="hero-break">每项都附有用法、版本和来源。</p>
+          <a class="hero-action" href="#catalog">浏览目录</a>
+        </div>
+        <div class="library-art" role="img" aria-label="三册封面分别对应记忆体技能、出片工程书和自媒体出海插件。">
+          <div class="volumes" aria-hidden="true">
+            <div class="volume vol-memory">
+              <div class="jacket">
+                <span class="imprint" lang="en">DSH / SKILL</span><b>记忆体</b>
+                <span class="cover-art orbital"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                <span class="press">iLang</span>
+              </div>
+            </div>
+            <div class="volume vol-film">
+              <div class="jacket">
+                <span class="imprint" lang="en">DSH / BOOK</span><b>出片</b>
+                <span class="cover-art frames"><i></i><i></i><i></i><i></i><i></i></span>
+                <span class="press">iLang</span>
+              </div>
+            </div>
+            <div class="volume vol-world">
+              <div class="jacket">
+                <span class="imprint" lang="en">DSH / PLUGIN</span><b>自媒体<br>出海</b>
+                <span class="cover-art globe"><i></i><i></i><i></i></span>
+                <span class="press">iLang</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="block">
-      <div class="wrap">
-        <span class="section-label">技能（随工具包）</span>
-        <h2>工具包自带的技能，都在这里。</h2>
-        <!-- market:skills -->
-<div class="m-row"><div class="m-name">mem-forever</div><div class="m-desc">窗口关了，进度还在</div><div class="m-meta">3.2.0 · ilang-ai · MIT · <a href="https://github.com/ilang-ai/Mem-Forever" target="_blank" rel="noopener">https://github.com/ilang-ai/Mem-Forever</a> · <a href="https://doi.org/10.5281/zenodo.22865160" target="_blank" rel="noopener">10.5281/zenodo.22865160</a> · <span title="0260bc06890604afa0d21b07d30d655b6bc8b409dc38b5b473e9bcd2a3b35d35">0260bc068906</span></div></div>
-<div class="m-row"><div class="m-name">site-design-engine</div><div class="m-desc">把门面做到获奖级</div><div class="m-meta">2.1.0 · ai_chuhai · MIT · — · <span title="0be2adf61c7a33ca3c9ca1448e14c6cd7299096099dee28c7e33801192afc73c">0be2adf61c7a</span></div></div>
-<div class="m-row"><div class="m-name">deai</div><div class="m-desc">去 AI 味，像你自己写的</div><div class="m-meta">1.6.0 · ilang-ai · MIT · <a href="https://github.com/adsorgcn/DEAI" target="_blank" rel="noopener">https://github.com/adsorgcn/DEAI</a> · <a href="https://doi.org/10.5281/zenodo.24028757" target="_blank" rel="noopener">10.5281/zenodo.24028757</a> · v1.6.0 · <span title="cdec34412a45a95f3328e17c294631431188adc56e168f25ed2e81a0dccfce9d">cdec34412a45</span></div></div>
-<div class="m-row"><div class="m-name">source-book</div><div class="m-desc">看见攻略，说一句「变工程书」，变成 AI 能照着执行的工程书</div><div class="m-meta">2.9 · ilang-ai · MIT · <a href="https://github.com/ilang-ai/ilang-spec" target="_blank" rel="noopener">https://github.com/ilang-ai/ilang-spec</a> · <a href="https://doi.org/10.5281/zenodo.21821452" target="_blank" rel="noopener">10.5281/zenodo.21821452</a> · v5.0.14 · <span title="fae5be9c30fa66701cd735562cbc100d5c37ed3f50f31a4a5a03d82ada71bf94">fae5be9c30fa</span></div></div>
-    <!-- /market:skills -->
-        <p class="after">装了工具包就有。更新：把 iLang DSH 工具包的引擎更新到最新，不要动我的记忆。</p>
+    <nav class="catalog-bar" id="catalog" aria-label="市场目录">
+      <div class="wrap category-links">
+        <!-- market:nav -->
+<a href="#skills">内置技能<span class="count">4</span></a>
+<a href="#books">工程书<span class="count">5</span></a>
+<a href="#plugins">官方插件<span class="count">2</span></a>
+<!-- /market:nav -->
+        <a class="author-link" href="#admission">收录规则</a>
       </div>
-    </section>
+    </nav>
 
-    <section class="block">
-      <div class="wrap">
-        <span class="section-label">工程书（随工具包）</span>
-        <h2>过了门的工程书，装了工具包就有。</h2>
-        <!-- market:books -->
-<div class="m-row"><div class="m-name">AI全球自媒体</div><div class="m-desc">说一句话，从装写作专家、接内容源、建知识库、出文章，一直带到公众号发出第一篇</div><div class="m-meta">说一句「AI全球自媒体」 · 0.2.9 · ilang-ai · MIT · — · <span title="b98fcdbb206028bafbdd31731a52ea411e3742fe78e93bb4134d22e099d13999">b98fcdbb2060</span></div></div>
-<div class="m-row"><div class="m-name">出片</div><div class="m-desc">说一句「出片」，一句话或一张图，交给你的 Grok Bot 出图出视频，每一件成品都带着请求和判决</div><div class="m-meta">说一句「出片」 · 1.6 · ilang-ai · MIT · — · <span title="b38ed3ab6810f71429d870141cee49e28f69a57613da9b8a21acc45fc796477a">b38ed3ab6810</span></div></div>
-<div class="m-row"><div class="m-name">云端分身</div><div class="m-desc">说一句「云端分身」，工作区进私有仓库，分身书交给你的 Grok Bot，出门用手机说「出文」「出片」「发到 YouTube」，改的是同一个仓库；勾一下，它每天到点自己出文、自己盯公众号后台的反馈</div><div class="m-meta">说一句「云端分身」 · 1.2 · ilang-ai · MIT · — · <span title="f358414bf81308a760f4d3ea8049ec34b22078943aa84f2fc1f05d4e420435ee">f358414bf813</span></div></div>
-<div class="m-row"><div class="m-name">一稿多发</div><div class="m-desc">说一句「一稿多发」，一篇稿照每个平台的卡改成该平台的版本，你点头进队列，到点由手发出去：公众号推草稿你点发布，X 走官方接口，YouTube 先私密；发错的原样记一行</div><div class="m-meta">说一句「一稿多发」 · 1.0 · ilang-ai · MIT · — · <span title="14be70ad70d79239a6f483d38ccccbbd4746861c9252ca4c9478b718c9f28c21">14be70ad70d7</span></div></div>
-<div class="m-row"><div class="m-name">SEM 与付费投流（AdsPilot）</div><div class="m-desc">说一句「SEM」或「付费投流」，从环境自检、凭据账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线到无人值守日循环与 7 天校准，全程在你自己账号和机器跑通。</div><div class="m-meta">说一句「SEM」 · 2.2.0 · adsorgcn · MIT · <a href="https://github.com/adsorgcn/AdsPilot" target="_blank" rel="noopener">https://github.com/adsorgcn/AdsPilot</a> · <span title="04536fe5970713074d7fd353c62317652a625e17">04536fe59707</span> · <span title="cf2d789e0a38331500d3faee7b6c855f2619444130196deb8244ff4493cb8346">cf2d789e0a38</span></div></div>
-    <p class="after">装了工具包就有。说出那句话，它照着书一步一步带你做。</p>
-    <!-- /market:books -->
-      </div>
-    </section>
+    <div class="wrap catalog-body">
+      <section class="catalog-section skill-section" id="skills" aria-labelledby="skills-heading">
+        <div class="section-head">
+          <span class="section-en" lang="en">SKILLS</span><h2 id="skills-heading">内置技能</h2>
+          <p>装了工具包就有。让 DSH 记住进度、设计网页，或把文章改得更像你写的。</p>
+        </div>
+        <div class="section-body">
+          <div class="entries skill-grid">
+<!-- market:skills -->
+<article class="entry" id="entry-mem-forever" data-kind="skill">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>记忆体</h3><span class="identifier">mem-forever</span></div>
+    <span class="version" aria-label="版本 3.2.0">v3.2.0</span>
+  </header>
+  <p class="entry-description">窗口关了，进度还在</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 记忆体</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang-ai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/skills/mem-forever/MARKET.md" target="_blank" rel="noopener">.dsh/skills/mem-forever/MARKET.md</a></dd></div>
+<div><dt>上游仓库</dt><dd><a href="https://github.com/ilang-ai/Mem-Forever" target="_blank" rel="noopener">ilang-ai/Mem-Forever</a></dd></div>
+<div><dt>DOI</dt><dd><a href="https://doi.org/10.5281/zenodo.22865160" target="_blank" rel="noopener">10.5281/zenodo.22865160</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>0260bc06890604afa0d21b07d30d655b6bc8b409dc38b5b473e9bcd2a3b35d35</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-site-design-engine" data-kind="skill">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>网站设计</h3><span class="identifier">site-design-engine</span></div>
+    <span class="version" aria-label="版本 2.1.0">v2.1.0</span>
+  </header>
+  <p class="entry-description">把门面做到获奖级</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 网站设计</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ai_chuhai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/skills/site-design-engine/SKILL.md" target="_blank" rel="noopener">.dsh/skills/site-design-engine/SKILL.md</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>0be2adf61c7a33ca3c9ca1448e14c6cd7299096099dee28c7e33801192afc73c</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-deai" data-kind="skill">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>写作去 AI 味</h3><span class="identifier">deai</span></div>
+    <span class="version" aria-label="版本 1.6.0">v1.6.0</span>
+  </header>
+  <p class="entry-description">去 AI 味，像你自己写的</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 写作去 AI 味</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang-ai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/skills/deai/SKILL.md" target="_blank" rel="noopener">.dsh/skills/deai/SKILL.md</a></dd></div>
+<div><dt>上游仓库</dt><dd><a href="https://github.com/adsorgcn/DEAI" target="_blank" rel="noopener">adsorgcn/DEAI</a></dd></div>
+<div><dt>DOI</dt><dd><a href="https://doi.org/10.5281/zenodo.24028757" target="_blank" rel="noopener">10.5281/zenodo.24028757</a></dd></div>
+<div><dt>版本标签</dt><dd><a href="https://github.com/adsorgcn/DEAI/tree/v1.6.0" target="_blank" rel="noopener">v1.6.0</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>cdec34412a45a95f3328e17c294631431188adc56e168f25ed2e81a0dccfce9d</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-source-book" data-kind="skill">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>变工程书</h3><span class="identifier">source-book</span></div>
+    <span class="version" aria-label="版本 2.9">v2.9</span>
+  </header>
+  <p class="entry-description">看见攻略，说一句「变工程书」，变成 AI 能照着执行的工程书</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 变工程书</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang-ai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/skills/source-book/SKILL.md" target="_blank" rel="noopener">.dsh/skills/source-book/SKILL.md</a></dd></div>
+<div><dt>上游仓库</dt><dd><a href="https://github.com/ilang-ai/ilang-spec" target="_blank" rel="noopener">ilang-ai/ilang-spec</a></dd></div>
+<div><dt>DOI</dt><dd><a href="https://doi.org/10.5281/zenodo.21821452" target="_blank" rel="noopener">10.5281/zenodo.21821452</a></dd></div>
+<div><dt>版本标签</dt><dd><a href="https://github.com/ilang-ai/ilang-spec/tree/v5.0.14" target="_blank" rel="noopener">v5.0.14</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>fae5be9c30fa66701cd735562cbc100d5c37ed3f50f31a4a5a03d82ada71bf94</code></dd></div></dl>
+  </details>
+</article>
+<!-- /market:skills -->
+          </div>
+          <details class="section-help"><summary>如何更新内置技能？</summary><p>告诉 DSH「把 iLang DSH 工具包的引擎更新到最新，不要动我的记忆。」</p></details>
+        </div>
+      </section>
 
-    <section class="block">
-      <div class="wrap">
-        <span class="section-label">官方插件（从 npm 装）</span>
-        <h2>官方插件：自媒体出海、AdsPilot。</h2>
-<div class="m-row"><div class="m-name">dsh-plugin-chuhai</div><div class="m-desc">说一句「自媒体出海」，从零一直带到 X 开蓝 V、用上 Grok Bot；前半段的书随插件带着，不装工具包也能用</div><div class="m-meta">说一句「自媒体出海」 · 0.3.4 · ilang · MIT · <a href="https://github.com/adsorgcn/dsh-plugin-chuhai" target="_blank" rel="noopener">https://github.com/adsorgcn/dsh-plugin-chuhai</a> · <a href="https://www.npmjs.com/package/dsh-plugin-chuhai" target="_blank" rel="noopener">npm</a> · 版本 0.3.4 · <span title="sha512-T+W2yg0iwF/J0s/CxND6Scft9iS1zOvJCbEmvCDk8Uf84+f0HvByeMGmn12DVgopB4KKt4W5KHbC/ssbKKa91g==">T+W2yg0iwF/J0s/</span> · <a href="https://github.com/adsorgcn/dsh-plugin-chuhai/releases/tag/v0.3.4" target="_blank" rel="noopener">Release v0.3.4</a></div></div>
-<div class="m-row"><div class="m-name">adspilot</div><div class="m-desc">说一句「SEM」或「付费投流」，从装机自检、凭据账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线到无人值守日循环与 7 天校准，全程在你自己的账号和机器上跑，默认 dry-run；装了插件就有 sem 技能和 adspilot_book 读书工具，对接本机 AdsPilot 仓的 39 个接口</div><div class="m-meta">说一句「SEM」 · 2.2.0 · adsorgcn · MIT · <a href="https://github.com/adsorgcn/AdsPilot" target="_blank" rel="noopener">https://github.com/adsorgcn/AdsPilot</a> · <a href="https://www.npmjs.com/package/adspilot" target="_blank" rel="noopener">npm</a> · 版本 2.2.0 · <span title="sha512-I4oTjgyxmkvq/w+637BUh+4imBZserFZ/nn4o+SUHtBYEMDcMMis1jqF8x4ao7sT5P5ytHQ7ZU8lh3juBJrbRA==">I4oTjgyxmkvq/w+</span> · <a href="https://github.com/adsorgcn/AdsPilot/releases/tag/v2.2.0" target="_blank" rel="noopener">标签 v2.2.0</a></div></div>
-        <p class="after">装工具包的那句话会顺手把它装上。手动装：DSH 侧栏「插件」→「添加插件」，只填包名，别把下面那条地址填进这个框： <code class="code">dsh-plugin-chuhai</code> 想从列表里装：先在「插件」页的「实验性插件」下启用「自定义插件索引」，页面会多出「发现」页签，在里面点「添加索引源」贴这条地址，再在列表里点安装： <code class="code">https://dsh.ilang.guide/market/index.json</code> 目前进度：到把第一本书交给 Grok Bot，再给它配手脚（邮箱、Gmail、InstaBox、Muse、Railway、家宽 IP、YouTube 频道）；工具包那边「出片」「云端分身」「一稿多发」三句口令都能用。再往后的环更新中。</p>
-      </div>
-    </section>
+      <section class="catalog-section book-section" id="books" aria-labelledby="books-heading">
+        <div class="section-head">
+          <span class="section-en" lang="en">ENGINEERING BOOKS</span><h2 id="books-heading">工程书</h2>
+          <p>每本书带着一套执行步骤。把口令说给 DSH，它就按书带你往下做。</p>
+        </div>
+        <div class="section-body">
+<!-- market:books -->
+<div class="entries"><article class="entry" id="entry-ai-global-media" data-kind="book">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>AI全球自媒体</h3><span class="identifier">ai-global-media</span></div>
+    <span class="version" aria-label="版本 0.2.9">v0.2.9</span>
+  </header>
+  <p class="entry-description">说一句话，从装写作专家、接内容源、建知识库、出文章，一直带到公众号发出第一篇</p>
+  <p class="invocation">说一句「AI全球自媒体」</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · AI全球自媒体</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang-ai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/books/ai-global-media/BOOK.md" target="_blank" rel="noopener">.dsh/books/ai-global-media/BOOK.md</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>b98fcdbb206028bafbdd31731a52ea411e3742fe78e93bb4134d22e099d13999</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-chupian" data-kind="book">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>出片</h3><span class="identifier">chupian</span></div>
+    <span class="version" aria-label="版本 1.6">v1.6</span>
+  </header>
+  <p class="entry-description">一句话或一张图，交给你的 Grok Bot 出图出视频，每一件成品都带着请求和判决</p>
+  <p class="invocation">说一句「出片」</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 出片</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang-ai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/books/chupian/BOOK.md" target="_blank" rel="noopener">.dsh/books/chupian/BOOK.md</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>b38ed3ab6810f71429d870141cee49e28f69a57613da9b8a21acc45fc796477a</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-fenshen" data-kind="book">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>云端分身</h3><span class="identifier">fenshen</span></div>
+    <span class="version" aria-label="版本 1.2">v1.2</span>
+  </header>
+  <p class="entry-description">工作区进私有仓库，分身书交给你的 Grok Bot，出门用手机说「出文」「出片」「发到 YouTube」，改的是同一个仓库；勾一下，它每天到点自己出文、自己盯公众号后台的反馈</p>
+  <p class="invocation">说一句「云端分身」</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 云端分身</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang-ai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/books/fenshen/BOOK.md" target="_blank" rel="noopener">.dsh/books/fenshen/BOOK.md</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>f358414bf81308a760f4d3ea8049ec34b22078943aa84f2fc1f05d4e420435ee</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-yigaoduofa" data-kind="book">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>一稿多发</h3><span class="identifier">yigaoduofa</span></div>
+    <span class="version" aria-label="版本 1.0">v1.0</span>
+  </header>
+  <p class="entry-description">一篇稿照每个平台的卡改成该平台的版本，你点头进队列，到点由手发出去：公众号推草稿你点发布，X 走官方接口，YouTube 先私密；发错的原样记一行</p>
+  <p class="invocation">说一句「一稿多发」</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 一稿多发</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang-ai</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/books/yigaoduofa/BOOK.md" target="_blank" rel="noopener">.dsh/books/yigaoduofa/BOOK.md</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>14be70ad70d79239a6f483d38ccccbbd4746861c9252ca4c9478b718c9f28c21</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-adspilot-sem" data-kind="book">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>SEM 与付费投流（AdsPilot）</h3><span class="identifier">adspilot-sem</span></div>
+    <span class="version" aria-label="版本 2.2.0">v2.2.0</span>
+  </header>
+  <p class="entry-description">从环境自检、凭据账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线到无人值守日循环与 7 天校准，全程在你自己账号和机器跑通。</p>
+  <p class="invocation">说一句「SEM」或「付费投流」</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · SEM 与付费投流（AdsPilot）</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>adsorgcn</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>工具包文件</dt><dd><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/.dsh/books/adspilot-sem/BOOK.md" target="_blank" rel="noopener">.dsh/books/adspilot-sem/BOOK.md</a></dd></div>
+<div><dt>上游仓库</dt><dd><a href="https://github.com/adsorgcn/AdsPilot" target="_blank" rel="noopener">adsorgcn/AdsPilot</a></dd></div>
+<div><dt>来源提交</dt><dd><a href="https://github.com/adsorgcn/AdsPilot/commit/04536fe5970713074d7fd353c62317652a625e17" target="_blank" rel="noopener">04536fe5970713074d7fd353c62317652a625e17</a></dd></div>
+<div><dt>SHA-256 · LF</dt><dd><code>cf2d789e0a38331500d3faee7b6c855f2619444130196deb8244ff4493cb8346</code></dd></div></dl>
+  </details>
+</article></div>
+<p class="section-note">工程书装了工具包就有，说出卡片上的口令即可开始。</p>
+<!-- /market:books -->
+        </div>
+      </section>
 
-    <section class="block">
-      <div class="wrap">
-        <span class="section-label">别处的好东西</span>
-        <h2>看见不错的技能或插件，告诉你的 DSH。</h2>
-        <p class="after">说一句是哪个，它帮你写一版更好的，照 iLang 母版写成一本工程书。写好了可以提交给我们审；过了门、owner 说收，就内置进工具包。</p>
-        <p class="after">没有合作的第三方，我们只给作者的仓库地址，怎么用问你自己的 DSH。名单看 <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/docs/社区插件甄选.md" target="_blank" rel="noopener">社区插件甄选</a> 这一页。</p>
-      </div>
-    </section>
+      <section class="catalog-section plugin-section" id="plugins" aria-labelledby="plugins-heading">
+        <div class="section-head">
+          <span class="section-en" lang="en">PLUGINS</span><h2 id="plugins-heading">官方插件</h2>
+          <p>从 npm 安装，为 DSH 加上自媒体出海或 SEM 投流的专用工具。</p>
+          <a class="text-link" href="#plugin-install">查看安装方法</a>
+        </div>
+        <div class="section-body">
+          <div class="entries">
+<!-- market:plugins -->
+<article class="entry" id="entry-dsh-plugin-chuhai" data-kind="plugin">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>自媒体出海</h3><span class="identifier">dsh-plugin-chuhai</span></div>
+    <span class="version" aria-label="版本 0.3.4">v0.3.4</span>
+  </header>
+  <p class="entry-description">DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V、装 Grok Bot 并把第一本书交给它，再给它配手脚（邮箱、Gmail、InstaBox 免费云主机、Muse、Railway、家宽 IP、YouTube 频道）。</p>
+  <p class="invocation">说一句「自媒体出海」</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · 自媒体出海</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>ilang</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>上游仓库</dt><dd><a href="https://github.com/adsorgcn/dsh-plugin-chuhai" target="_blank" rel="noopener">adsorgcn/dsh-plugin-chuhai</a></dd></div>
+<div><dt>版本标签</dt><dd><a href="https://github.com/adsorgcn/dsh-plugin-chuhai/tree/v0.3.4" target="_blank" rel="noopener">v0.3.4</a></dd></div>
+<div><dt>来源提交</dt><dd><a href="https://github.com/adsorgcn/dsh-plugin-chuhai/commit/aa466d4c3a73affa091f1e3cde2d09d401498787" target="_blank" rel="noopener">aa466d4c3a73affa091f1e3cde2d09d401498787</a></dd></div>
+<div><dt>npm 包</dt><dd><a href="https://www.npmjs.com/package/dsh-plugin-chuhai" target="_blank" rel="noopener">dsh-plugin-chuhai</a></dd></div>
+<div><dt>npm integrity</dt><dd><code>sha512-T+W2yg0iwF/J0s/CxND6Scft9iS1zOvJCbEmvCDk8Uf84+f0HvByeMGmn12DVgopB4KKt4W5KHbC/ssbKKa91g==</code></dd></div></dl>
+  </details>
+</article>
+<article class="entry" id="entry-adspilot" data-kind="plugin">
+  <header class="entry-head">
+    <span class="entry-mark" aria-hidden="true"><i></i></span>
+    <div><h3>AdsPilot（SEM / 付费投流）</h3><span class="identifier">adspilot</span></div>
+    <span class="version" aria-label="版本 2.2.0">v2.2.0</span>
+  </header>
+  <p class="entry-description">DSH 装上 sem 技能和 adspilot_book 分页读书工具，带你从环境自检、凭据账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线做到无人值守日循环与 7 天校准；对接你本机克隆的 AdsPilot 仓和它的 39 个 MCP/CLI 接口，全程在你自己账号和机器上跑，默认 dry-run。</p>
+  <p class="invocation">说一句「SEM」或「付费投流」</p>
+  <details class="entry-details">
+    <summary>版本与来源<span class="visually-hidden"> · AdsPilot（SEM / 付费投流）</span></summary>
+    <dl class="entry-meta"><div><dt>作者</dt><dd>adsorgcn</dd></div>
+<div><dt>许可</dt><dd>MIT</dd></div>
+<div><dt>上游仓库</dt><dd><a href="https://github.com/adsorgcn/AdsPilot" target="_blank" rel="noopener">adsorgcn/AdsPilot</a></dd></div>
+<div><dt>版本标签</dt><dd><a href="https://github.com/adsorgcn/AdsPilot/tree/v2.2.0" target="_blank" rel="noopener">v2.2.0</a></dd></div>
+<div><dt>来源提交</dt><dd><a href="https://github.com/adsorgcn/AdsPilot/commit/04536fe5970713074d7fd353c62317652a625e17" target="_blank" rel="noopener">04536fe5970713074d7fd353c62317652a625e17</a></dd></div>
+<div><dt>npm 包</dt><dd><a href="https://www.npmjs.com/package/adspilot" target="_blank" rel="noopener">adspilot</a></dd></div>
+<div><dt>npm integrity</dt><dd><code>sha512-I4oTjgyxmkvq/w+637BUh+4imBZserFZ/nn4o+SUHtBYEMDcMMis1jqF8x4ao7sT5P5ytHQ7ZU8lh3juBJrbRA==</code></dd></div></dl>
+  </details>
+</article>
+<!-- /market:plugins -->
+          </div>
+          <div class="install-guide" id="plugin-install">
+            <h3>安装官方插件</h3>
+            <p>安装工具包时，DSH 会询问是否安装「自媒体出海」，经你确认后才会安装。也可以在 DSH 侧栏自行添加插件。</p>
+            <dl>
+              <div><dt>按包名安装</dt><dd>打开「插件」里的「添加插件」，填入 <code>dsh-plugin-chuhai</code> 或 <code>adspilot</code> 后确认安装。</dd></div>
+              <div><dt>从插件目录安装</dt><dd>在「插件」的「实验性插件」下启用「自定义插件索引」，进入「发现」，点「添加索引源」，粘贴下方地址后选择要安装的插件。<code class="copy-text">https://dsh.ilang.guide/market/index.json</code></dd></div>
+            </dl>
+            <details class="section-help"><summary>自媒体出海插件目前做到哪一步？</summary><p>前半段工程书随插件提供，可单独使用。目前已带到把第一本书交给 Grok Bot，再为它接上邮箱、Gmail、InstaBox、Muse、Railway、家宽 IP 和 YouTube 频道。工具包里的「出片」「云端分身」「一稿多发」三句口令均可使用，后续环节仍在更新。</p></details>
+          </div>
+        </div>
+      </section>
+    </div>
 
-    <section class="block">
-      <div class="wrap">
-        <span class="section-label">给作者（准入）</span>
-        <h2>四条门，逐条过。</h2>
-        <ul class="gates">
-          <li><b>清单</b><span>工程书的第一行和最后一行都是 ::ILANG::v5.0::ENGINEERING_BOOK；技能是一个以 ::ILANG::v5.0 开头、含 ::GENE{ 的围栏。</span></li>
-          <li><b>校验器</b><span>tools/ilang_grammar_validator.py --lint --strict，0 错 0 警告。</span></li>
-          <li><b>钉死</b><span>记工程书或清单的 sha256；来自别的仓库的再记 40 位 commit。</span></li>
-          <li><b>许可</b><span>仓库里有 OSI 许可文件。</span></li>
-        </ul>
-        <p class="veto">三类不收：与官方能力重复；要拿走钥匙或记忆；娱乐与不稳定。来源：docs/社区插件甄选.md 第六条。</p>
-        <p class="author-action">自检命令：<code class="code">python -X utf8 tools/market_admit.py &lt;你的仓库 https 地址&gt; &lt;tag 或 commit&gt;</code> 通过后，到 <a href="https://github.com/adsorgcn/DeepSeekHarness/issues/new?template=market-admit.yml" target="_blank" rel="noopener">市场准入申请</a> 提一个 issue。维护者看过准入输出后决定收不收。收了的，原样内置进工具包。</p>
+    <section class="author-section" id="admission" aria-labelledby="admission-heading">
+      <div class="wrap author-inner">
+        <div class="section-head">
+          <span class="section-en" lang="en">CONTRIBUTE</span><h2 id="admission-heading">收录规则</h2>
+          <p>收录顺序就是显示顺序。维护者看过准入输出后决定收不收。</p>
+          <a class="submission" href="https://github.com/adsorgcn/DeepSeekHarness/issues/new?template=market-admit.yml" target="_blank" rel="noopener">提交准入申请</a>
+        </div>
+        <div class="author-body">
+          <h3>提交前对照四项要求</h3>
+          <dl class="rules">
+            <div><dt>清单</dt><dd>工程书使用 <code>::ILANG::v5.0::ENGINEERING_BOOK</code> 标记首尾两行。技能清单使用以 <code>::ILANG::v5.0</code> 开头且含 <code>::GENE{</code> 的围栏。</dd></div>
+            <div><dt>校验</dt><dd>运行 <code>tools/ilang_grammar_validator.py --lint --strict</code>，结果须为 0 错误、0 警告。</dd></div>
+            <div><dt>版本</dt><dd>记录工程书或清单的 SHA-256，外部仓库再附 40 位提交哈希。npm 插件固定包版本、integrity、发包提交和对应标签。</dd></div>
+            <div><dt>许可</dt><dd>仓库中须包含 OSI 认可的开源许可文件。</dd></div>
+          </dl>
+          <p class="author-note">按社区甄选规则，与官方能力重复、索取钥匙或记忆，以及娱乐类或运行不稳定的条目均不予收录。</p>
+          <details class="guideline"><summary>运行准入自检</summary><p>在工具包仓库根目录运行相应命令，把输出附在申请里。</p><span>工程书</span><code class="copy-text">python -X utf8 tools/market_admit.py &lt;仓库 HTTPS 地址&gt; &lt;tag 或 commit&gt;</code><span>npm 插件</span><code class="copy-text">python -X utf8 tools/market_admit.py --plugin &lt;包名&gt;@&lt;版本&gt;</code></details>
+          <details class="guideline"><summary>发现了值得收录的第三方工具？</summary><p>把想借鉴的技能或插件告诉 DSH，它可以帮你写一版更好的，并按 iLang 母版整理成工程书，完成后即可提交审阅。在<a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/docs/社区插件甄选.md" target="_blank" rel="noopener">社区插件甄选</a>中可以查到第三方项目的作者仓库。</p></details>
+        </div>
       </div>
     </section>
   </main>
-  <footer>
+
+  <footer class="site-footer">
     <div class="wrap">
-      <nav class="footer-links" aria-label="项目资源">
-        <a href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">仓库</a>
-        <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/dsh-新手起手式.md" target="_blank" rel="noopener">新手教程</a>
-        <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/一键安装.md" target="_blank" rel="noopener">一键安装</a>
-        <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md" target="_blank" rel="noopener">迭代清单</a>
-        <a href="./" aria-current="page">市场</a>
-        <a href="https://gitee.com/monetize/DeepSeekHarness" target="_blank" rel="noopener">国内镜像</a>
-      </nav>
-      <p>iLang 出品 · 基于 iLang v5.0 与 Mem-Forever · MIT</p>
-      <a class="doi" href="https://doi.org/10.5281/zenodo.23998664" target="_blank" rel="noopener"><span>DOI</span><span>10.5281/zenodo.23998664</span></a>
+      <div class="footer-main">
+        <a class="brand" href="../"><img src="../favicon.svg" width="30" height="30" alt=""><span>iLang <strong>DSH 工具包</strong></span></a>
+        <nav aria-label="项目资源">
+          <a href="../#start">安装工具包</a><a href="../agents/">Agent 接入</a><a href="https://github.com/adsorgcn/DeepSeekHarness" target="_blank" rel="noopener">GitHub</a><a href="https://gitee.com/monetize/DeepSeekHarness" target="_blank" rel="noopener">国内镜像</a>
+          <a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/dsh-新手起手式.md" target="_blank" rel="noopener">新手教程</a><a href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md" target="_blank" rel="noopener">迭代清单</a>
+        </nav>
+      </div>
+      <div class="footer-bottom"><span>iLang 与 Mem-Forever · MIT 开源</span><a href="https://doi.org/10.5281/zenodo.23998664" target="_blank" rel="noopener">DOI 10.5281/zenodo.23998664</a></div>
     </div>
   </footer>
-  <script>
-    (() => {
-      if (!('IntersectionObserver' in window)) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const reveal = new IntersectionObserver(entries => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.add('entered');
-          reveal.unobserve(entry.target);
-        }
-      }, { threshold: .08 });
-      document.querySelectorAll('section, footer').forEach(el => reveal.observe(el));
-    })();
-  </script>
 </body>
 </html>

@@ -75,7 +75,7 @@ footer a:focus-visible {
   background: #fff;
   border: 1px solid #dbe3e5;
   border-radius: 5px;
-  font: 500 11px/1.5 ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font: 500 11px/1.5 var(--font-code);
   color: #364f59;
 }
 
@@ -92,7 +92,7 @@ footer a:focus-visible {
 
 .ads-name > span {
   display: block;
-  font: 600 12px/1.4 ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font: 600 12px/1.4 var(--font-code);
   letter-spacing: .03em;
   color: var(--dsh-action);
 }
@@ -343,4 +343,51 @@ footer a:focus-visible {
   .start-layout .install-top > span { font-size: 11px; }
   .start-layout #install-command { font-size: 15px; padding: 10px 12px; }
   .start-layout .section-heading h2 { font-size: 32px; }
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.55rem, 1.65rem + 3.6vw, 4.8rem);
+  font-weight: 640;
+  letter-spacing: -.035em;
+  line-height: 1.18;
+}
+
+.hero-copy > p {
+  font-size: clamp(.94rem, .85rem + .33vw, 1.1rem);
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+.section-heading h2, .agent-copy h2, .platform-intro h2,
+.closing h2, .faq-section h2 {
+  font-weight: 620;
+  letter-spacing: -.025em;
+}
+
+.feature-copy h3, .official-copy h3, .story-copy h3,
+.distribution .story-copy h3, .ads-track h4 {
+  font-weight: 590;
+  letter-spacing: -.018em;
+}
+
+.feature-copy p, .official-copy p, .story-copy p,
+.agent-copy > p, .faq-list details > p {
+  font-size: clamp(.94rem, .9rem + .14vw, 1rem);
+  line-height: 1.8;
+}
+
+.faq-list summary {
+  font-size: clamp(.95rem, .88rem + .22vw, 1.08rem);
+  font-weight: 560;
+}
+
+.intro p { letter-spacing: -.01em; }
+.brand { letter-spacing: -.025em; }
+.brand b, .feature-index, .scene-eyebrow { letter-spacing: .015em; }
+.endpoint-field input, .mcp-config pre { font-family: var(--font-code); }
+.hero-copy .keep-phrase { white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .hero-copy > p { text-wrap: balance; }
+  .hero-copy > p br { display: none; }
 }
