@@ -29,6 +29,8 @@
 - [云端分身](https://dsh.ilang.guide/.dsh/books/fenshen/BOOK.md): 用户的电脑与 Grok Bot 共用私有工作仓库，用手机接续已配置的工作流
 - [云端分身执行正文](https://dsh.ilang.guide/.dsh/books/fenshen/bot-fenshen-book.md): 给 Grok Bot / Muse 的完整书；其引用的 AI 全球自媒体与出片书也在公开文档目录中
 - [SEM 与付费投流（AdsPilot）](https://dsh.ilang.guide/.dsh/books/adspilot-sem/BOOK.md): 在用户自有账号与机器上跑通合规的 SEM 联盟投放，从装机自检、凭据账本、Cloudflare 落地位、选品到 Google Ads 上线、无人值守日循环与 7 天校准；默认 dry-run，KYC、付款、申诉由用户完成
+- [一稿多发](https://dsh.ilang.guide/.dsh/books/yigaoduofa/BOOK.md): 一篇稿照每个平台的卡改成该平台的版本，用户点头进队列，到点由手发出去；只改平台外壳，不改观点、数字、标题
+- [一稿多发执行正文](https://dsh.ilang.guide/.dsh/books/yigaoduofa/bot-yigaoduofa-book.md): 给 Grok Bot 的书，到点照队列发，X 走官方接口，YouTube 先私密，公众号到草稿箱，发错的原样记一行
 - [国内指导站](https://ilang.cn/guide/dsh/): 国内分享与阅读入口
 - [迭代清单](https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md): 后续计划，不等同于已实现功能
 

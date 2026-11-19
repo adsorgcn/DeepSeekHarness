@@ -42,7 +42,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "get": "kit"
     },
@@ -70,7 +70,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "get": "kit"
     },
@@ -102,7 +102,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "get": "kit"
     },
@@ -134,7 +134,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "get": "kit"
     },
@@ -162,7 +162,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "say": "AI全球自媒体",
       "get": "kit",
@@ -193,7 +193,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "say": "出片",
       "get": "kit",
@@ -224,12 +224,43 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "say": "云端分身",
       "get": "kit",
       "admitted_by": "@SUN",
       "admitted_on": "2026-11-18"
+    },
+    {
+      "kind": "book",
+      "name": "yigaoduofa",
+      "title": {
+        "zh": "一稿多发",
+        "en": "One post, many platforms"
+      },
+      "description": {
+        "zh": "说一句「一稿多发」，一篇稿照每个平台的卡改成该平台的版本，你点头进队列，到点由手发出去：公众号推草稿你点发布，X 走官方接口，YouTube 先私密；发错的原样记一行",
+        "en": "Say one phrase: one article is adapted per platform card, you approve, it is queued, and the hands post on time: a WeChat draft you publish yourself, X through the official API, YouTube private first; failures are logged verbatim"
+      },
+      "version": "1.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/books/yigaoduofa/BOOK.md",
+      "procedure": ".dsh/books/yigaoduofa/BOOK.md",
+      "upstream": null,
+      "sha256_lf": "14be70ad70d79239a6f483d38ccccbbd4746861c9252ca4c9478b718c9f28c21",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "markers": 2,
+        "at": "2026-11-19"
+      },
+      "say": "一稿多发",
+      "get": "kit",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-19"
     },
     {
       "kind": "book",
@@ -260,7 +291,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-18"
+        "at": "2026-11-19"
       },
       "say": "SEM",
       "get": "kit",

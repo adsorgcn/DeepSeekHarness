@@ -132,6 +132,7 @@ test('newly released workflows can be discovered, searched and read without auth
     ['.dsh/books/chupian/BOOK.md', '出片'],
     ['.dsh/books/fenshen/BOOK.md', '云端分身'],
     ['.dsh/books/adspilot-sem/BOOK.md', '付费投流'],
+    ['.dsh/books/yigaoduofa/BOOK.md', '一稿多发'],
   ];
   const { body: overview } = await rpc('tools/call', { name: 'dsh_overview', arguments: {} });
   for (const [path, query] of additions) {
@@ -168,6 +169,7 @@ test('workflow dependencies return complete source text and correct media types'
     ['.dsh/books/chupian/sources/IML-VEM-v1.2.2.md', 'text/markdown'],
     ['.dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md', 'text/markdown'],
     ['.dsh/books/fenshen/bot-fenshen-book.md', 'text/markdown'],
+    ['.dsh/books/yigaoduofa/bot-yigaoduofa-book.md', 'text/markdown'],
   ];
   const { body: list } = await rpc('resources/list');
   for (const [path, mimeType] of dependencies) {

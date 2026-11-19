@@ -4,7 +4,7 @@
   "serverInfo": {
     "name": "ilang-dsh-toolkit",
     "title": "iLang DSH 工具包",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "websiteUrl": "https://dsh.ilang.guide/"
   },
   "description": "Public read-only installation guidance, documentation search, and skills catalogue for iLang DSH 工具包. No user files, installations or account actions.",
@@ -132,7 +132,9 @@
               ".dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md",
               ".dsh/books/fenshen/BOOK.md",
               ".dsh/books/fenshen/bot-fenshen-book.md",
-              ".dsh/books/adspilot-sem/BOOK.md"
+              ".dsh/books/adspilot-sem/BOOK.md",
+              ".dsh/books/yigaoduofa/BOOK.md",
+              ".dsh/books/yigaoduofa/bot-yigaoduofa-book.md"
             ]
           }
         },
