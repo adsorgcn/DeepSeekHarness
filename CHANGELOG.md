@@ -8,6 +8,7 @@
 - 货架加 book yigaoduofa（say 一稿多发）；AGENTS.local 口令说明；README 第四本；起手式一行；MCP 服务 1.3.0 白名单加两本（23 项），openapi、well-known、llms.txt、agents 页同步，线上 Worker 已重新部署
 - 官网两处文案：MCP 段补「一稿多发」「SEM 与付费投流」；03 卡片加官方插件两枚 dsh-plugin-chuhai、adspilot
 - 来源：2026-11-19 owner 看过一稿多发需求单后拍「做 一起把官网那两处也改了」，并定第二波平台走「grok 控制 muse 在 muse 内置电脑的真实浏览器里弄」
+- 货架：plugin 条目钉 dsh-plugin-chuhai 0.3.4（进度行加「一稿多发」，再往后的环写明第二阶段平台由 Grok Bot 指挥 Muse 在它的真实浏览器里发），index.json 顶部加 0.3.4，市场页那行同步；来源：2026-11-19 owner 拍「发 把进度行改了」
 
 **v1.1.44** · 2026-11-18 · 补 v1.1.43：发现文件同步 21 项与 1.2.0
 
