@@ -27,7 +27,7 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 剩下它全包：装环境先问你再动手，放好全套，问几个问题认识你。Windows 走 bootstrap.ps1，macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选；软件只从官方源装；默认本机模式，什么都不上传。
 
-连不上 GitHub：自动走国内镜像 gitee.com/monetize/DeepSeekHarness，iLang 官方资料自动走 ilang.cn。
+国内先走镜像 gitee.com/monetize/DeepSeekHarness（和 GitHub 同源，排在 GitHub 前面），iLang 官方资料走 ilang.cn；那一句的全文国内也有一份，一字不差：https://ilang.cn/guide/dsh/install.md 。
 
 在 DeepSeek Harness 0.2.2-rc.1 上验证（DSH 还是 Developer Preview，官方说可能有破坏性变更；装不上先看这一行）。
 
