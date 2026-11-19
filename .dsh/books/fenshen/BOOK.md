@@ -1,16 +1,16 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:DSH-FENSHEN]
-[VERSION:1.1]
+[VERSION:1.2]
 [DATE:2026-11-18]
 [LANG:zh]
 
 ::STATE{@USER, role:decision_maker, is:在电脑上用 DSH 出过文 出过片 装了 Grok Bot 的人, does:给仓库地址 在 GitHub 加一把钥匙 在公众号后台加一个 IP 点头, never:贴钥匙到聊天}
 ::STATE{@AGENT, role:you_the_user_s_own_AI_running_in_DeepSeek_Harness_with_the_iLang_DSH_kit, does:把工作区推成私有仓库 把分身书交到手上 以后每次开工先 pull, never:把账本的值写进聊天 替用户注册 付款 点发布}
 ::STATE{@HANDS, first:Grok Bot 用户在「自媒体出海」里装好的, second:Muse, none:先走「自媒体出海」到装 Grok Bot 那一环}
-::STATE{@BOOK, kit_copy:.dsh/books/fenshen/bot-fenshen-book.md 随工具包带着, kit_sha256:91b6766aefefabd3685bc46157f414aed0419bdaea84853a7764f68e6e1d2132, workspace_copy:bot-fenshen-book.md 放在工作区根目录 和 kit_copy 一字不差}
+::STATE{@BOOK, kit_copy:.dsh/books/fenshen/bot-fenshen-book.md 随工具包带着, kit_sha256:4bd8744e4422d4765b3b463b84087e2fe775c96cc935ab06053107fcd48cf7dd, workspace_copy:bot-fenshen-book.md 放在工作区根目录 和 kit_copy 一字不差}
 ::STATE{@REPO, mode:git config dsh.mode 是 sync 就已经有私有远端 是 local 就还没有, remote:私有 GitHub 仓库 用户自己建 名字他起, guard:tools/hooks/pre-push 拒绝推到公开远端 不绕}
-::STATE{@SCOPE, covers:工作区进私有仓库 分身书交到手上 两头共用一个仓库, later:多个分身 多平台 以后逐版加}
+::STATE{@SCOPE, covers:工作区进私有仓库 分身书交到手上 两头共用一个仓库 手问过用户要不要到点自己出文 自己盯公众号反馈 勾了才有, later:多个分身 多平台 以后逐版加}
 
 ::OBJECTIVE{id:cloud_twin_handoff|owner:user|trust:trusted|version:1|status:active}
   target: 用户说一句 云端分身 之后 工作区在私有仓库里 分身书到了手上 手搬完回了六行 用户用手机说一句 出文 稿子进了仓库 电脑上的 DSH pull 到了
@@ -48,11 +48,12 @@
   [STEP] 1 git pull 看到手的提交 交接单里有分身那一行才算
   [STEP] 2 请用户用手机对手说一句 出文 等他说稿子出来了 再 git pull 看 articles/ 里多了那一篇
   [STEP] 3 从今天起每次开工先 git pull 把这条记进交接单
+  [NOTE] 手会问他一次要不要每天到点自己出文 自己盯公众号后台的反馈 他自己答 你不替他答 他勾了以后 你每次 pull 会看到到点出的稿和 library/feedback/ 里的反馈 反馈里写的改法他点头了你才照着改
 ::MODULE{REPORT|title:每做完一步告诉用户什么}
   [LINE] 仓库在哪 私有不私有 推没推上去
   [LINE] 书放在哪 怎么拖 说哪一句
   [LINE] 手回的六行里出口走的哪一种 白名单加了没
-  [LINE] 两头对过没 以后他在手机上说的三句口令
+  [LINE] 两头对过没 以后他在手机上说的三句口令 到点自己出文他勾了没
 ::RUBRIC{G1: 远端是私有仓库 本地 HEAD 已推上去|check:cmd|run:"git status -sb"|expect:no_ahead}
 ::RUBRIC{G2: 工作区根目录的分身书和工具包里那份一字不差|check:cmd|run:"python -X utf8 -c \"import hashlib,io,sys;h=lambda p:hashlib.sha256(io.open(p,'rb').read().replace(b'\\r\\n',b'\\n')).hexdigest();sys.exit(0 if h('bot-fenshen-book.md')==h('.dsh/books/fenshen/bot-fenshen-book.md') else 1)\""|expect:0}
 ::RUBRIC{G3: 手回了 TWIN-READY 六行 交接单里有分身那一行|check:human}

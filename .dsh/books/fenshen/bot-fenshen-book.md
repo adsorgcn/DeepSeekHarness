@@ -1,7 +1,7 @@
 ::ILANG::v5.0::ENGINEERING_BOOK
 [TYPE:engineering_book]
 [ID:FENSHEN-BOT-BOOK]
-[VERSION:1.1]
+[VERSION:1.2]
 [DATE:2026-11-18]
 [LANG:zh]
 
@@ -10,6 +10,7 @@
   T:用户在电脑上用 DSH 工具包做自媒体 工作区是一个 git 仓库 里面有他的人格 记忆 交接单 货仓 稿子 两本书和工具 现在要在你这里有一个分身 他出门用手机跟你说话时 你做的和 DSH 在电脑上做的一样 改的是同一个仓库
   T:仓库是私有的 钥匙在仓库的账本里 静态编码 不是明文 开门要用户在你这台机器上点一次头
   T:owner 2026-11-18 定 DSH 上跑的东西能丢给你的都丢 只差公众号接口要一个固定出口 IP
+  T:owner 2026-11-18 拍 加 routine 用户勾了 你到点自己出文 自己盯公众号后台的反馈 不用等他说话
 
 ::STATE{@USER, role:拍板的人, does:给仓库地址 在 GitHub 上加一把钥匙 在公众号后台加一个 IP 点头 付款, never:贴钥匙到聊天里}
 ::STATE{@HAND, role:你 读这本书的手, is:Grok Bot 或 Muse, has:自己的电脑 shell git Python 浏览器 自己的模型, never:把账本的值或任何钥匙打印到聊天 替用户点发布}
@@ -17,12 +18,13 @@
 ::STATE{@BOOKS, main:.dsh/books/ai-global-media/BOOK.md 说一句 AI全球自媒体 五环 出文章到公众号, clip:.dsh/books/chupian/bot-chupian-book.md 出图出视频 你已经会, hands:你的第一本书里的手脚 照旧}
 ::STATE{@KEYS, ledger:env/ledger.env 一门一行, values:env/keys.env 静态编码 配 env/pepper 和 tools/brain.py 解, open:python -X utf8 tools/brain.py unlock <门> 第一次在这台机器要用户点头 brain.py grant 之后这扇门在这里就开, never:把值复述到聊天}
 ::STATE{@WECHAT, api:公众号接口认调用方 IP 的白名单, script:专家包 wechat-draft-push 的 wechat_draft.py 推草稿, needs:一个固定出口 IP 加进公众号后台的白名单 用户自己加}
+::STATE{@ROUTINE, what:Grok Bot 自己的 routine 按时间或事件自己跑 Muse 用它自己的等价物, limits:最短间隔 5 分钟 一只 Bot 最多 50 条 每条留 20 次运行记录 用户的时区, only_if:用户在选择卡上勾了 没勾就没有}
 ::STATE{@EGRESS, first:你自己电脑的出口 IP 是固定的 owner 2026-11-18 确认 量一次 把它给用户加白名单, else:测试草稿推不出去 用户在出海那一环买的海外服务器 IP 也固定 推草稿这一步通过 ssh 在服务器上跑 服务器密码进你的密钥卡不进聊天, last:都没有 公众号推送先留在电脑上的 DSH 其余照搬 告诉用户}
 
 ::OBJECTIVE{id:cloud_twin|owner:user|trust:trusted|version:1|status:active}
-  target: 仓库在你这里克隆好 人格装上 两本书读过 账本的门能在这里开 公众号推草稿有固定出口 用户用手机对你说一句 出文 出片 发到 YouTube 你做出来的东西进同一个仓库 电脑上的 DSH 下次 pull 就看见
+  target: 仓库在你这里克隆好 人格装上 两本书读过 账本的门能在这里开 公众号推草稿有固定出口 用户用手机对你说一句 出文 出片 发到 YouTube 你做出来的东西进同一个仓库 电脑上的 DSH 下次 pull 就看见 他勾了的话 到点你自己出文 自己盯公众号的反馈
   ACCEPT: RUBRIC 每项通过
-  NON_GOALS: 改仓库的结构 改两本书的字 替用户注册任何账号 替用户点发布或公开 把钥匙写进任何聊天或新文件
+  NON_GOALS: 改仓库的结构 改两本书的字 替用户注册任何账号 替用户点发布或公开 把钥匙写进任何聊天或新文件 用户没勾就建 routine
   DONE_WHEN: 用户用手机说一句 出文 稿子进了仓库 他说行
 
 ::BOUNDARY{never:print_a_ledger_value_a_key_a_password_or_a_token_in_chat|scope:permanent}
@@ -56,6 +58,14 @@
   [STEP] 4 用户说 发到 YouTube 照你第一本书的 B15 做 先私密 用户点公开
   [STEP] 5 用户说别的 看交接单 哪一环没做完接着做 一次只问他一件事
   [STEP] 6 每做完一件 commit 并 push 交接单加一行
+::MODULE{ROUTINE|title:到点自己动 用户勾了才建}
+  [STEP] 1 搬完回了六行之后 问用户一次 出一张选择卡 两样各自勾不勾 一 每天到点自己出文 几点 一天几篇 二 每天盯一次公众号后台的反馈 他不勾就不建 以后他说一句 每天出文 或 盯反馈 再建
+  [STEP] 2 建 用 @ROUTINE 的 routine 不用别的定时 一样一条 时间按他的时区 建好告诉他一句 几点会跑
+  [STEP] 3 出文那条到点做的 和他说一句 出文 一模一样 先 git pull 照主书写稿进 articles/ 推草稿走 @EGRESS 定下的那条路 发不发他点 做完 commit 并 push
+  [STEP] 4 盯反馈那条 每天看一次公众号后台能给你看的 阅读 在看 转发 留言 掉粉 和前一天比 把变化和一句你会怎么改写进 library/feedback/日期.md 一天一个文件 commit 并 push 后台不给看的告诉他看不到 不假装
+  [STEP] 5 看到的只写不改 不改书 不改过程 不改人格 想改的写在那个文件里 他点头了才动
+  [STEP] 6 每次跑完交接单加一行 出了什么 看到了什么 不在手机上刷屏 他问了再给
+  [STEP] 7 用户说 停 或 别每天了 当场关掉那条 routine 回一句关了 他说 改成几点 就改时间
 ::MODULE{REPORT|title:搬完回六行}
   [LINE] TWIN-READY 仓库地址的最后一段 克隆到的提交号前七位
   [LINE] 人格装了没 两本书读了没
@@ -69,6 +79,7 @@
 ::RUBRIC{F4: 公众号测试草稿从固定出口推到了草稿箱|check:human}
 ::RUBRIC{F5: 用户用手机说一句 出文 稿子出现在仓库 articles/ 里 电脑上的 DSH pull 到了|check:human}
 ::RUBRIC{F6: 每件事一次提交 没有强推 远端一直是私有|check:human}
-::FALLBACK{仓库不是私有⇒停下 请用户改成私有再来|用户没有 GitHub⇒告诉他去注册 手机码用他自己的 不替他注册|白名单加了测试草稿还推不出去⇒走 @EGRESS 第二种|没有海外服务器⇒公众号推送留在电脑上的 DSH 其余照搬 告诉用户|账本的门用户不点⇒那扇门的事留在电脑上做 不绕|大文件推不上去⇒只推系列文档和链接 成片留在你这里 告诉用户在哪}
+::RUBRIC{F7: routine 是用户勾了才建的 到点出的稿都是草稿 盯反馈只写不改|check:human}
+::FALLBACK{仓库不是私有⇒停下 请用户改成私有再来|用户没有 GitHub⇒告诉他去注册 手机码用他自己的 不替他注册|白名单加了测试草稿还推不出去⇒走 @EGRESS 第二种|没有海外服务器⇒公众号推送留在电脑上的 DSH 其余照搬 告诉用户|账本的门用户不点⇒那扇门的事留在电脑上做 不绕|大文件推不上去⇒只推系列文档和链接 成片留在你这里 告诉用户在哪|后台的反馈看不到⇒告诉用户哪些看不到 不假装 不去扫码登后台|routine 到点没跑⇒下次跑时补一次 不重复出同一篇}
 ::PRIORITY{ BOUNDARY > 仓库私有 > 用户点头 > 两头同一个仓库 > 快 }
 ::ILANG::v5.0::ENGINEERING_BOOK

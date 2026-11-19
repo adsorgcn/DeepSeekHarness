@@ -208,16 +208,16 @@
         "en": "Cloud twin"
       },
       "description": {
-        "zh": "说一句「云端分身」，工作区进私有仓库，分身书交给你的 Grok Bot，出门用手机说「出文」「出片」「发到 YouTube」，改的是同一个仓库",
-        "en": "Say one phrase: the workspace goes to a private repository and your Grok Bot clones it; away from the desk you say 出文, 出片 or 发到 YouTube from your phone, and both sides write the same repository"
+        "zh": "说一句「云端分身」，工作区进私有仓库，分身书交给你的 Grok Bot，出门用手机说「出文」「出片」「发到 YouTube」，改的是同一个仓库；勾一下，它每天到点自己出文、自己盯公众号后台的反馈",
+        "en": "Say one phrase: the workspace goes to a private repository and your Grok Bot clones it; away from the desk you say 出文, 出片 or 发到 YouTube from your phone, and both sides write the same repository; tick once and it writes on schedule and watches your WeChat account feedback by itself"
       },
-      "version": "1.1",
+      "version": "1.2",
       "author": "ilang-ai",
       "license": "MIT",
       "manifest": ".dsh/books/fenshen/BOOK.md",
       "procedure": ".dsh/books/fenshen/BOOK.md",
       "upstream": null,
-      "sha256_lf": "f0f895ac15cc8f52f6053472439113ae4241e6a21086cbc674575a19963db83a",
+      "sha256_lf": "f358414bf81308a760f4d3ea8049ec34b22078943aa84f2fc1f05d4e420435ee",
       "validated": {
         "tool": "tools/ilang_grammar_validator.py --lint --strict",
         "strict": true,
