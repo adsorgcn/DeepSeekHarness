@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.42** · 2026-11-18 · 货架收第二个官方插件 AdsPilot 2.2.0：说一句「SEM」或「付费投流」
+
+- 货架加两条：工程书 adspilot-sem（AdsPilot 的 BOOK.md 原样内置到 .dsh/books/adspilot-sem/，strict 0 错 0 警告，sha256 cf2d789e…，也是插件在线更新的锚点）和官方插件 adspilot 2.2.0（npm integrity 钉死、标签 v2.2.0 = 04536fe、仓库 npm test 16 过 0 败）；index.json 加 adspilot 与 advertising 分类；市场页官方插件区加一行
+- AGENTS.local 加「SEM」「付费投流」口令说明：克隆 AdsPilot 仓、六环、默认 dry-run、KYC 绑卡申诉用户自己做
+- 工具：market_admit.py 核标签时优先取 ^{} 解引用到的提交，附注标签不再误报不一致；test_market 官方插件索引按包名核全部插件
+- 来源：2026-11-18 AdsPilot 发 2.2.0 并交来上架单，逐项实测后 owner 拍「批」
+
 **v1.1.41** · 2026-11-18 · 云端分身加 routine：勾了它到点自己出文、自己盯公众号后台的反馈
 
 - 分身书 1.2：搬完回六行之后手问用户一次，出选择卡两样各自勾不勾：每天到点自己出文（几点、几篇）、每天盯一次公众号后台的反馈；勾了才用 Grok Bot 自己的 routine 建（最短 5 分钟、一只 50 条），到点出文和他说一句「出文」一模一样，稿子还是草稿他点发布；盯反馈只写不改，变化和一句改法进 library/feedback/日期.md，后台不给看的说看不到不假装；他说「停」当场关
