@@ -183,12 +183,19 @@ def test_official_plugin_index():
             bad.append("dsh-plugin-chuhai not listed")
         if "market/index.json" not in m or "dsh-plugin-chuhai" not in m:
             bad.append("market page does not show the official plugin / index url")
-        # index.json 第一个 versions 的 version 等于 registry.json 里 plugin 条目的 version
+        # index.json 每个插件的 versions[0].version 等于 registry.json 里同名 plugin 条目的 version；按包名对，不只看第一个
         reg = load_json("docs/market/registry.json")
-        plugin_entries = [x for x in reg.get("entries", []) if x.get("kind") == "plugin"]
-        if plugins and plugin_entries and plugins[0].get("versions"):
-            if plugins[0]["versions"][0].get("version") != plugin_entries[0].get("version"):
-                bad.append("index versions[0] != registry plugin version")
+        plugin_entries = {x.get("name"): x for x in reg.get("entries", []) if x.get("kind") == "plugin"}
+        for x in plugins:
+            e = plugin_entries.get(x.get("name"))
+            vs = x.get("versions") or []
+            if e is None:
+                bad.append("%s: not in registry" % x.get("name"))
+            elif vs and vs[0].get("version") != e.get("version"):
+                bad.append("%s: index versions[0] != registry plugin version" % x.get("name"))
+        for name in plugin_entries:
+            if name not in names:
+                bad.append("%s: registry plugin not in index" % name)
         ok = not bad
         detail = "bad=%s" % bad
     check("official_plugin_index", ok, detail)

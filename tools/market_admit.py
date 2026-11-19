@@ -161,10 +161,13 @@ def admit_plugin(spec):
         if r.returncode != 0:
             reasons.append("git ls-remote 失败：%s" % r.stderr.strip()[:200])
         else:
+            peeled, plain = "", ""
             for line in r.stdout.splitlines():
-                if line.endswith("refs/tags/v" + version):
-                    tag_commit = line.split()[0]
-                    break
+                if line.endswith("refs/tags/v" + version + "^{}"):
+                    peeled = line.split()[0]
+                elif line.endswith("refs/tags/v" + version):
+                    plain = line.split()[0]
+            tag_commit = peeled or plain  # 附注标签先取 ^{} 解引用到的提交；轻量标签两行一样
             if not tag_commit:
                 reasons.append("远端没有 v%s 这个标签" % version)
             elif tag_commit != git_head:

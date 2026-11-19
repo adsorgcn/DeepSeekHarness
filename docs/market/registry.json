@@ -232,6 +232,42 @@
       "admitted_on": "2026-11-18"
     },
     {
+      "kind": "book",
+      "name": "adspilot-sem",
+      "title": {
+        "zh": "SEM 与付费投流（AdsPilot）",
+        "en": "SEM & Affiliate Media Buying (AdsPilot)"
+      },
+      "description": {
+        "zh": "说一句「SEM」或「付费投流」，从环境自检、凭据账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线到无人值守日循环与 7 天校准，全程在你自己账号和机器跑通。",
+        "en": "Say SEM or Paid Traffic: from self-check, credential vault, Cloudflare landing hub, Offer Rule #1 and Google Ads launch to an unattended daily loop and 7-day calibration on your own accounts."
+      },
+      "version": "2.2.0",
+      "author": "adsorgcn",
+      "license": "MIT",
+      "manifest": ".dsh/books/adspilot-sem/BOOK.md",
+      "procedure": ".dsh/books/adspilot-sem/BOOK.md",
+      "upstream": {
+        "repo": "https://github.com/adsorgcn/AdsPilot",
+        "commit": "04536fe5970713074d7fd353c62317652a625e17",
+        "path": "BOOK.md",
+        "publishTimestamp": 1795057664
+      },
+      "sha256_lf": "cf2d789e0a38331500d3faee7b6c855f2619444130196deb8244ff4493cb8346",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "markers": 2,
+        "at": "2026-11-18"
+      },
+      "say": "SEM",
+      "get": "kit",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-18"
+    },
+    {
       "kind": "plugin",
       "name": "dsh-plugin-chuhai",
       "title": {
@@ -269,6 +305,45 @@
       "get": "npm",
       "admitted_by": "@SUN",
       "admitted_on": "2026-11-17"
+    },
+    {
+      "kind": "plugin",
+      "name": "adspilot",
+      "title": {
+        "zh": "AdsPilot（SEM / 付费投流）",
+        "en": "AdsPilot (SEM / Paid Traffic)"
+      },
+      "description": {
+        "zh": "说一句「SEM」或「付费投流」，DSH 装上 sem 技能和 adspilot_book 分页读书工具，带你从环境自检、凭据账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线做到无人值守日循环与 7 天校准；对接你本机克隆的 AdsPilot 仓和它的 39 个 MCP/CLI 接口，全程在你自己账号和机器上跑，默认 dry-run。",
+        "en": "Say SEM or Paid Traffic: DSH gains the sem skill and the adspilot_book reader, and walks you from self-check, credential vault, Cloudflare landing hub, Offer Rule #1 and Google Ads launch to an unattended daily loop and 7-day calibration; it drives your local AdsPilot clone through its 39 MCP/CLI interfaces, on your own accounts and machine, dry-run by default."
+      },
+      "version": "2.2.0",
+      "author": "adsorgcn",
+      "license": "MIT",
+      "manifest": "skills/sem.md",
+      "procedure": "skills/sem.md",
+      "upstream": {
+        "repo": "https://github.com/adsorgcn/AdsPilot",
+        "commit": "04536fe5970713074d7fd353c62317652a625e17",
+        "tag": "v2.2.0"
+      },
+      "npm": {
+        "name": "adspilot",
+        "version": "2.2.0",
+        "integrity": "sha512-I4oTjgyxmkvq/w+637BUh+4imBZserFZ/nn4o+SUHtBYEMDcMMis1jqF8x4ao7sT5P5ytHQ7ZU8lh3juBJrbRA==",
+        "tarball": "https://registry.npmjs.org/adspilot/-/adspilot-2.2.0.tgz",
+        "publishedAt": "2026-11-19T03:07:44.879Z"
+      },
+      "validated": {
+        "tool": "npm test",
+        "tests": 16,
+        "failed": 0,
+        "at": "2026-11-18"
+      },
+      "say": "SEM / 付费投流",
+      "get": "npm",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-18"
     }
   ]
 }

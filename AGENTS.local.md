@@ -156,6 +156,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
   T:the_trigger_phrase_of_.dsh/books/ai-global-media/BOOK.md_is_written_in_the_note_below
   T:the_trigger_phrase_of_.dsh/books/chupian/BOOK.md_is_written_in_the_note_below
   T:the_trigger_phrase_of_.dsh/books/fenshen/BOOK.md_is_written_in_the_note_below
+  T:the_trigger_phrase_of_.dsh/books/adspilot-sem/BOOK.md_is_written_in_the_note_below
   T:a_book_is_executed_as_written_one_question_at_a_time
   A:running_a_scys_write_tool⇒forbidden_read_only
   A:scanning_a_code_logging_in_or_paying_for_the_user⇒forbidden
@@ -164,5 +165,7 @@ AGENTS.md 本体保持与上游 Mem-Forever 一致；本文件是本仓库对 DS
 （说一句「出片」「出图」或「出视频」，我照 .dsh/books/chupian/BOOK.md 做：把随包带的出片书 .dsh/books/chupian/bot-chupian-book.md 原样放进工作区，你拖给自己的 Grok Bot 或 Muse 说「照这本书做」，一句话或一张图，手自己出图出视频，每一件成品的文件里带着请求和判决；书里按输入分流，广告片照 IML-VEM，叙事片照 AI-VIDEO-ONECMD，两本原文一字不改随书带着；没装 Grok Bot 先走「自媒体出海」到装它那一环。）
 
 （说一句「云端分身」，我照 .dsh/books/fenshen/BOOK.md 做：把你的工作区推成私有仓库，把随包带的分身书 .dsh/books/fenshen/bot-fenshen-book.md 交给你的 Grok Bot，它克隆同一个仓库、装人格、读两本书、开账本的门要你在它那台机器上点一次头、公众号推草稿走固定出口 IP；以后你出门用手机对它说「出文」「出片」「发到 YouTube」，改的是同一个仓库，我每次开工先 git pull；它会问你一次要不要每天到点自己出文、自己盯公众号后台的反馈，勾了才有。没装 Grok Bot 先走「自媒体出海」。）
+
+（说一句「SEM」或「付费投流」，我照 .dsh/books/adspilot-sem/BOOK.md 做：先看 dsh-memory 同级有没有克隆 AdsPilot 仓库，没有就克隆；装机自检、凭据进账本、Cloudflare 落地位、选品第一条、Google Ads 系列上线、无人值守日循环、7 天校准，一环一环带你；脚本和 MCP 默认 dry-run，花钱要你在本机 config 里开 apply；KYC、绑卡付款、申诉三件你自己做，我不碰。装了官方插件 adspilot（npm）就多一个 sem 技能和 adspilot_book 分页读书工具，书每小时在线核一次新版。）
 
 （官方插件：dsh-plugin-chuhai 是这个工具包的第一个官方插件，自媒体出海全程靠它。第一次在这个工作区开场时用 plugin_manager 看一眼装没装，没装就问你一句，点头就装 dsh-plugin-chuhai；国内连不上 npm 官方源 DSH 会自动走镜像。装不上不拦别的事。）

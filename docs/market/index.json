@@ -15,6 +15,12 @@
           "en": "Going global",
           "zh": "自媒体出海"
         }
+      },
+      "advertising": {
+        "title": {
+          "en": "SEM & paid traffic",
+          "zh": "SEM 与付费投流"
+        }
       }
     }
   },
@@ -141,6 +147,47 @@
         {
           "version": "0.1.0",
           "publishTimestamp": 1794487940,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.5 <0.3.0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "adspilot",
+      "title": {
+        "en": "AdsPilot (SEM / Paid Traffic)",
+        "zh": "AdsPilot（SEM / 付费投流）"
+      },
+      "description": {
+        "en": "Say SEM or Paid Traffic and DeepSeek Harness walks you, on your own accounts and machine, from self-check and credential vault to a Cloudflare landing hub, Offer Rule #1, Google Ads launch, an unattended daily loop and 7-day calibration, driving your local AdsPilot clone through 39 MCP/CLI interfaces, dry-run by default.",
+        "zh": "说一句「SEM」或「付费投流」，DSH 在你自己的账号和机器上，从环境自检、凭据账本到 Cloudflare 落地位、选品第一条、Google Ads 系列上线、无人值守日循环与 7 天校准，对接本机 AdsPilot 仓的 39 个 MCP/CLI 接口，默认 dry-run。"
+      },
+      "author": "adsorgcn",
+      "homepage": "https://github.com/adsorgcn/AdsPilot",
+      "repository": {
+        "url": "https://github.com/adsorgcn/AdsPilot"
+      },
+      "metadata": {
+        "category": "advertising",
+        "keywords": [
+          "dsh",
+          "deepseek-harness",
+          "dsh-plugin",
+          "adspilot",
+          "sem",
+          "付费投流",
+          "affiliate-marketing",
+          "google-ads"
+        ]
+      },
+      "versions": [
+        {
+          "version": "2.2.0",
+          "publishTimestamp": 1795057664,
           "source": {
             "type": "npm"
           },
