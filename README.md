@@ -67,6 +67,8 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 你的记忆，只在你的电脑上。笔记是纯文本，随时能看、能改、能删。出网的只有两件事：你向模型提问的 API 请求，和你主动配置的备份（自己的私有仓库或同步盘）。不记密码；钥匙在账本里，值静态编码，不是加密（见 [一键安装.md](一键安装.md)「钥匙放在账本里」）。工具包自己不设门：没有登录墙、没有许可证、不限次数、不看你在哪；模型那边说不，原话给你，下一句就是另一条路，不是一堵墙。
 
+每一笔改动都留了底：从 v1.1.53 起，本仓库每个提交的末尾都带一条链（标签 ai.ilang.chain 之后五行）——一行写 owner 的原话和这次改了什么，一个 JUDGE 块写怎么判的；CI 从 git log 读回来过正典的两个校验器，缺链或链不合法就不放行。读法：`git log -1 --format=%B`，或 `python -X utf8 tools/code_chain.py show HEAD`。规范在正典 [products/code-chain](https://github.com/ilang-ai/ilang-spec/tree/main/products/code-chain)。
+
 ## 引用与致谢
 
 本仓库站在公开学术工作之上，每一层都带 DOI / arXiv 锚点，作者有 ORCID 的挂 ORCID：

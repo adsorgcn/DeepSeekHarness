@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # the code-chain gate reads git log since v1.1.52
+          fetch-depth: 0  # the code-chain gate reads git log since v1.1.52 and requires a chain from v1.1.53 on
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -48,5 +48,5 @@ jobs:
         run: python -X utf8 tools/brain.py instructions check
       - name: Brain check
         run: python -X utf8 tools/brain.py check
-      - name: code-chain gate (counts since v1.1.52, fails only on an invalid chain)
-        run: python -X utf8 tools/code_chain.py check --since v1.1.52
+      - name: code-chain gate (counts since v1.1.52; an invalid chain fails, and so does a missing one from v1.1.53 on)
+        run: python -X utf8 tools/code_chain.py check --since v1.1.52 --require v1.1.53
