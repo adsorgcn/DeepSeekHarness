@@ -28,6 +28,7 @@
 - [出片执行正文](https://dsh.ilang.guide/.dsh/books/chupian/bot-chupian-book.md): 给 Grok Bot / Muse 的完整书，包含两份原书全文；[来源记录](https://dsh.ilang.guide/.dsh/books/chupian/SOURCE.json)、[IML-VEM v1.2.2](https://dsh.ilang.guide/.dsh/books/chupian/sources/IML-VEM-v1.2.2.md)、[AI-VIDEO-ONECMD v1.0](https://dsh.ilang.guide/.dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md)
 - [云端分身](https://dsh.ilang.guide/.dsh/books/fenshen/BOOK.md): 用户的电脑与 Grok Bot 共用私有工作仓库，用手机接续已配置的工作流
 - [云端分身执行正文](https://dsh.ilang.guide/.dsh/books/fenshen/bot-fenshen-book.md): 给 Grok Bot / Muse 的完整书；其引用的 AI 全球自媒体与出片书也在公开文档目录中
+- [SEM 与付费投流（AdsPilot）](https://dsh.ilang.guide/.dsh/books/adspilot-sem/BOOK.md): 在用户自有账号与机器上跑通合规的 SEM 联盟投放，从装机自检、凭据账本、Cloudflare 落地位、选品到 Google Ads 上线、无人值守日循环与 7 天校准；默认 dry-run，KYC、付款、申诉由用户完成
 - [国内指导站](https://ilang.cn/guide/dsh/): 国内分享与阅读入口
 - [迭代清单](https://github.com/adsorgcn/DeepSeekHarness/blob/main/ROADMAP.md): 后续计划，不等同于已实现功能
 
