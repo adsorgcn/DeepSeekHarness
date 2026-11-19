@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.43** · 2026-11-18 · MCP 服务 1.2.0：公开资源加 AdsPilot 的工程书，共 21 项
+
+- server/content.mjs 白名单加 .dsh/books/adspilot-sem/BOOK.md，服务版本 1.1.0 → 1.2.0，概览描述加「SEM 与付费投流」；worker.test.mjs 把这本书加进发现、读取、检索、HTTP 入口的测试；server/README、根 README、.well-known 的 mcp.json 与 server-card.json 同步 21 项与 1.2.0
+- 线上 dsh.ilang.guide/mcp 已重新部署，模块与本提交一字不差
+- 来源：2026-11-18 owner 对「MCP 固定资源表没加 AdsPilot 书」拍「加」
+
 **v1.1.42** · 2026-11-18 · 货架收第二个官方插件 AdsPilot 2.2.0：说一句「SEM」或「付费投流」
 
 - 货架加两条：工程书 adspilot-sem（AdsPilot 的 BOOK.md 原样内置到 .dsh/books/adspilot-sem/，strict 0 错 0 警告，sha256 cf2d789e…，也是插件在线更新的锚点）和官方插件 adspilot 2.2.0（npm integrity 钉死、标签 v2.2.0 = 04536fe、仓库 npm test 16 过 0 败）；index.json 加 adspilot 与 advertising 分类；市场页官方插件区加一行
