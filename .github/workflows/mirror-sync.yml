@@ -9,6 +9,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+# One release is two push events (the branch and the tag); run them one after the other so two jobs never push the same tag at once.
+concurrency:
+  group: mirror-sync
+  cancel-in-progress: false
 jobs:
   mirror:
     runs-on: ubuntu-latest

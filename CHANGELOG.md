@@ -5,6 +5,7 @@
 - mirror-sync 加 cnb.cool/ilang/DeepSeekHarness 一步；Gitee 与 CNB 的令牌已进仓库密钥，Gitee 镜像从 11-18 的 92b0758 追平到当前 main，CNB 从空仓一次性推平（本地克隆原来是浅的，CNB 不收浅推送，取全历史后才推上）
 - README 国内那句加上 CNB
 - 来源：2026-11-19 owner 给了 CNB 与 Gitee 仓库级令牌
+- 补：mirror-sync 加串行锁 concurrency mirror-sync。一次发版是两个推送事件（分支和标签），首跑时两个任务同时推同一个标签，一个报 failed to update ref；镜像内容没错，串行后不再撞
 
 **v1.1.49** · 2026-11-19 · GitHub 发版自动同步到 GitCode 与 Gitee 两个镜像
 
