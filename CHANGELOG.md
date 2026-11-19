@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.49** · 2026-11-19 · GitHub 发版自动同步到 GitCode 与 Gitee 两个镜像
+
+- 新增 .github/workflows/mirror-sync.yml：每次推 main 和打 v* 标签，把 main 和标签推到 gitcode.com/monetize/DeepSeekHarness 与 gitee.com/monetize/DeepSeekHarness；令牌没配的镜像跳过不报错；只做普通推送，镜像分叉就让任务失败让人来看，不强推。GitCode 的令牌已配进仓库密钥，Gitee 的等 owner 给
+- GitCode 镜像今天一次性推平到 GitHub 的 main（之前空着）；GitCode 不提供 raw 文件直链（raw.gitcode.com 回「暂不支持预览」），只当 clone 镜像，install.md 的 raw 来源仍是 gitee；Gitee 镜像停在 11-18 的 92b0758，等令牌一到就自动追平
+- 来源：2026-11-19 owner 说「我导入了一份 你设置下一次性推了之后 都同步发版 做成 github 发版 gitcode 跟 gitee 并行」
+
 **v1.1.48** · 2026-11-19 · 国内镜像的权重排前面：install.md 先走 gitee，再走 GitHub
 
 - 有人贴了那一句之后 Agent 说无法访问 git。从国内探测点实测：gitee 三网都快，GitHub raw 三个点有一个超时，dsh.ilang.guide 三个点有一个超时。docs/install.md 1.1：@SOURCES 把 gitee 镜像排第一，取脚本先 mirror_raw 再 raw，两边都不通就把两个地址给用户在浏览器里下；README 国内那句同步
