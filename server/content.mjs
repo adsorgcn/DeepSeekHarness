@@ -2,7 +2,7 @@
 export const SITE_URL = 'https://dsh.ilang.guide';
 export const REPOSITORY = 'https://github.com/adsorgcn/DeepSeekHarness';
 export const RAW_ROOT = 'https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/';
-export const SERVER_VERSION = '1.3.1';
+export const SERVER_VERSION = '1.3.2';
 export const SUPPORTED_PROTOCOLS = Object.freeze(['2026-07-28', '2025-11-25', '2025-06-18']);
 export const DOCUMENTS = Object.freeze([
   { path: 'README.md', title: 'iLang DSH 工具包：概览与安装' },
@@ -133,8 +133,8 @@ export function createContentClient(fetcher = globalThis.fetch) {
     const systems = platform === 'all' ? ['windows', 'macos', 'linux'] : [platform];
     return { platform, prompt, bootstrap: systems.map(system => {
       const file = system === 'windows' ? 'bootstrap.ps1' : 'bootstrap.sh';
-      return { platform: system, url: `${RAW_ROOT}${file}`, mirror: `https://gitee.com/monetize/DeepSeekHarness/raw/main/${file}` };
-    }), guide: `${SITE_URL}/install.md`, source: readme.url, requiresUserApproval: true, executesInstallation: false };
+      return { platform: system, url: `https://gitee.com/monetize/DeepSeekHarness/raw/main/${file}`, mirror: `${RAW_ROOT}${file}` };
+    }), guide: 'https://ilang.cn/guide/dsh/install.md', source: readme.url, requiresUserApproval: true, executesInstallation: false };
   }
   async function listSkills() {
     let registry, index;

@@ -3,7 +3,7 @@
 # 原则：全部软件只从官方源安装；每步要不要人审批由 DSH 的审批模式决定——
 #   · 不需要审批的（检测、克隆、切目录、验收）→ 自动跑
 #   · 需要审批的（装 Git / Python 等系统软件）→ agent 先问用户，同意后执行
-# 国内网络：GitHub 不可达时自动切换产品仓库到国内镜像
+# 产品源：国内镜像优先，GitHub 兜底（DSH 是中文产品）；镜像随 GitHub 每次推送同步
 #   https://gitee.com/monetize/DeepSeekHarness（镜像与 GitHub 同源，由 owner 维护）
 #
 # 用法：
@@ -26,6 +26,7 @@ $ErrorActionPreference = "Stop"
 $GitHubUrl  = "https://github.com/adsorgcn/DeepSeekHarness.git"
 $GiteeUrl   = "https://gitee.com/monetize/DeepSeekHarness.git"
 $GitHubProbe = "https://github.com"
+$GiteeProbe  = "https://gitee.com"
 
 function Has($cmd) {
     # 1) 真跑一下版本命令（防止把微软商店的 python 占位 stub 当成本地已装）
@@ -71,6 +72,17 @@ function Test-DshInstalled($dir) {
            (Test-Path (Join-Path $dir "CITATION.cff"))
 }
 
+function Test-GiteeReachable {
+    if ($Source -eq "github") { return $false }
+    if ($Source -eq "gitee")  { return $true }
+    try {
+        Invoke-WebRequest -UseBasicParsing -Uri $GiteeProbe -TimeoutSec 8 | Out-Null
+        return $true
+    } catch {
+        return $false
+    }
+}
+
 function Test-GitHubReachable {
     if ($Source -eq "gitee")  { return $false }
     if ($Source -eq "github") { return $true }
@@ -89,6 +101,7 @@ $wingetOk = Has winget
 $productSource = "auto"
 if ($Source -eq "gitee") { $productSource = "gitee" }
 elseif ($Source -eq "github") { $productSource = "github" }
+elseif (Test-GiteeReachable) { $productSource = "gitee" }
 elseif (Test-GitHubReachable) { $productSource = "github" }
 else { $productSource = "gitee" }
 $cloneUrl = if ($productSource -eq "github") { $GitHubUrl } else { $GiteeUrl }
@@ -98,7 +111,7 @@ Write-Host ("git     : " + $(if ($gitOk) { "已装" } else { "缺（需审批安
 Write-Host ("python  : " + $(if ($pyOk) { "已装" } else { "缺（需审批安装）" }))
 Write-Host ("winget  : " + $(if ($wingetOk) { "可用（官方包管理器）" } else { "缺（将给官方下载链接，人类点一下）" }))
 Write-Host ("目标仓库: " + $(if (Test-DshInstalled $TargetDir) { "已安装（完整） -> $TargetDir" } else { "待克隆 -> $TargetDir" }))
-if ($Source -eq "auto") { Write-Host ("产品源  : 自动探测（GitHub 优先，不可达走国内镜像 gitee.com/monetize/DeepSeekHarness）——本轮: " + $productSource) }
+if ($Source -eq "auto") { Write-Host ("产品源  : 自动探测（国内镜像 gitee.com/monetize/DeepSeekHarness 优先，不可达走 GitHub 兜底）——本轮: " + $productSource) }
 elseif ($Source -eq "gitee") { Write-Host "产品源  : 国内镜像 gitee.com/monetize/DeepSeekHarness（强制）" }
 else { Write-Host "产品源  : github.com/adsorgcn/DeepSeekHarness（强制）" }
 Write-Host ""

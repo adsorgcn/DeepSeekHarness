@@ -4,7 +4,7 @@
 # 原则：全部软件只从官方源安装；每步要不要人审批由 DSH 的审批模式决定——
 #   · 不需要审批的（检测、克隆、切目录、验收）→ 自动跑
 #   · 需要审批的（装 git / python 等系统软件）→ agent 先问用户，同意后执行
-# 国内网络：GitHub 不可达时自动切换产品仓库到国内镜像
+# 产品源：国内镜像优先，GitHub 兜底（DSH 是中文产品）；镜像随 GitHub 每次推送同步
 #   https://gitee.com/monetize/DeepSeekHarness（镜像与 GitHub 同源，由 owner 维护）
 #
 # 用法：
@@ -23,6 +23,7 @@ SOURCE="auto"
 GITHUB_URL="https://github.com/adsorgcn/DeepSeekHarness.git"
 GITEE_URL="https://gitee.com/monetize/DeepSeekHarness.git"
 GITHUB_PROBE="https://github.com"
+GITEE_PROBE="https://gitee.com"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -46,6 +47,15 @@ dsh_installed() {
   [ -f "$1/AGENTS.md" ] && [ -f "$1/tools/brain.py" ] && [ -f "$1/CITATION.cff" ]
 }
 
+gitee_reachable() {
+  [ "$SOURCE" = "github" ] && return 1
+  [ "$SOURCE" = "gitee" ] && return 0
+  if has curl; then
+    curl -s --max-time 8 -o /dev/null "$GITEE_PROBE" && return 0
+  fi
+  [ -n "$GIT_BIN" ] && "$GIT_BIN" ls-remote --heads "$GITEE_URL" main >/dev/null 2>&1
+}
+
 github_reachable() {
   [ "$SOURCE" = "gitee" ] && return 1
   [ "$SOURCE" = "github" ] && return 0
@@ -59,7 +69,7 @@ say() { printf '%s\n' "$1"; }
 ok() { if [ "$1" = "1" ]; then say "已装"; else say "缺（需审批安装）"; fi; }
 
 product_source="auto"
-if [ "$SOURCE" = "gitee" ]; then product_source="gitee"; elif [ "$SOURCE" = "github" ]; then product_source="github"; elif github_reachable; then product_source="github"; else product_source="gitee"; fi
+if [ "$SOURCE" = "gitee" ]; then product_source="gitee"; elif [ "$SOURCE" = "github" ]; then product_source="github"; elif gitee_reachable; then product_source="gitee"; elif github_reachable; then product_source="github"; else product_source="gitee"; fi
 CLONE_URL="$GITHUB_URL"
 [ "$product_source" = "gitee" ] && CLONE_URL="$GITEE_URL"
 
@@ -72,7 +82,7 @@ else
   printf 'apt-get : %s\n' "$(ok $APT_OK)"
 fi
 if dsh_installed "$TARGET"; then say "目标仓库: 已安装（完整） -> $TARGET"; else say "目标仓库: 待克隆 -> $TARGET"; fi
-if [ "$SOURCE" = "auto" ]; then say "产品源  : 自动探测（GitHub 优先，不可达走国内镜像 gitee.com/monetize/DeepSeekHarness）——本轮: $product_source"
+if [ "$SOURCE" = "auto" ]; then say "产品源  : 自动探测（国内镜像 gitee.com/monetize/DeepSeekHarness 优先，不可达走 GitHub 兜底）——本轮: $product_source"
 elif [ "$SOURCE" = "gitee" ]; then say "产品源  : 国内镜像 gitee.com/monetize/DeepSeekHarness（强制）"
 else say "产品源  : github.com/adsorgcn/DeepSeekHarness（强制）"; fi
 say ""

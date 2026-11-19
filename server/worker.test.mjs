@@ -119,7 +119,8 @@ test('installation response preserves README prompt and does not execute the scr
   const data = await response.json();
   const readme = await readFile(new URL('README.md', root), 'utf8');
   assert.ok(readme.includes(`> ${data.prompt}`));
-  assert.match(data.prompt, /dsh\.ilang\.guide\/install\.md/);
+  assert.match(data.prompt, /ilang\.cn\/guide\/dsh\/install\.md/);
+  assert.ok(data.bootstrap[0].url.startsWith('https://gitee.com/') && data.bootstrap[0].mirror.startsWith('https://raw.githubusercontent.com/'));
   assert.equal(data.bootstrap.length, 1);
   assert.ok(data.bootstrap[0].url.endsWith('/bootstrap.ps1'));
   assert.equal(data.executesInstallation, false);

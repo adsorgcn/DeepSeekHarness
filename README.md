@@ -21,9 +21,9 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 
 新开一个任务，一定先选「创造模式」（装插件的工具只有它有，装不上东西时它能自己修），再把下面这一句原样贴给它：
 
-> 帮我装 iLang DSH 工具包，照 https://dsh.ilang.guide/install.md 做。
+> 帮我装 iLang DSH 工具包，照 https://ilang.cn/guide/dsh/install.md 做。
 
-这一句的全文在 https://dsh.ilang.guide/install.md ，是写给它看的；你只管贴这一句。
+这一句的全文在 https://ilang.cn/guide/dsh/install.md ，是写给它看的；国际兜底 https://dsh.ilang.guide/install.md 是同一份。你只管贴这一句。
 
 剩下它全包：装环境先问你再动手，放好全套，问几个问题认识你。Windows 走 bootstrap.ps1，macOS 与 Linux 走 bootstrap.sh，由 DSH 按系统选；软件只从官方源装；默认本机模式，什么都不上传。
 
