@@ -1,5 +1,10 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.44** · 2026-11-18 · 补 v1.1.43：发现文件同步 21 项与 1.2.0
+
+- docs/openapi.json 版本 1.2.0、五处文档路径枚举加 .dsh/books/adspilot-sem/BOOK.md；.well-known 的 mcp.json 与 server-card.json 工具参数枚举同步；llms.txt 与 agents 页各加这本书一条
+- 来源：v1.1.43 的 CI 发现测试（test_agent_site）挂在这几份清单上，线上服务本身已是 1.2.0、21 项
+
 **v1.1.43** · 2026-11-18 · MCP 服务 1.2.0：公开资源加 AdsPilot 的工程书，共 21 项
 
 - server/content.mjs 白名单加 .dsh/books/adspilot-sem/BOOK.md，服务版本 1.1.0 → 1.2.0，概览描述加「SEM 与付费投流」；worker.test.mjs 把这本书加进发现、读取、检索、HTTP 入口的测试；server/README、根 README、.well-known 的 mcp.json 与 server-card.json 同步 21 项与 1.2.0
