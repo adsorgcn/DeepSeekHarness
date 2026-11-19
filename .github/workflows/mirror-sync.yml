@@ -1,0 +1,36 @@
+name: Mirror to GitCode and Gitee
+# Every push to main and every v* tag is pushed on to the two China mirrors, so a release on GitHub is a release on
+# GitCode and Gitee in the same minute. A mirror whose token is not set is skipped, not failed. Plain pushes only:
+# a mirror that has diverged makes this job fail and a person looks, nothing is force-pushed.
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: GitCode (monetize/DeepSeekHarness)
+        env:
+          TOKEN: ${{ secrets.GITCODE_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then echo "GITCODE_TOKEN is not set; skipped" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          url="https://monetize:${TOKEN}@gitcode.com/monetize/DeepSeekHarness.git"
+          if [ "$GITHUB_REF_TYPE" = "branch" ]; then git push "$url" HEAD:refs/heads/main; fi
+          git push "$url" --tags
+          echo "GitCode: main and tags pushed from $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Gitee (monetize/DeepSeekHarness)
+        env:
+          TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then echo "GITEE_TOKEN is not set; skipped" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          url="https://monetize:${TOKEN}@gitee.com/monetize/DeepSeekHarness.git"
+          if [ "$GITHUB_REF_TYPE" = "branch" ]; then git push "$url" HEAD:refs/heads/main; fi
+          git push "$url" --tags
+          echo "Gitee: main and tags pushed from $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
