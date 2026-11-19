@@ -1,5 +1,14 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.45** · 2026-11-19 · 一稿多发：一篇稿照平台卡改版本、排队、由手发出；MCP 1.3.0 共 23 项；官网补两处
+
+- 新书 .dsh/books/yigaoduofa/BOOK.md，说一句「一稿多发」或直接说「发到 X 和公众号」「明天发到所有平台」：取最近成稿，照 publish/cards.md 每个平台的卡改成该平台的版本（只改排版、长度、标签、配图、链接、语言，不改观点、数字、标题、论证），每版先给你看，你说「发」才进 publish/queue/<平台>.json；公众号推草稿你点发布，X 由你的 Grok Bot 走官方接口，YouTube 先私密；发完链接写回队列，发错的原样记一行进 publish/log/errors.md；队列文件是两头共用的唯一排期账本，DSH 不常驻、到点的事由 Bot 的 routine 做
+- 随包 Bot 书 bot-yigaoduofa-book.md：到点 pull 队列，只发 approved 且到时间的，X 走第一本书 B2/B4，YouTube 走 B15，公众号走云端分身的固定出口，一条一次提交；用户在手机上直接说「发到 X 和公众号」它也能照卡出版本给看再排
+- 随包平台卡 cards.md 九张：第一波公众号、X、YouTube 这版就发；第二阶段小红书、抖音、哔哩哔哩、LinkedIn、Medium、Substack 由 Grok Bot 指挥 Muse 在 Muse 内置电脑的真实浏览器里发，这版只出版本放 outbox（Medium 已停发新接入令牌、Substack 没有发帖接口、小红书官方不给个人接口、抖音与哔哩哔哩要应用过审，都查过）
+- 货架加 book yigaoduofa（say 一稿多发）；AGENTS.local 口令说明；README 第四本；起手式一行；MCP 服务 1.3.0 白名单加两本（23 项），openapi、well-known、llms.txt、agents 页同步，线上 Worker 已重新部署
+- 官网两处文案：MCP 段补「一稿多发」「SEM 与付费投流」；03 卡片加官方插件两枚 dsh-plugin-chuhai、adspilot
+- 来源：2026-11-19 owner 看过一稿多发需求单后拍「做 一起把官网那两处也改了」，并定第二波平台走「grok 控制 muse 在 muse 内置电脑的真实浏览器里弄」
+
 **v1.1.44** · 2026-11-18 · 补 v1.1.43：发现文件同步 21 项与 1.2.0
 
 - docs/openapi.json 版本 1.2.0、五处文档路径枚举加 .dsh/books/adspilot-sem/BOOK.md；.well-known 的 mcp.json 与 server-card.json 工具参数枚举同步；llms.txt 与 agents 页各加这本书一条
