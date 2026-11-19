@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.47** · 2026-11-19 · 那句话换成一句短的：帮我装 iLang DSH 工具包，照 https://dsh.ilang.guide/install.md 做
+
+- 新手贴的只剩这一句；原来 250 字的长指令全文改写成给 Agent 读的工程书 docs/install.md（创造模式、取脚本、只检测、一样一样问、官方源、问一次装插件、卡住自己修、最后告诉用户怎么回来），strict 0 错 0 警告，线上 https://dsh.ilang.guide/install.md
+- README、首页、一键安装.md 三处改到同一句（之前 README 和 一键安装.md 里的长句已经是两个不同版本）；MCP 安装说明工具 1.3.1 返回这一句并把 guide 指向 install.md；Worker 测试、openapi、well-known 版本同步；agent-skills 的 dsh-install 卡补一句并重算摘要；llms.txt 与 agents 页各加一条
+- 来源：2026-11-19 owner 说「首页复制粘贴的命令提示词 一些新手蠢到没办法理解」并拍「过」
+
 **v1.1.46** · 2026-11-19 · 出片 Bot 书 1.5：交片六行每行开头给固定标签
 
 - 第一次真人跑回来的出片报告内容齐、壳子散（没写 CLIP-READY、S 写成 DONE、少了花费那行、瑕疵混进六行），所以 REPORT 六行每行开头给标签 CLIP-READY、成品、版本、花费、门禁、S=，让 Bot 照抄；瑕疵另起一段写在六行之后。其余一个字不动
