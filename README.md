@@ -122,7 +122,7 @@ iLang 开发、面向 DeepSeek Harness 用户的开源工具包，提供本地�
 - [OpenAPI](https://dsh.ilang.guide/openapi.json) · [Agent 导航](https://dsh.ilang.guide/llms.txt)
 - [Agent Skills 索引](https://dsh.ilang.guide/.well-known/agent-skills/index.json) · [访问说明](https://dsh.ilang.guide/auth.md)
 
-MCP 现可读取「变工程书」「出片」「云端分身」及其随包执行正文，共 20 项固定公开资源、5 个只读工具。它返回使用资料，制作、同步和发布仍由你的 Agent 按实际配置与授权执行。
+MCP 现可读取「变工程书」「出片」「云端分身」「SEM 与付费投流」及其随包执行正文，共 21 项固定公开资源、5 个只读工具。它返回使用资料，制作、同步和发布仍由你的 Agent 按实际配置与授权执行。
 
 支持 WebMCP 的浏览器还可在首页调用「读取安装说明」和「搜索技能市场」。安装仍由本地 Agent 按用户确认执行。
 

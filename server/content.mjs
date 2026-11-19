@@ -2,7 +2,7 @@
 export const SITE_URL = 'https://dsh.ilang.guide';
 export const REPOSITORY = 'https://github.com/adsorgcn/DeepSeekHarness';
 export const RAW_ROOT = 'https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/';
-export const SERVER_VERSION = '1.1.0';
+export const SERVER_VERSION = '1.2.0';
 export const SUPPORTED_PROTOCOLS = Object.freeze(['2026-07-28', '2025-11-25', '2025-06-18']);
 export const DOCUMENTS = Object.freeze([
   { path: 'README.md', title: 'iLang DSH 工具包：概览与安装' },
@@ -25,6 +25,7 @@ export const DOCUMENTS = Object.freeze([
   { path: '.dsh/books/chupian/sources/AI-VIDEO-ONECMD-v1.0.md', title: '出片原书：AI-VIDEO-ONECMD v1.0' },
   { path: '.dsh/books/fenshen/BOOK.md', title: '云端分身：私有仓库与手机接续工作' },
   { path: '.dsh/books/fenshen/bot-fenshen-book.md', title: '云端分身：Grok Bot / Muse 完整执行正文' },
+  { path: '.dsh/books/adspilot-sem/BOOK.md', title: 'SEM 与付费投流（AdsPilot）：自有账号上的合规联盟投放工程书' },
 ]);
 // This exact public compressed source is the mother named by source-book/SKILL.md.
 // Its uncompressed digest is recorded in the same repository's MOTHER.source.txt.
@@ -49,7 +50,7 @@ export const documentMimeType = path => path.endsWith('.json') ? 'application/js
 export function overview() {
   return {
     name: 'iLang DSH 工具包',
-    description: '面向 DeepSeek Harness 用户的开源工具包：本地记忆、安装指引、技能与工程书，涵盖自媒体出海、变工程书、出片和云端分身。远程服务只读取这些公开资料。',
+    description: '面向 DeepSeek Harness 用户的开源工具包：本地记忆、安装指引、技能与工程书，涵盖自媒体出海、变工程书、出片、云端分身和 SEM 与付费投流。远程服务只读取这些公开资料。',
     website: `${SITE_URL}/`, repository: REPOSITORY, guide: 'https://ilang.cn/guide/dsh/',
     market: `${SITE_URL}/market/`, mcp: `${SITE_URL}/mcp`,
     capabilities: ['公开文档读取与检索', '按系统读取安装说明', '查询技能、工程书和插件目录'],

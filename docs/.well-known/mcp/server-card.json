@@ -4,7 +4,7 @@
   "serverInfo": {
     "name": "ilang-dsh-toolkit",
     "title": "iLang DSH 工具包",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "websiteUrl": "https://dsh.ilang.guide/"
   },
   "description": "Public read-only installation guidance, documentation search, and skills catalogue for iLang DSH 工具包. No user files, installations or account actions.",
