@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.50** · 2026-11-19 · 第三个国内镜像：腾讯 CNB，三处镜像随 GitHub 发版自动同步
+
+- mirror-sync 加 cnb.cool/ilang/DeepSeekHarness 一步；Gitee 与 CNB 的令牌已进仓库密钥，Gitee 镜像从 11-18 的 92b0758 追平到当前 main，CNB 从空仓一次性推平（本地克隆原来是浅的，CNB 不收浅推送，取全历史后才推上）
+- README 国内那句加上 CNB
+- 来源：2026-11-19 owner 给了 CNB 与 Gitee 仓库级令牌
+
 **v1.1.49** · 2026-11-19 · GitHub 发版自动同步到 GitCode 与 Gitee 两个镜像
 
 - 新增 .github/workflows/mirror-sync.yml：每次推 main 和打 v* 标签，把 main 和标签推到 gitcode.com/monetize/DeepSeekHarness 与 gitee.com/monetize/DeepSeekHarness；令牌没配的镜像跳过不报错；只做普通推送，镜像分叉就让任务失败让人来看，不强推。GitCode 的令牌已配进仓库密钥，Gitee 的等 owner 给
