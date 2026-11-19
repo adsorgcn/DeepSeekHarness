@@ -1,5 +1,11 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.48** · 2026-11-19 · 国内镜像的权重排前面：install.md 先走 gitee，再走 GitHub
+
+- 有人贴了那一句之后 Agent 说无法访问 git。从国内探测点实测：gitee 三网都快，GitHub raw 三个点有一个超时，dsh.ilang.guide 三个点有一个超时。docs/install.md 1.1：@SOURCES 把 gitee 镜像排第一，取脚本先 mirror_raw 再 raw，两边都不通就把两个地址给用户在浏览器里下；README 国内那句同步
+- 那一句的全文在国内多放一份：https://ilang.cn/guide/dsh/install.md ，和 docs/install.md 一字不差；国内孪生页上那一句指向这份
+- 来源：2026-11-19 owner 说「我里面有 gitee 镜像 我觉得这个权重要拉前面来」
+
 **v1.1.47** · 2026-11-19 · 那句话换成一句短的：帮我装 iLang DSH 工具包，照 https://dsh.ilang.guide/install.md 做
 
 - 新手贴的只剩这一句；原来 250 字的长指令全文改写成给 Agent 读的工程书 docs/install.md（创造模式、取脚本、只检测、一样一样问、官方源、问一次装插件、卡住自己修、最后告诉用户怎么回来），strict 0 错 0 警告，线上 https://dsh.ilang.guide/install.md
