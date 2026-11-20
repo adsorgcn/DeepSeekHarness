@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""code-chain gate and sealer for this repository (ilang-spec products/code-chain 1.0).
+"""code-chain gate and sealer for this repository (ilang-spec products/code-chain 1.1).
 
 A chained commit ends its message with one blank line, the label line `ai.ilang.chain`, then five lines:
 a ::FACT{key:request|...} line with the owner's words verbatim, and a JUDGE block (::JUDGE{v5.0}, V:, M:, R:).
