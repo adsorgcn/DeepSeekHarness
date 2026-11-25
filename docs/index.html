@@ -81,7 +81,7 @@
   <link rel="stylesheet" href="landing.css?v=20261119.4">
   <link rel="stylesheet" href="platforms.css?v=20261118.1">
   <link rel="stylesheet" href="typography.css?v=20261119.1">
-  <link rel="stylesheet" href="redesign.css?v=20261119.2">
+  <link rel="stylesheet" href="redesign.css?v=20261125.1">
   <script src="landing.js?v=20261119.3" defer></script>
   <link rel="alternate" type="text/markdown" href="https://dsh.ilang.guide/llms-full.txt">
   <link rel="api-catalog" href="https://dsh.ilang.guide/.well-known/api-catalog">
@@ -112,7 +112,7 @@
     </div></header>
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <a class="release-note" href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/CHANGELOG.md" target="_blank" rel="noopener"><span class="live-dot"></span> 新增「一稿多发」与 AdsPilot <span aria-hidden="true">↗</span></a>
+        <a class="release-note" href="https://github.com/adsorgcn/DeepSeekHarness/blob/main/CHANGELOG.md" target="_blank" rel="noopener"><span class="live-dot"></span> 新增「SEO 体检」与 dsh-plugin-seo <span aria-hidden="true">↗</span></a>
         <h1 id="hero-title">让你的 AI，<br>接着把事做完。</h1>
         <p>给 DeepSeek Harness 装上记忆、技能和<span class="keep-phrase">内容工作流。</span><br>从电脑上的一个想法，到随时接续的<span class="keep-phrase">出海工作室。</span></p>
         <div class="hero-actions"><button class="button button-dark" type="button" data-copy-target="install-command"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制安装指令</span></button><a class="hero-secondary" href="#demo">看看它怎么工作 <span aria-hidden="true">↓</span></a></div>
@@ -145,10 +145,10 @@
       <div class="official-copy">
         <span class="feature-index">03 / 工具与技能</span>
         <h3>需要的能力，<br>接进同一个工作区。</h3>
-        <p>4 个内置技能、5 本工程书，装了工具包就有。两个官方插件从 npm 装，安装前逐项确认。</p>
+        <p>4 个内置技能、7 本工程书，装了工具包就有。三个官方插件从 npm 装，安装前逐项确认。</p>
         <div class="tool-inventory">
           <div><span>技能</span><ul><li>mem-forever</li><li>deai</li><li>source-book</li><li>site-design-engine</li></ul></div>
-          <div><span>插件</span><ul><li>dsh-plugin-chuhai</li><li>adspilot</li></ul></div>
+          <div><span>插件</span><ul><li>dsh-plugin-chuhai</li><li>adspilot</li><li>dsh-plugin-seo</li></ul></div>
         </div>
         <p class="market-note">技能市场的收录顺序就是显示顺序。</p>
         <a class="link" href="https://www.deepseek.com/harness/" target="_blank" rel="noopener">了解 DeepSeek Harness <span aria-hidden="true">↗</span></a>
@@ -234,11 +234,32 @@
           <div><h4>海外平台规划</h4><p><span>Medium</span>、<wbr><span>Substack</span>、<wbr><span>LinkedIn</span>、<wbr><span>Facebook</span>、<wbr><span>Instagram</span>、<wbr><span>Threads</span>、<wbr><span>TikTok</span>、<wbr><span>Reddit</span>、<wbr><span>Pinterest</span>、<wbr><span>Quora</span>、<wbr><span>Telegram</span>、<wbr><span>WhatsApp Channels</span>、<wbr><span>Bluesky</span>、<wbr><span>Spotify</span>、<wbr><span>Apple Podcasts</span>、<wbr><span>LINE</span>、<wbr><span>Naver</span>、<wbr><span>note</span>、<wbr><span>VK</span></p></div>
         </div>
       </div>
+      <article class="story-card checkup" id="seo-checkup" aria-labelledby="checkup-title">
+        <div class="story-copy">
+          <span class="command-tag">说「SEO 体检」</span>
+          <h3 id="checkup-title">想被 Google 搜到，<br>先按它的规矩查。</h3>
+          <p>给网址，它先读 Google Search Central 当天的官方页，按六个维度逐条判，一页报告每条带证据和官方页地址。改法你点头一条改一条，部署是你做。不批量产页，不做外链，不抓结果页。</p>
+          <a class="link" href="market/#entry-seo" target="_blank" rel="noopener">查看这本工程书 <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="checkup-sheet" role="img" aria-label="SEO 体检报告示意：六个维度逐条判，每条带证据与 Google 官方页地址，非 Google 的建议另列">
+          <div class="checkup-head"><span>SEO 体检 · 报告</span><span>判据：Google Search Central</span></div>
+          <ol class="checkup-rows">
+            <li><b>技术地基</b><span>能抓取、能索引、能渲染</span><i class="p0">P0</i></li>
+            <li><b>你是谁</b><span>Organization 结构化数据</span><i class="p1">P1</i></li>
+            <li><b>站点聚焦</b><span>无价值页与重复页</span><i class="ok">✓</i></li>
+            <li><b>页面可读</b><span>标题链接与摘要</span><i class="p2">P2</i></li>
+            <li><b>信任与站外</b><span>链接不买、不换、不自动提交</span><i class="ok">✓</i></li>
+            <li><b>数据</b><span>Search Console 导出</span><i class="p3">P3</i></li>
+          </ol>
+          <div class="checkup-foot"><span class="live-dot"></span> 每条带证据与官方页地址 · 点头一条改一条</div>
+          <span class="checkup-aside">非 Google 的建议 · 另列，不进判据</span>
+        </div>
+      </article>
     </div>
   </section>
 
   <section class="section wrap agent-section" id="mcp" aria-labelledby="mcp-title"><div class="agent-grid">
-    <div class="agent-copy"><span class="eyebrow">也为你的 Agent 准备好了</span><h2 id="mcp-title">接上 MCP，<br>从官方资料开始。</h2><p>Agent 可用 5 个只读工具查阅 23 项公开资源，包括安装方法、技能和工程书。<span class="query-name">「变工程书」</span><span class="query-name">「出片」</span><span class="query-name">「云端分身」</span><span class="query-name">「一稿多发」</span><span class="query-name">「SEM 与付费投流」</span>的公开说明，也在同一套入口里。</p><a class="ready-badge" href="https://isitagentready.com/dsh.ilang.guide" target="_blank" rel="noopener" aria-label="Agent Ready 100分，查看实测结果"><img src="assets/agent-ready-100.svg" width="222" height="32" alt="Agent Ready 100/100"></a><span class="score-note">Level 5 · Agent-Native<br>默认 All Checks · 2026.11.18 实测</span><a class="link" href="agents/">完整接入文档与工具清单 <span aria-hidden="true">↗</span></a></div>
+    <div class="agent-copy"><span class="eyebrow">也为你的 Agent 准备好了</span><h2 id="mcp-title">接上 MCP，<br>从官方资料开始。</h2><p>Agent 可用 5 个只读工具查阅 25 项公开资源，包括安装方法、技能和工程书。<span class="query-name">「变工程书」</span><span class="query-name">「出片」</span><span class="query-name">「云端分身」</span><span class="query-name">「一稿多发」</span><span class="query-name">「SEM 与付费投流」</span><span class="query-name">「SEO 体检」</span>的公开说明，也在同一套入口里。</p><a class="ready-badge" href="https://isitagentready.com/dsh.ilang.guide" target="_blank" rel="noopener" aria-label="Agent Ready 100分，查看实测结果"><img src="assets/agent-ready-100.svg" width="222" height="32" alt="Agent Ready 100/100"></a><span class="score-note">Level 5 · Agent-Native<br>默认 All Checks · 2026.11.18 实测</span><a class="link" href="agents/">完整接入文档与工具清单 <span aria-hidden="true">↗</span></a></div>
     <div class="mcp-card"><div class="mcp-heading"><span class="mcp-glyph" aria-hidden="true">⌘</span><div><h3>iLang DSH MCP</h3><p>公开只读 · 无需账号或 API Key</p></div><span class="mcp-status"><i class="live-dot"></i> 可连接</span></div><label for="mcp-endpoint">远程 MCP 地址</label><div class="endpoint-field"><input id="mcp-endpoint" value="https://dsh.ilang.guide/mcp" readonly spellcheck="false"><button type="button" class="copy-mini" data-copy-target="mcp-endpoint" aria-label="复制 MCP 地址"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制</span></button></div><dl class="mcp-settings"><div><dt>传输方式</dt><dd>Streamable HTTP</dd></div><div><dt>认证方式</dt><dd>无（None）</dd></div></dl><details class="mcp-config"><summary>使用 JSON 配置 <span aria-hidden="true">＋</span></summary><div class="code-top"><span>mcpServers</span><button type="button" class="copy-mini" data-copy-target="mcp-json" aria-label="复制 MCP JSON 配置"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-copy-label>复制配置</span></button></div><pre><code id="mcp-json">{
   "mcpServers": {
     "ilang-dsh": {
