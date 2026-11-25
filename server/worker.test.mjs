@@ -135,6 +135,7 @@ test('newly released workflows can be discovered, searched and read without auth
     ['.dsh/books/adspilot-sem/BOOK.md', '付费投流'],
     ['.dsh/books/yigaoduofa/BOOK.md', '一稿多发'],
     ['.dsh/books/baowen/BOOK.md', '爆文公式'],
+    ['.dsh/books/seo/BOOK.md', 'SEO 体检'],
   ];
   const { body: overview } = await rpc('tools/call', { name: 'dsh_overview', arguments: {} });
   for (const [path, query] of additions) {

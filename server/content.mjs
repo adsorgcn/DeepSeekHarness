@@ -2,7 +2,7 @@
 export const SITE_URL = 'https://dsh.ilang.guide';
 export const REPOSITORY = 'https://github.com/adsorgcn/DeepSeekHarness';
 export const RAW_ROOT = 'https://raw.githubusercontent.com/adsorgcn/DeepSeekHarness/main/';
-export const SERVER_VERSION = '1.3.3';
+export const SERVER_VERSION = '1.3.4';
 export const SUPPORTED_PROTOCOLS = Object.freeze(['2026-07-28', '2025-11-25', '2025-06-18']);
 export const DOCUMENTS = Object.freeze([
   { path: 'README.md', title: 'iLang DSH 工具包：概览与安装' },
@@ -29,6 +29,7 @@ export const DOCUMENTS = Object.freeze([
   { path: '.dsh/books/yigaoduofa/BOOK.md', title: '一稿多发：一篇稿照平台卡改版本、排队、由手发出' },
   { path: '.dsh/books/yigaoduofa/bot-yigaoduofa-book.md', title: '一稿多发：Grok Bot 照队列发的执行正文' },
   { path: '.dsh/books/baowen/BOOK.md', title: '爆文公式：公众号稿的节奏自查，209 条标题与 15 篇正文量出来的' },
+  { path: '.dsh/books/seo/BOOK.md', title: 'SEO 体检：按 Google 官方文档逐条判六维，一页报告，点头才改' },
 ]);
 // This exact public compressed source is the mother named by source-book/SKILL.md.
 // Its uncompressed digest is recorded in the same repository's MOTHER.source.txt.
