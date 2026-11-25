@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DSH-FIX-A1-A9 的 RUBRIC 检查器：R1-R9 与 R11（R6 已撤回，R10 由 @SUN 人工走）。
+"""DSH-FIX-A1-A9 的 RUBRIC 检查器：R1-R9、R11 与 R12（R6 已撤回，R10 由 @SUN 人工走）。
 
 用法: python -X utf8 tools/check_rubrics.py
 每项打印「R<n> PASS/FAIL + 命令输出原文」。
@@ -151,6 +151,36 @@ for _p in ("bootstrap.ps1", "bootstrap.sh", "tools/free_station.py", "server/wor
 ok11 = soul_ok and guide_ok and readme_ok and not hits11
 results["R11"] = ok11
 print(f"[R11] {'PASS' if ok11 else 'FAIL'} (soul={soul_ok}, guide={guide_ok}, readme={readme_ok}, gate words found: {hits11 or 'none'})")
+print("-" * 60)
+
+# R12：SEO 体检书钉在书、货架、入口三处，四条边界都在
+import os as _os12
+seo_book_path = ".dsh/books/seo/BOOK.md"
+seo_book_ok = _os12.path.isfile(seo_book_path)
+if seo_book_ok:
+    seo_book_t = io.open(seo_book_path, encoding="utf-8").read()
+    seo_book_ok = seo_book_t.startswith("::ILANG::v5.0::ENGINEERING_BOOK") \
+        and seo_book_t.rstrip().endswith("::ILANG::v5.0::ENGINEERING_BOOK") \
+        and "[ID:DSH-SEO]" in seo_book_t \
+        and all(s in seo_book_t for s in (
+            "never:fetch_or_scrape_a_google_search_result_page",
+            "never:generate_pages_in_bulk",
+            "never:create_buy_exchange_or_automatically_submit_a_link",
+            "never:deploy_or_touch_the_live_site"))
+seo_reg_t = io.open("docs/market/registry.json", encoding="utf-8").read()
+seo_reg = json.loads(seo_reg_t)
+seo_entries = [e for e in seo_reg["entries"] if e.get("name") == "seo"]
+seo_registry_ok = len(seo_entries) == 1 \
+    and seo_entries[0].get("kind") == "book" \
+    and seo_entries[0].get("say") == "SEO 体检" \
+    and seo_entries[0].get("admitted_by") == "@SUN" \
+    and seo_entries[0].get("manifest") == ".dsh/books/seo/BOOK.md"
+seo_agents_t = io.open("AGENTS.local.md", encoding="utf-8").read()
+seo_agents_ok = "T:the_trigger_phrase_of_.dsh/books/seo/BOOK.md_is_written_in_the_note_below" in seo_agents_t \
+    and "SEO 体检" in seo_agents_t
+ok12 = seo_book_ok and seo_registry_ok and seo_agents_ok
+results["R12"] = ok12
+print(f"[R12] {'PASS' if ok12 else 'FAIL'} (book={seo_book_ok}, registry={seo_registry_ok}, agents={seo_agents_ok})")
 print("-" * 60)
 
 failed = [k for k, v in results.items() if not v]
