@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.57** · 2026-11-25 · 货架钉 dsh-plugin-seo 0.1.0；落地页加「SEO 体检」一卡；线上 MCP 1.3.4 共 25 项已部署
+
+- 货架登记官方插件 dsh-plugin-seo 0.1.0（npm integrity、commit 80c412413f7133f959bc78d9e5e357a25804cc1e、标签 v0.1.0 钉死，npm test 10/10，仓库 adsorgcn/dsh-plugin-seo MIT）；官方索引 docs/market/index.json 加 seo 分类与这条；市场页由 market_build 重生成，官方插件 3 个
+- 落地页 docs/index.html：「从第一篇文章」一节加「SEO 体检」宽卡（报告示意：六维逐条、每条带证据与 Google 官方页地址、非 Google 的建议另列）；03 卡计数改 7 本工程书、三个官方插件并列出 dsh-plugin-seo；MCP 段 25 项并加「SEO 体检」；首页公告句改本次；样式在 docs/redesign.css
+- Worker ilang-dsh-mcp 已按 main 的 server/content.mjs 1.3.4 重新部署并验：healthz 1.3.4、overview 25、MCP resources 25、SEO 书 sha 82a64b16 一致
+- 来源：2026-11-25 owner 对三件拍「1，放 2，过 3，出」，第 3 件插件已发 npm，第 2 件落地页与 Worker 是这一版
+
 **v1.1.56** · 2026-11-25 · SEO 体检：按 Google 官方文档逐条判六维，一页报告，点头才改，不批量产页不做外链不抓结果页；MCP 1.3.4 共 25 项（DSH-SEO-S1-S6）
 
 - 新书说一句「SEO 体检」并给网址：先读 Google Search Central 当天的官方页，抓站落快照，按技术地基、你是谁、站点聚焦、页面可读、信任与站外、数据六个维度逐条判，一页报告每条带证据和 Google 页地址；改法你点头一条改一条，只改工作区里的站文件，部署是你做。Google 说 AI Overviews 与 AI Mode 没有额外要求、不要特殊 schema、没有 magic word count；自动只能是自动体检和改稿建议，不能自动产页、自动外链、自动抓排名，书里四条边界钉死
