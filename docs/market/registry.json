@@ -42,7 +42,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "get": "kit"
     },
@@ -70,7 +70,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "get": "kit"
     },
@@ -102,7 +102,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "get": "kit"
     },
@@ -134,7 +134,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "get": "kit"
     },
@@ -162,7 +162,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "say": "AI全球自媒体",
       "get": "kit",
@@ -193,7 +193,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "say": "出片",
       "get": "kit",
@@ -224,7 +224,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "say": "云端分身",
       "get": "kit",
@@ -255,7 +255,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "say": "一稿多发",
       "get": "kit",
@@ -286,12 +286,43 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "say": "爆文公式",
       "get": "kit",
       "admitted_by": "@SUN",
       "admitted_on": "2026-11-19"
+    },
+    {
+      "kind": "book",
+      "name": "seo",
+      "title": {
+        "zh": "SEO 体检",
+        "en": "SEO checkup by Google s own rules"
+      },
+      "description": {
+        "zh": "说一句「SEO 体检」并给网址，它按 Google Search Central 当天的官方页逐条判六个维度：技术地基、你是谁、站点聚焦、页面可读、信任与站外、数据；一页报告每条带证据和官方页地址，改法你点头一条它改一条，只改工作区里的站文件，部署是你做；不批量产页、不做外链、不抓 Google 结果页、不承诺排名",
+        "en": "Say one phrase with your URL: it audits the site on six dimensions against the current Google Search Central pages only, writes a one-page report where every finding carries its evidence and the official page, and edits a workspace file only after you approve that line; you deploy. No bulk pages, no link building, no scraping of Google results, no ranking promises"
+      },
+      "version": "1.0",
+      "author": "ilang-ai",
+      "license": "MIT",
+      "manifest": ".dsh/books/seo/BOOK.md",
+      "procedure": ".dsh/books/seo/BOOK.md",
+      "upstream": null,
+      "sha256_lf": "82a64b168a37b7e1491bec9b7c556653143e1412cbfd089b4714e8899a21540a",
+      "validated": {
+        "tool": "tools/ilang_grammar_validator.py --lint --strict",
+        "strict": true,
+        "errors": 0,
+        "warnings": 0,
+        "markers": 2,
+        "at": "2026-11-25"
+      },
+      "say": "SEO 体检",
+      "get": "kit",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-25"
     },
     {
       "kind": "book",
@@ -322,7 +353,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-23"
+        "at": "2026-11-25"
       },
       "say": "SEM",
       "get": "kit",
