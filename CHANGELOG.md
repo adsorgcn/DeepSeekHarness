@@ -1,5 +1,14 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.56** · 2026-11-25 · SEO 体检：按 Google 官方文档逐条判六维，一页报告，点头才改，不批量产页不做外链不抓结果页；MCP 1.3.4 共 25 项（DSH-SEO-S1-S6）
+
+- 新书说一句「SEO 体检」并给网址：先读 Google Search Central 当天的官方页，抓站落快照，按技术地基、你是谁、站点聚焦、页面可读、信任与站外、数据六个维度逐条判，一页报告每条带证据和 Google 页地址；改法你点头一条改一条，只改工作区里的站文件，部署是你做。Google 说 AI Overviews 与 AI Mode 没有额外要求、不要特殊 schema、没有 magic word count；自动只能是自动体检和改稿建议，不能自动产页、自动外链、自动抓排名，书里四条边界钉死
+- 货架登记 seo（version 1.0），口令三处：AGENTS.local.md 触发行与一段、README 市场与 MCP 行、dsh-新手起手式.md 表
+- MCP 1.3.4 共 25 项，发现文件同步（content.mjs、worker.test.mjs、server/README、openapi.json、mcp.json、server-card.json、agents/index.html、llms.txt）；Worker 由 @SUN 侧重新部署
+- check_rubrics 加 R12 钉住书的四条边界与入口
+- code-chain 门禁放过 upstream-sync 的自动提交（它们没有 owner 的话可封，2a217e2 那笔就是）
+- 来源：2026-11-25 owner 看过对照报告后拍「做 写工程书」；门禁那条是他同日拍的「放」
+
 **v1.1.55** · 2026-11-19 · code_chain.py 的文件头注释跟上正典 code-chain 1.1
 
 - `tools/code_chain.py` 第 2 行注释：products/code-chain 1.0 → 1.1（正典 5.0.18 同日发，第 16 行反模式改为讲原因：旁边文件随后面每个提交走、谁都能改，提交信息只属于这一个提交）；链的格式、门禁的行为都没变
