@@ -437,6 +437,45 @@
       "get": "npm",
       "admitted_by": "@SUN",
       "admitted_on": "2026-11-18"
+    },
+    {
+      "kind": "plugin",
+      "name": "dsh-plugin-seo",
+      "title": {
+        "zh": "SEO 体检",
+        "en": "SEO checkup"
+      },
+      "description": {
+        "zh": "说一句「SEO 体检」并给网址，DSH 装上这本书和它的技能：按 Google Search Central 当天的官方页逐条判六个维度，一页报告每条带证据和官方页地址，改法你点头一条它改一条，只改工作区里的站文件，部署是你做；不批量产页、不做外链、不抓 Google 结果页、不承诺排名。",
+        "en": "Say one phrase with your URL and DeepSeek Harness gains the SEO checkup book and skill: six dimensions judged against the current Google Search Central pages only, a one-page report where every finding carries its evidence and the official page, edits to workspace site files only after you approve each line; you deploy. No bulk pages, no link building, no scraping of Google results, no ranking promises."
+      },
+      "version": "0.1.0",
+      "author": "adsorgcn",
+      "license": "MIT",
+      "manifest": "skills/seo-tijian/SKILL.md",
+      "procedure": "books/BOOK.md",
+      "upstream": {
+        "repo": "https://github.com/adsorgcn/dsh-plugin-seo",
+        "commit": "80c412413f7133f959bc78d9e5e357a25804cc1e",
+        "tag": "v0.1.0"
+      },
+      "npm": {
+        "name": "dsh-plugin-seo",
+        "version": "0.1.0",
+        "integrity": "sha512-+CftBZvJUitYFp0BHkKy19VoSBtNuAgIvN5xq69ky1lVb/WfF7pVTFB+aoBbt1G7o0/PQwL6oqnB8r70laY+kw==",
+        "tarball": "https://registry.npmjs.org/dsh-plugin-seo/-/dsh-plugin-seo-0.1.0.tgz",
+        "publishedAt": "2026-11-25T11:10:10.106Z"
+      },
+      "validated": {
+        "tool": "npm test",
+        "tests": 10,
+        "failed": 0,
+        "at": "2026-11-25"
+      },
+      "say": "SEO 体检",
+      "get": "npm",
+      "admitted_by": "@SUN",
+      "admitted_on": "2026-11-25"
     }
   ]
 }

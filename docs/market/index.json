@@ -21,6 +21,12 @@
           "en": "SEM & paid traffic",
           "zh": "SEM 与付费投流"
         }
+      },
+      "seo": {
+        "title": {
+          "en": "SEO checkup",
+          "zh": "SEO 体检"
+        }
       }
     }
   },
@@ -208,6 +214,46 @@
         {
           "version": "2.2.0",
           "publishTimestamp": 1795057664,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.5 <0.3.0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dsh-plugin-seo",
+      "title": {
+        "en": "SEO checkup",
+        "zh": "SEO 体检"
+      },
+      "description": {
+        "en": "Say one phrase with your URL: six dimensions judged against Google Search Central's own pages, a one-page report with evidence and the official page for every finding, edits only after you approve each line; you deploy.",
+        "zh": "说一句「SEO 体检」并给网址，按 Google Search Central 官方页逐条判六个维度，一页报告每条带证据和官方页地址，你点头它才改，部署是你做。"
+      },
+      "author": "adsorgcn",
+      "homepage": "https://dsh.ilang.guide/",
+      "repository": {
+        "url": "https://github.com/adsorgcn/dsh-plugin-seo"
+      },
+      "metadata": {
+        "category": "seo",
+        "keywords": [
+          "dsh",
+          "deepseek-harness",
+          "dsh-plugin",
+          "ilang",
+          "seo",
+          "SEO体检",
+          "google-search-central"
+        ]
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1795605010,
           "source": {
             "type": "npm"
           },
