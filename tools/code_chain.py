@@ -3,6 +3,7 @@
 
 A chained commit ends its message with one blank line, the label line `ai.ilang.chain`, then five lines:
 a ::FACT{key:request|...} line with the owner's words verbatim, and a JUDGE block (::JUDGE{v5.0}, V:, M:, R:).
+Commits the upstream-sync workflow makes (subject `sync: upstream engine update <date>`) carry no owner request and are exempt from the gate.
 
     python -X utf8 tools/code_chain.py check [--since REV] [--require REV]
         read git log, find the chains, validate the request line (grammar, strict) and the block (judge
@@ -92,11 +93,14 @@ def cmd_check(args):
     since = args[args.index("--since") + 1] if "--since" in args else None
     require = args[args.index("--require") + 1] if "--require" in args else None
     required = set(git("rev-list", require + "..HEAD").split()) if require else set()
-    chained = unchained = invalid = 0
+    chained = unchained = invalid = exempt = 0
     bad = []
     for h, msg in commits(since):
         chain = extract(msg)
         if chain is None:
+            if msg.splitlines()[0].startswith("sync: upstream engine update"):
+                exempt += 1
+                continue
             unchained += 1
             if h in required:
                 bad.append((h[:7], "no chain (required)"))
@@ -108,7 +112,7 @@ def cmd_check(args):
         else:
             invalid += 1
             bad.append((h[:7], "; ".join(reasons)))
-    print("code-chain: %d chained, %d unchained, %d invalid%s" % (chained, unchained, invalid, (" (since %s)" % since) if since else ""))
+    print("code-chain: %d chained, %d unchained, %d invalid, %d exempt%s" % (chained, unchained, invalid, exempt, (" (since %s)" % since) if since else ""))
     for h, why in bad:
         print("  %s  %s" % (h, why))
     return 1 if bad else 0
