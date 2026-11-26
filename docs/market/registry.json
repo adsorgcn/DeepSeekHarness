@@ -42,7 +42,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "get": "kit"
     },
@@ -70,7 +70,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 4,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "get": "kit"
     },
@@ -102,7 +102,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "get": "kit"
     },
@@ -134,7 +134,7 @@
         "errors": 0,
         "warnings": 0,
         "fences_linted": 1,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "get": "kit"
     },
@@ -162,7 +162,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "say": "AI全球自媒体",
       "get": "kit",
@@ -193,7 +193,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "say": "出片",
       "get": "kit",
@@ -224,7 +224,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "say": "云端分身",
       "get": "kit",
@@ -255,7 +255,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "say": "一稿多发",
       "get": "kit",
@@ -286,7 +286,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "say": "爆文公式",
       "get": "kit",
@@ -317,7 +317,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "say": "SEO 体检",
       "get": "kit",
@@ -353,7 +353,7 @@
         "errors": 0,
         "warnings": 0,
         "markers": 2,
-        "at": "2026-11-25"
+        "at": "2026-11-26"
       },
       "say": "SEM",
       "get": "kit",
@@ -371,28 +371,28 @@
         "zh": "说一句「自媒体出海」，DSH 从装好工具包一直带到海外平台：写作人格、内容源、知识库、出文章、公众号走通，再到海外服务器、你的设备、注册 X、开蓝 V、装 Grok Bot 并把第一本书交给它，再给它配手脚（邮箱、Gmail、InstaBox 免费云主机、Muse、Railway、家宽 IP、YouTube 频道）。",
         "en": "Say one phrase and DeepSeek Harness walks you from an installed toolkit to overseas platforms: writing persona, sources, library, articles, first post, then a server abroad, your devices, an X account, Premium, and Grok Bot with its first book and its hands (a mailbox, Gmail, an InstaBox machine, Muse, Railway, a home IP, a YouTube channel)."
       },
-      "version": "0.3.5",
+      "version": "0.3.6",
       "author": "ilang",
       "license": "MIT",
       "manifest": "skills/zimeiti-chuhai.md",
       "procedure": "skills/zimeiti-chuhai.md",
       "upstream": {
         "repo": "https://github.com/adsorgcn/dsh-plugin-chuhai",
-        "commit": "4ac6a98c4bc118735612e2d483119174398ae38a",
-        "tag": "v0.3.5"
+        "commit": "bfccecd953130eb3ee82697c53eea390a803baf0",
+        "tag": "v0.3.6"
       },
       "npm": {
         "name": "dsh-plugin-chuhai",
-        "version": "0.3.5",
-        "integrity": "sha512-LL4PBbhnt6h1L1oYok0H94MDPW402TXEacugjDYRNepaoh1cD2G15PgLQFDdnVxyQMmOxKnU7ImI2BP7OIOi6g==",
-        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.3.5.tgz",
-        "publishedAt": "2026-11-19T12:05:47.888Z"
+        "version": "0.3.6",
+        "integrity": "sha512-nanR0cKGkyeSTvf6rX+IzFN4v4ltF1iTdoaq2e6J1RJyNnLkP3Krdju21WthrV9n3XBNXpFrbaj/Oyj8ByK5HQ==",
+        "tarball": "https://registry.npmjs.org/dsh-plugin-chuhai/-/dsh-plugin-chuhai-0.3.6.tgz",
+        "publishedAt": "2026-11-26T05:53:09.739Z"
       },
       "validated": {
         "tool": "npm test",
         "tests": 22,
         "failed": 0,
-        "at": "2026-11-19"
+        "at": "2026-11-26"
       },
       "say": "自媒体出海",
       "get": "npm",

@@ -6,6 +6,7 @@
 - SOURCE.json 重钉：提交 9dc5cd91c1919ef1dcb00604360cd74ee2c2a048、版本 2.3.67、30 个文件的 sha256（CRLF 换 LF 后算）；test_market 的 expert_package_pinned 过
 - 主书 0.2.10 正文不动：RULE expert_as_is 让选题照专家原样做，Apify 这条路随专家包进来；出海插件随带的专家包另发 0.3.6 跟上
 - 来源：2026-11-26 owner「你先看迭代后有没有需要修改的 如果没有DSH 那边就同步」
+- 货架：plugin 条目钉 dsh-plugin-chuhai 0.3.6（随带专家包换成 WorkBuddy 2.3.67，npm integrity、commit bfccecd、标签 v0.3.6 钉死，npm test 22/22），index.json 顶部加 0.3.6，市场页那行由 market_build 重生；来源同上
 
 **v1.1.57** · 2026-11-25 · 货架钉 dsh-plugin-seo 0.1.0；落地页加「SEO 体检」一卡；线上 MCP 1.3.4 共 25 项已部署
 
