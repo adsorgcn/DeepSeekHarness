@@ -7,6 +7,7 @@
 - 实测：me、viral、search、accounts、index、suggest、metrics、detail、comments、history、run 十二次运行全部 SUCCEEDED，字段与脚本一致，令牌未出现在任何输出，共花约 2.4 美元
 - 主书 0.2.10 正文不动；出海插件随带的专家包另发 0.3.7 跟上
 - 来源：2026-11-26 owner「补 然后我是付费账户 你可以测下」
+- 货架：plugin 条目钉 dsh-plugin-chuhai 0.3.7（随带专家包跟到 WorkBuddy 2.3.68，npm integrity、commit be9db93、标签 v0.3.7 钉死，npm test 22/22），index.json 顶部加 0.3.7，市场页那行由 market_build 重生；来源同上
 
 **v1.1.58** · 2026-11-26 · 专家包同步到 WorkBuddy 2.3.67：选题技能多一条 Apify 数据路（低粉爆文日榜、微信指数、留言、联想词、按词找号、历史发文倍率）
 
