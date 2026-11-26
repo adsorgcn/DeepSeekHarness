@@ -1,5 +1,12 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.58** · 2026-11-26 · 专家包同步到 WorkBuddy 2.3.67：选题技能多一条 Apify 数据路（低粉爆文日榜、微信指数、留言、联想词、按词找号、历史发文倍率）
+
+- .dsh/books/ai-global-media/expert 的 agents/ 与 skills/ 原样换成 adsorgcn/WorkBuddy 2.3.67（9dc5cd9）：选题技能新增 scripts/apify_wechat.py 与 references/apify-wechat.md，用用户自己的 Apify 令牌调公众号采集器，跑之前报价、默认封顶 1 美元、令牌不进输出；五个文件的 IML 链头换成 0.6；sources.json 停一个英文源；其余文件一字未变
+- SOURCE.json 重钉：提交 9dc5cd91c1919ef1dcb00604360cd74ee2c2a048、版本 2.3.67、30 个文件的 sha256（CRLF 换 LF 后算）；test_market 的 expert_package_pinned 过
+- 主书 0.2.10 正文不动：RULE expert_as_is 让选题照专家原样做，Apify 这条路随专家包进来；出海插件随带的专家包另发 0.3.6 跟上
+- 来源：2026-11-26 owner「你先看迭代后有没有需要修改的 如果没有DSH 那边就同步」
+
 **v1.1.57** · 2026-11-25 · 货架钉 dsh-plugin-seo 0.1.0；落地页加「SEO 体检」一卡；线上 MCP 1.3.4 共 25 项已部署
 
 - 货架登记官方插件 dsh-plugin-seo 0.1.0（npm integrity、commit 80c412413f7133f959bc78d9e5e357a25804cc1e、标签 v0.1.0 钉死，npm test 10/10，仓库 adsorgcn/dsh-plugin-seo MIT）；官方索引 docs/market/index.json 加 seo 分类与这条；市场页由 market_build 重生成，官方插件 3 个
