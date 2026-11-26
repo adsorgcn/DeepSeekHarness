@@ -1,5 +1,13 @@
 # 更新记录（每次改动即发版）
 
+**v1.1.59** · 2026-11-26 · 专家包跟到 WorkBuddy 2.3.68：选题技能的 Apify 数据路在 owner 付费账户上每个子命令各真跑一遍，四处小修
+
+- .dsh/books/ai-global-media/expert 的 agents/ 与 skills/ 原样换成 adsorgcn/WorkBuddy 2.3.68（da76cfb）：找号默认不漏服务号、微信搜索夹带的提示行不再当账号数；标题超长截断带省略号；单价表说明改成免费档并注明 Starter 档实付；头条判定按实测写死 itemIndex 从 1 起；SKILL 与参考页补一句免费档 25 次试跑每次一页
+- SOURCE.json 重钉：提交 da76cfb3ecf47dedf8eb5b43081e4f249ab9e869、版本 2.3.68、30 个文件的 sha256（CRLF 换 LF 后算）；test_market 的 expert_package_pinned 过
+- 实测：me、viral、search、accounts、index、suggest、metrics、detail、comments、history、run 十二次运行全部 SUCCEEDED，字段与脚本一致，令牌未出现在任何输出，共花约 2.4 美元
+- 主书 0.2.10 正文不动；出海插件随带的专家包另发 0.3.7 跟上
+- 来源：2026-11-26 owner「补 然后我是付费账户 你可以测下」
+
 **v1.1.58** · 2026-11-26 · 专家包同步到 WorkBuddy 2.3.67：选题技能多一条 Apify 数据路（低粉爆文日榜、微信指数、留言、联想词、按词找号、历史发文倍率）
 
 - .dsh/books/ai-global-media/expert 的 agents/ 与 skills/ 原样换成 adsorgcn/WorkBuddy 2.3.67（9dc5cd9）：选题技能新增 scripts/apify_wechat.py 与 references/apify-wechat.md，用用户自己的 Apify 令牌调公众号采集器，跑之前报价、默认封顶 1 美元、令牌不进输出；五个文件的 IML 链头换成 0.6；sources.json 停一个英文源；其余文件一字未变
